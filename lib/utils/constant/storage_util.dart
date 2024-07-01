@@ -138,34 +138,35 @@ class StorageUtil {
     required String nama,
     required String tipe,
     required String app,
-    required String lihat,
-    required String print,
-    required String tambah,
-    required String edit,
-    required String hapus,
-    required String jumlah,
-    required String kirim,
-    required String batal,
-    required String cekUnit,
-    required String wilayah,
-    required String plant,
-    required String cekReguler,
-    required String cekMutasi,
-    required String acc1,
-    required String acc2,
-    required String acc3,
-    required String menu1,
-    required String menu2,
-    required String menu3,
-    required String menu4,
-    required String menu5,
-    required String menu6,
-    required String menu7,
-    required String menu8,
-    required String menu9,
-    required String menu10,
+    required int lihat, // Ubah menjadi int
+    required int print, // Ubah menjadi int
+    required int tambah, // Ubah menjadi int
+    required int edit, // Ubah menjadi int
+    required int hapus, // Ubah menjadi int
+    required int jumlah, // Ubah menjadi int
+    required int kirim, // Ubah menjadi int
+    required int batal, // Ubah menjadi int
+    required int cekUnit, // Ubah menjadi int
+    required int wilayah, // Ubah menjadi int
+    required String
+        plant, // Sesuai dengan respons JSON, kemungkinan 'plant' adalah string
+    required int cekReguler, // Ubah menjadi int
+    required int cekMutasi, // Ubah menjadi int
+    required int acc1, // Ubah menjadi int
+    required int acc2, // Ubah menjadi int
+    required int acc3, // Ubah menjadi int
+    required int menu1, // Ubah menjadi int
+    required int menu2, // Ubah menjadi int
+    required int menu3, // Ubah menjadi int
+    required int menu4, // Ubah menjadi int
+    required int menu5, // Ubah menjadi int
+    required int menu6, // Ubah menjadi int
+    required int menu7, // Ubah menjadi int
+    required int menu8, // Ubah menjadi int
+    required int menu9, // Ubah menjadi int
+    required int menu10, // Ubah menjadi int
     required String gambar,
-    required String online,
+    required int online, // Ubah menjadi int
   }) {
     prefs.write('username', username);
     prefs.write('nama', nama);
@@ -181,7 +182,8 @@ class StorageUtil {
     prefs.write('batal', batal);
     prefs.write('cek_unit', cekUnit);
     prefs.write('wilayah', wilayah);
-    prefs.write('plant', plant);
+    prefs.write('plant',
+        plant); // Sesuai dengan respons JSON, mungkin 'plant' adalah string
     prefs.write('cek_reguler', cekReguler);
     prefs.write('cek_mutasi', cekMutasi);
     prefs.write('acc_1', acc1);
