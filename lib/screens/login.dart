@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -62,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                                   return null;
                                 },
                                 decoration: const InputDecoration(
-                                  prefixIcon: Icon(Icons.person),
+                                  prefixIcon: Icon(Iconsax.user),
                                   labelText: 'Username',
                                 ),
                               ),
@@ -86,8 +87,8 @@ class LoginScreen extends StatelessWidget {
                                               !controller.hidePassword.value,
                                       icon: Icon(
                                         controller.hidePassword.value
-                                            ? Icons.visibility_off
-                                            : Icons.visibility,
+                                            ? Iconsax.eye
+                                            : Iconsax.eye_slash,
                                       ),
                                     ),
                                   ),

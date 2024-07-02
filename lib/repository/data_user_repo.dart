@@ -10,6 +10,7 @@ class DataUserRepository extends GetxController {
         .get(Uri.parse('http://langgeng.dyndns.biz/DO/api/tampil_user.php'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
+      // print(list.toList());
       return list.map((model) => DataUserModel.fromJson(model)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data user');

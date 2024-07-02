@@ -3,6 +3,36 @@ import 'package:flutter/material.dart';
 class CustomDialogs {
   static defaultDialog({
     required BuildContext context,
+    required Widget titleWidget,
+    required Widget contentWidget,
+    String cancelText = 'Batal',
+    required String confirmText,
+    Function()? onCancel,
+    Function()? onConfirm,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: titleWidget,
+          content: contentWidget,
+          actions: <Widget>[
+            TextButton(
+              onPressed: onCancel ?? () => Navigator.of(context).pop(),
+              child: Text(cancelText),
+            ),
+            TextButton(
+              onPressed: onConfirm,
+              child: Text(confirmText),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  static deleteDialog({
+    required BuildContext context,
     String title = 'Konfirmasi Penghapusan',
     String content =
         'Menghapus data ini akan menghapus semua data terkait. Apakah Anda yakin?',

@@ -1,39 +1,41 @@
 class DataUserModel {
   String username;
+  String password;
   String nama;
   String tipe;
   String app;
-  String lihat;
-  String print;
-  String tambah;
-  String edit;
-  String hapus;
-  String jumlah;
-  String kirim;
-  String batal;
-  String cekUnit;
-  String wilayah;
+  int lihat;
+  int print;
+  int tambah;
+  int edit;
+  int hapus;
+  int jumlah;
+  int kirim;
+  int batal;
+  int cekUnit;
+  int wilayah;
   String plant;
-  String cekReguler;
-  String cekMutasi;
-  String acc1;
-  String acc2;
-  String acc3;
-  String menu1;
-  String menu2;
-  String menu3;
-  String menu4;
-  String menu5;
-  String menu6;
-  String menu7;
-  String menu8;
-  String menu9;
-  String menu10;
+  int cekReguler;
+  int cekMutasi;
+  int acc1;
+  int acc2;
+  int acc3;
+  int menu1;
+  int menu2;
+  int menu3;
+  int menu4;
+  int menu5;
+  int menu6;
+  int menu7;
+  int menu8;
+  int menu9;
+  int menu10;
   String gambar;
-  String online;
+  int online;
 
   DataUserModel({
     required this.username,
+    required this.password,
     required this.nama,
     required this.tipe,
     required this.app,
@@ -70,6 +72,7 @@ class DataUserModel {
   factory DataUserModel.fromJson(Map<String, dynamic> json) {
     return DataUserModel(
       username: json['username'] ?? '',
+      password: json['password'] ?? '',
       nama: json['nama'] ?? '',
       tipe: json['tipe'] ?? '',
       app: json['app'] ?? '',
