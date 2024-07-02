@@ -56,13 +56,13 @@ class LoginController extends GetxController {
 
         if (data['response'] != null && data['response']['status'] == '401') {
           print('Login gagal: Nama pengguna atau kata sandi tidak valid');
+          Navigator.of(Get.overlayContext!).pop();
           SnackbarLoader.errorSnackBar(
             title: 'Login Gagal',
             message:
                 'Nama pengguna atau kata sandi tidak valid. Silakan coba lagi.',
           );
         } else {
-          // Login berhasil, simpan data pengguna ke local storage
           final user = data['response'];
           storageUtil.saveUserDetails(
             username: user['username'],
@@ -99,23 +99,24 @@ class LoginController extends GetxController {
             online: user['online'],
           );
 
-          Get.offNamed(
-              '/rootpage'); // Navigate to rootpage after successful login
+          Get.offNamed('/rootpage');
 
           print('Berhasil menyimpan ke local storage: ${user['username']}');
         }
       } else {
         print('Terjadi kesalahan saat mencoba login: ${response.statusCode}');
+        Navigator.of(Get.overlayContext!).pop();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal',
-          message: 'Username dan password salah..',
+          message: 'Username dan password salah..😒',
         );
       }
     } catch (e) {
       print('Terjadi kesalahan saat mencoba login: $e');
+      Navigator.of(Get.overlayContext!).pop();
       SnackbarLoader.errorSnackBar(
         title: 'Error',
-        message: 'Terjadi kesalahan saat mencoba login: $e',
+        message: 'Pastikan jaringan anda telah terhubung dengan wifi kantor 😁',
       );
     }
   }

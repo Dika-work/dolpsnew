@@ -43,7 +43,7 @@ class CustomSize {
   static const double dividerHeight = 1.0;
 
   // Product item dimensions
-  static const double productImageSize = 120.0;
+  static const double profileImageSize = 120.0;
   static const double productImageRadius = 16.0;
   static const double productItemHeight = 160.0;
 
@@ -66,10 +66,4 @@ class CustomSize {
 
   // Grid view spacing
   static const double gridViewSpacing = 16.0;
-
-  // Responsive Screen Sizes
-  static const int desktopScreenSize = 1366;
-  static const int tabletScreenSize = 768;
-  static const int mobileScreenSize = 360;
-  static const int customScreenSize = 1100;
 }

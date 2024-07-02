@@ -1,5 +1,5 @@
 import 'package:doplsnew/helpers/routes.dart';
-import 'package:doplsnew/screens/rootpage.dart';
+import 'package:doplsnew/screens/profile.dart';
 import 'package:doplsnew/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,8 +20,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
-      getPages: AppRoutes.routes(),
-      // home: Rootpage(),
+      // getPages: AppRoutes.routes(),
+      home: Profile(),
     );
   }
 }

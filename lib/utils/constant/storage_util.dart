@@ -6,131 +6,131 @@ class StorageUtil {
   final prefs = GetStorage();
 
   String getUsername() {
-    return prefs.read('username') ?? '';
+    return prefs.read('username');
   }
 
   String getName() {
-    return prefs.read('nama') ?? '';
+    return prefs.read('nama');
   }
 
   String getTipe() {
-    return prefs.read('tipe') ?? '';
+    return prefs.read('tipe');
   }
 
   String getApp() {
-    return prefs.read('app') ?? '';
+    return prefs.read('app');
   }
 
-  String getLihat() {
-    return prefs.read('lihat') ?? '';
+  int getLihat() {
+    return prefs.read('lihat');
   }
 
-  String getPrint() {
-    return prefs.read('print') ?? '';
+  int getPrint() {
+    return prefs.read('print');
   }
 
-  String getTambah() {
-    return prefs.read('tambah') ?? '';
+  int getTambah() {
+    return prefs.read('tambah');
   }
 
-  String getEdit() {
-    return prefs.read('edit') ?? '';
+  int getEdit() {
+    return prefs.read('edit');
   }
 
-  String getHapus() {
-    return prefs.read('hapus') ?? '';
+  int getHapus() {
+    return prefs.read('hapus');
   }
 
-  String getJumlah() {
-    return prefs.read('jumlah') ?? '';
+  int getJumlah() {
+    return prefs.read('jumlah');
   }
 
-  String getKirim() {
-    return prefs.read('kirim') ?? '';
+  int getKirim() {
+    return prefs.read('kirim');
   }
 
-  String getBatal() {
-    return prefs.read('batal') ?? '';
+  int getBatal() {
+    return prefs.read('batal');
   }
 
-  String getCekUnit() {
-    return prefs.read('cek_unit') ?? '';
+  int getCekUnit() {
+    return prefs.read('cek_unit');
   }
 
-  String getWilayah() {
-    return prefs.read('wilayah') ?? '';
+  int getWilayah() {
+    return prefs.read('wilayah');
   }
 
   String getPlant() {
-    return prefs.read('plant') ?? '';
+    return prefs.read('plant');
   }
 
-  String getCekRegular() {
-    return prefs.read('cek_reguler') ?? '';
+  int getCekRegular() {
+    return prefs.read('cek_reguler');
   }
 
-  String getCekMutasi() {
-    return prefs.read('cek_mutasi') ?? '';
+  int getCekMutasi() {
+    return prefs.read('cek_mutasi');
   }
 
-  String getAcc1() {
-    return prefs.read('acc_1') ?? '';
+  int getAcc1() {
+    return prefs.read('acc_1');
   }
 
-  String getAcc2() {
-    return prefs.read('acc_2') ?? '';
+  int getAcc2() {
+    return prefs.read('acc_2');
   }
 
-  String getAcc3() {
-    return prefs.read('acc_3') ?? '';
+  int getAcc3() {
+    return prefs.read('acc_3');
   }
 
-  String getMenu1() {
-    return prefs.read('menu1') ?? '';
+  int getMenu1() {
+    return prefs.read('menu1');
   }
 
-  String getMenu2() {
-    return prefs.read('menu2') ?? '';
+  int getMenu2() {
+    return prefs.read('menu2');
   }
 
-  String getMenu3() {
-    return prefs.read('menu3') ?? '';
+  int getMenu3() {
+    return prefs.read('menu3');
   }
 
-  String getMenu4() {
-    return prefs.read('menu4') ?? '';
+  int getMenu4() {
+    return prefs.read('menu4');
   }
 
-  String getMenu5() {
-    return prefs.read('menu5') ?? '';
+  int getMenu5() {
+    return prefs.read('menu5');
   }
 
-  String getMenu6() {
-    return prefs.read('menu6') ?? '';
+  int getMenu6() {
+    return prefs.read('menu6');
   }
 
-  String getMenu7() {
-    return prefs.read('menu7') ?? '';
+  int getMenu7() {
+    return prefs.read('menu7');
   }
 
-  String getMenu8() {
-    return prefs.read('menu8') ?? '';
+  int getMenu8() {
+    return prefs.read('menu8');
   }
 
-  String getMenu9() {
-    return prefs.read('menu9') ?? '';
+  int getMenu9() {
+    return prefs.read('menu9');
   }
 
-  String getMenu10() {
-    return prefs.read('menu10') ?? '';
+  int getMenu10() {
+    return prefs.read('menu10');
   }
 
   String getGambar() {
-    return prefs.read('gambar') ?? '';
+    return prefs.read('gambar');
   }
 
-  String getOnline() {
-    return prefs.read('online') ?? '';
+  int getOnline() {
+    return prefs.read('online');
   }
 
   void saveUserDetails({
@@ -138,35 +138,34 @@ class StorageUtil {
     required String nama,
     required String tipe,
     required String app,
-    required int lihat, // Ubah menjadi int
-    required int print, // Ubah menjadi int
-    required int tambah, // Ubah menjadi int
-    required int edit, // Ubah menjadi int
-    required int hapus, // Ubah menjadi int
-    required int jumlah, // Ubah menjadi int
-    required int kirim, // Ubah menjadi int
-    required int batal, // Ubah menjadi int
-    required int cekUnit, // Ubah menjadi int
-    required int wilayah, // Ubah menjadi int
-    required String
-        plant, // Sesuai dengan respons JSON, kemungkinan 'plant' adalah string
-    required int cekReguler, // Ubah menjadi int
-    required int cekMutasi, // Ubah menjadi int
-    required int acc1, // Ubah menjadi int
-    required int acc2, // Ubah menjadi int
-    required int acc3, // Ubah menjadi int
-    required int menu1, // Ubah menjadi int
-    required int menu2, // Ubah menjadi int
-    required int menu3, // Ubah menjadi int
-    required int menu4, // Ubah menjadi int
-    required int menu5, // Ubah menjadi int
-    required int menu6, // Ubah menjadi int
-    required int menu7, // Ubah menjadi int
-    required int menu8, // Ubah menjadi int
-    required int menu9, // Ubah menjadi int
-    required int menu10, // Ubah menjadi int
+    required int lihat,
+    required int print,
+    required int tambah,
+    required int edit,
+    required int hapus,
+    required int jumlah,
+    required int kirim,
+    required int batal,
+    required int cekUnit,
+    required int wilayah,
+    required String plant,
+    required int cekReguler,
+    required int cekMutasi,
+    required int acc1,
+    required int acc2,
+    required int acc3,
+    required int menu1,
+    required int menu2,
+    required int menu3,
+    required int menu4,
+    required int menu5,
+    required int menu6,
+    required int menu7,
+    required int menu8,
+    required int menu9,
+    required int menu10,
     required String gambar,
-    required int online, // Ubah menjadi int
+    required int online,
   }) {
     prefs.write('username', username);
     prefs.write('nama', nama);
@@ -182,8 +181,7 @@ class StorageUtil {
     prefs.write('batal', batal);
     prefs.write('cek_unit', cekUnit);
     prefs.write('wilayah', wilayah);
-    prefs.write('plant',
-        plant); // Sesuai dengan respons JSON, mungkin 'plant' adalah string
+    prefs.write('plant', plant);
     prefs.write('cek_reguler', cekReguler);
     prefs.write('cek_mutasi', cekMutasi);
     prefs.write('acc_1', acc1);

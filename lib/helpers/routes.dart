@@ -1,3 +1,4 @@
+import 'package:doplsnew/screens/profile.dart';
 import 'package:get/get.dart';
 
 import '../screens/login.dart';
@@ -12,6 +13,10 @@ class AppRoutes {
         GetPage(
           name: '/rootpage',
           page: () => const Rootpage(),
-        )
+        ),
+        GetPage(
+          name: '/profile',
+          page: () => const Profile(),
+        ),
       ];
 }

@@ -11,15 +11,16 @@ class CustomSearchTextFormField extends StatefulWidget {
   final Function(String) function;
   final String nameTextField;
   final Function()? clearFunction;
-  const CustomSearchTextFormField({
-    super.key,
-    required this.offset,
-    required this.name,
-    required this.textEditingController,
-    required this.function,
-    required this.nameTextField,
-    required this.clearFunction,
-  });
+  final IconData icon;
+  const CustomSearchTextFormField(
+      {super.key,
+      required this.offset,
+      required this.name,
+      required this.textEditingController,
+      required this.function,
+      required this.nameTextField,
+      required this.clearFunction,
+      required this.icon});
 
   @override
   State<CustomSearchTextFormField> createState() =>
@@ -66,46 +67,41 @@ class _CustomSearchTextFormFieldState extends State<CustomSearchTextFormField> {
             ? (search ? width - 40 : 20)
             : (search ? width : 40),
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 250),
-          child: search
-              ? TextField(
-                  controller: widget.textEditingController,
-                  onChanged: widget.function,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.zero,
-                    hintText: widget.nameTextField,
-                    prefixIcon: InkWell(
-                      onTap: () {
-                        setState(() {
-                          search = false;
-                          widget.textEditingController.clear();
-                          textVisible = false;
-                          widget.clearFunction?.call();
-                        });
-                      },
-                      child: const Icon(
-                        Iconsax.close_circle,
-                        color: AppColors.dark,
+            duration: const Duration(milliseconds: 250),
+            child: search
+                ? TextField(
+                    controller: widget.textEditingController,
+                    onChanged: widget.function,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+                      hintText: widget.nameTextField,
+                      prefixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            search = false;
+                            widget.textEditingController.clear();
+                            textVisible = false;
+                            widget.clearFunction?.call();
+                          });
+                        },
+                        child: const Icon(
+                          Iconsax.close_circle,
+                          color: AppColors.dark,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              : Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          search = true;
-                        });
-                      },
-                      child: const Icon(
-                        Icons.search,
-                        color: AppColors.grey,
-                      ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        search = true;
+                      });
+                    },
+                    child: Icon(
+                      widget.icon,
+                      color: AppColors.black,
                     ),
-                  ],
-                ),
-        ),
+                  )),
       ),
     );
   }
@@ -114,20 +110,22 @@ class _CustomSearchTextFormFieldState extends State<CustomSearchTextFormField> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
-      height: 50,
+      height: 80,
       color: Theme.of(context).scaffoldBackgroundColor,
       width: CustomHelperFunctions.screenWidth(),
       child: Stack(
         children: [
           change(CustomHelperFunctions.screenWidth() * .96, context),
-          Positioned(
-              top: 13,
-              left: 10,
+          Align(
+              alignment: Alignment.centerLeft,
               child: search
                   ? Container()
-                  : Text(
-                      widget.name,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 15),
+                      child: Text(
+                        widget.name,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
                     )),
           Positioned(
             top: 0,
