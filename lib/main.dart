@@ -30,7 +30,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final Widget initialPage;
 
-  const MyApp({Key? key, required this.initialPage}) : super(key: key);
+  const MyApp({super.key, required this.initialPage});
 
   @override
   Widget build(BuildContext context) {

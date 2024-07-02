@@ -1,7 +1,8 @@
+import 'package:doplsnew/controllers/data_user_controller.dart';
 import 'package:get/get.dart';
 
 import '../screens/login.dart';
-import '../screens/manajemen user/data_user.dart';
+import '../screens/manajemen user/data_user_screen.dart';
 import '../screens/onboarding.dart';
 import '../screens/profile.dart';
 import '../screens/rootpage.dart';
@@ -26,8 +27,10 @@ class AppRoutes {
         ),
         // manajemen user
         GetPage(
-          name: '/data-user',
-          page: () => const DataUser(),
-        ),
+            name: '/data-user',
+            page: () => const DataUserScreen(),
+            binding: BindingsBuilder(() {
+              Get.put(DataUserController());
+            })),
       ];
 }

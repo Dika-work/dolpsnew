@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class CustomDialogs {
   static defaultDialog({
     required BuildContext context,
-    String title = 'Removal Confirmation',
+    String title = 'Konfirmasi Penghapusan',
     String content =
-        'Removing this data will delete all related data. Are you sure?',
-    String cancelText = 'Cancel',
-    String confirmText = 'Remove',
+        'Menghapus data ini akan menghapus semua data terkait. Apakah Anda yakin?',
+    String cancelText = 'Batal',
+    String confirmText = 'Hapus',
     Function()? onCancel,
     Function()? onConfirm,
   }) {
