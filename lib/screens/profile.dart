@@ -16,6 +16,7 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storageUtil = StorageUtil();
+    final user = storageUtil.getUserDetails();
     final usernameController = TextEditingController();
     final passwordController = TextEditingController();
     return Scaffold(
@@ -53,14 +54,14 @@ class Profile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        storageUtil.getName().toUpperCase(),
+                        user!.nama.toUpperCase(),
                         style: Theme.of(context)
                             .textTheme
                             .headlineLarge
                             ?.copyWith(color: AppColors.white),
                       ),
                       Text(
-                        storageUtil.getTipe(),
+                        user.tipe,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                     ],
@@ -75,7 +76,7 @@ class Profile extends StatelessWidget {
                   'Nama Lengkap :',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                Text(CustomHelperFunctions.toTitleCase(storageUtil.getName()),
+                Text(CustomHelperFunctions.toTitleCase(user.nama),
                     style: Theme.of(context).textTheme.bodyLarge)
               ],
             ),
@@ -86,7 +87,7 @@ class Profile extends StatelessWidget {
                   'Petugas :',
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-                Text(CustomHelperFunctions.toTitleCase(storageUtil.getTipe()),
+                Text(CustomHelperFunctions.toTitleCase(user.tipe),
                     style: Theme.of(context).textTheme.bodyLarge)
               ],
             ),

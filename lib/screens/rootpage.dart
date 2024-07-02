@@ -21,7 +21,6 @@ class Rootpage extends StatefulWidget {
 
 class _RootpageState extends State<Rootpage> {
   final loginController = Get.put(LoginController());
-  final storageUtil = StorageUtil();
 
   int _selectedIndex = 0;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -38,6 +37,8 @@ class _RootpageState extends State<Rootpage> {
 
   @override
   Widget build(BuildContext context) {
+    final storageUtil = StorageUtil();
+    final user = storageUtil.getUserDetails();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Homepage'),
@@ -100,7 +101,7 @@ class _RootpageState extends State<Rootpage> {
                       ),
                     ),
                     Text(
-                      storageUtil.getName().toUpperCase(),
+                      user!.nama.toUpperCase(),
                       style: Theme.of(context)
                           .textTheme
                           .headlineMedium
@@ -150,7 +151,7 @@ class _RootpageState extends State<Rootpage> {
                 textTitle: 'Home',
                 onTap: _onItemTapped(0),
               ),
-              storageUtil.getMenu1() == 1
+              user.menu1 == 1
                   ? ExpandableContainer(
                       icon: Iconsax.folder_2,
                       textTitle: 'Master Data',
@@ -185,7 +186,7 @@ class _RootpageState extends State<Rootpage> {
                         ],
                       ))
                   : const SizedBox.shrink(),
-              storageUtil.getMenu2() == 1
+              user.menu2 == 1
                   ? ExpandableContainer(
                       icon: Iconsax.box,
                       textTitle: 'Tampil Seluruh Data',
@@ -302,7 +303,7 @@ class _RootpageState extends State<Rootpage> {
                           )),
                     )
                   : const SizedBox.shrink(),
-              storageUtil.getMenu3() == 1
+              user.menu3 == 1
                   ? ExpandableContainer(
                       icon: Iconsax.add,
                       textTitle: 'Input Data DO',
@@ -380,7 +381,7 @@ class _RootpageState extends State<Rootpage> {
                           )),
                     )
                   : const SizedBox.shrink(),
-              storageUtil.getMenu4() == 1
+              user.menu4 == 1
                   ? ExpandableContainer(
                       icon: Iconsax.add,
                       textTitle: 'Input Data Realisasi',
@@ -432,7 +433,7 @@ class _RootpageState extends State<Rootpage> {
                           )),
                     )
                   : const SizedBox.shrink(),
-              storageUtil.getMenu9() == 1
+              user.menu9 == 1
                   ? ExpandableContainer(
                       icon: Iconsax.calendar,
                       textTitle: 'Laporan Honda',
@@ -611,13 +612,14 @@ class _RootpageState extends State<Rootpage> {
                       ),
                     )
                   : const SizedBox.shrink(),
-              storageUtil.getMenu10() == 1
+              user.menu10 == 1
                   ? ExpandableContainer(
                       icon: Iconsax.setting,
                       textTitle: 'Manajemen User',
                       content: Column(
                         children: [
                           ListTile(
+                            onTap: () => Get.toNamed('data-user'),
                             leading: const Icon(
                               Iconsax.user,
                               color: AppColors.darkExpandableContent,
