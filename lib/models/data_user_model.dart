@@ -1,6 +1,5 @@
 class DataUserModel {
   String username;
-  String password;
   String nama;
   String tipe;
   String app;
@@ -13,7 +12,7 @@ class DataUserModel {
   int kirim;
   int batal;
   int cekUnit;
-  int wilayah;
+  String wilayah;
   String plant;
   int cekReguler;
   int cekMutasi;
@@ -35,7 +34,6 @@ class DataUserModel {
 
   DataUserModel({
     required this.username,
-    required this.password,
     required this.nama,
     required this.tipe,
     required this.app,
@@ -72,7 +70,6 @@ class DataUserModel {
   factory DataUserModel.fromJson(Map<String, dynamic> json) {
     return DataUserModel(
       username: json['username'] ?? '',
-      password: json['password'] ?? '',
       nama: json['nama'] ?? '',
       tipe: json['tipe'] ?? '',
       app: json['app'] ?? '',
@@ -85,7 +82,7 @@ class DataUserModel {
       kirim: json['kirim'] ?? 0,
       batal: json['batal'] ?? 0,
       cekUnit: json['cek_unit'] ?? 0,
-      wilayah: json['wilayah'] ?? 0,
+      wilayah: json['wilayah'] ?? '',
       plant: json['plant'] ?? '',
       cekReguler: json['cek_reguler'] ?? 0,
       cekMutasi: json['cek_mutasi'] ?? 0,

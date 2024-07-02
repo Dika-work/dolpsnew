@@ -10,40 +10,13 @@ class DataUserDataSource extends DataTableSource {
   @override
   DataRow getRow(int index) {
     final user = controller.dataUserModel[index];
-    print('ini data usernya : $user');
+    String nomer = (index + 1).toString();
     return DataRow.byIndex(index: index, cells: [
-      DataCell(Text(user.username)),
-      DataCell(Text(user.nama)),
-      DataCell(Text(user.tipe)),
-      DataCell(Text(user.app)),
-      DataCell(Text(user.lihat.toString())),
-      DataCell(Text(user.print.toString())),
-      DataCell(Text(user.tambah.toString())),
-      DataCell(Text(user.edit.toString())),
-      DataCell(Text(user.hapus.toString())),
-      DataCell(Text(user.jumlah.toString())),
-      DataCell(Text(user.kirim.toString())),
-      DataCell(Text(user.batal.toString())),
-      DataCell(Text(user.cekUnit.toString())),
-      DataCell(Text(user.wilayah.toString())),
-      DataCell(Text(user.plant)),
-      DataCell(Text(user.cekReguler.toString())),
-      DataCell(Text(user.cekMutasi.toString())),
-      DataCell(Text(user.acc1.toString())),
-      DataCell(Text(user.acc2.toString())),
-      DataCell(Text(user.acc3.toString())),
-      DataCell(Text(user.menu1.toString())),
-      DataCell(Text(user.menu2.toString())),
-      DataCell(Text(user.menu3.toString())),
-      DataCell(Text(user.menu4.toString())),
-      DataCell(Text(user.menu5.toString())),
-      DataCell(Text(user.menu6.toString())),
-      DataCell(Text(user.menu7.toString())),
-      DataCell(Text(user.menu8.toString())),
-      DataCell(Text(user.menu9.toString())),
-      DataCell(Text(user.menu10.toString())),
-      DataCell(Text(user.gambar.toString())),
-      DataCell(Text(user.online.toString())),
+      DataCell(_customCell(index, nomer)),
+      DataCell(_customCell(index, user.username)),
+      DataCell(_customCell(index, user.nama)),
+      DataCell(_customCell(index, user.tipe)),
+      DataCell(_customCell(index, user.gambar)),
       DataCell(Row(
         children: [
           IconButton(
@@ -58,6 +31,15 @@ class DataUserDataSource extends DataTableSource {
         ],
       )),
     ]);
+  }
+
+  Widget _customCell(int index, String text) {
+    bool isEven = index % 2 == 0;
+    return Container(
+      color: isEven ? Colors.grey[200] : Colors.white,
+      padding: const EdgeInsets.all(8.0),
+      child: Text(text),
+    );
   }
 
   @override

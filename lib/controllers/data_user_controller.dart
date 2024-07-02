@@ -28,23 +28,23 @@ class DataUserController extends GetxController {
   final cekUnit = '0'.obs;
   final wilayahController = TextEditingController();
   final plantController = TextEditingController();
-  final cekRegulerController = TextEditingController();
-  final cekMutasiController = TextEditingController();
-  final acc1Controller = TextEditingController();
-  final acc2Controller = TextEditingController();
-  final acc3Controller = TextEditingController();
-  final menu1Controller = TextEditingController();
-  final menu2Controller = TextEditingController();
-  final menu3Controller = TextEditingController();
-  final menu4Controller = TextEditingController();
-  final menu5Controller = TextEditingController();
-  final menu6Controller = TextEditingController();
-  final menu7Controller = TextEditingController();
-  final menu8Controller = TextEditingController();
-  final menu9Controller = TextEditingController();
-  final menu10Controller = TextEditingController();
+  final cekReguler = '0'.obs;
+  final cekMutasi = '0'.obs;
+  final acc1 = '0'.obs;
+  final acc2 = '0'.obs;
+  final acc3 = '0'.obs;
+  final menu1 = '0'.obs;
+  final menu2 = '0'.obs;
+  final menu3 = '0'.obs;
+  final menu4 = '0'.obs;
+  final menu5 = '0'.obs;
+  final menu6 = '0'.obs;
+  final menu7 = '0'.obs;
+  final menu8 = '0'.obs;
+  final menu9 = '0'.obs;
+  final menu10 = '0'.obs;
   final gambarController = TextEditingController();
-  final onlineController = TextEditingController();
+  final online = '0'.obs;
 
   @override
   void onInit() {
@@ -56,7 +56,6 @@ class DataUserController extends GetxController {
     try {
       isDataUserLoading.value = true;
       final dataUser = await dataUserRepo.fetchDataUserContent();
-      print('ini data usernya ' + dataUserModel.toString());
       dataUserModel.assignAll(dataUser);
     } catch (e) {
       print('ini error nya ya : $e');

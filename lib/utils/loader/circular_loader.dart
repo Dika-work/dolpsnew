@@ -7,19 +7,28 @@ class CustomCircularLoader extends StatelessWidget {
     super.key,
     this.foregroundColor = AppColors.white,
     this.backgroundColor = AppColors.primary,
+    this.size = 50.0,
   });
 
   final Color? foregroundColor;
   final Color? backgroundColor;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(CustomSize.lg),
-      decoration: BoxDecoration(color: backgroundColor, shape: BoxShape.circle),
-      child: Center(
+    return Center(
+      child: Container(
+        width: size,
+        height: size,
+        padding: const EdgeInsets.all(CustomSize.sm),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          shape: BoxShape.circle,
+        ),
         child: CircularProgressIndicator(
-            color: foregroundColor, backgroundColor: Colors.transparent),
+          color: foregroundColor,
+          backgroundColor: Colors.transparent,
+        ),
       ),
     );
   }
