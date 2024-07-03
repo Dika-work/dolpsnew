@@ -1,7 +1,10 @@
 import 'package:doplsnew/models/user_model.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+
+import '../../screens/homepage.dart';
 
 class StorageUtil {
   final prefs = GetStorage();
@@ -23,5 +26,16 @@ class StorageUtil {
     Get.offAllNamed('/login');
     SnackbarLoader.successSnackBar(
         title: 'Logged Out', message: 'Anda telah berhasil keluar 👍');
+  }
+
+  final selectedIndex = 0.obs;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
+  List<Widget> widgetOptions = <Widget>[
+    const Homepage(),
+  ];
+
+  onItemTapped(int index) {
+    selectedIndex.value = index;
   }
 }

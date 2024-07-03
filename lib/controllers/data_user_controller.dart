@@ -1,7 +1,10 @@
-import 'package:doplsnew/models/data_user_model.dart';
+import 'package:doplsnew/models/get_all_user_model.dart';
 import 'package:doplsnew/repository/data_user_repo.dart';
+import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../utils/popups/snackbar.dart';
 
 class DataUserController extends GetxController {
   RxList<DataUserModel> dataUserModel = <DataUserModel>[].obs;
@@ -15,36 +18,11 @@ class DataUserController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final namaController = TextEditingController();
-  final tipeController = TextEditingController();
-  final appController = TextEditingController();
-  final lihat = '0'.obs;
-  final print = '0'.obs;
-  final tambah = '0'.obs;
-  final edit = '0'.obs;
-  final hapus = '0'.obs;
-  final jumlah = '0'.obs;
-  final kirim = '0'.obs;
-  final batal = '0'.obs;
-  final cekUnit = '0'.obs;
-  final wilayahController = TextEditingController();
-  final plantController = TextEditingController();
-  final cekReguler = '0'.obs;
-  final cekMutasi = '0'.obs;
-  final acc1 = '0'.obs;
-  final acc2 = '0'.obs;
-  final acc3 = '0'.obs;
-  final menu1 = '0'.obs;
-  final menu2 = '0'.obs;
-  final menu3 = '0'.obs;
-  final menu4 = '0'.obs;
-  final menu5 = '0'.obs;
-  final menu6 = '0'.obs;
-  final menu7 = '0'.obs;
-  final menu8 = '0'.obs;
-  final menu9 = '0'.obs;
-  final menu10 = '0'.obs;
+  final tipe = 'admin'.obs;
+  final wilayah = '1'.obs;
+  final plant = '1100'.obs;
   final gambarController = TextEditingController();
-  final online = '0'.obs;
+  final dealer = 'honda'.obs;
 
   @override
   void onInit() {
@@ -58,10 +36,58 @@ class DataUserController extends GetxController {
       final dataUser = await dataUserRepo.fetchDataUserContent();
       dataUserModel.assignAll(dataUser);
     } catch (e) {
-      print('ini error nya ya : $e');
+      print('Error fetching user data: $e');
       dataUserModel.assignAll([]);
     } finally {
       isDataUserLoading.value = false;
     }
+  }
+
+  Future<void> addUserData() async {
+    print('Adding new user data...');
+    CustomFullScreenLoader.openLoadingDialog(
+      'Adding new user data...',
+      'assets/animations/141594-animation-of-docer.json',
+    );
+
+    if (!addUserKey.currentState!.validate()) {
+      CustomFullScreenLoader.stopLoading();
+      return;
+    }
+
+    await dataUserRepo.addDataUserContent(
+        usernameController.text,
+        passwordController.text,
+        namaController.text,
+        tipe.value,
+        'do',
+        wilayah.value,
+        plant.value,
+        dealer.value,
+        gambarController.text,
+        '0');
+    CustomFullScreenLoader.stopLoading();
+
+    // reset text controllers
+    usernameController.clear();
+    passwordController.clear();
+    namaController.clear();
+    gambarController.clear();
+
+    // Reset Rx variables or other state variables if needed
+    tipe.value = 'admin';
+    wilayah.value = '1';
+    plant.value = '1100';
+    dealer.value = 'honda';
+
+    Get.back();
+    print('...SUDAH BERHASIL...');
+    fetchUserData();
+    print('/// BERHASIL NAMPILIN DATA BARU ///');
+
+    SnackbarLoader.successSnackBar(
+      title: 'Berhasil',
+      message: 'Menambahkan data user baru..',
+    );
   }
 }

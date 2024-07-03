@@ -9,7 +9,6 @@ class CustomTextFormFieldTheme {
     errorMaxLines: 3,
     prefixIconColor: AppColors.darkGrey,
     suffixIconColor: AppColors.darkGrey,
-    // constraints: const BoxConstraints.expand(height: TSizes.inputFieldHeight),
     labelStyle: const TextStyle().copyWith(
         fontSize: CustomSize.fontSizeMd,
         color: AppColors.textPrimary,

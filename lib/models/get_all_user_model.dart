@@ -1,5 +1,6 @@
 class DataUserModel {
   String username;
+  String password;
   String nama;
   String tipe;
   String app;
@@ -34,6 +35,7 @@ class DataUserModel {
 
   DataUserModel({
     required this.username,
+    required this.password,
     required this.nama,
     required this.tipe,
     required this.app,
@@ -70,6 +72,7 @@ class DataUserModel {
   factory DataUserModel.fromJson(Map<String, dynamic> json) {
     return DataUserModel(
       username: json['username'] ?? '',
+      password: json['password'] ?? '',
       nama: json['nama'] ?? '',
       tipe: json['tipe'] ?? '',
       app: json['app'] ?? '',

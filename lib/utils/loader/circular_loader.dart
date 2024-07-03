@@ -1,3 +1,4 @@
+import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -16,18 +17,24 @@ class CustomCircularLoader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: size,
-        height: size,
-        padding: const EdgeInsets.all(CustomSize.sm),
-        decoration: BoxDecoration(
-          color: backgroundColor,
-          shape: BoxShape.circle,
-        ),
-        child: CircularProgressIndicator(
-          color: foregroundColor,
-          backgroundColor: Colors.transparent,
+    return SizedBox(
+      width: CustomHelperFunctions.screenWidth(),
+      height: CustomHelperFunctions.screenHeight(),
+      child: Center(
+        child: Container(
+          width: size,
+          height: size,
+          padding: const EdgeInsets.all(CustomSize.sm),
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: CircularProgressIndicator(
+              color: foregroundColor,
+              backgroundColor: Colors.transparent,
+            ),
+          ),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:doplsnew/models/user_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
+import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
@@ -44,12 +44,13 @@ class LoginRepository extends GetxController {
   }
 
   void showErrorSnackbar(String title, String message) {
-    Navigator.of(Get.overlayContext!).pop();
+    CustomFullScreenLoader.stopLoading();
     SnackbarLoader.errorSnackBar(title: title, message: message);
   }
 
   void handleError(dynamic e) {
     print('Terjadi kesalahan saat mencoba login: $e');
-    showErrorSnackbar('Error', 'Terjadi kesalahan saat mencoba login: $e');
+    showErrorSnackbar(
+        'Error', 'Pastikan sudah terhubung dengan wifi kantor 😁');
   }
 }
