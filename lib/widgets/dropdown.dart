@@ -23,7 +23,7 @@ class DropDownWidget extends StatelessWidget {
         isExpanded: true,
         items: items
             .map((String item) => DropdownMenuItem<String>(
-                  value: item, // Pastikan setiap nilai di sini adalah unik
+                  value: item,
                   child: Text(
                     item,
                     overflow: TextOverflow.ellipsis,

@@ -272,6 +272,7 @@ class CustomDrawer extends StatelessWidget {
                         content: Column(
                           children: [
                             ListTile(
+                              onTap: () => Get.toNamed('/data-do-global'),
                               leading: const Icon(
                                 Iconsax.record,
                                 color: AppColors.darkExpandableContent,
@@ -285,6 +286,7 @@ class CustomDrawer extends StatelessWidget {
                               ),
                             ),
                             ListTile(
+                              onTap: () => Get.toNamed('/data-do-harian'),
                               leading: const Icon(
                                 Iconsax.record,
                                 color: AppColors.darkExpandableContent,
@@ -311,6 +313,7 @@ class CustomDrawer extends StatelessWidget {
                               ),
                             ),
                             ListTile(
+                              onTap: () => Get.toNamed('/data-do-tambahan'),
                               leading: const Icon(
                                 Iconsax.record,
                                 color: AppColors.darkExpandableContent,
@@ -324,6 +327,7 @@ class CustomDrawer extends StatelessWidget {
                               ),
                             ),
                             ListTile(
+                              onTap: () => Get.toNamed('/data-do-pengurangan'),
                               leading: const Icon(
                                 Iconsax.record,
                                 color: AppColors.darkExpandableContent,

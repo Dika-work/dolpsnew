@@ -1,4 +1,3 @@
-// import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -57,8 +56,6 @@ class _ExpandableContainerState extends State<ExpandableContainer>
 
   @override
   Widget build(BuildContext context) {
-    // final dark = CustomHelperFunctions.isDarkMode(context);
-
     return Column(
       children: [
         Container(

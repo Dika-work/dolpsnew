@@ -40,21 +40,20 @@ class Profile extends StatelessWidget {
                         child: CachedNetworkImage(
                           width: CustomSize.profileImageSize,
                           height: CustomSize.profileImageSize,
-                          imageUrl:
-                              'https://tse3.mm.bing.net/th?id=OIP.d7Yh1Ur0vyGpFrhMYsNZIAHaGs&pid=Api&P=0&h=180',
+                          imageUrl: '${storageUtil.baseURL}/do/${user!.gambar}',
                           fit: BoxFit.cover,
-                          progressIndicatorBuilder: (context, url, progress) =>
+                          progressIndicatorBuilder: (_, __, ___) =>
                               const CustomShimmerEffect(
                             width: 55,
                             height: 55,
                             radius: 55,
                           ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                          errorWidget: (_, __, ___) =>
+                              Image.asset('assets/icons/person.png'),
                         ),
                       ),
                       Text(
-                        user!.nama.toUpperCase(),
+                        user.nama.toUpperCase(),
                         style: Theme.of(context)
                             .textTheme
                             .headlineLarge

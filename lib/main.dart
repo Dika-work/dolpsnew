@@ -2,6 +2,7 @@ import 'package:doplsnew/helpers/routes.dart';
 import 'package:doplsnew/screens/login.dart';
 import 'package:doplsnew/screens/onboarding.dart';
 import 'package:doplsnew/screens/rootpage.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:doplsnew/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en'), Locale('id')],
       home: initialPage,
       getPages: AppRoutes.routes(),
     );

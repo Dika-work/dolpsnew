@@ -42,7 +42,7 @@ class Homepage extends StatelessWidget {
           Text('Menu8: ${user.menu8}'),
           Text('Menu9: ${user.menu9}'),
           Text('Menu10: ${user.menu10}'),
-          Text('Gambar: ${storage.baseURL}/${user.gambar}'),
+          Text('Gambar: ${storage.baseURL}/do/${user.gambar}'),
           Text('Online: ${user.online}'),
         ],
       ),
