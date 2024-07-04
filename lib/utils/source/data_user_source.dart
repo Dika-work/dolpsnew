@@ -1,4 +1,5 @@
 import 'package:doplsnew/controllers/data_user_controller.dart';
+import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:doplsnew/utils/popups/dialogs.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,7 @@ class DataUserDataSource extends DataTableSource {
     bool isEven = index % 2 == 0;
     return Container(
       color: isEven ? Colors.grey[200] : Colors.white,
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(CustomSize.sm),
       child: Text(text),
     );
   }

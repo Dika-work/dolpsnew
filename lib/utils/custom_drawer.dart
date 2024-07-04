@@ -37,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               height: CustomSize.imageCarouselHeight,
-              padding: const EdgeInsets.only(top: 20.0),
+              padding: const EdgeInsets.only(top: CustomSize.lg),
               decoration: const BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage('assets/images/login_bg.jpg'),
@@ -51,21 +51,20 @@ class CustomDrawer extends StatelessWidget {
                     child: CachedNetworkImage(
                       width: 70,
                       height: 70,
-                      imageUrl:
-                          'https://tse3.mm.bing.net/th?id=OIP.d7Yh1Ur0vyGpFrhMYsNZIAHaGs&pid=Api&P=0&h=180',
+                      imageUrl: '${storageUtil.baseURL}/do/${user!.gambar}',
                       fit: BoxFit.cover,
-                      progressIndicatorBuilder: (context, url, progress) =>
+                      progressIndicatorBuilder: (_, __, ___) =>
                           const CustomShimmerEffect(
                         width: 55,
                         height: 55,
                         radius: 55,
                       ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                      errorWidget: (_, ___, __) =>
+                          Image.asset('assets/icons/person.png'),
                     ),
                   ),
                   Text(
-                    user!.nama.toUpperCase(),
+                    user.nama.toUpperCase(),
                     style: Theme.of(context)
                         .textTheme
                         .headlineMedium

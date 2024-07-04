@@ -1,3 +1,4 @@
+import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -23,8 +24,8 @@ class LoginScreen extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 24.0),
-                padding: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.symmetric(horizontal: CustomSize.lg),
+                padding: const EdgeInsets.all(CustomSize.sm),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.white.withOpacity(0.13)),
                   borderRadius: BorderRadius.circular(15.0),
@@ -51,7 +52,8 @@ class LoginScreen extends StatelessWidget {
                               fontWeight: FontWeight.bold, fontSize: 22),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: CustomSize.xl),
                           child: Column(
                             children: [
                               TextFormField(

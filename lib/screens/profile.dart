@@ -29,10 +29,10 @@ class Profile extends StatelessWidget {
               child: Container(
                 color: Colors.blueAccent,
                 width: double.infinity,
-                padding: const EdgeInsets.only(bottom: 20.0),
+                padding: const EdgeInsets.only(bottom: CustomSize.lg),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 12.0),
+                      horizontal: CustomSize.lg, vertical: CustomSize.md),
                   child: Column(
                     children: [
                       ClipRRect(
@@ -117,7 +117,7 @@ class Profile extends StatelessWidget {
             Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
+                  padding: const EdgeInsets.only(left: CustomSize.md),
                   child: Text(
                     'Data User',
                     style: Theme.of(context).textTheme.headlineMedium,
@@ -126,7 +126,7 @@ class Profile extends StatelessWidget {
             Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
+                  padding: const EdgeInsets.only(left: CustomSize.md),
                   child: Text(
                     'Alamat',
                     style: Theme.of(context).textTheme.bodyMedium,

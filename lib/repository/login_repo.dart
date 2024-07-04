@@ -14,7 +14,7 @@ class LoginRepository extends GetxController {
       print('Mengirim permintaan ke server...');
       final response = await http.post(
         Uri.parse(
-          'http://langgeng.dyndns.biz/DO/api/login_user.php?username=$username&password=$password',
+          '${storageUtil.baseURL}/DO/api/login_user.php?username=$username&password=$password',
         ),
       );
 
@@ -32,10 +32,10 @@ class LoginRepository extends GetxController {
           print('Berhasil menyimpan ke local storage: ${user.username}');
           return user;
         } else {
-          showErrorSnackbar('Gagal', 'Respon dari server tidak valid.');
+          showErrorSnackbar('Gagal😪', 'Respon dari server tidak valid.');
         }
       } else {
-        showErrorSnackbar('Gagal', 'Username dan password salah..😒');
+        showErrorSnackbar('Gagal😪', 'Username dan password salah..😒');
       }
     } catch (e) {
       handleError(e);

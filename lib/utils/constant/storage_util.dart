@@ -8,6 +8,7 @@ import '../../screens/homepage.dart';
 
 class StorageUtil {
   final prefs = GetStorage();
+  final baseURL = 'http://langgeng.dyndns.biz';
 
   UserModel? getUserDetails() {
     final data = prefs.read('user');

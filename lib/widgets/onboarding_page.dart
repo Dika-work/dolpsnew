@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
 
+import '../utils/constant/custom_size.dart';
+
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage(
       {super.key,
@@ -22,7 +24,7 @@ class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.all(CustomSize.lg),
       child: Column(
         children: [
           Lottie.asset(

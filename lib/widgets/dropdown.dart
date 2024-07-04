@@ -1,4 +1,5 @@
 import 'package:doplsnew/helpers/helper_function.dart';
+import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class DropDownWidget extends StatelessWidget {
         buttonStyleData: ButtonStyleData(
           height: 55,
           width: CustomHelperFunctions.screenWidth(),
-          padding: const EdgeInsets.only(left: 14, right: 14),
+          padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             border: Border.all(width: 1, color: AppColors.borderPrimary),

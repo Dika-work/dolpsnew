@@ -3,6 +3,8 @@ import 'package:doplsnew/repository/data_user_repo.dart';
 import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 import '../utils/popups/snackbar.dart';
 
@@ -17,11 +19,11 @@ class DataUserController extends GetxController {
   // textEditingController
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  Rx<File?> image = Rx<File?>(null);
   final namaController = TextEditingController();
   final tipe = 'admin'.obs;
   final wilayah = '1'.obs;
   final plant = '1100'.obs;
-  final gambarController = TextEditingController();
   final dealer = 'honda'.obs;
 
   @override
@@ -52,6 +54,7 @@ class DataUserController extends GetxController {
 
     if (!addUserKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
+      Get.back();
       return;
     }
 
@@ -64,7 +67,7 @@ class DataUserController extends GetxController {
         wilayah.value,
         plant.value,
         dealer.value,
-        gambarController.text,
+        image.value!.path,
         '0');
     CustomFullScreenLoader.stopLoading();
 
@@ -72,7 +75,7 @@ class DataUserController extends GetxController {
     usernameController.clear();
     passwordController.clear();
     namaController.clear();
-    gambarController.clear();
+    image.value = null;
 
     // Reset Rx variables or other state variables if needed
     tipe.value = 'admin';
@@ -89,5 +92,29 @@ class DataUserController extends GetxController {
       title: 'Berhasil',
       message: 'Menambahkan data user baru..',
     );
+  }
+
+  // get image from divice
+  Future<XFile?> pickImage() async {
+    try {
+      final imagePicker =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (imagePicker == null) return null;
+
+      final imageTemporary = File(imagePicker.path);
+      image.value = imageTemporary;
+    } catch (e) {
+      // Show error message
+      SnackbarLoader.errorSnackBar(title: 'Oops🤷', message: e.toString());
+    }
+    return null;
+  }
+
+  // delete image
+  Future<void> deleteImage() async {
+    if (image.value != null) {
+      await image.value!.delete();
+      image.value = null;
+    }
   }
 }
