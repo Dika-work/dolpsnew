@@ -11,6 +11,7 @@ import '../utils/popups/snackbar.dart';
 class DataUserController extends GetxController {
   RxList<DataUserModel> dataUserModel = <DataUserModel>[].obs;
   GlobalKey<FormState> addUserKey = GlobalKey<FormState>();
+  GlobalKey<FormState> editUserKey = GlobalKey<FormState>();
 
   final isDataUserLoading = Rx<bool>(false);
   final hidePassword = true.obs;
@@ -22,9 +23,14 @@ class DataUserController extends GetxController {
   Rx<File?> image = Rx<File?>(null);
   final namaController = TextEditingController();
   final tipe = 'admin'.obs;
-  final wilayah = '1'.obs;
-  final plant = '1100'.obs;
-  final dealer = 'honda'.obs;
+  final wilayah = '0'.obs;
+  final plant = '0'.obs;
+  final dealer = '0'.obs;
+
+  // Text editing controllers for addUser form
+  final usernameAddController = TextEditingController();
+  final passwordAddController = TextEditingController();
+  final namaAddController = TextEditingController();
 
   @override
   void onInit() {
@@ -54,22 +60,35 @@ class DataUserController extends GetxController {
 
     if (!addUserKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
-      Get.back();
+      print('Form validation failed');
       return;
     }
 
-    await dataUserRepo.addDataUserContent(
+    try {
+      await dataUserRepo.addDataUserContent(
         usernameController.text,
         passwordController.text,
         namaController.text,
         tipe.value,
         'do',
+        image.value!.path,
         wilayah.value,
         plant.value,
         dealer.value,
-        image.value!.path,
-        '0');
+      );
+      print('Data added successfully');
+    } catch (e) {
+      print('Error while adding data: $e');
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Failed to add user data',
+      );
+      return;
+    }
+
     CustomFullScreenLoader.stopLoading();
+    print('Stopped loading dialog');
 
     // reset text controllers
     usernameController.clear();
@@ -79,22 +98,71 @@ class DataUserController extends GetxController {
 
     // Reset Rx variables or other state variables if needed
     tipe.value = 'admin';
-    wilayah.value = '1';
-    plant.value = '1100';
-    dealer.value = 'honda';
+    wilayah.value = '0';
+    plant.value = '0';
+    dealer.value = '0';
 
-    Get.back();
-    print('...SUDAH BERHASIL...');
-    fetchUserData();
-    print('/// BERHASIL NAMPILIN DATA BARU ///');
+    print('Controllers and variables reset');
+    await fetchUserData();
+    print('User data fetched');
 
     SnackbarLoader.successSnackBar(
       title: 'Berhasil',
       message: 'Menambahkan data user baru..',
     );
+
+    print('Navigated back');
   }
 
-  // get image from divice
+  Future<void> editUserData(
+    String userName,
+    String password,
+    String nama,
+    String selectedTipe,
+    String selectedWilayah,
+    String selectedPlant,
+    String selectedDealer,
+  ) async {
+    CustomFullScreenLoader.openLoadingDialog(
+      'Editing user data...',
+      'assets/animations/141594-animation-of-docer.json',
+    );
+
+    if (!editUserKey.currentState!.validate()) {
+      CustomFullScreenLoader.stopLoading();
+      Get.back();
+      return;
+    }
+
+    try {
+      // Perform the edit operation
+      await dataUserRepo.editDataUserContent(
+        userName,
+        password,
+        nama,
+        selectedTipe,
+        'do',
+        image.value?.path ?? '',
+        selectedWilayah,
+        selectedPlant,
+        selectedDealer,
+      );
+
+      CustomFullScreenLoader.stopLoading();
+      Get.offNamed('/data-user');
+      fetchUserData();
+
+      // Show success snackbar handled inside editDataUserContent
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit data user',
+      );
+    }
+  }
+
+  // get image from device
   Future<XFile?> pickImage() async {
     try {
       final imagePicker =
@@ -105,7 +173,10 @@ class DataUserController extends GetxController {
       image.value = imageTemporary;
     } catch (e) {
       // Show error message
-      SnackbarLoader.errorSnackBar(title: 'Oops🤷', message: e.toString());
+      SnackbarLoader.errorSnackBar(
+        title: 'Oops🤷',
+        message: 'Gagal mengambil gambar dari gallery',
+      );
     }
     return null;
   }

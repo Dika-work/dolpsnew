@@ -1,4 +1,5 @@
 import 'package:doplsnew/controllers/data_user_controller.dart';
+import 'package:doplsnew/models/get_all_user_model.dart';
 import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:doplsnew/utils/popups/dialogs.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,11 @@ import 'package:flutter/material.dart';
 class DataUserDataSource extends DataTableSource {
   final DataUserController controller;
   final BuildContext context;
-  DataUserDataSource(this.controller, this.context);
+  final void Function(DataUserModel) onEdit;
+  final void Function()? onDelete;
+
+  DataUserDataSource(this.controller, this.context,
+      {required this.onEdit, this.onDelete});
 
   @override
   DataRow getRow(int index) {
@@ -22,12 +27,13 @@ class DataUserDataSource extends DataTableSource {
         children: [
           IconButton(
             icon: const Icon(Icons.edit),
-            onPressed: () {},
+            onPressed: () => onEdit(user),
           ),
           IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                CustomDialogs.deleteDialog(context: context);
+                CustomDialogs.deleteDialog(
+                    context: context, onConfirm: onDelete);
               }),
         ],
       )),

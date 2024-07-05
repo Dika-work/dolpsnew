@@ -31,6 +31,7 @@ class DataUserModel {
   int menu9;
   int menu10;
   String gambar;
+  String dealer;
   int online;
 
   DataUserModel({
@@ -66,6 +67,7 @@ class DataUserModel {
     required this.menu9,
     required this.menu10,
     required this.gambar,
+    required this.dealer,
     required this.online,
   });
 
@@ -103,6 +105,7 @@ class DataUserModel {
       menu9: json['menu9'] ?? 0,
       menu10: json['menu10'] ?? 0,
       gambar: json['gambar'] ?? '',
+      dealer: json['dealer'] ?? '',
       online: json['online'] ?? 0,
     );
   }

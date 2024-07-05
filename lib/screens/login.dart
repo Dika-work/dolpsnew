@@ -45,11 +45,10 @@ class LoginScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
+                        Text(
                           "PT. Langgeng Pranamas Sentosa",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 22),
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
