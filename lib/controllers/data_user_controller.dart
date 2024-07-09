@@ -81,8 +81,8 @@ class DataUserController extends GetxController {
       print('Error while adding data: $e');
       CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
-        title: 'Error',
-        message: 'Failed to add user data',
+        title: 'Error☠️',
+        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
       );
       return;
     }
@@ -107,7 +107,7 @@ class DataUserController extends GetxController {
     print('User data fetched');
 
     SnackbarLoader.successSnackBar(
-      title: 'Berhasil',
+      title: 'Berhasil✨',
       message: 'Menambahkan data user baru..',
     );
 

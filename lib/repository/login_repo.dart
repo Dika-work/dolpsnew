@@ -51,6 +51,6 @@ class LoginRepository extends GetxController {
   void handleError(dynamic e) {
     print('Terjadi kesalahan saat mencoba login: $e');
     showErrorSnackbar(
-        'Error', 'Pastikan sudah terhubung dengan wifi kantor 😁');
+        'Error☠️', 'Pastikan sudah terhubung dengan wifi kantor 😁');
   }
 }

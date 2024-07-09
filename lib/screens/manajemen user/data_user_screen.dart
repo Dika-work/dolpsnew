@@ -11,6 +11,7 @@ import 'package:iconsax/iconsax.dart';
 
 import '../../models/get_all_user_model.dart';
 import '../../utils/source/data_user_source.dart';
+import '../../widgets/curved_edges.dart';
 
 class DataUserScreen extends GetView<DataUserController> {
   const DataUserScreen({super.key});
@@ -64,8 +65,7 @@ class DataUserScreen extends GetView<DataUserController> {
                             userData: userData,
                           ));
                     },
-                    onDelete:
-                        () {}, // Function onDelete should be implemented accordingly
+                    onDelete: () {},
                   ),
                   rowsPerPage: 10,
                 ),
@@ -99,205 +99,253 @@ class AddUserData extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Form(
-          key: controller.addUserKey,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: CustomSize.lg, vertical: CustomSize.md),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: controller.usernameController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Username harus di isi';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.person),
-                    labelText: 'Username',
-                  ),
-                ),
-                const SizedBox(height: CustomSize.spaceBtwItems),
-                Obx(
-                  () => TextFormField(
-                    controller: controller.passwordController,
-                    obscureText: controller.hidePassword.value,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Password harus di isi';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      labelText: 'Password',
-                      suffixIcon: IconButton(
-                        onPressed: () => controller.hidePassword.value =
-                            !controller.hidePassword.value,
-                        icon: Icon(
-                          controller.hidePassword.value
-                              ? Iconsax.eye
-                              : Iconsax.eye_slash,
+        child: Column(
+          children: [
+            ClipPath(
+              clipper: TCustomCurvedEdges(),
+              child: Container(
+                color: Colors.blueAccent,
+                width: double.infinity,
+                padding: const EdgeInsets.only(bottom: CustomSize.lg),
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: CustomSize.lg, vertical: CustomSize.md),
+                    child: Obx(() => controller.image.value != null
+                        ? Column(
+                            children: [
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(70),
+                                  child: Image.file(
+                                    controller.image.value!,
+                                    width: CustomSize.profileImageSize,
+                                    height: CustomSize.profileImageSize,
+                                    fit: BoxFit.cover,
+                                  )),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  IconButton(
+                                      onPressed: controller.deleteImage,
+                                      icon: const Icon(
+                                        Iconsax.trash,
+                                        color: AppColors.error,
+                                      )),
+                                  IconButton(
+                                      onPressed: controller.pickImage,
+                                      icon: const Icon(Iconsax.edit)),
+                                ],
+                              )
+                            ],
+                          )
+                        : Align(
+                            alignment: Alignment.center,
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(70),
+                                  child: InkWell(
+                                    onTap: controller.pickImage,
+                                    child: Image.asset(
+                                      'assets/icons/person.png',
+                                      width: CustomSize.profileImageSize,
+                                      height: CustomSize.profileImageSize,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 4,
+                                  right: 0,
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        width: 4,
+                                        color: Theme.of(context)
+                                            .scaffoldBackgroundColor,
+                                      ),
+                                      color: Colors.green,
+                                    ),
+                                    child: const Icon(
+                                      Iconsax.add_circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: CustomSize.lg, vertical: CustomSize.md),
+              child: Form(
+                key: controller.addUserKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: controller.usernameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Username harus di isi';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Icons.person),
+                        labelText: 'Username',
+                      ),
+                    ),
+                    const SizedBox(height: CustomSize.spaceBtwItems),
+                    Obx(
+                      () => TextFormField(
+                        controller: controller.passwordController,
+                        obscureText: controller.hidePassword.value,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Password harus di isi';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.lock),
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            onPressed: () => controller.hidePassword.value =
+                                !controller.hidePassword.value,
+                            icon: Icon(
+                              controller.hidePassword.value
+                                  ? Iconsax.eye
+                                  : Iconsax.eye_slash,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: CustomSize.spaceBtwItems),
+                    TextFormField(
+                      controller: controller.namaController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Nama harus di isi';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        prefixIcon: Icon(Iconsax.card),
+                        labelText: 'Nama',
+                      ),
+                    ),
+                    const SizedBox(height: CustomSize.spaceBtwItems),
+                    const Text('Pilih Tipe'),
+                    Obx(
+                      () => DropDownWidget(
+                        value: controller.tipe.value,
+                        items: const ['admin', 'user'],
+                        onChanged: (String? value) {
+                          controller.tipe.value = value!;
+                          print('ini tipenya : ${controller.tipe.value}');
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: CustomSize.spaceBtwItems),
+                    const Text('Pilih Daerah'),
+                    Obx(
+                      () => DropDownWidget(
+                        value: controller.wilayah.value,
+                        items: const ['0', '1', '2', '3', '4'],
+                        onChanged: (String? value) {
+                          controller.wilayah.value = value!;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: CustomSize.spaceBtwItems),
+                    const Text('Pilih Plant'),
+                    Obx(
+                      () => DropDownWidget(
+                        value: controller.plant.value,
+                        items: const [
+                          '0',
+                          '1100',
+                          '1200',
+                          '1300',
+                          '1350',
+                          '1700',
+                          '1800',
+                          '1900',
+                          'DC (Pondok Ungu)',
+                          'TB (Tambun Bekasi)'
+                        ],
+                        onChanged: (String? value) {
+                          controller.plant.value = value!;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: CustomSize.spaceBtwItems),
+                    const Text('Pilih Dealer'),
+                    Obx(
+                      () => DropDownWidget(
+                        value: controller.dealer.value,
+                        items: const [
+                          '0',
+                          'honda',
+                          'yamaha',
+                          'suzuki',
+                          'kawasaki'
+                        ],
+                        onChanged: (String? value) {
+                          controller.dealer.value = value!;
+                          print('INI VALUE DEALER... $value');
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: CustomSize.spaceBtwItems),
-                TextFormField(
-                  controller: controller.namaController,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Nama harus di isi';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.card),
-                    labelText: 'Nama',
-                  ),
-                ),
-                const SizedBox(height: CustomSize.spaceBtwItems),
-                Obx(
-                  () => controller.image.value != null
-                      ? Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                width: 180,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: FileImage(controller.image.value!),
-                                      fit: BoxFit.cover),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton(
-                                  onPressed: controller.deleteImage,
-                                  icon: const Icon(
-                                    Iconsax.trash,
-                                    color: AppColors.error,
-                                  )),
-                            ),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: IconButton(
-                                  onPressed: controller.pickImage,
-                                  icon: const Icon(Iconsax.edit)),
-                            )
-                          ],
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                              Text(
-                                'Tambahkan Foto',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              InkWell(
-                                  onTap: controller.pickImage,
-                                  child: const Icon(Iconsax.gallery))
-                            ]),
-                ),
-                const SizedBox(height: CustomSize.spaceBtwItems),
-                const Text('Pilih Tipe'),
-                Obx(
-                  () => DropDownWidget(
-                    value: controller.tipe.value,
-                    items: const ['admin', 'user'],
-                    onChanged: (String? value) {
-                      controller.tipe.value = value!;
-                    },
-                  ),
-                ),
-                const SizedBox(height: CustomSize.spaceBtwItems),
-                const Text('Pilih Daerah'),
-                Obx(
-                  () => DropDownWidget(
-                    value: controller.wilayah.value,
-                    items: const ['0', '1', '2', '3', '4'],
-                    onChanged: (String? value) {
-                      controller.wilayah.value = value!;
-                    },
-                  ),
-                ),
-                const SizedBox(height: CustomSize.spaceBtwItems),
-                const Text('Pilih Plant'),
-                Obx(
-                  () => DropDownWidget(
-                    value: controller.plant.value,
-                    items: const [
-                      '0',
-                      '1100',
-                      '1200',
-                      '1300',
-                      '1350',
-                      '1700',
-                      '1800',
-                      '1900',
-                      'DC (Pondok Ungu)',
-                      'TB (Tambun Bekasi)'
-                    ],
-                    onChanged: (String? value) {
-                      controller.plant.value = value!;
-                    },
-                  ),
-                ),
-                const SizedBox(height: CustomSize.spaceBtwItems),
-                const Text('Pilih Dealer'),
-                Obx(
-                  () => DropDownWidget(
-                    value: controller.dealer.value,
-                    items: const ['0', 'honda', 'yamaha', 'suzuki', 'kawasaki'],
-                    onChanged: (String? value) {
-                      controller.dealer.value = value!;
-                      print('INI VALUE DEALER... $value');
-                    },
-                  ),
-                ),
-                const SizedBox(height: CustomSize.spaceBtwSections),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (controller.image.value == null) {
-                        SnackbarLoader.errorSnackBar(
-                          title: 'Perhatian😪',
-                          message: 'Harap menginput foto 😁',
-                        );
-                      } else {
-                        CustomDialogs.defaultDialog(
-                          context: context,
-                          titleWidget: Text(
-                            'Menambahkan data user baru',
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                          contentWidget: Text(
-                            'Apakah anda yakin ingin menambahkan data user baru?',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          confirmText: 'Ya',
-                          onConfirm: () async {
-                            await controller.addUserData();
-                            Get.offNamed('/data-user');
-                          },
-                        );
-                      }
-                    },
-                    child: const Text('Tambahkan user'),
-                  ),
-                )
-              ],
+              ),
             ),
-          ),
+            const SizedBox(height: CustomSize.spaceBtwSections),
+            Padding(
+              padding: const EdgeInsets.only(
+                  bottom: CustomSize.md,
+                  left: CustomSize.md,
+                  right: CustomSize.md),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (controller.image.value == null) {
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Perhatian😪',
+                        message: 'Harap menginput foto 😁',
+                      );
+                    } else {
+                      CustomDialogs.defaultDialog(
+                        context: context,
+                        titleWidget: Text(
+                          'Menambahkan data user baru',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        contentWidget: Text(
+                          'Apakah anda yakin ingin menambahkan data user baru?',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        confirmText: 'Ya',
+                        onConfirm: () async {
+                          await controller.addUserData();
+                          Get.offNamed('/data-user');
+                        },
+                      );
+                    }
+                  },
+                  child: const Text('Tambahkan user'),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -420,6 +468,7 @@ class _EditUserDataState extends State<EditUserData> {
                   onChanged: (String? value) {
                     setState(() {
                       tipe = value!;
+                      print('ini tipe nya : $tipe');
                     });
                   },
                 ),
