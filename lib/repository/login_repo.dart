@@ -28,8 +28,10 @@ class LoginRepository extends GetxController {
             data['response'] is Map<String, dynamic>) {
           final user = UserModel.fromJson(data['response']);
           storageUtil.saveUserDetails(user);
+          print('ini gambarnya : ${user.gambar}');
           Get.offNamed('/rootpage');
-          print('Berhasil menyimpan ke local storage: ${user.username}');
+          print(
+              'Berhasil menyimpan ke local storage: ${user.username} ${user.gambar}');
           return user;
         } else {
           showErrorSnackbar('Gagal😪', 'Respon dari server tidak valid.');

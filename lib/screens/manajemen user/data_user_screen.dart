@@ -8,6 +8,7 @@ import 'package:doplsnew/widgets/dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../models/get_all_user_model.dart';
 import '../../utils/source/data_user_source.dart';
@@ -18,6 +19,14 @@ class DataUserScreen extends GetView<DataUserController> {
 
   @override
   Widget build(BuildContext context) {
+    late Map<String, double> columnWidths = {
+      'No': double.nan,
+      'Username': double.nan,
+      'Nama': double.nan,
+      'Tipe': double.nan,
+      'Gambar': double.nan,
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -28,52 +37,133 @@ class DataUserScreen extends GetView<DataUserController> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.toNamed('/rootpage'),
         ),
-        actions: [
-          IconButton(
-              onPressed: () =>
-                  Get.to(() => AddUserData(controller: controller)),
-              icon: const Icon(Iconsax.user_add))
-        ],
       ),
-      body: SingleChildScrollView(
-        child: Obx(() {
-          if (controller.isDataUserLoading.value &&
-              controller.dataUserModel.isEmpty) {
-            return const CustomCircularLoader();
-          } else if (controller.dataUserModel.isEmpty) {
-            return Center(child: Text(controller.dataUserModel.toString()));
-          } else {
-            return SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: CustomSize.md, vertical: CustomSize.md),
-                child: PaginatedDataTable(
-                  columns: const [
-                    DataColumn(label: Text('No')),
-                    DataColumn(label: Text('Username')),
-                    DataColumn(label: Text('Nama')),
-                    DataColumn(label: Text('Tipe')),
-                    DataColumn(label: Text('Gambar')),
-                    DataColumn(label: Text('Action')),
-                  ],
-                  source: DataUserDataSource(
-                    controller,
-                    context,
-                    onEdit: (userData) {
-                      Get.to(() => EditUserData(
-                            controller: controller,
-                            userData: userData,
-                          ));
-                    },
-                    onDelete: () {},
-                  ),
-                  rowsPerPage: 10,
+      body: Obx(() {
+        if (controller.isDataUserLoading.value &&
+            controller.dataUserModel.isEmpty) {
+          return const CustomCircularLoader();
+        } else if (controller.dataUserModel.isEmpty) {
+          return Center(
+              child: Text('Data User Tidak Tersedia',
+                  style: Theme.of(context).textTheme.bodyMedium));
+        } else {
+          return SafeArea(
+            child: SfDataGrid(
+              source: DataUserDataSource(dataUser: controller.dataUserModel),
+              columnWidthMode: ColumnWidthMode.auto,
+              allowPullToRefresh: true,
+              gridLinesVisibility: GridLinesVisibility.both,
+              headerGridLinesVisibility: GridLinesVisibility.both,
+              allowColumnsResizing: true,
+              onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
+                columnWidths[details.column.columnName] = details.width;
+                return true;
+              },
+              footer: Container(
+                color: AppColors.primary,
+                child: Center(
+                  child: InkWell(
+                      onTap: () =>
+                          Get.to(() => AddUserData(controller: controller)),
+                      child: Text(
+                        'Tambahkan user baru',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.apply(color: AppColors.light),
+                      )),
                 ),
               ),
-            );
-          }
-        }),
-      ),
+              allowEditing: true,
+              editingGestureType: EditingGestureType.tap,
+              selectionMode: SelectionMode.single,
+              navigationMode: GridNavigationMode.cell,
+              columns: [
+                GridColumn(
+                    width: columnWidths['No']!,
+                    columnName: 'No',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'No',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Username']!,
+                    columnName: 'Username',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Username',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Nama']!,
+                    columnName: 'Nama',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Nama',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Tipe']!,
+                    columnName: 'Tipe',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Tipe',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Gambar']!,
+                    columnName: 'Gambar',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Gambar',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+              ],
+            ),
+          );
+        }
+      }),
     );
   }
 }

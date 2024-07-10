@@ -1,60 +1,40 @@
-import 'package:doplsnew/controllers/data_user_controller.dart';
 import 'package:doplsnew/models/get_all_user_model.dart';
-import 'package:doplsnew/utils/constant/custom_size.dart';
-import 'package:doplsnew/utils/popups/dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class DataUserDataSource extends DataTableSource {
-  final DataUserController controller;
-  final BuildContext context;
-  final void Function(DataUserModel) onEdit;
-  final void Function()? onDelete;
-
-  DataUserDataSource(this.controller, this.context,
-      {required this.onEdit, this.onDelete});
-
-  @override
-  DataRow getRow(int index) {
-    final user = controller.dataUserModel[index];
-    String nomer = (index + 1).toString();
-    return DataRow.byIndex(index: index, cells: [
-      DataCell(_customCell(index, nomer)),
-      DataCell(_customCell(index, user.username)),
-      DataCell(_customCell(index, user.nama)),
-      DataCell(_customCell(index, user.tipe)),
-      DataCell(_customCell(index, user.gambar)),
-      DataCell(Row(
-        children: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () => onEdit(user),
-          ),
-          IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                CustomDialogs.deleteDialog(
-                    context: context, onConfirm: onDelete);
-              }),
-        ],
-      )),
-    ]);
+class DataUserDataSource extends DataGridSource {
+  DataUserDataSource({required List<DataUserModel> dataUser}) {
+    int index = 0;
+    _dataUsers = dataUser.map((e) {
+      index++;
+      return DataGridRow(cells: [
+        DataGridCell<int>(columnName: 'No', value: index),
+        DataGridCell<String>(columnName: 'Username', value: e.username),
+        DataGridCell<String>(columnName: 'Nama', value: e.nama),
+        DataGridCell<String>(columnName: 'Tipe', value: e.tipe),
+        DataGridCell<String>(columnName: 'Gambar', value: e.gambar),
+      ]);
+    }).toList();
   }
 
-  Widget _customCell(int index, String text) {
-    bool isEven = index % 2 == 0;
-    return Container(
-      color: isEven ? Colors.grey[200] : Colors.white,
-      padding: const EdgeInsets.all(CustomSize.sm),
-      child: Text(text),
-    );
+  List<DataGridRow> _dataUsers = [];
+
+  @override
+  List<DataGridRow> get rows => _dataUsers;
+
+  @override
+  DataGridRowAdapter? buildRow(DataGridRow row) {
+    int rowIndex = _dataUsers.indexOf(row);
+    bool isEvenRow = rowIndex % 2 == 0;
+
+    return DataGridRowAdapter(
+        color: isEvenRow ? Colors.white : Colors.grey[200],
+        cells: row.getCells().map<Widget>((e) {
+          return Center(
+            child: Text(
+              e.value.toString(),
+            ),
+          );
+        }).toList());
   }
-
-  @override
-  bool get isRowCountApproximate => false;
-
-  @override
-  int get rowCount => controller.dataUserModel.length;
-
-  @override
-  int get selectedRowCount => 0;
 }

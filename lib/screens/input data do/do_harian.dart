@@ -1,11 +1,15 @@
 import 'package:doplsnew/controllers/input%20data%20do/do_harian_controller.dart';
+import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/utils/popups/dialogs.dart';
+import 'package:doplsnew/utils/source/data_do_harian_source.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../widgets/dropdown.dart';
 
 class InputDataDoHarian extends GetView<DataDoHarianController> {
@@ -13,6 +17,21 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
 
   @override
   Widget build(BuildContext context) {
+    late Map<String, double> columnWidths = {
+      'No': double.nan,
+      'Plant': double.nan,
+      'Tujuan': double.nan,
+      'Tanggal': double.nan,
+      'Jam': double.nan,
+      'HSO - SRD': double.nan,
+      'HSO - MKS': double.nan,
+      'HSO - PTK': double.nan,
+      'BJM': double.nan,
+      'Jumlah 5': double.nan,
+      'Jumlah 6': double.nan,
+      'User': double.nan
+    };
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -49,10 +68,247 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
               icon: const Icon(Iconsax.user_add))
         ],
       ),
-      body: SafeArea(
-          child: Center(
-        child: Text('Input Data DO Harian'),
-      )),
+      body: Obx(() {
+        if (controller.isLoadingHarian.value &&
+            controller.doHarianModel.isEmpty) {
+          return const CustomCircularLoader();
+        } else if (controller.doHarianModel.isEmpty) {
+          return Center(
+            child: Text(
+              'Data DO Harian Tidak Tersedia',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          );
+        } else {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: CustomSize.md, vertical: CustomSize.sm),
+                  child: Text(
+                    'DO GLOBAL TGL : ${CustomHelperFunctions.getFormattedDate(DateTime.now())}',
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                ),
+                SfDataGrid(
+                  source:
+                      DataDoHarianSource(doHarian: controller.doHarianModel),
+                  columnWidthMode: ColumnWidthMode.auto,
+                  allowPullToRefresh: true,
+                  gridLinesVisibility: GridLinesVisibility.both,
+                  headerGridLinesVisibility: GridLinesVisibility.both,
+                  allowColumnsResizing: true,
+                  onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
+                    columnWidths[details.column.columnName] = details.width;
+                    return true;
+                  },
+                  columns: [
+                    GridColumn(
+                        width: columnWidths['No']!,
+                        columnName: 'No',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'No',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Plant']!,
+                        columnName: 'Plant',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Plant',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Tujuan']!,
+                        columnName: 'Tujuan',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Tujuan',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Tanggal']!,
+                        columnName: 'Tanggal',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Tanggal',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Jam']!,
+                        columnName: 'Jam',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Jam',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['HSO - SRD']!,
+                        columnName: 'HSO - SRD',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'HSO - SRD',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['HSO - MKS']!,
+                        columnName: 'HSO - MKS',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'HSO - MKS',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    GridColumn(
+                        width: columnWidths['HSO - PTK']!,
+                        columnName: 'HSO - PTK',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'HSO - PTK',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    GridColumn(
+                        width: columnWidths['BJM']!,
+                        columnName: 'BJM',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'BJM',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    GridColumn(
+                        width: columnWidths['Jumlah 5']!,
+                        columnName: 'Jumlah 5',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'Jumlah 5',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    GridColumn(
+                        width: columnWidths['Jumlah 6']!,
+                        columnName: 'Jumlah 6',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'Jumlah 6',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                    GridColumn(
+                        width: columnWidths['User']!,
+                        columnName: 'User',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'User',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          );
+        }
+      }),
     );
   }
 }
