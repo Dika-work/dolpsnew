@@ -1,4 +1,3 @@
-import 'package:doplsnew/controllers/data_user_controller.dart';
 import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
 import 'package:doplsnew/controllers/input%20data%20do/do_pengurangan_controller.dart';
 import 'package:doplsnew/controllers/input%20data%20do/do_tambahan_controller.dart';
@@ -35,11 +34,9 @@ class AppRoutes {
         ),
         // manajemen user
         GetPage(
-            name: '/data-user',
-            page: () => const DataUserScreen(),
-            binding: BindingsBuilder(() {
-              Get.put(DataUserController());
-            })),
+          name: '/data-user',
+          page: () => const DataUserScreen(),
+        ),
         GetPage(
             name: '/data-do-harian',
             page: () => const InputDataDoHarian(),

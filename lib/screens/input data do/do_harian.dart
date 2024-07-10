@@ -10,6 +10,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/circular_loader.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
 class InputDataDoHarian extends GetView<DataDoHarianController> {
@@ -42,31 +43,6 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Input DO Harian'),
-                    contentWidget: AddDOHarian(
-                      controller: controller,
-                    ),
-                    onConfirm: controller.AddDataDOHarian,
-                    onCancel: () {
-                      Navigator.of(context).pop();
-                      controller.tgl.value = '';
-                      controller.plant.value = '1100';
-                      controller.tujuan.value = '1';
-                      controller.srdController.clear();
-                      controller.mksController.clear();
-                      controller.ptkController.clear();
-                      controller.bjmController.clear();
-                    },
-                    cancelText: 'Close',
-                    confirmText: 'Tambahkan');
-              },
-              icon: const Icon(Iconsax.user_add))
-        ],
       ),
       body: Obx(() {
         if (controller.isLoadingHarian.value &&
@@ -103,6 +79,40 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                     columnWidths[details.column.columnName] = details.width;
                     return true;
                   },
+                  footer: Container(
+                    color: AppColors.primary,
+                    child: Center(
+                      child: InkWell(
+                          onTap: () {
+                            CustomDialogs.defaultDialog(
+                                context: context,
+                                titleWidget: const Text('Input DO Harian'),
+                                contentWidget: AddDOHarian(
+                                  controller: controller,
+                                ),
+                                onConfirm: controller.AddDataDOHarian,
+                                onCancel: () {
+                                  Get.back();
+                                  controller.tgl.value = '';
+                                  controller.plant.value = '1100';
+                                  controller.tujuan.value = '1';
+                                  controller.srdController.clear();
+                                  controller.mksController.clear();
+                                  controller.ptkController.clear();
+                                  controller.bjmController.clear();
+                                },
+                                cancelText: 'Close',
+                                confirmText: 'Tambahkan');
+                          },
+                          child: Text(
+                            'Tambahkan user baru',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.apply(color: AppColors.light),
+                          )),
+                    ),
+                  ),
                   columns: [
                     GridColumn(
                         width: columnWidths['No']!,

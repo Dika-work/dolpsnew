@@ -1,5 +1,6 @@
 import 'package:doplsnew/models/get_all_user_model.dart';
 import 'package:doplsnew/repository/data_user_repo.dart';
+import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,6 @@ import '../utils/popups/snackbar.dart';
 class DataUserController extends GetxController {
   RxList<DataUserModel> dataUserModel = <DataUserModel>[].obs;
   GlobalKey<FormState> addUserKey = GlobalKey<FormState>();
-  GlobalKey<FormState> editUserKey = GlobalKey<FormState>();
 
   final isDataUserLoading = Rx<bool>(false);
   final hidePassword = true.obs;
@@ -123,16 +123,7 @@ class DataUserController extends GetxController {
     String selectedPlant,
     String selectedDealer,
   ) async {
-    CustomFullScreenLoader.openLoadingDialog(
-      'Editing user data...',
-      'assets/animations/141594-animation-of-docer.json',
-    );
-
-    if (!editUserKey.currentState!.validate()) {
-      CustomFullScreenLoader.stopLoading();
-      Get.back();
-      return;
-    }
+    const CustomCircularLoader();
 
     try {
       // Perform the edit operation
@@ -149,7 +140,6 @@ class DataUserController extends GetxController {
       );
 
       CustomFullScreenLoader.stopLoading();
-      Get.offNamed('/data-user');
       fetchUserData();
 
       // Show success snackbar handled inside editDataUserContent
