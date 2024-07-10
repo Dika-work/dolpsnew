@@ -1,28 +1,27 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_harian_controller.dart';
-import 'package:doplsnew/models/do_harian_model.dart';
+import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
+import 'package:doplsnew/helpers/helper_function.dart';
+import 'package:doplsnew/models/do_tambah_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../helpers/helper_function.dart';
-
-class DataDoHarianSource extends DataGridSource {
-  DataDoHarianSource(
-      {required List<DoHarianModel> doHarian, int startIndex = 0}) {
-    _updateDataPager(doHarian, startIndex);
+class DataDoTambahSource extends DataGridSource {
+  DataDoTambahSource(
+      {required List<DoTambahModel> doTambah, int startIndex = 0}) {
+    _updateDataPager(doTambah, startIndex);
   }
 
-  List<DataGridRow> _doHarianData = [];
-  final controller = Get.put(DataDoHarianController());
+  List<DataGridRow> _doTambahData = [];
+  final controller = Get.put(DataDoTambahanController());
   int startIndex = 0;
   int index = 0;
 
   @override
-  List<DataGridRow> get rows => _doHarianData;
+  List<DataGridRow> get rows => _doTambahData;
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    int rowIndex = _doHarianData.indexOf(row);
+    int rowIndex = _doTambahData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
     return DataGridRowAdapter(
@@ -42,10 +41,10 @@ class DataDoHarianSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoHarianModel> doHarian, int startIndex) {
+  void _updateDataPager(List<DoTambahModel> doTambah, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
-    _doHarianData = doHarian.skip(startIndex).take(7).map<DataGridRow>((data) {
+    _doTambahData = doTambah.skip(startIndex).take(7).map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -65,7 +64,7 @@ class DataDoHarianSource extends DataGridSource {
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     final int startIndex = newPageIndex * 7;
-    _updateDataPager(controller.doHarianModel, startIndex);
+    _updateDataPager(controller.doTambahModel, startIndex);
     notifyListeners();
     return true;
   }

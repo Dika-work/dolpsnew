@@ -1,5 +1,5 @@
-import 'package:doplsnew/models/do_global_model.dart';
-import 'package:doplsnew/repository/input%20data%20do/do_global_repo.dart';
+import 'package:doplsnew/models/do_tambah_model.dart';
+import 'package:doplsnew/repository/input%20data%20do/do_tambah_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,11 +10,11 @@ import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
-class DataDOGlobalController extends GetxController {
+class DataDoTambahanController extends GetxController {
   final storageUtil = StorageUtil();
   final isLoadingGlobal = Rx<bool>(false);
-  RxList<DoGlobalModel> doGlobalModel = <DoGlobalModel>[].obs;
-  final dataHarianRepo = Get.put(DataDoGlobalRepository());
+  RxList<DoTambahModel> doTambahModel = <DoTambahModel>[].obs;
+  final dataTambahRepo = Get.put(DataDoTambahRepository());
   GlobalKey<FormState> addGlobalKey = GlobalKey<FormState>();
 
   final tujuan = '1'.obs;
@@ -71,17 +71,17 @@ class DataDOGlobalController extends GetxController {
   Future<void> fetchDataDoGlobal() async {
     try {
       isLoadingGlobal.value = true;
-      final dataHarian = await dataHarianRepo.fetchDataGlobalContent();
-      doGlobalModel.assignAll(dataHarian);
+      final dataTambah = await dataTambahRepo.fetchDataTambahContent();
+      doTambahModel.assignAll(dataTambah);
     } catch (e) {
       print('Error fetching data do harian : $e');
-      doGlobalModel.assignAll([]);
+      doTambahModel.assignAll([]);
     } finally {
       isLoadingGlobal.value = false;
     }
   }
 
-  Future<void> addDataDOGlobal() async {
+  Future<void> addDataDoTambah() async {
     const CustomCircularLoader();
 
     if (!addGlobalKey.currentState!.validate()) {
@@ -89,7 +89,7 @@ class DataDOGlobalController extends GetxController {
       return;
     }
 
-    bool isDuplicate = doGlobalModel.any((data) =>
+    bool isDuplicate = doTambahModel.any((data) =>
         data.idPlant.toString() == idplant.value && data.tgl == tgl.value);
 
     if (isDuplicate) {
@@ -101,7 +101,7 @@ class DataDOGlobalController extends GetxController {
     }
 
     try {
-      await dataHarianRepo.addDataGlobal(
+      await dataTambahRepo.addDataTambah(
           idplant.value,
           tujuanDisplayValue,
           tgl.value,

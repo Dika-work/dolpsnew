@@ -24,14 +24,10 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
       'Plant': double.nan,
       'Tujuan': double.nan,
       'Tanggal': double.nan,
-      'Jam': double.nan,
       'HSO - SRD': double.nan,
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
-      'Jumlah 5': double.nan,
-      'Jumlah 6': double.nan,
-      'User': double.nan
     };
 
     const double dataPagerHeight = 60.0;
@@ -195,22 +191,6 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                 ))),
                         GridColumn(
-                            width: columnWidths['Jam']!,
-                            columnName: 'Jam',
-                            label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'Jam',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
                             width: columnWidths['HSO - SRD']!,
                             columnName: 'HSO - SRD',
                             label: Container(
@@ -271,57 +251,6 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                               ),
                               child: Text(
                                 'BJM',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        GridColumn(
-                            width: columnWidths['Jumlah 5']!,
-                            columnName: 'Jumlah 5',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Jumlah 5',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        GridColumn(
-                            width: columnWidths['Jumlah 6']!,
-                            columnName: 'Jumlah 6',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Jumlah 6',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        GridColumn(
-                            width: columnWidths['User']!,
-                            columnName: 'User',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'User',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium

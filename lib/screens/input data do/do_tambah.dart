@@ -1,21 +1,20 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
-import 'package:doplsnew/utils/loader/circular_loader.dart';
-import 'package:doplsnew/utils/source/data_do_global.dart';
+import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
+import 'package:doplsnew/utils/source/data_do_tambah.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../helpers/helper_function.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
-class InputDataDOGlobal extends GetView<DataDOGlobalController> {
-  const InputDataDOGlobal({super.key});
+class InputDataDoTambahan extends GetView<DataDoTambahanController> {
+  const InputDataDoTambahan({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +33,10 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
     const int rowsPerPage = 7;
 
     int currentPage = 0;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Input DO Global',
+          'Input DO Tambahan',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         leading: IconButton(
@@ -50,22 +48,13 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
               onPressed: () {
                 CustomDialogs.defaultDialog(
                     context: context,
-                    titleWidget: const Text('Input DO Global'),
-                    contentWidget: AddDOGlobal(
+                    titleWidget: const Text('Input DO Tambahan'),
+                    contentWidget: AddDOTambahan(
                       controller: controller,
                     ),
-                    onConfirm: () {
-                      if (controller.tgl.value.isEmpty) {
-                        SnackbarLoader.errorSnackBar(
-                          title: 'Gagal😪',
-                          message: 'Pastikan tanggal telah di isi 😁',
-                        );
-                      } else {
-                        controller.addDataDOGlobal();
-                      }
-                    },
+                    onConfirm: controller.addDataDoTambah,
                     onCancel: () {
-                      Get.back();
+                      Navigator.of(context).pop();
                       controller.tgl.value = '';
                       controller.plant.value = '1100';
                       controller.tujuan.value = '1';
@@ -82,18 +71,18 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
       ),
       body: Obx(() {
         if (controller.isLoadingGlobal.value &&
-            controller.doGlobalModel.isEmpty) {
+            controller.doTambahModel.isEmpty) {
           return const CustomCircularLoader();
-        } else if (controller.doGlobalModel.isEmpty) {
+        } else if (controller.doTambahModel.isEmpty) {
           return Center(
             child: Text(
-              'Data DO Global Tidak Tersedia',
+              'Data DO Harian Tidak Tersedia',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           );
         } else {
-          final dataSource = DataDoGlobalSource(
-            doGlobal: controller.doGlobalModel,
+          final dataSource = DataDoTambahSource(
+            doTambah: controller.doTambahModel,
             startIndex: currentPage * rowsPerPage,
           );
           return LayoutBuilder(
@@ -122,8 +111,8 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
                               onTap: () {
                                 CustomDialogs.defaultDialog(
                                     context: context,
-                                    titleWidget: const Text('Input DO Global'),
-                                    contentWidget: AddDOGlobal(
+                                    titleWidget: const Text('Input DO Harian'),
+                                    contentWidget: AddDOTambahan(
                                       controller: controller,
                                     ),
                                     onConfirm: () {
@@ -134,7 +123,7 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
                                               'Pastikan tanggal telah di isi 😁',
                                         );
                                       } else {
-                                        controller.addDataDOGlobal();
+                                        controller.addDataDoTambah();
                                       }
                                     },
                                     onCancel: () {
@@ -151,7 +140,7 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
                                     confirmText: 'Tambahkan');
                               },
                               child: Text(
-                                'Tambahkan data DO Global',
+                                'Tambahkan data DO Harian',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium
@@ -298,7 +287,7 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
                     height: dataPagerHeight,
                     child: SfDataPager(
                       delegate: dataSource,
-                      pageCount: (controller.doGlobalModel.length / rowsPerPage)
+                      pageCount: (controller.doTambahModel.length / rowsPerPage)
                           .ceilToDouble(),
                       direction: Axis.horizontal,
                     ),
@@ -313,15 +302,14 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
   }
 }
 
-class AddDOGlobal extends StatelessWidget {
-  const AddDOGlobal({super.key, required this.controller});
+class AddDOTambahan extends StatelessWidget {
+  const AddDOTambahan({super.key, required this.controller});
 
-  final DataDOGlobalController controller;
+  final DataDoTambahanController controller;
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: controller.addGlobalKey,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -345,28 +333,21 @@ class AddDOGlobal extends StatelessWidget {
                         lastDate: DateTime(2040),
                       ).then((newSelectedDate) {
                         if (newSelectedDate != null) {
-                          // Hanya ubah nilai tanggal, biarkan waktu tetap default
                           controller.tgl.value =
-                              DateFormat('yyyy-MM-dd').format(newSelectedDate);
-                          print(
-                              'Ini tanggal yang dipilih : ${controller.tgl.value}');
+                              newSelectedDate.toLocal().toString();
                         }
                       });
                     },
-                    icon: const Icon(Icons.calendar_today),
+                    icon: const Icon(Iconsax.calendar),
                   ),
                   hintText: controller.tgl.value.isNotEmpty
                       ? DateFormat.yMMMMd('id_ID').format(
-                          DateTime.tryParse(
-                                  '${controller.tgl.value} 00:00:00') ??
+                          DateTime.tryParse(controller.tgl.value) ??
                               DateTime.now(),
                         )
                       : 'Tanggal',
                 ),
               ),
-            ),
-            Obx(
-              () => Text(controller.idplant.value),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plant'),
@@ -375,7 +356,6 @@ class AddDOGlobal extends StatelessWidget {
                 value: controller.plant.value,
                 items: controller.tujuanMap.keys.toList(),
                 onChanged: (String? value) {
-                  print('Selected plant: $value');
                   controller.plant.value = value!;
                 },
               ),
@@ -392,9 +372,6 @@ class AddDOGlobal extends StatelessWidget {
                 ),
               ),
             ),
-            Obx(() => Text('Tujuan ${controller.tujuanDisplayValue}')),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Obx(() => Text('Hari ini tgl : ${controller.tgl.value}')),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: controller.srdController,
@@ -402,7 +379,7 @@ class AddDOGlobal extends StatelessWidget {
               maxLength: 4,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Samarinda harus di isi';
+                  return 'Field samarinda harus di isi';
                 }
                 return null;
               },
@@ -417,7 +394,7 @@ class AddDOGlobal extends StatelessWidget {
               maxLength: 4,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Makasar harus di isi';
+                  return 'Field makasar harus di isi';
                 }
                 return null;
               },
@@ -432,7 +409,7 @@ class AddDOGlobal extends StatelessWidget {
               maxLength: 4,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Pontianak harus di isi';
+                  return 'Field pontianak harus di isi';
                 }
                 return null;
               },
@@ -447,7 +424,7 @@ class AddDOGlobal extends StatelessWidget {
               maxLength: 4,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Banjarmasin harus di isi';
+                  return 'Field banjarmasin harus di isi';
                 }
                 return null;
               },
