@@ -80,4 +80,7 @@ class CustomHelperFunctions {
 
     return words.join(' ');
   }
+
+  // jam hari ini
+  static String get formattedTime => DateFormat.Hms().format(DateTime.now());
 }
