@@ -1,6 +1,5 @@
 import 'package:doplsnew/controllers/input%20data%20do/do_harian_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/utils/popups/dialogs.dart';
 import 'package:doplsnew/utils/source/data_do_harian_source.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
@@ -34,6 +34,11 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
       'User': double.nan
     };
 
+    const double dataPagerHeight = 60.0;
+    const int rowsPerPage = 7;
+
+    int currentPage = 0;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -57,265 +62,287 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
             ),
           );
         } else {
-          return Column(
-            children: [
-              SfDataGrid(
-                source: DataDoHarianSource(doHarian: controller.doHarianModel),
-                columnWidthMode: ColumnWidthMode.auto,
-                allowPullToRefresh: true,
-                gridLinesVisibility: GridLinesVisibility.both,
-                headerGridLinesVisibility: GridLinesVisibility.both,
-                allowColumnsResizing: true,
-                onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
-                  columnWidths[details.column.columnName] = details.width;
-                  return true;
-                },
-                footer: Container(
-                  color: AppColors.primary,
-                  child: Center(
-                    child: InkWell(
-                        onTap: () {
-                          CustomDialogs.defaultDialog(
-                              context: context,
-                              titleWidget: const Text('Input DO Harian'),
-                              contentWidget: AddDOHarian(
-                                controller: controller,
+          final dataSource = DataDoHarianSource(
+            doHarian: controller.doHarianModel,
+            startIndex: currentPage * rowsPerPage,
+          );
+          return LayoutBuilder(
+            builder: (context, constraint) {
+              return Column(
+                children: [
+                  SizedBox(
+                    height: constraint.maxHeight - dataPagerHeight,
+                    width: constraint.maxWidth,
+                    child: SfDataGrid(
+                      source: dataSource,
+                      columnWidthMode: ColumnWidthMode.auto,
+                      allowPullToRefresh: true,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      headerGridLinesVisibility: GridLinesVisibility.both,
+                      allowColumnsResizing: true,
+                      onColumnResizeUpdate:
+                          (ColumnResizeUpdateDetails details) {
+                        columnWidths[details.column.columnName] = details.width;
+                        return true;
+                      },
+                      footer: Container(
+                        color: AppColors.primary,
+                        child: Center(
+                          child: InkWell(
+                              onTap: () {
+                                CustomDialogs.defaultDialog(
+                                    context: context,
+                                    titleWidget: const Text('Input DO Harian'),
+                                    contentWidget: AddDOHarian(
+                                      controller: controller,
+                                    ),
+                                    onConfirm: () {
+                                      if (controller.tgl.value.isEmpty) {
+                                        SnackbarLoader.errorSnackBar(
+                                          title: 'Gagal😪',
+                                          message:
+                                              'Pastikan tanggal telah di isi 😁',
+                                        );
+                                      } else {
+                                        controller.addDataDOHarian();
+                                      }
+                                    },
+                                    onCancel: () {
+                                      Get.back();
+                                      controller.tgl.value = '';
+                                      controller.plant.value = '1100';
+                                      controller.tujuan.value = '1';
+                                      controller.srdController.clear();
+                                      controller.mksController.clear();
+                                      controller.ptkController.clear();
+                                      controller.bjmController.clear();
+                                    },
+                                    cancelText: 'Close',
+                                    confirmText: 'Tambahkan');
+                              },
+                              child: Text(
+                                'Tambahkan data DO Harian',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.apply(color: AppColors.light),
+                              )),
+                        ),
+                      ),
+                      columns: [
+                        GridColumn(
+                            width: columnWidths['No']!,
+                            columnName: 'No',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['Plant']!,
+                            columnName: 'Plant',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Plant',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['Tujuan']!,
+                            columnName: 'Tujuan',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Tujuan',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['Tanggal']!,
+                            columnName: 'Tanggal',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Tanggal',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['Jam']!,
+                            columnName: 'Jam',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Jam',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['HSO - SRD']!,
+                            columnName: 'HSO - SRD',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'HSO - SRD',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['HSO - MKS']!,
+                            columnName: 'HSO - MKS',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
                               ),
-                              onConfirm: () {
-                                if (controller.tgl.value.isEmpty) {
-                                  SnackbarLoader.errorSnackBar(
-                                    title: 'Gagal😪',
-                                    message: 'Pastikan tanggal telah di isi 😁',
-                                  );
-                                } else {
-                                  controller.addDataDOHarian();
-                                }
-                              },
-                              onCancel: () {
-                                Get.back();
-                                controller.tgl.value = '';
-                                controller.plant.value = '1100';
-                                controller.tujuan.value = '1';
-                                controller.srdController.clear();
-                                controller.mksController.clear();
-                                controller.ptkController.clear();
-                                controller.bjmController.clear();
-                              },
-                              cancelText: 'Close',
-                              confirmText: 'Tambahkan');
-                        },
-                        child: Text(
-                          'Tambahkan data DO Harian',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.apply(color: AppColors.light),
-                        )),
+                              child: Text(
+                                'HSO - MKS',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        GridColumn(
+                            width: columnWidths['HSO - PTK']!,
+                            columnName: 'HSO - PTK',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'HSO - PTK',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        GridColumn(
+                            width: columnWidths['BJM']!,
+                            columnName: 'BJM',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'BJM',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        GridColumn(
+                            width: columnWidths['Jumlah 5']!,
+                            columnName: 'Jumlah 5',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'Jumlah 5',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        GridColumn(
+                            width: columnWidths['Jumlah 6']!,
+                            columnName: 'Jumlah 6',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'Jumlah 6',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                        GridColumn(
+                            width: columnWidths['User']!,
+                            columnName: 'User',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'User',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-                columns: [
-                  GridColumn(
-                      width: columnWidths['No']!,
-                      columnName: 'No',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'No',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      width: columnWidths['Plant']!,
-                      columnName: 'Plant',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Plant',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      width: columnWidths['Tujuan']!,
-                      columnName: 'Tujuan',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Tujuan',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      width: columnWidths['Tanggal']!,
-                      columnName: 'Tanggal',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Tanggal',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      width: columnWidths['Jam']!,
-                      columnName: 'Jam',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Jam',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      width: columnWidths['HSO - SRD']!,
-                      columnName: 'HSO - SRD',
-                      label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'HSO - SRD',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ))),
-                  GridColumn(
-                      width: columnWidths['HSO - MKS']!,
-                      columnName: 'HSO - MKS',
-                      label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'HSO - MKS',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                  GridColumn(
-                      width: columnWidths['HSO - PTK']!,
-                      columnName: 'HSO - PTK',
-                      label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'HSO - PTK',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                  GridColumn(
-                      width: columnWidths['BJM']!,
-                      columnName: 'BJM',
-                      label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'BJM',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                  GridColumn(
-                      width: columnWidths['Jumlah 5']!,
-                      columnName: 'Jumlah 5',
-                      label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'Jumlah 5',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                  GridColumn(
-                      width: columnWidths['Jumlah 6']!,
-                      columnName: 'Jumlah 6',
-                      label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'Jumlah 6',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                  GridColumn(
-                      width: columnWidths['User']!,
-                      columnName: 'User',
-                      label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'User',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                      )),
+                  SizedBox(
+                    height: dataPagerHeight,
+                    child: SfDataPager(
+                      delegate: dataSource,
+                      pageCount: (controller.doHarianModel.length / rowsPerPage)
+                          .ceilToDouble(),
+                      direction: Axis.horizontal,
+                    ),
+                  ),
                 ],
-              ),
-              // Container(height: 60,child: SfDataPager(delegate: ,),)
-            ],
+              );
+            },
           );
         }
       }),
@@ -465,36 +492,6 @@ class AddDOHarian extends StatelessWidget {
                 labelText: 'BJM',
               ),
             ),
-            // const SizedBox(height: CustomSize.spaceBtwItems),
-            // TextFormField(
-            //   controller: controller.jumlah5,
-            //   keyboardType: TextInputType.number,
-            //   maxLength: 4,
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'Field Jumlah 5 harus di isi';
-            //     }
-            //     return null;
-            //   },
-            //   decoration: const InputDecoration(
-            //     labelText: 'Jumlah 5',
-            //   ),
-            // ),
-            // const SizedBox(height: CustomSize.spaceBtwItems),
-            // TextFormField(
-            //   controller: controller.jumlah6,
-            //   keyboardType: TextInputType.number,
-            //   maxLength: 4,
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'Field Jumlah 6 harus di isi';
-            //     }
-            //     return null;
-            //   },
-            //   decoration: const InputDecoration(
-            //     labelText: 'Jumlah 6',
-            //   ),
-            // ),
           ],
         ),
       ),
