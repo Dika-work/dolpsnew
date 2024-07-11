@@ -1,6 +1,7 @@
 import 'package:doplsnew/models/do_global_model.dart';
 import 'package:doplsnew/repository/input%20data%20do/do_global_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:doplsnew/controllers/input%20data%20do/do_global_harian_controller.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/helper_function.dart';
@@ -15,6 +16,7 @@ class DataDOGlobalController extends GetxController {
   final isLoadingGlobal = Rx<bool>(false);
   RxList<DoGlobalModel> doGlobalModel = <DoGlobalModel>[].obs;
   final dataHarianRepo = Get.put(DataDoGlobalRepository());
+  final doGlobalHarianController = Get.put(DataDOGlobalHarianController());
   GlobalKey<FormState> addGlobalKey = GlobalKey<FormState>();
 
   final tujuan = '1'.obs;
@@ -127,6 +129,7 @@ class DataDOGlobalController extends GetxController {
       tujuan.value = '1';
 
       await fetchDataDoGlobal();
+      await doGlobalHarianController.fetchDataDoGlobal();
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',

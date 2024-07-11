@@ -23,8 +23,8 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Plant': double.nan,
-      'Tujuan': double.nan,
-      'Tanggal': double.nan,
+      'Tujuan': 130,
+      'Tanggal': 150,
       'HSO - SRD': double.nan,
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,

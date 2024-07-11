@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../helpers/helper_function.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/animation_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/data_do_global_source.dart';
@@ -22,8 +23,8 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Plant': double.nan,
-      'Tujuan': double.nan,
-      'Tanggal': double.nan,
+      'Tujuan': 130,
+      'Tanggal': 150,
       'HSO - SRD': double.nan,
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
@@ -45,50 +46,48 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Input DO Global'),
-                    contentWidget: AddDOGlobal(
-                      controller: controller,
-                    ),
-                    onConfirm: () {
-                      if (controller.tgl.value.isEmpty) {
-                        SnackbarLoader.errorSnackBar(
-                          title: 'Gagal😪',
-                          message: 'Pastikan tanggal telah di isi 😁',
-                        );
-                      } else {
-                        controller.addDataDOGlobal();
-                      }
-                    },
-                    onCancel: () {
-                      Get.back();
-                      controller.tgl.value = '';
-                      controller.plant.value = '1100';
-                      controller.tujuan.value = '1';
-                      controller.srdController.clear();
-                      controller.mksController.clear();
-                      controller.ptkController.clear();
-                      controller.bjmController.clear();
-                    },
-                    cancelText: 'Close',
-                    confirmText: 'Tambahkan');
-              },
-              icon: const Icon(Iconsax.user_add))
-        ],
       ),
       body: Obx(() {
         if (controller.isLoadingGlobal.value &&
             controller.doGlobalModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.doGlobalModel.isEmpty) {
-          return Center(
-            child: Text(
-              'Data DO Global Tidak Tersedia',
-              style: Theme.of(context).textTheme.bodyMedium,
+          return GestureDetector(
+            onTap: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  titleWidget: const Text('Input DO Global'),
+                  contentWidget: AddDOGlobal(
+                    controller: controller,
+                  ),
+                  onConfirm: () {
+                    if (controller.tgl.value.isEmpty) {
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Gagal😪',
+                        message: 'Pastikan tanggal telah di isi 😁',
+                      );
+                    } else {
+                      controller.addDataDOGlobal();
+                    }
+                  },
+                  onCancel: () {
+                    Get.back();
+                    controller.tgl.value = '';
+                    controller.plant.value = '1100';
+                    controller.tujuan.value = '1';
+                    controller.srdController.clear();
+                    controller.mksController.clear();
+                    controller.ptkController.clear();
+                    controller.bjmController.clear();
+                  },
+                  cancelText: 'Close',
+                  confirmText: 'Tambahkan');
+            },
+            child: CustomAnimationLoaderWidget(
+              text: 'Tambahkan Data Baru',
+              animation: 'assets/animations/add-data-animation.json',
+              height: CustomHelperFunctions.screenHeight() * 0.4,
+              width: CustomHelperFunctions.screenHeight(),
             ),
           );
         } else {
