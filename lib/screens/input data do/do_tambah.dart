@@ -1,4 +1,6 @@
 import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
+import 'package:doplsnew/helpers/helper_function.dart';
+import 'package:doplsnew/utils/loader/animation_loader.dart';
 import 'package:doplsnew/utils/source/data_do_tambah.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -43,41 +45,48 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Input DO Tambahan'),
-                    contentWidget: AddDOTambahan(
-                      controller: controller,
-                    ),
-                    onConfirm: controller.addDataDoTambah,
-                    onCancel: () {
-                      Navigator.of(context).pop();
-                      controller.tgl.value = '';
-                      controller.plant.value = '1100';
-                      controller.tujuan.value = '1';
-                      controller.srdController.clear();
-                      controller.mksController.clear();
-                      controller.ptkController.clear();
-                      controller.bjmController.clear();
-                    },
-                    cancelText: 'Close',
-                    confirmText: 'Tambahkan');
-              },
-              icon: const Icon(Iconsax.user_add))
-        ],
       ),
       body: Obx(() {
         if (controller.isLoadingGlobal.value &&
             controller.doTambahModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.doTambahModel.isEmpty) {
-          return Center(
-            child: Text(
-              'Data DO Harian Tidak Tersedia',
-              style: Theme.of(context).textTheme.bodyMedium,
+          return GestureDetector(
+            onTap: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  titleWidget: const Text('Input DO Harian'),
+                  contentWidget: AddDOTambahan(
+                    controller: controller,
+                  ),
+                  onConfirm: () {
+                    if (controller.tgl.value.isEmpty) {
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Gagal😪',
+                        message: 'Pastikan tanggal telah di isi 😁',
+                      );
+                    } else {
+                      controller.addDataDoTambah();
+                    }
+                  },
+                  onCancel: () {
+                    Get.back();
+                    controller.tgl.value = '';
+                    controller.plant.value = '1100';
+                    controller.tujuan.value = '1';
+                    controller.srdController.clear();
+                    controller.mksController.clear();
+                    controller.ptkController.clear();
+                    controller.bjmController.clear();
+                  },
+                  cancelText: 'Close',
+                  confirmText: 'Tambahkan');
+            },
+            child: CustomAnimationLoaderWidget(
+              text: 'Tambahkan Data Baru',
+              animation: 'assets/animations/add-data-animation.json',
+              height: CustomHelperFunctions.screenHeight() * 0.4,
+              width: CustomHelperFunctions.screenHeight(),
             ),
           );
         } else {

@@ -38,104 +38,99 @@ class LoginScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Form(
-                    key: controller.loginFormKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "PT. Langgeng Pranamas Sentosa",
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: CustomSize.xl),
-                          child: Column(
-                            children: [
-                              TextFormField(
-                                controller: controller.usernameController,
+                child: Form(
+                  key: controller.loginFormKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "PT. Langgeng Pranamas Sentosa",
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.symmetric(vertical: CustomSize.xl),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: controller.usernameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Username harus di isi';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                prefixIcon: Icon(Iconsax.user),
+                                labelText: 'Username',
+                              ),
+                            ),
+                            const SizedBox(height: 16.0),
+                            Obx(
+                              () => TextFormField(
+                                controller: controller.passwordController,
+                                obscureText: controller.hidePassword.value,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Username harus di isi';
+                                    return 'Password harus di isi';
                                   }
                                   return null;
                                 },
-                                decoration: const InputDecoration(
-                                  prefixIcon: Icon(Iconsax.user),
-                                  labelText: 'Username',
-                                ),
-                              ),
-                              const SizedBox(height: 16.0),
-                              Obx(
-                                () => TextFormField(
-                                  controller: controller.passwordController,
-                                  obscureText: controller.hidePassword.value,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Password harus di isi';
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                    prefixIcon: const Icon(Icons.lock),
-                                    labelText: 'Password',
-                                    suffixIcon: IconButton(
-                                      onPressed: () =>
-                                          controller.hidePassword.value =
-                                              !controller.hidePassword.value,
-                                      icon: Icon(
-                                        controller.hidePassword.value
-                                            ? Iconsax.eye
-                                            : Iconsax.eye_slash,
-                                      ),
+                                decoration: InputDecoration(
+                                  prefixIcon: const Icon(Icons.lock),
+                                  labelText: 'Password',
+                                  suffixIcon: IconButton(
+                                    onPressed: () => controller.hidePassword
+                                        .value = !controller.hidePassword.value,
+                                    icon: Icon(
+                                      controller.hidePassword.value
+                                          ? Iconsax.eye
+                                          : Iconsax.eye_slash,
                                     ),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 10.0),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Obx(
-                                        () => SizedBox(
-                                          width: 24,
-                                          height: 24,
-                                          child: Checkbox(
-                                            value: controller.rememberMe.value,
-                                            onChanged: (value) => controller
-                                                    .rememberMe.value =
-                                                !controller.rememberMe.value,
-                                          ),
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Obx(
+                                      () => SizedBox(
+                                        width: 24,
+                                        height: 24,
+                                        child: Checkbox(
+                                          value: controller.rememberMe.value,
+                                          onChanged: (value) =>
+                                              controller.rememberMe.value =
+                                                  !controller.rememberMe.value,
                                         ),
                                       ),
-                                      const Text(
-                                        'Ingat Saya',
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 30),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    controller.emailAndPasswordSignIn();
-                                  },
-                                  child: const Text('Sign In'),
+                                    ),
+                                    const Text(
+                                      'Ingat Saya',
+                                    ),
+                                  ],
                                 ),
+                              ],
+                            ),
+                            const SizedBox(height: 30),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  controller.emailAndPasswordSignIn();
+                                },
+                                child: const Text('Sign In'),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

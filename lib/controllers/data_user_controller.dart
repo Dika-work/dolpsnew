@@ -139,9 +139,7 @@ class DataUserController extends GetxController {
         selectedDealer,
       );
 
-      CustomFullScreenLoader.stopLoading();
       fetchUserData();
-
       // Show success snackbar handled inside editDataUserContent
     } catch (e) {
       CustomFullScreenLoader.stopLoading();

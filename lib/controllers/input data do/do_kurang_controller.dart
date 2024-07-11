@@ -1,17 +1,17 @@
 import 'package:doplsnew/models/do_kurang_model.dart';
+import 'package:doplsnew/repository/input%20data%20do/do_kurang_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/helper_function.dart';
 import '../../models/user_model.dart';
-import '../../repository/input data do/do_kurang_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
-class DataDoPenguranganController extends GetxController {
+class DataDOKurangController extends GetxController {
   final storageUtil = StorageUtil();
   final isLoadingKurang = Rx<bool>(false);
   RxList<DoKurangModel> doKurangModel = <DoKurangModel>[].obs;

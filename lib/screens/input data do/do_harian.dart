@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
@@ -51,10 +52,42 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
             controller.doHarianModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.doHarianModel.isEmpty) {
-          return Center(
-            child: Text(
-              'Data DO Harian Tidak Tersedia',
-              style: Theme.of(context).textTheme.bodyMedium,
+          return GestureDetector(
+            onTap: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  titleWidget: const Text('Input DO Harian'),
+                  contentWidget: AddDOHarian(
+                    controller: controller,
+                  ),
+                  onConfirm: () {
+                    if (controller.tgl.value.isEmpty) {
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Gagal😪',
+                        message: 'Pastikan tanggal telah di isi 😁',
+                      );
+                    } else {
+                      controller.addDataDOHarian();
+                    }
+                  },
+                  onCancel: () {
+                    Get.back();
+                    controller.tgl.value = '';
+                    controller.plant.value = '1100';
+                    controller.tujuan.value = '1';
+                    controller.srdController.clear();
+                    controller.mksController.clear();
+                    controller.ptkController.clear();
+                    controller.bjmController.clear();
+                  },
+                  cancelText: 'Close',
+                  confirmText: 'Tambahkan');
+            },
+            child: CustomAnimationLoaderWidget(
+              text: 'Tambahkan Data Baru',
+              animation: 'assets/animations/add-data-animation.json',
+              height: CustomHelperFunctions.screenHeight() * 0.4,
+              width: CustomHelperFunctions.screenHeight(),
             ),
           );
         } else {
