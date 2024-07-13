@@ -2,23 +2,63 @@ import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../models/do_global_harian.dart';
-import '../theme/app_colors.dart';
+import '../../../models/do_global_harian.dart';
+import '../../theme/app_colors.dart';
 
 class DataDoGlobalHarianSource extends DataGridSource {
+  final List<int> validPlants = [
+    1100,
+    1200,
+    1300,
+    1350,
+    1700,
+    1800,
+    1900,
+  ];
+  final List<String> validTujuans = [
+    'Sunter',
+    'Pegangsaan',
+    'Cibitung',
+    'Cibitung',
+    'Dawuan',
+    'Dawuan',
+    'Bekasi'
+  ];
+
   int index = 0;
 
   DataDoGlobalHarianSource(
       {required List<DoGlobalHarianModel> doGlobalHarian}) {
-    doGlobalHarianModel = doGlobalHarian.map<DataGridRow>((dataGridRow) {
+    doGlobalHarianModel = validPlants.asMap().entries.map<DataGridRow>((entry) {
+      int i = entry.key;
+      int plant = entry.value;
+
+      DoGlobalHarianModel? dataGridRow = doGlobalHarian.firstWhere(
+          (item) => item.plant == plant.toString(),
+          orElse: () => DoGlobalHarianModel(
+              idPlant: plant,
+              tujuan: validTujuans[i],
+              tgl: '',
+              jam: '',
+              srd: 0,
+              mks: 0,
+              ptk: 0,
+              bjm: 0,
+              jumlah5: 0,
+              jumlah6: 0,
+              user: '',
+              plant: plant.toString()));
+
       index++;
       final jumlah =
           dataGridRow.srd + dataGridRow.mks + dataGridRow.ptk + dataGridRow.bjm;
+
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
         DataGridCell<String>(columnName: 'Plant', value: dataGridRow.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: dataGridRow.tujuan),
-        DataGridCell<int>(columnName: 'Jumlah', value: jumlah),
+        DataGridCell<String>(
+            columnName: 'Jumlah', value: jumlah == 0 ? '-' : jumlah.toString()),
         DataGridCell<String>(
             columnName: 'HSO - SRD',
             value: dataGridRow.srd == 0 ? '-' : dataGridRow.srd.toString()),
@@ -46,7 +86,9 @@ class DataDoGlobalHarianSource extends DataGridSource {
       const DataGridCell<int>(columnName: 'No', value: null),
       const DataGridCell<String>(columnName: 'Plant', value: 'TOTAL'),
       const DataGridCell<String>(columnName: 'Tujuan', value: null),
-      DataGridCell<int>(columnName: 'Jumlah', value: totalJumlah),
+      DataGridCell<String>(
+          columnName: 'Jumlah',
+          value: totalJumlah == 0 ? '-' : totalJumlah.toString()),
       DataGridCell<String>(
           columnName: 'HSO - SRD',
           value: totalSrd == 0 ? '-' : totalSrd.toString()),
