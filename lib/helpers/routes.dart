@@ -1,9 +1,9 @@
 import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20do/do_pengurangan_controller.dart';
+import 'package:doplsnew/controllers/input%20data%20do/do_kurang_controller.dart';
 import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
 import 'package:doplsnew/screens/input%20data%20do/do_global.dart';
 import 'package:doplsnew/screens/input%20data%20do/do_harian.dart';
-import 'package:doplsnew/screens/input%20data%20do/do_pengurangan.dart';
+import 'package:doplsnew/screens/input%20data%20do/do_kurang.dart';
 import 'package:doplsnew/screens/input%20data%20do/do_tambah.dart';
 import 'package:get/get.dart';
 
@@ -59,7 +59,7 @@ class AppRoutes {
             name: '/data-do-pengurangan',
             page: () => const InputDataDoPengurangan(),
             binding: BindingsBuilder(() {
-              Get.put(DataDoPenguranganController());
+              Get.put(DataDOKurangController());
             })),
       ];
 }

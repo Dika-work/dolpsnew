@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../constant/custom_size.dart';
+
 class DataDoKurangSource extends DataGridSource {
   DataDoKurangSource(
       {required List<DoKurangModel> doKurang, int startIndex = 0}) {
@@ -30,7 +32,7 @@ class DataDoKurangSource extends DataGridSource {
         return Center(
           child: Container(
             alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
             child: Text(
               e.value.toString(),
               textAlign: TextAlign.center,
@@ -53,10 +55,18 @@ class DataDoKurangSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
-        DataGridCell<int>(columnName: 'HSO - SRD', value: data.srd),
-        DataGridCell<int>(columnName: 'HSO - MKS', value: data.mks),
-        DataGridCell<int>(columnName: 'HSO - PTK', value: data.ptk),
-        DataGridCell<int>(columnName: 'BJM', value: data.bjm),
+        DataGridCell<String>(
+            columnName: 'HSO - SRD',
+            value: data.srd == 0 ? '-' : data.srd.toString()),
+        DataGridCell<String>(
+            columnName: 'HSO - MKS',
+            value: data.mks == 0 ? '-' : data.mks.toString()),
+        DataGridCell<String>(
+            columnName: 'HSO - PTK',
+            value: data.ptk == 0 ? '-' : data.ptk.toString()),
+        DataGridCell<String>(
+            columnName: 'BJM',
+            value: data.bjm == 0 ? '-' : data.bjm.toString()),
       ]);
     }).toList();
   }

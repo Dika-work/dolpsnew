@@ -1,3 +1,4 @@
+import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -18,10 +19,18 @@ class DataDoGlobalHarianSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Plant', value: dataGridRow.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: dataGridRow.tujuan),
         DataGridCell<int>(columnName: 'Jumlah', value: jumlah),
-        DataGridCell<int>(columnName: 'HSO - SRD', value: dataGridRow.srd),
-        DataGridCell<int>(columnName: 'HSO - MKS', value: dataGridRow.mks),
-        DataGridCell<int>(columnName: 'HSO - PTK', value: dataGridRow.ptk),
-        DataGridCell<int>(columnName: 'BJM', value: dataGridRow.bjm),
+        DataGridCell<String>(
+            columnName: 'HSO - SRD',
+            value: dataGridRow.srd == 0 ? '-' : dataGridRow.srd.toString()),
+        DataGridCell<String>(
+            columnName: 'HSO - MKS',
+            value: dataGridRow.mks == 0 ? '-' : dataGridRow.mks.toString()),
+        DataGridCell<String>(
+            columnName: 'HSO - PTK',
+            value: dataGridRow.ptk == 0 ? '-' : dataGridRow.ptk.toString()),
+        DataGridCell<String>(
+            columnName: 'BJM',
+            value: dataGridRow.bjm == 0 ? '-' : dataGridRow.bjm.toString()),
       ]);
     }).toList();
 
@@ -38,10 +47,17 @@ class DataDoGlobalHarianSource extends DataGridSource {
       const DataGridCell<String>(columnName: 'Plant', value: 'TOTAL'),
       const DataGridCell<String>(columnName: 'Tujuan', value: null),
       DataGridCell<int>(columnName: 'Jumlah', value: totalJumlah),
-      DataGridCell<int>(columnName: 'HSO - SRD', value: totalSrd),
-      DataGridCell<int>(columnName: 'HSO - MKS', value: totalMks),
-      DataGridCell<int>(columnName: 'HSO - PTK', value: totalPtk),
-      DataGridCell<int>(columnName: 'BJM', value: totalBjm),
+      DataGridCell<String>(
+          columnName: 'HSO - SRD',
+          value: totalSrd == 0 ? '-' : totalSrd.toString()),
+      DataGridCell<String>(
+          columnName: 'HSO - MKS',
+          value: totalMks == 0 ? '-' : totalMks.toString()),
+      DataGridCell<String>(
+          columnName: 'HSO - PTK',
+          value: totalPtk == 0 ? '-' : totalPtk.toString()),
+      DataGridCell<String>(
+          columnName: 'BJM', value: totalBjm == 0 ? '-' : totalBjm.toString()),
     ]));
   }
 
@@ -74,7 +90,7 @@ class DataDoGlobalHarianSource extends DataGridSource {
 
         return Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
           color: cellColor,
           child: Text(
             e.value?.toString() ?? '',

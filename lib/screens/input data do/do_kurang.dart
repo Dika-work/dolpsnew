@@ -1,10 +1,10 @@
+import 'package:doplsnew/controllers/input%20data%20do/do_kurang_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../controllers/input data do/do_pengurangan_controller.dart';
 import '../../helpers/helper_function.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
@@ -15,7 +15,7 @@ import '../../utils/source/data_do_kurang_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
-class InputDataDoPengurangan extends GetView<DataDoPenguranganController> {
+class InputDataDoPengurangan extends GetView<DataDOKurangController> {
   const InputDataDoPengurangan({super.key});
 
   @override
@@ -317,7 +317,7 @@ class InputDataDoPengurangan extends GetView<DataDoPenguranganController> {
 class AddDOPengurangan extends StatelessWidget {
   const AddDOPengurangan({super.key, required this.controller});
 
-  final DataDoPenguranganController controller;
+  final DataDOKurangController controller;
 
   @override
   Widget build(BuildContext context) {

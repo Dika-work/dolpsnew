@@ -116,7 +116,6 @@ class DataDoHarianController extends GetxController {
           namaUser,
           plant.value);
       print('Stopped loading dialog');
-      CustomFullScreenLoader.stopLoading();
 
       srdController.clear();
       mksController.clear();
@@ -133,6 +132,7 @@ class DataDoHarianController extends GetxController {
         title: 'Berhasil✨',
         message: 'Menambahkan data user baru..',
       );
+      CustomFullScreenLoader.stopLoading();
     } catch (e) {
       print('Error while adding data: $e');
       CustomFullScreenLoader.stopLoading();
@@ -141,6 +141,33 @@ class DataDoHarianController extends GetxController {
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
       );
       return;
+    }
+  }
+
+  Future<void> editDOHarian(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataHarianRepo.editDOHarianContent(
+          id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+
+      fetchDataDoHarian();
+      CustomFullScreenLoader.stopLoading();
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit DO Harian😒',
+      );
     }
   }
 }

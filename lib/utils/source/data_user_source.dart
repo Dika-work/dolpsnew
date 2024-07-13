@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../widgets/dropdown.dart';
+import '../constant/custom_size.dart';
 
 class DataUserDataSource extends DataGridSource {
   DataUserDataSource({
@@ -136,7 +137,7 @@ class DataUserDataSource extends DataGridSource {
       return null;
     } else if (column.columnName == 'Nama') {
       return Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(CustomSize.sm),
         alignment: Alignment.centerLeft,
         child: TextField(
           autofocus: true,
@@ -180,7 +181,7 @@ class DataUserDataSource extends DataGridSource {
     } else {
       // Return text field for other columns
       return Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(CustomSize.sm),
         alignment: Alignment.centerLeft,
         child: TextField(
           autofocus: true,

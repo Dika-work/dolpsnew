@@ -7,6 +7,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../models/do_harian_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
@@ -29,6 +30,7 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
+      'Action': 100,
     };
 
     const double dataPagerHeight = 60.0;
@@ -70,16 +72,6 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                       controller.addDataDOHarian();
                     }
                   },
-                  onCancel: () {
-                    Get.back();
-                    controller.tgl.value = '';
-                    controller.plant.value = '1100';
-                    controller.tujuan.value = '1';
-                    controller.srdController.clear();
-                    controller.mksController.clear();
-                    controller.ptkController.clear();
-                    controller.bjmController.clear();
-                  },
                   cancelText: 'Close',
                   confirmText: 'Tambahkan');
             },
@@ -94,7 +86,24 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
           final dataSource = DataDoHarianSource(
             doHarian: controller.doHarianModel,
             startIndex: currentPage * rowsPerPage,
+            onEdited: (DoHarianModel model) {
+              // Implementasi edit data di sini
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return EditDataDOHarian(
+                    controller: controller,
+                    model: model,
+                  );
+                },
+              );
+            },
+            onDeleted: () {
+              // Implementasi delete data di sini
+              print('ini deleted btn');
+            },
           );
+
           return LayoutBuilder(
             builder: (context, constraint) {
               return Column(
@@ -290,6 +299,25 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             )),
+                        // Action column
+                        GridColumn(
+                          width: columnWidths['Action']!,
+                          columnName: 'Action',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Action',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -457,6 +485,227 @@ class AddDOHarian extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class EditDataDOHarian extends StatefulWidget {
+  const EditDataDOHarian(
+      {super.key, required this.controller, required this.model});
+
+  final DataDoHarianController controller;
+  final DoHarianModel model;
+
+  @override
+  State<EditDataDOHarian> createState() => _EditDataDOHarianState();
+}
+
+class _EditDataDOHarianState extends State<EditDataDOHarian> {
+  late int id;
+  late String tgl;
+  late int idPlant;
+  late String? plant;
+  late String tujuan;
+  late TextEditingController srd;
+  late TextEditingController mks;
+  late TextEditingController ptk;
+  late TextEditingController bjm;
+
+  final Map<String, String> tujuanMap = {
+    '1100': 'Sunter', //1
+    '1200': 'Pegangsaan', //2
+    '1300': 'Cibitung', //3
+    '1350': 'Cibitung', //4
+    '1700': 'Dawuan', //5
+    '1800': 'Dawuan', //6
+    '1900': 'Bekasi', //9
+  };
+
+  final Map<String, String> idPlantMap = {
+    '1100': '1', //1
+    '1200': '2', //2
+    '1300': '3', //3
+    '1350': '4', //4
+    '1700': '5', //5
+    '1800': '6', //6
+    '1900': '9', //9
+  };
+
+  String get tujuanDisplayValue => tujuanMap[plant] ?? '';
+
+  String get idPlantValue => idPlantMap[idPlant.toString()] ?? '';
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.model.id;
+    tgl = widget.model.tgl;
+    idPlant = widget.model.idPlant;
+    plant = widget.model.plant;
+    tujuan = widget.model.tujuan;
+    srd = TextEditingController(text: widget.model.srd.toString());
+    mks = TextEditingController(text: widget.model.mks.toString());
+    ptk = TextEditingController(text: widget.model.ptk.toString());
+    bjm = TextEditingController(text: widget.model.bjm.toString());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'Edit data DO Harian',
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('ini id nya : $id'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    DateTime? selectedDate = DateTime.tryParse(tgl);
+
+                    showDatePicker(
+                      context: context,
+                      locale: const Locale("id", "ID"),
+                      initialDate: selectedDate ?? DateTime.now(),
+                      firstDate: DateTime(1850),
+                      lastDate: DateTime(2040),
+                    ).then((newSelectedDate) {
+                      if (newSelectedDate != null) {
+                        // Hanya ubah nilai tanggal, biarkan waktu tetap default
+                        setState(() {
+                          tgl =
+                              DateFormat('yyyy-MM-dd').format(newSelectedDate);
+                          print('Ini tanggal yang dipilih : $tgl');
+                        });
+                      }
+                    });
+                  },
+                  icon: const Icon(Icons.calendar_today),
+                ),
+                hintText: tgl.isNotEmpty
+                    ? DateFormat.yMMMMd('id_ID').format(
+                        DateTime.tryParse('$tgl 00:00:00') ?? DateTime.now(),
+                      )
+                    : 'Tanggal',
+              ),
+            ),
+            Text(idPlant.toString()),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Plant'),
+            DropDownWidget(
+              value: plant,
+              items: tujuanMap.keys.toList(),
+              onChanged: (String? value) {
+                setState(() {
+                  print('Selected plant: $value');
+                  plant = value!;
+                  idPlant = int.parse(idPlantMap[value]!);
+                  tujuan = tujuanMap[value]!;
+                });
+              },
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Tujuan'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Iconsax.truck_fast),
+                hintText: tujuan,
+              ),
+            ),
+            Text('Tujuan $tujuan'),
+            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
+            Text('Hari ini tgl : $tgl'),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            TextFormField(
+              controller: srd,
+              keyboardType: TextInputType.number,
+              maxLength: 4,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Samarinda harus di isi';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                labelText: 'HSO - SRD',
+              ),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            TextFormField(
+              controller: mks,
+              keyboardType: TextInputType.number,
+              maxLength: 4,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Makasar harus di isi';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                labelText: 'HSO - MKS',
+              ),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            TextFormField(
+              controller: ptk,
+              keyboardType: TextInputType.number,
+              maxLength: 4,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Pontianak harus di isi';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                labelText: 'HSO - PTK',
+              ),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            TextFormField(
+              controller: bjm,
+              keyboardType: TextInputType.number,
+              maxLength: 4,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Banjarmasin harus di isi';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                labelText: 'BJM',
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Close'),
+        ),
+        TextButton(
+          onPressed: () => widget.controller.editDOHarian(
+            id,
+            tgl,
+            idPlant,
+            tujuan,
+            int.parse(srd.text),
+            int.parse(mks.text),
+            int.parse(ptk.text),
+            int.parse(bjm.text),
+          ),
+          child: const Text('Simpan'),
+        ),
+      ],
     );
   }
 }

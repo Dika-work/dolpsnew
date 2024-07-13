@@ -56,4 +56,52 @@ class DataDoHarianRepository extends GetxController {
       return;
     }
   }
+
+  Future<Map<String, dynamic>> editDOHarianContent(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    try {
+      print('...PROSES AWALANAN DI REPOSITORY DO HARIAN...');
+      final response = await http.post(Uri.parse(
+          'http://langgeng.dyndns.biz/DO/api/edit_do_harian.php?id=$id&tgl=$tgl&id_plant=$idPlant&tujuan=$tujuan&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm'));
+
+      print('...BERHASIL DI REPOSITORY...');
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'DO Harian berhasil diubah',
+          );
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal mengedit DO Harian, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di catch di repository do harian: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit DO Harian',
+      );
+    }
+    return {};
+  }
 }

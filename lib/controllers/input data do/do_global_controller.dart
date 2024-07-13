@@ -117,7 +117,6 @@ class DataDOGlobalController extends GetxController {
           namaUser,
           plant.value);
       print('Stopped loading dialog');
-      CustomFullScreenLoader.stopLoading();
 
       srdController.clear();
       mksController.clear();
@@ -135,6 +134,7 @@ class DataDOGlobalController extends GetxController {
         title: 'Berhasil✨',
         message: 'Menambahkan data user baru..',
       );
+      CustomFullScreenLoader.stopLoading();
     } catch (e) {
       print('Error while adding data: $e');
       CustomFullScreenLoader.stopLoading();
