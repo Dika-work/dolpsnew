@@ -1,15 +1,17 @@
-import 'package:doplsnew/models/input%20data%20do/do_tambah_model.dart';
-import 'package:doplsnew/repository/input%20data%20do/do_tambah_repo.dart';
+import 'package:doplsnew/controllers/home/do_harian_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/helper_function.dart';
+import '../../models/input data do/do_tambah_model.dart';
 import '../../models/user_model.dart';
+import '../../repository/input data do/do_tambah_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
+import '../home/do_harian_home_bsk_controller.dart';
 
 class DataDoTambahanController extends GetxController {
   final storageUtil = StorageUtil();
@@ -17,6 +19,9 @@ class DataDoTambahanController extends GetxController {
   RxList<DoTambahModel> doTambahModel = <DoTambahModel>[].obs;
   final dataTambahRepo = Get.put(DataDoTambahRepository());
   GlobalKey<FormState> addTambahKey = GlobalKey<FormState>();
+
+  final dataHarianHomeController = Get.put(DataDOHarianHomeController());
+  final dataHarianHomeBskController = Get.put(DoHarianHomeBskController());
 
   final tujuan = '1'.obs;
   final tgl =
@@ -128,6 +133,8 @@ class DataDoTambahanController extends GetxController {
       tujuan.value = '1';
 
       await fetchDataDoTambah();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
@@ -160,7 +167,10 @@ class DataDoTambahanController extends GetxController {
       await dataTambahRepo.editDOTambahContent(
           id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
 
-      fetchDataDoTambah();
+      await fetchDataDoTambah();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
+      print('...INI DATA DO TAMBAH EDIT...');
       CustomFullScreenLoader.stopLoading();
     } catch (e) {
       CustomFullScreenLoader.stopLoading();
@@ -179,7 +189,9 @@ class DataDoTambahanController extends GetxController {
     try {
       await dataTambahRepo.deleteDOTambahContent(id);
 
-      fetchDataDoTambah();
+      await fetchDataDoTambah();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
     } catch (e) {
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',

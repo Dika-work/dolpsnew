@@ -1,12 +1,12 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_kurang_controller.dart';
-import 'package:doplsnew/models/input%20data%20do/do_kurang_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../controllers/input data do/do_kurang_controller.dart';
 import '../../helpers/helper_function.dart';
+import '../../models/input data do/do_kurang_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';

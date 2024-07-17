@@ -1,15 +1,17 @@
-import 'package:doplsnew/models/input%20data%20do/do_kurang_model.dart';
-import 'package:doplsnew/repository/input%20data%20do/do_kurang_repo.dart';
+import 'package:doplsnew/controllers/home/do_harian_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/helper_function.dart';
+import '../../models/input data do/do_kurang_model.dart';
 import '../../models/user_model.dart';
+import '../../repository/input data do/do_kurang_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
+import '../home/do_harian_home_bsk_controller.dart';
 
 class DataDOKurangController extends GetxController {
   final storageUtil = StorageUtil();
@@ -17,6 +19,9 @@ class DataDOKurangController extends GetxController {
   RxList<DoKurangModel> doKurangModel = <DoKurangModel>[].obs;
   final dataKurangRepo = Get.put(DataDoKurangRepository());
   GlobalKey<FormState> addKurangKey = GlobalKey<FormState>();
+
+  final dataHarianHomeController = Get.put(DataDOHarianHomeController());
+  final dataHarianHomeBskController = Get.put(DoHarianHomeBskController());
 
   final tujuan = '1'.obs;
   final tgl =
@@ -127,6 +132,8 @@ class DataDOKurangController extends GetxController {
       tujuan.value = '1';
 
       await fetchDataDoKurang();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
@@ -160,7 +167,9 @@ class DataDOKurangController extends GetxController {
       await dataKurangRepo.editDOKurangContent(
           id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
 
-      fetchDataDoKurang();
+      await fetchDataDoKurang();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
       CustomFullScreenLoader.stopLoading();
     } catch (e) {
       CustomFullScreenLoader.stopLoading();
@@ -179,7 +188,9 @@ class DataDOKurangController extends GetxController {
     try {
       await dataKurangRepo.deleteDOKurangContent(id);
 
-      fetchDataDoKurang();
+      await fetchDataDoKurang();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
     } catch (e) {
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',

@@ -1,15 +1,15 @@
-import 'package:doplsnew/controllers/home/do_global_harian_controller.dart';
-import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
-import 'package:doplsnew/repository/input%20data%20do/do_global_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/helper_function.dart';
+import '../../models/input data do/do_global_model.dart';
 import '../../models/user_model.dart';
+import '../../repository/input data do/do_global_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
+import '../home/do_global_harian_controller.dart';
 
 class DataDOGlobalController extends GetxController {
   final storageUtil = StorageUtil();

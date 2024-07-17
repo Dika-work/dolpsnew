@@ -1,5 +1,5 @@
 import 'package:doplsnew/utils/constant/custom_size.dart';
-import 'package:doplsnew/utils/custom_drawer.dart';
+import 'package:doplsnew/widgets/custom_drawer.dart';
 import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -8,7 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../widgets/expandable_container.dart';
+import 'expandable_container.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer(
