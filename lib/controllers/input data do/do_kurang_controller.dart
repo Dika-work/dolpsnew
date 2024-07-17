@@ -170,4 +170,21 @@ class DataDOKurangController extends GetxController {
       );
     }
   }
+
+  Future<void> hapusDOKurang(
+    int id,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataKurangRepo.deleteDOKurangContent(id);
+
+      fetchDataDoKurang();
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus DO Kurang😒',
+      );
+    }
+  }
 }

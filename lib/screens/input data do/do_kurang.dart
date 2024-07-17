@@ -12,7 +12,7 @@ import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
-import '../../utils/source/data_do_kurang_source.dart';
+import '../../utils/source/input data do source/data_do_kurang_source.dart';
 import '../../widgets/dropdown.dart';
 
 class InputDataDoPengurangan extends GetView<DataDOKurangController> {
@@ -107,8 +107,8 @@ class InputDataDoPengurangan extends GetView<DataDOKurangController> {
                   },
                 );
               },
-              onDeleted: () {
-                // Implementasi delete data di sini
+              onDeleted: (DoKurangModel model) {
+                controller.hapusDOKurang(model.id);
                 print('ini deleted btn');
               },
             );

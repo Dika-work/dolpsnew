@@ -170,4 +170,21 @@ class DataDoTambahanController extends GetxController {
       );
     }
   }
+
+  Future<void> hapusDOTambah(
+    int id,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataTambahRepo.deleteDOTambahContent(id);
+
+      fetchDataDoTambah();
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus DO Tambah😒',
+      );
+    }
+  }
 }

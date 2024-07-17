@@ -1,35 +1,38 @@
-import 'package:doplsnew/models/input%20data%20do/do_harian_model.dart';
+import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
+import 'package:doplsnew/helpers/helper_function.dart';
+import 'package:doplsnew/models/input%20data%20do/do_tambah_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../helpers/helper_function.dart';
-import '../constant/custom_size.dart';
+import '../../constant/custom_size.dart';
 
-class DataDoHarianSource extends DataGridSource {
-  final void Function(DoHarianModel)? onEdited;
-  final void Function()? onDeleted;
-  final List<DoHarianModel> doHarian;
+class DataDoTambahSource extends DataGridSource {
+  final void Function(DoTambahModel)? onEdited;
+  final void Function(DoTambahModel)? onDeleted;
+  final List<DoTambahModel> doTambah;
   int startIndex = 0;
 
-  DataDoHarianSource({
+  DataDoTambahSource({
     required this.onEdited,
     required this.onDeleted,
-    required this.doHarian,
+    required this.doTambah,
     int startIndex = 0,
   }) {
-    _updateDataPager(doHarian, startIndex);
+    _updateDataPager(doTambah, startIndex);
   }
 
-  List<DataGridRow> _doHarianData = [];
+  List<DataGridRow> _doTambahData = [];
+  final controller = Get.put(DataDoTambahanController());
   int index = 0;
 
   @override
-  List<DataGridRow> get rows => _doHarianData;
+  List<DataGridRow> get rows => _doTambahData;
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    int rowIndex = _doHarianData.indexOf(row);
+    int rowIndex = _doTambahData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
     return DataGridRowAdapter(
@@ -52,22 +55,26 @@ class DataDoHarianSource extends DataGridSource {
           icon: const Icon(Iconsax.edit),
           onPressed: () {
             if (onEdited != null) {
-              onEdited!(doHarian[startIndex + rowIndex]);
+              onEdited!(doTambah[startIndex + rowIndex]);
             }
           },
         ),
         IconButton(
           icon: const Icon(Iconsax.trash),
-          onPressed: onDeleted,
+          onPressed: () {
+            if (onDeleted != null) {
+              onDeleted!(doTambah[startIndex + rowIndex]);
+            }
+          },
         ),
       ],
     );
   }
 
-  void _updateDataPager(List<DoHarianModel> doHarian, int startIndex) {
+  void _updateDataPager(List<DoTambahModel> doTambah, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
-    _doHarianData = doHarian.skip(startIndex).take(7).map<DataGridRow>((data) {
+    _doTambahData = doTambah.skip(startIndex).take(7).map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -95,7 +102,7 @@ class DataDoHarianSource extends DataGridSource {
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     final int startIndex = newPageIndex * 7;
-    _updateDataPager(doHarian, startIndex);
+    _updateDataPager(controller.doTambahModel, startIndex);
     notifyListeners();
     return true;
   }

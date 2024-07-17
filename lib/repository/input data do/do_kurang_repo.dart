@@ -104,4 +104,45 @@ class DataDoKurangRepository extends GetxController {
     }
     return {};
   }
+
+  Future<Map<String, dynamic>> deleteDOKurangContent(
+    int id,
+  ) async {
+    try {
+      print('...PROSES AWALANAN DELETE DI REPOSITORY DO Kurang...');
+      final response = await http.post(Uri.parse(
+          '${storageUtil.baseURL}/DO/api/hapus_do_kurang.php?id=$id'));
+
+      print('...BERHASIL DI REPOSITORY...');
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Data DO Kurang berhasil dihapus',
+          );
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal menghapus DO Kurang, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di catch di repository do Kurang: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus DO Kurang',
+      );
+    }
+    return {};
+  }
 }

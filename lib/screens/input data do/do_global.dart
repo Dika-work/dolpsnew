@@ -12,7 +12,7 @@ import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
-import '../../utils/source/data_do_global_source.dart';
+import '../../utils/source/input data do source/data_do_global_source.dart';
 import '../../widgets/dropdown.dart';
 
 class InputDataDOGlobal extends GetView<DataDOGlobalController> {
@@ -108,9 +108,8 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
                 },
               );
             },
-            onDeleted: () {
-              // Implementasi delete data di sini
-              print('ini deleted btn');
+            onDeleted: (DoGlobalModel model) {
+              controller.hapusDOGlobal(model.id);
             },
           );
           return LayoutBuilder(

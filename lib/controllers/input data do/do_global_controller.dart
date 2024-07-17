@@ -162,13 +162,32 @@ class DataDOGlobalController extends GetxController {
       await dataGlobalRepo.editDOGlobalContent(
           id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
 
-      fetchDataDoGlobal();
+      await fetchDataDoGlobal();
+      await doGlobalHarianController.fetchDataDoGlobal();
       CustomFullScreenLoader.stopLoading();
     } catch (e) {
       CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Terjadi kesalahan saat mengedit DO Global😒',
+      );
+    }
+  }
+
+  Future<void> hapusDOGlobal(
+    int id,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataGlobalRepo.deleteDOGlobalContent(id);
+
+      await fetchDataDoGlobal();
+      await doGlobalHarianController.fetchDataDoGlobal();
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus DO Global😒',
       );
     }
   }

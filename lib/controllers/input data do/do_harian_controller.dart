@@ -166,13 +166,34 @@ class DataDoHarianController extends GetxController {
       await dataHarianRepo.editDOHarianContent(
           id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
 
-      fetchDataDoHarian();
+      await fetchDataDoHarian();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
       CustomFullScreenLoader.stopLoading();
     } catch (e) {
       CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Terjadi kesalahan saat mengedit DO Harian😒',
+      );
+    }
+  }
+
+  Future<void> hapusDOHarian(
+    int id,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataHarianRepo.deleteDOHarianContent(id);
+
+      await fetchDataDoHarian();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus DO Harian😒',
       );
     }
   }

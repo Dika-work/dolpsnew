@@ -1,38 +1,37 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
+import 'package:doplsnew/controllers/input%20data%20do/do_kurang_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_kurang_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../constant/custom_size.dart';
+import '../../constant/custom_size.dart';
 
-class DataDoGlobalSource extends DataGridSource {
-  final void Function(DoGlobalModel)? onEdited;
-  final void Function()? onDeleted;
-  final List<DoGlobalModel> doGlobal;
+class DataDoKurangSource extends DataGridSource {
+  final void Function(DoKurangModel)? onEdited;
+  final void Function(DoKurangModel)? onDeleted;
+  final List<DoKurangModel> doKurang;
   int startIndex = 0;
-
-  DataDoGlobalSource({
+  DataDoKurangSource({
     required this.onEdited,
     required this.onDeleted,
-    required this.doGlobal,
+    required this.doKurang,
     int startIndex = 0,
   }) {
-    _updateDataPager(doGlobal, startIndex);
+    _updateDataPager(doKurang, startIndex);
   }
 
-  List<DataGridRow> _doGlobalData = [];
-  final controller = Get.put(DataDOGlobalController());
+  List<DataGridRow> _doKurangData = [];
+  final controller = Get.put(DataDOKurangController());
   int index = 0;
 
   @override
-  List<DataGridRow> get rows => _doGlobalData;
+  List<DataGridRow> get rows => _doKurangData;
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    int rowIndex = _doGlobalData.indexOf(row);
+    int rowIndex = _doKurangData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
     return DataGridRowAdapter(
@@ -55,22 +54,26 @@ class DataDoGlobalSource extends DataGridSource {
           icon: const Icon(Iconsax.edit),
           onPressed: () {
             if (onEdited != null) {
-              onEdited!(doGlobal[startIndex + rowIndex]);
+              onEdited!(doKurang[startIndex + rowIndex]);
             }
           },
         ),
         IconButton(
           icon: const Icon(Iconsax.trash),
-          onPressed: onDeleted,
+          onPressed: () {
+            if (onDeleted != null) {
+              onDeleted!(doKurang[startIndex + rowIndex]);
+            }
+          },
         ),
       ],
     );
   }
 
-  void _updateDataPager(List<DoGlobalModel> doGlobal, int startIndex) {
+  void _updateDataPager(List<DoKurangModel> doKurang, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
-    _doGlobalData = doGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
+    _doKurangData = doKurang.skip(startIndex).take(7).map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -98,7 +101,7 @@ class DataDoGlobalSource extends DataGridSource {
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     final int startIndex = newPageIndex * 7;
-    _updateDataPager(controller.doGlobalModel, startIndex);
+    _updateDataPager(controller.doKurangModel, startIndex);
     notifyListeners();
     return true;
   }

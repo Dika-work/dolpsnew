@@ -2,7 +2,7 @@ import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart
 import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/models/input%20data%20do/do_tambah_model.dart';
 import 'package:doplsnew/utils/loader/animation_loader.dart';
-import 'package:doplsnew/utils/source/data_do_tambah.dart';
+import 'package:doplsnew/utils/source/input%20data%20do%20source/data_do_tambah.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -108,8 +108,8 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                 },
               );
             },
-            onDeleted: () {
-              // Implementasi delete data di sini
+            onDeleted: (DoTambahModel model) {
+              controller.hapusDOTambah(model.id);
               print('ini deleted btn');
             },
           );

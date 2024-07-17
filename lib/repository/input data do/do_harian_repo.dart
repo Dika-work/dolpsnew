@@ -104,4 +104,45 @@ class DataDoHarianRepository extends GetxController {
     }
     return {};
   }
+
+  Future<Map<String, dynamic>> deleteDOHarianContent(
+    int id,
+  ) async {
+    try {
+      print('...PROSES AWALANAN DELETE DI REPOSITORY DO Harian...');
+      final response = await http.post(Uri.parse(
+          '${storageUtil.baseURL}/DO/api/hapus_do_harian.php?id=$id'));
+
+      print('...BERHASIL DI REPOSITORY...');
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Data DO Harian berhasil dihapus',
+          );
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal menghapus DO Harian, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di catch di repository do Harian: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus DO Harian',
+      );
+    }
+    return {};
+  }
 }

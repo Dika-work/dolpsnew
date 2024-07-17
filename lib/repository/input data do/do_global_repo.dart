@@ -104,4 +104,45 @@ class DataDoGlobalRepository extends GetxController {
     }
     return {};
   }
+
+  Future<Map<String, dynamic>> deleteDOGlobalContent(
+    int id,
+  ) async {
+    try {
+      print('...PROSES AWALANAN DELETE DI REPOSITORY DO Global...');
+      final response = await http.post(Uri.parse(
+          '${storageUtil.baseURL}/DO/api/hapus_do_global.php?id=$id'));
+
+      print('...BERHASIL DI REPOSITORY...');
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Data DO Global berhasil dihapus',
+          );
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal menghapus DO Global, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di catch di repository do Global: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus DO Global',
+      );
+    }
+    return {};
+  }
 }

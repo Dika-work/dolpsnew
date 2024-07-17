@@ -1,38 +1,38 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
+import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/input%20data%20do/do_tambah_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../constant/custom_size.dart';
+import '../../constant/custom_size.dart';
 
-class DataDoTambahSource extends DataGridSource {
-  final void Function(DoTambahModel)? onEdited;
-  final void Function()? onDeleted;
-  final List<DoTambahModel> doTambah;
+class DataDoGlobalSource extends DataGridSource {
+  final void Function(DoGlobalModel)? onEdited;
+  final void Function(DoGlobalModel)? onDeleted;
+  final List<DoGlobalModel> doGlobal;
   int startIndex = 0;
 
-  DataDoTambahSource({
+  DataDoGlobalSource({
     required this.onEdited,
     required this.onDeleted,
-    required this.doTambah,
+    required this.doGlobal,
     int startIndex = 0,
   }) {
-    _updateDataPager(doTambah, startIndex);
+    _updateDataPager(doGlobal, startIndex);
   }
 
-  List<DataGridRow> _doTambahData = [];
-  final controller = Get.put(DataDoTambahanController());
+  List<DataGridRow> _doGlobalData = [];
+  final controller = Get.put(DataDOGlobalController());
   int index = 0;
 
   @override
-  List<DataGridRow> get rows => _doTambahData;
+  List<DataGridRow> get rows => _doGlobalData;
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    int rowIndex = _doTambahData.indexOf(row);
+    int rowIndex = _doGlobalData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
     return DataGridRowAdapter(
@@ -55,22 +55,26 @@ class DataDoTambahSource extends DataGridSource {
           icon: const Icon(Iconsax.edit),
           onPressed: () {
             if (onEdited != null) {
-              onEdited!(doTambah[startIndex + rowIndex]);
+              onEdited!(doGlobal[startIndex + rowIndex]);
             }
           },
         ),
         IconButton(
           icon: const Icon(Iconsax.trash),
-          onPressed: onDeleted,
+          onPressed: () {
+            if (onDeleted != null) {
+              onDeleted!(doGlobal[startIndex + rowIndex]);
+            }
+          },
         ),
       ],
     );
   }
 
-  void _updateDataPager(List<DoTambahModel> doTambah, int startIndex) {
+  void _updateDataPager(List<DoGlobalModel> doGlobal, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
-    _doTambahData = doTambah.skip(startIndex).take(7).map<DataGridRow>((data) {
+    _doGlobalData = doGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -98,7 +102,7 @@ class DataDoTambahSource extends DataGridSource {
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     final int startIndex = newPageIndex * 7;
-    _updateDataPager(controller.doTambahModel, startIndex);
+    _updateDataPager(controller.doGlobalModel, startIndex);
     notifyListeners();
     return true;
   }

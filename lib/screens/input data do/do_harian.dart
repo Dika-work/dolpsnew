@@ -1,6 +1,6 @@
 import 'package:doplsnew/controllers/input%20data%20do/do_harian_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/utils/source/data_do_harian_source.dart';
+import 'package:doplsnew/utils/source/input%20data%20do%20source/data_do_harian_source.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -98,8 +98,8 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                 },
               );
             },
-            onDeleted: () {
-              // Implementasi delete data di sini
+            onDeleted: (DoHarianModel model) {
+              controller.hapusDOHarian(model.id);
               print('ini deleted btn');
             },
           );
