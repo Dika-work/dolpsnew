@@ -1,4 +1,4 @@
-import 'package:doplsnew/models/do_harian_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_harian_model.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -22,6 +22,7 @@ class DataDoHarianSource extends DataGridSource {
   }
 
   List<DataGridRow> _doHarianData = [];
+  int index = 0;
 
   @override
   List<DataGridRow> get rows => _doHarianData;
@@ -47,24 +48,17 @@ class DataDoHarianSource extends DataGridSource {
           );
         }),
         // Action cells (edit and delete)
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(
-                icon: const Icon(Iconsax.edit),
-                onPressed: () {
-                  if (onEdited != null) {
-                    onEdited!(doHarian[rowIndex]);
-                  }
-                },
-              ),
-              IconButton(
-                icon: const Icon(Iconsax.trash),
-                onPressed: onDeleted,
-              ),
-            ],
-          ),
+        IconButton(
+          icon: const Icon(Iconsax.edit),
+          onPressed: () {
+            if (onEdited != null) {
+              onEdited!(doHarian[startIndex + rowIndex]);
+            }
+          },
+        ),
+        IconButton(
+          icon: const Icon(Iconsax.trash),
+          onPressed: onDeleted,
         ),
       ],
     );
@@ -72,11 +66,13 @@ class DataDoHarianSource extends DataGridSource {
 
   void _updateDataPager(List<DoHarianModel> doHarian, int startIndex) {
     this.startIndex = startIndex;
+    index = startIndex;
     _doHarianData = doHarian.skip(startIndex).take(7).map<DataGridRow>((data) {
+      index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
       return DataGridRow(cells: [
-        DataGridCell<int>(columnName: 'No', value: data.id),
+        DataGridCell<int>(columnName: 'No', value: index),
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),

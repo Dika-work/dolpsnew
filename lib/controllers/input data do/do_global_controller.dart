@@ -1,7 +1,7 @@
-import 'package:doplsnew/models/do_global_model.dart';
+import 'package:doplsnew/controllers/home/do_global_harian_controller.dart';
+import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
 import 'package:doplsnew/repository/input%20data%20do/do_global_repo.dart';
 import 'package:flutter/material.dart';
-import 'package:doplsnew/controllers/input%20data%20do/do_global_harian_controller.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/helper_function.dart';
@@ -15,12 +15,13 @@ class DataDOGlobalController extends GetxController {
   final storageUtil = StorageUtil();
   final isLoadingGlobal = Rx<bool>(false);
   RxList<DoGlobalModel> doGlobalModel = <DoGlobalModel>[].obs;
-  final dataHarianRepo = Get.put(DataDoGlobalRepository());
+  final dataGlobalRepo = Get.put(DataDoGlobalRepository());
   final doGlobalHarianController = Get.put(DataDOGlobalHarianController());
   GlobalKey<FormState> addGlobalKey = GlobalKey<FormState>();
 
   final tujuan = '1'.obs;
-  final tgl = ''.obs;
+  final tgl =
+      CustomHelperFunctions.getFormattedDateDatabase(DateTime.now()).obs;
   final plant = '1100'.obs;
   final idplant = '1'.obs;
   String namaUser = '';
@@ -73,10 +74,10 @@ class DataDOGlobalController extends GetxController {
   Future<void> fetchDataDoGlobal() async {
     try {
       isLoadingGlobal.value = true;
-      final dataHarian = await dataHarianRepo.fetchDataGlobalContent();
-      doGlobalModel.assignAll(dataHarian);
+      final dataGlobal = await dataGlobalRepo.fetchDataGlobalContent();
+      doGlobalModel.assignAll(dataGlobal);
     } catch (e) {
-      print('Error fetching data do harian : $e');
+      print('Error fetching data do Global : $e');
       doGlobalModel.assignAll([]);
     } finally {
       isLoadingGlobal.value = false;
@@ -87,7 +88,7 @@ class DataDOGlobalController extends GetxController {
     const CustomCircularLoader();
 
     if (!addGlobalKey.currentState!.validate()) {
-      print('Form validation do harian failed');
+      print('Form validation do Global failed');
       return;
     }
 
@@ -103,7 +104,7 @@ class DataDOGlobalController extends GetxController {
     }
 
     try {
-      await dataHarianRepo.addDataGlobal(
+      await dataGlobalRepo.addDataGlobal(
           idplant.value,
           tujuanDisplayValue,
           tgl.value,
@@ -123,7 +124,6 @@ class DataDOGlobalController extends GetxController {
       ptkController.clear();
       bjmController.clear();
 
-      tgl.value = '';
       plant.value = '1100';
       tujuan.value = '1';
 
@@ -143,6 +143,33 @@ class DataDOGlobalController extends GetxController {
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
       );
       return;
+    }
+  }
+
+  Future<void> editDOGlobal(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataGlobalRepo.editDOGlobalContent(
+          id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+
+      fetchDataDoGlobal();
+      CustomFullScreenLoader.stopLoading();
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit DO Global😒',
+      );
     }
   }
 }

@@ -1,21 +1,29 @@
 import 'package:doplsnew/controllers/input%20data%20do/do_kurang_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/do_kurang_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_kurang_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../constant/custom_size.dart';
 
 class DataDoKurangSource extends DataGridSource {
-  DataDoKurangSource(
-      {required List<DoKurangModel> doKurang, int startIndex = 0}) {
+  final void Function(DoKurangModel)? onEdited;
+  final void Function()? onDeleted;
+  final List<DoKurangModel> doKurang;
+  int startIndex = 0;
+  DataDoKurangSource({
+    required this.onEdited,
+    required this.onDeleted,
+    required this.doKurang,
+    int startIndex = 0,
+  }) {
     _updateDataPager(doKurang, startIndex);
   }
 
   List<DataGridRow> _doKurangData = [];
   final controller = Get.put(DataDOKurangController());
-  int startIndex = 0;
   int index = 0;
 
   @override
@@ -28,18 +36,33 @@ class DataDoKurangSource extends DataGridSource {
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: row.getCells().map<Widget>((e) {
-        return Center(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-            child: Text(
-              e.value.toString(),
-              textAlign: TextAlign.center,
+      cells: [
+        ...row.getCells().map<Widget>((e) {
+          return Center(
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+              child: Text(
+                e.value.toString(),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }),
+        // Action cells (edit and delete)
+        IconButton(
+          icon: const Icon(Iconsax.edit),
+          onPressed: () {
+            if (onEdited != null) {
+              onEdited!(doKurang[startIndex + rowIndex]);
+            }
+          },
+        ),
+        IconButton(
+          icon: const Icon(Iconsax.trash),
+          onPressed: onDeleted,
+        ),
+      ],
     );
   }
 

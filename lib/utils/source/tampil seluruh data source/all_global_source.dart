@@ -1,38 +1,34 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../constant/custom_size.dart';
+import '../../../models/tampil seluruh data/do_global_all.dart';
+import '../../constant/custom_size.dart';
 
-class DataDoGlobalSource extends DataGridSource {
-  final void Function(DoGlobalModel)? onEdited;
+class DataAllGlobalSource extends DataGridSource {
+  final void Function(DoGlobalAllModel)? onEdited;
   final void Function()? onDeleted;
-  final List<DoGlobalModel> doGlobal;
+  final List<DoGlobalAllModel> allGlobal;
   int startIndex = 0;
 
-  DataDoGlobalSource({
+  DataAllGlobalSource({
     required this.onEdited,
     required this.onDeleted,
-    required this.doGlobal,
+    required this.allGlobal,
     int startIndex = 0,
   }) {
-    _updateDataPager(doGlobal, startIndex);
+    _updateDataPager(allGlobal, startIndex);
   }
 
-  List<DataGridRow> _doGlobalData = [];
-  final controller = Get.put(DataDOGlobalController());
-  int index = 0;
+  List<DataGridRow> _allGlobalData = [];
 
   @override
-  List<DataGridRow> get rows => _doGlobalData;
+  List<DataGridRow> get rows => _allGlobalData;
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    int rowIndex = _doGlobalData.indexOf(row);
+    int rowIndex = _allGlobalData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
     return DataGridRowAdapter(
@@ -49,13 +45,13 @@ class DataDoGlobalSource extends DataGridSource {
               ),
             ),
           );
-        }),
+        }).toList(),
         // Action cells (edit and delete)
         IconButton(
           icon: const Icon(Iconsax.edit),
           onPressed: () {
             if (onEdited != null) {
-              onEdited!(doGlobal[startIndex + rowIndex]);
+              onEdited!(allGlobal[startIndex + rowIndex]);
             }
           },
         ),
@@ -67,15 +63,14 @@ class DataDoGlobalSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoGlobalModel> doGlobal, int startIndex) {
+  void _updateDataPager(List<DoGlobalAllModel> allGlobal, int startIndex) {
     this.startIndex = startIndex;
-    index = startIndex;
-    _doGlobalData = doGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
-      index++;
+    _allGlobalData =
+        allGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
       return DataGridRow(cells: [
-        DataGridCell<int>(columnName: 'No', value: index),
+        DataGridCell<int>(columnName: 'No', value: data.id),
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
@@ -98,7 +93,7 @@ class DataDoGlobalSource extends DataGridSource {
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     final int startIndex = newPageIndex * 7;
-    _updateDataPager(controller.doGlobalModel, startIndex);
+    _updateDataPager(allGlobal, startIndex);
     notifyListeners();
     return true;
   }

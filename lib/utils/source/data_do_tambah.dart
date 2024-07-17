@@ -1,21 +1,30 @@
 import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/do_tambah_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_tambah_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../constant/custom_size.dart';
 
 class DataDoTambahSource extends DataGridSource {
-  DataDoTambahSource(
-      {required List<DoTambahModel> doTambah, int startIndex = 0}) {
+  final void Function(DoTambahModel)? onEdited;
+  final void Function()? onDeleted;
+  final List<DoTambahModel> doTambah;
+  int startIndex = 0;
+
+  DataDoTambahSource({
+    required this.onEdited,
+    required this.onDeleted,
+    required this.doTambah,
+    int startIndex = 0,
+  }) {
     _updateDataPager(doTambah, startIndex);
   }
 
   List<DataGridRow> _doTambahData = [];
   final controller = Get.put(DataDoTambahanController());
-  int startIndex = 0;
   int index = 0;
 
   @override
@@ -28,18 +37,33 @@ class DataDoTambahSource extends DataGridSource {
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: row.getCells().map<Widget>((e) {
-        return Center(
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-            child: Text(
-              e.value.toString(),
-              textAlign: TextAlign.center,
+      cells: [
+        ...row.getCells().map<Widget>((e) {
+          return Center(
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+              child: Text(
+                e.value.toString(),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }),
+        // Action cells (edit and delete)
+        IconButton(
+          icon: const Icon(Iconsax.edit),
+          onPressed: () {
+            if (onEdited != null) {
+              onEdited!(doTambah[startIndex + rowIndex]);
+            }
+          },
+        ),
+        IconButton(
+          icon: const Icon(Iconsax.trash),
+          onPressed: onDeleted,
+        ),
+      ],
     );
   }
 

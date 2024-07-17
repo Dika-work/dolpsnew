@@ -1,6 +1,7 @@
-import 'package:doplsnew/models/do_tambah_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_tambah_model.dart';
 import 'package:doplsnew/repository/input%20data%20do/do_tambah_repo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/helper_function.dart';
@@ -12,13 +13,14 @@ import '../../utils/popups/snackbar.dart';
 
 class DataDoTambahanController extends GetxController {
   final storageUtil = StorageUtil();
-  final isLoadingGlobal = Rx<bool>(false);
+  final isLoadingTambah = Rx<bool>(false);
   RxList<DoTambahModel> doTambahModel = <DoTambahModel>[].obs;
   final dataTambahRepo = Get.put(DataDoTambahRepository());
-  GlobalKey<FormState> addGlobalKey = GlobalKey<FormState>();
+  GlobalKey<FormState> addTambahKey = GlobalKey<FormState>();
 
   final tujuan = '1'.obs;
-  final tgl = ''.obs;
+  final tgl =
+      CustomHelperFunctions.getFormattedDateDatabase(DateTime.now()).obs;
   final plant = '1100'.obs;
   final idplant = '1'.obs;
   String namaUser = '';
@@ -56,7 +58,7 @@ class DataDoTambahanController extends GetxController {
 
   @override
   void onInit() {
-    fetchDataDoGlobal();
+    fetchDataDoTambah();
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       namaUser = user.nama;
@@ -68,23 +70,23 @@ class DataDoTambahanController extends GetxController {
     super.onInit();
   }
 
-  Future<void> fetchDataDoGlobal() async {
+  Future<void> fetchDataDoTambah() async {
     try {
-      isLoadingGlobal.value = true;
+      isLoadingTambah.value = true;
       final dataTambah = await dataTambahRepo.fetchDataTambahContent();
       doTambahModel.assignAll(dataTambah);
     } catch (e) {
       print('Error fetching data do harian : $e');
       doTambahModel.assignAll([]);
     } finally {
-      isLoadingGlobal.value = false;
+      isLoadingTambah.value = false;
     }
   }
 
   Future<void> addDataDoTambah() async {
     const CustomCircularLoader();
 
-    if (!addGlobalKey.currentState!.validate()) {
+    if (!addTambahKey.currentState!.validate()) {
       print('Form validation do harian failed');
       return;
     }
@@ -122,11 +124,10 @@ class DataDoTambahanController extends GetxController {
       ptkController.clear();
       bjmController.clear();
 
-      tgl.value = '';
       plant.value = '1100';
       tujuan.value = '1';
 
-      await fetchDataDoGlobal();
+      await fetchDataDoTambah();
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
@@ -140,6 +141,33 @@ class DataDoTambahanController extends GetxController {
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
       );
       return;
+    }
+  }
+
+  Future<void> editDOTambah(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataTambahRepo.editDOTambahContent(
+          id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+
+      fetchDataDoTambah();
+      CustomFullScreenLoader.stopLoading();
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit DO Tambah😒',
+      );
     }
   }
 }

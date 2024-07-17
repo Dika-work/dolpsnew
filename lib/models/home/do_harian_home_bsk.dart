@@ -1,45 +1,39 @@
-class DoKurangModel {
+class DoHarianHomeBskModel {
   int idPlant;
   String tujuan;
   String tgl;
   String jam;
+  int jumlah;
   int srd;
   int mks;
   int ptk;
   int bjm;
-  int jumlah5;
-  int jumlah6;
-  String user;
   String plant;
 
-  DoKurangModel({
+  DoHarianHomeBskModel({
     required this.idPlant,
     required this.tujuan,
     required this.tgl,
     required this.jam,
+    required this.jumlah,
     required this.srd,
     required this.mks,
     required this.ptk,
     required this.bjm,
-    required this.jumlah5,
-    required this.jumlah6,
-    required this.user,
     required this.plant,
   });
 
-  factory DoKurangModel.fromJson(Map<String, dynamic> json) {
-    return DoKurangModel(
+  factory DoHarianHomeBskModel.fromJson(Map<String, dynamic> json) {
+    return DoHarianHomeBskModel(
       idPlant: json['id_plant'] ?? 0,
       tujuan: json['tujuan'] ?? '',
       tgl: json['tgl'] ?? '',
       jam: json['jam'] ?? '',
-      srd: json['jumlah_1'] ?? 0,
-      mks: json['jumlah_2'] ?? 0,
-      ptk: json['jumlah_3'] ?? 0,
-      bjm: json['jumlah_4'] ?? 0,
-      jumlah5: json['jumlah_5'] ?? 0,
-      jumlah6: json['jumlah_6'] ?? 0,
-      user: json['user'] ?? '',
+      jumlah: json['jumlah_harian'] ?? 0,
+      srd: json['jumlah_srd'] ?? 0,
+      mks: json['jumlah_mks'] ?? 0,
+      ptk: json['jumlah_ptk'] ?? 0,
+      bjm: json['jumlah_bjm'] ?? 0,
       plant: json['plant'] ?? '',
     );
   }

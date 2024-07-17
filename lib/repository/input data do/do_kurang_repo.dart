@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:doplsnew/models/do_kurang_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_kurang_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -55,5 +55,53 @@ class DataDoKurangRepository extends GetxController {
       );
       return;
     }
+  }
+
+  Future<Map<String, dynamic>> editDOKurangContent(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    try {
+      print('...PROSES AWALANAN DI REPOSITORY DO Kurang...');
+      final response = await http.post(Uri.parse(
+          '${storageUtil.baseURL}/DO/api/edit_do_kurang.php?id=$id&tgl=$tgl&id_plant=$idPlant&tujuan=$tujuan&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm'));
+
+      print('...BERHASIL DI REPOSITORY...');
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'DO Kurang berhasil diubah',
+          );
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal mengedit DO Kurang, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di catch di repository do Kurang: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit DO Kurang',
+      );
+    }
+    return {};
   }
 }

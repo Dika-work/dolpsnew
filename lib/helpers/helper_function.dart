@@ -64,6 +64,11 @@ class CustomHelperFunctions {
     return DateFormat(format).format(date);
   }
 
+  static String getFormattedDateDatabase(DateTime date,
+      {String format = 'yyyy-MM-dd'}) {
+    return DateFormat(format).format(date);
+  }
+
   // camel case
   static String toTitleCase(String text) {
     if (text.isEmpty) return text;

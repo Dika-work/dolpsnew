@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:doplsnew/models/do_harian_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_harian_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -70,7 +70,7 @@ class DataDoHarianRepository extends GetxController {
     try {
       print('...PROSES AWALANAN DI REPOSITORY DO HARIAN...');
       final response = await http.post(Uri.parse(
-          'http://langgeng.dyndns.biz/DO/api/edit_do_harian.php?id=$id&tgl=$tgl&id_plant=$idPlant&tujuan=$tujuan&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm'));
+          '${storageUtil.baseURL}/DO/api/edit_do_harian.php?id=$id&tgl=$tgl&id_plant=$idPlant&tujuan=$tujuan&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm'));
 
       print('...BERHASIL DI REPOSITORY...');
 

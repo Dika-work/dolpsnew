@@ -1,4 +1,4 @@
-import 'package:doplsnew/models/do_kurang_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_kurang_model.dart';
 import 'package:doplsnew/repository/input%20data%20do/do_kurang_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +19,8 @@ class DataDOKurangController extends GetxController {
   GlobalKey<FormState> addKurangKey = GlobalKey<FormState>();
 
   final tujuan = '1'.obs;
-  final tgl = ''.obs;
+  final tgl =
+      CustomHelperFunctions.getFormattedDateDatabase(DateTime.now()).obs;
   final plant = '1100'.obs;
   final idplant = '1'.obs;
   String namaUser = '';
@@ -122,7 +123,6 @@ class DataDOKurangController extends GetxController {
       ptkController.clear();
       bjmController.clear();
 
-      tgl.value = '';
       plant.value = '1100';
       tujuan.value = '1';
 
@@ -141,6 +141,33 @@ class DataDOKurangController extends GetxController {
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
       );
       return;
+    }
+  }
+
+  Future<void> editDOGlobal(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    const CustomCircularLoader();
+
+    try {
+      await dataKurangRepo.editDOKurangContent(
+          id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+
+      fetchDataDoKurang();
+      CustomFullScreenLoader.stopLoading();
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit DO Global😒',
+      );
     }
   }
 }

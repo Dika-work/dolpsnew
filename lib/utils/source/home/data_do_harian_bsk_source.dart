@@ -1,11 +1,11 @@
+import 'package:doplsnew/models/home/do_harian_home_bsk.dart';
 import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../models/home/do_global_harian.dart';
 import '../../theme/app_colors.dart';
 
-class DataDoGlobalHarianSource extends DataGridSource {
+class DataDoHarianBskHomeSource extends DataGridSource {
   final List<int> validPlants = [
     1100,
     1200,
@@ -27,26 +27,24 @@ class DataDoGlobalHarianSource extends DataGridSource {
 
   int index = 0;
 
-  DataDoGlobalHarianSource(
-      {required List<DoGlobalHarianModel> doGlobalHarian}) {
+  DataDoHarianBskHomeSource(
+      {required List<DoHarianHomeBskModel> doGlobalHarian}) {
     doGlobalHarianModel = validPlants.asMap().entries.map<DataGridRow>((entry) {
       int i = entry.key;
       int plant = entry.value;
 
-      DoGlobalHarianModel? dataGridRow = doGlobalHarian.firstWhere(
+      DoHarianHomeBskModel? dataGridRow = doGlobalHarian.firstWhere(
           (item) => item.plant == plant.toString(),
-          orElse: () => DoGlobalHarianModel(
+          orElse: () => DoHarianHomeBskModel(
               idPlant: plant,
               tujuan: validTujuans[i],
               tgl: '',
               jam: '',
+              jumlah: 0,
               srd: 0,
               mks: 0,
               ptk: 0,
               bjm: 0,
-              jumlah5: 0,
-              jumlah6: 0,
-              user: '',
               plant: plant.toString()));
 
       index++;

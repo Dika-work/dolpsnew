@@ -1,14 +1,11 @@
-import 'package:doplsnew/models/do_global_harian.dart';
-import 'package:doplsnew/repository/do_global_harian_repo.dart';
+import 'package:doplsnew/models/tampil%20seluruh%20data/do_harian_all_lps.dart';
+import 'package:doplsnew/repository/tampil%20seluruh%20data/harian_all_lps_repo.dart';
 import 'package:get/get.dart';
 
-import '../../utils/constant/storage_util.dart';
-
-class DataDOGlobalHarianController extends GetxController {
-  final storageUtil = StorageUtil();
+class DataAllHarianLpsController extends GetxController {
   final isLoadingGlobalHarian = Rx<bool>(false);
-  RxList<DoGlobalHarianModel> doGlobalHarianModel = <DoGlobalHarianModel>[].obs;
-  final dataGlobalHarianRepo = Get.put(DoGlobalHarianRepository());
+  RxList<DoHarianAllLpsModel> doGlobalHarianModel = <DoHarianAllLpsModel>[].obs;
+  final dataGlobalHarianRepo = Get.put(GlobalHarianAllLpsRepository());
 
   @override
   void onInit() {

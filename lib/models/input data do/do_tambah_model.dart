@@ -1,4 +1,5 @@
 class DoTambahModel {
+  int id;
   int idPlant;
   String tujuan;
   String tgl;
@@ -13,6 +14,7 @@ class DoTambahModel {
   String plant;
 
   DoTambahModel({
+    required this.id,
     required this.idPlant,
     required this.tujuan,
     required this.tgl,
@@ -29,6 +31,7 @@ class DoTambahModel {
 
   factory DoTambahModel.fromJson(Map<String, dynamic> json) {
     return DoTambahModel(
+      id: json['id'] ?? 0,
       idPlant: json['id_plant'] ?? 0,
       tujuan: json['tujuan'] ?? '',
       tgl: json['tgl'] ?? '',

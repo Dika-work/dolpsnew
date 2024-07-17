@@ -1,14 +1,18 @@
+import 'package:doplsnew/controllers/home/do_harian_home_bsk_controller.dart';
+import 'package:doplsnew/controllers/home/do_harian_home_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
+import 'package:doplsnew/utils/source/home/data_do_harian_bsk_source.dart';
 import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../controllers/input data do/do_global_harian_controller.dart';
+import '../controllers/home/do_global_harian_controller.dart';
 import '../utils/source/empty_data_source.dart';
 import '../utils/source/home/data_do_global_harian_source.dart';
+import '../utils/source/home/data_do_harian_home_source.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -16,6 +20,8 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DataDOGlobalHarianController());
+    final controllerHarianHome = Get.put(DataDOHarianHomeController());
+    final controllerHarianBskHome = Get.put(DoHarianHomeBskController());
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
@@ -54,14 +60,16 @@ class Homepage extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             return Obx(() {
-              if (controller.isLoadingGlobalHarian.value) {
+              if (controllerHarianHome.isLoadingGlobalHarian.value) {
                 return const CustomCircularLoader();
               } else {
-                final dataSource = controller.doGlobalHarianModel.isEmpty
-                    ? EmptyDataSource()
-                    : DataDoGlobalHarianSource(
-                        doGlobalHarian: controller.doGlobalHarianModel,
-                      );
+                final dataSource =
+                    controllerHarianHome.doGlobalHarianModel.isEmpty
+                        ? EmptyDataSource()
+                        : DataDoHarianHomeSource(
+                            doGlobalHarian:
+                                controllerHarianHome.doGlobalHarianModel,
+                          );
 
                 return SfDataGrid(
                   source: dataSource,
@@ -250,14 +258,16 @@ class Homepage extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             return Obx(() {
-              if (controller.isLoadingGlobalHarian.value) {
+              if (controllerHarianBskHome.isLoadingGlobalHarian.value) {
                 return const CustomCircularLoader();
               } else {
-                final dataSource = controller.doGlobalHarianModel.isEmpty
-                    ? EmptyDataSource()
-                    : DataDoGlobalHarianSource(
-                        doGlobalHarian: controller.doGlobalHarianModel,
-                      );
+                final dataSource =
+                    controllerHarianBskHome.doGlobalHarianModel.isEmpty
+                        ? EmptyDataSource()
+                        : DataDoHarianBskHomeSource(
+                            doGlobalHarian:
+                                controllerHarianBskHome.doGlobalHarianModel,
+                          );
 
                 return SfDataGrid(
                   source: dataSource,

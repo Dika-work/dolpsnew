@@ -1,4 +1,5 @@
 class DoGlobalModel {
+  int id;
   int idPlant;
   String tujuan;
   String tgl;
@@ -13,6 +14,7 @@ class DoGlobalModel {
   String plant;
 
   DoGlobalModel({
+    required this.id,
     required this.idPlant,
     required this.tujuan,
     required this.tgl,
@@ -29,6 +31,7 @@ class DoGlobalModel {
 
   factory DoGlobalModel.fromJson(Map<String, dynamic> json) {
     return DoGlobalModel(
+      id: json['id'] ?? 0,
       idPlant: json['id_plant'] ?? 0,
       tujuan: json['tujuan'] ?? '',
       tgl: json['tgl'] ?? '',

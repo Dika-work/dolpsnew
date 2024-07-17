@@ -2,10 +2,10 @@ import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../models/home/do_global_harian.dart';
+import '../../../models/home/do_harian_home.dart';
 import '../../theme/app_colors.dart';
 
-class DataDoGlobalHarianSource extends DataGridSource {
+class DataDoHarianHomeSource extends DataGridSource {
   final List<int> validPlants = [
     1100,
     1200,
@@ -27,38 +27,34 @@ class DataDoGlobalHarianSource extends DataGridSource {
 
   int index = 0;
 
-  DataDoGlobalHarianSource(
-      {required List<DoGlobalHarianModel> doGlobalHarian}) {
+  DataDoHarianHomeSource({required List<DoHarianHomeModel> doGlobalHarian}) {
     doGlobalHarianModel = validPlants.asMap().entries.map<DataGridRow>((entry) {
       int i = entry.key;
       int plant = entry.value;
 
-      DoGlobalHarianModel? dataGridRow = doGlobalHarian.firstWhere(
+      DoHarianHomeModel? dataGridRow = doGlobalHarian.firstWhere(
           (item) => item.plant == plant.toString(),
-          orElse: () => DoGlobalHarianModel(
+          orElse: () => DoHarianHomeModel(
               idPlant: plant,
               tujuan: validTujuans[i],
               tgl: '',
               jam: '',
+              jumlah: 0,
               srd: 0,
               mks: 0,
               ptk: 0,
               bjm: 0,
-              jumlah5: 0,
-              jumlah6: 0,
-              user: '',
               plant: plant.toString()));
 
       index++;
-      final jumlah =
-          dataGridRow.srd + dataGridRow.mks + dataGridRow.ptk + dataGridRow.bjm;
-
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
         DataGridCell<String>(columnName: 'Plant', value: dataGridRow.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: dataGridRow.tujuan),
         DataGridCell<String>(
-            columnName: 'Jumlah', value: jumlah == 0 ? '-' : jumlah.toString()),
+            columnName: 'Jumlah',
+            value:
+                dataGridRow.jumlah == 0 ? '-' : dataGridRow.jumlah.toString()),
         DataGridCell<String>(
             columnName: 'HSO - SRD',
             value: dataGridRow.srd == 0 ? '-' : dataGridRow.srd.toString()),

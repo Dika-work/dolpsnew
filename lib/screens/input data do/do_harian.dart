@@ -7,13 +7,12 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../models/do_harian_model.dart';
+import '../../models/input data do/do_harian_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
-import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
 class InputDataDoHarian extends GetView<DataDoHarianController> {
@@ -30,10 +29,11 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
-      'Action': 100,
+      'Edit': 50,
+      'Hapus': 50,
     };
 
-    const double dataPagerHeight = 60.0;
+    // const double dataPagerHeight = 60.0;
     const int rowsPerPage = 7;
 
     int currentPage = 0;
@@ -108,9 +108,55 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
             builder: (context, constraint) {
               return Column(
                 children: [
-                  SizedBox(
-                    height: constraint.maxHeight - dataPagerHeight,
-                    width: constraint.maxWidth,
+                  GestureDetector(
+                    onTap: () {
+                      CustomDialogs.defaultDialog(
+                          context: context,
+                          titleWidget: const Text('Input DO Harian'),
+                          contentWidget: AddDOHarian(
+                            controller: controller,
+                          ),
+                          onConfirm: () {
+                            if (controller.tgl.value.isEmpty) {
+                              SnackbarLoader.errorSnackBar(
+                                title: 'Gagal😪',
+                                message: 'Pastikan tanggal telah di isi 😁',
+                              );
+                            } else {
+                              controller.addDataDOHarian();
+                            }
+                          },
+                          onCancel: () {
+                            Get.back();
+                            controller.tgl.value =
+                                CustomHelperFunctions.getFormattedDate(
+                                    DateTime.now());
+                            controller.plant.value = '1100';
+                            controller.tujuan.value = '1';
+                            controller.srdController.clear();
+                            controller.mksController.clear();
+                            controller.ptkController.clear();
+                            controller.bjmController.clear();
+                          },
+                          cancelText: 'Close',
+                          confirmText: 'Tambahkan');
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const IconButton(
+                            onPressed: null, icon: Icon(Iconsax.add_circle)),
+                        Padding(
+                          padding: const EdgeInsets.only(right: CustomSize.sm),
+                          child: Text(
+                            'Tambah data',
+                            style: Theme.of(context).textTheme.headlineMedium,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
                     child: SfDataGrid(
                       source: dataSource,
                       columnWidthMode: ColumnWidthMode.auto,
@@ -123,50 +169,6 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                         columnWidths[details.column.columnName] = details.width;
                         return true;
                       },
-                      footer: Container(
-                        color: AppColors.primary,
-                        child: Center(
-                          child: InkWell(
-                              onTap: () {
-                                CustomDialogs.defaultDialog(
-                                    context: context,
-                                    titleWidget: const Text('Input DO Harian'),
-                                    contentWidget: AddDOHarian(
-                                      controller: controller,
-                                    ),
-                                    onConfirm: () {
-                                      if (controller.tgl.value.isEmpty) {
-                                        SnackbarLoader.errorSnackBar(
-                                          title: 'Gagal😪',
-                                          message:
-                                              'Pastikan tanggal telah di isi 😁',
-                                        );
-                                      } else {
-                                        controller.addDataDOHarian();
-                                      }
-                                    },
-                                    onCancel: () {
-                                      Get.back();
-                                      controller.tgl.value = '';
-                                      controller.plant.value = '1100';
-                                      controller.tujuan.value = '1';
-                                      controller.srdController.clear();
-                                      controller.mksController.clear();
-                                      controller.ptkController.clear();
-                                      controller.bjmController.clear();
-                                    },
-                                    cancelText: 'Close',
-                                    confirmText: 'Tambahkan');
-                              },
-                              child: Text(
-                                'Tambahkan data DO Harian',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.apply(color: AppColors.light),
-                              )),
-                        ),
-                      ),
                       columns: [
                         GridColumn(
                             width: columnWidths['No']!,
@@ -299,10 +301,10 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             )),
-                        // Action column
+                        // Edit column
                         GridColumn(
-                          width: columnWidths['Action']!,
-                          columnName: 'Action',
+                          width: columnWidths['Edit']!,
+                          columnName: 'Edit',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -310,7 +312,26 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'Action',
+                              'Edit',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        // Hapus
+                        GridColumn(
+                          width: columnWidths['Hapus']!,
+                          columnName: 'Hapus',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Hapus',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -321,14 +342,11 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: dataPagerHeight,
-                    child: SfDataPager(
-                      delegate: dataSource,
-                      pageCount: (controller.doHarianModel.length / rowsPerPage)
-                          .ceilToDouble(),
-                      direction: Axis.horizontal,
-                    ),
+                  SfDataPager(
+                    delegate: dataSource,
+                    pageCount: (controller.doHarianModel.length / rowsPerPage)
+                        .ceilToDouble(),
+                    direction: Axis.horizontal,
                   ),
                 ],
               );
@@ -374,7 +392,8 @@ class AddDOHarian extends StatelessWidget {
                         if (newSelectedDate != null) {
                           // Hanya ubah nilai tanggal, biarkan waktu tetap default
                           controller.tgl.value =
-                              DateFormat('yyyy-MM-dd').format(newSelectedDate);
+                              CustomHelperFunctions.getFormattedDateDatabase(
+                                  newSelectedDate);
                           print(
                               'Ini tanggal yang dipilih : ${controller.tgl.value}');
                         }
@@ -580,8 +599,8 @@ class _EditDataDOHarianState extends State<EditDataDOHarian> {
                       if (newSelectedDate != null) {
                         // Hanya ubah nilai tanggal, biarkan waktu tetap default
                         setState(() {
-                          tgl =
-                              DateFormat('yyyy-MM-dd').format(newSelectedDate);
+                          tgl = CustomHelperFunctions.getFormattedDateDatabase(
+                              newSelectedDate);
                           print('Ini tanggal yang dipilih : $tgl');
                         });
                       }

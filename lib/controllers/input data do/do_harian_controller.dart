@@ -1,5 +1,6 @@
+import 'package:doplsnew/controllers/home/do_harian_home_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/do_harian_model.dart';
+import 'package:doplsnew/models/input%20data%20do/do_harian_model.dart';
 import 'package:doplsnew/models/user_model.dart';
 import 'package:doplsnew/repository/input%20data%20do/do_harian_repo.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
@@ -10,16 +11,23 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../utils/popups/snackbar.dart';
+import '../home/do_harian_home_bsk_controller.dart';
 
 class DataDoHarianController extends GetxController {
   final storageUtil = StorageUtil();
   final isLoadingHarian = Rx<bool>(false);
   RxList<DoHarianModel> doHarianModel = <DoHarianModel>[].obs;
+
   final dataHarianRepo = Get.put(DataDoHarianRepository());
+
+  final dataHarianHomeController = Get.put(DataDOHarianHomeController());
+  final dataHarianHomeBskController = Get.put(DoHarianHomeBskController());
+
   GlobalKey<FormState> addHarianKey = GlobalKey<FormState>();
 
   final tujuan = '1'.obs;
-  final tgl = ''.obs;
+  final tgl =
+      CustomHelperFunctions.getFormattedDateDatabase(DateTime.now()).obs;
   final plant = '1100'.obs;
   final idplant = '1'.obs;
   String namaUser = '';
@@ -83,8 +91,6 @@ class DataDoHarianController extends GetxController {
   }
 
   Future<void> addDataDOHarian() async {
-    const CustomCircularLoader();
-
     if (!addHarianKey.currentState!.validate()) {
       print('Form validation do harian failed');
       return;
@@ -115,32 +121,32 @@ class DataDoHarianController extends GetxController {
           jumlah6.text,
           namaUser,
           plant.value);
-      print('Stopped loading dialog');
 
+      // Clear input fields
       srdController.clear();
       mksController.clear();
       ptkController.clear();
       bjmController.clear();
-
-      tgl.value = '';
       plant.value = '1100';
       tujuan.value = '1';
 
+      // Fetch updated data
       await fetchDataDoHarian();
+      await dataHarianHomeController.fetchDataDoGlobal();
+      await dataHarianHomeBskController.fetchHarianBesok();
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
         message: 'Menambahkan data user baru..',
       );
-      CustomFullScreenLoader.stopLoading();
     } catch (e) {
       print('Error while adding data: $e');
-      CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
       );
-      return;
+    } finally {
+      CustomFullScreenLoader.stopLoading();
     }
   }
 
