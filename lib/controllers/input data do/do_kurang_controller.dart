@@ -130,7 +130,7 @@ class DataDOKurangController extends GetxController {
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
-        message: 'Menambahkan data user baru..',
+        message: 'Menambahkan data do kurang baru..',
       );
       CustomFullScreenLoader.stopLoading();
     } catch (e) {

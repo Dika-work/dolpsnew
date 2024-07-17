@@ -51,7 +51,7 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
           return const CustomCircularLoader();
         } else {
           final dataSource = controller.doAllGlobalModel.isEmpty
-              ? EmptyDataSource()
+              ? EmptyAllDataSource()
               : DataAllGlobalSource(
                   allGlobal: controller.doAllGlobalModel,
                   startIndex: currentPage * rowsPerPage,
@@ -273,8 +273,9 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
                   )),
                   SfDataPager(
                     delegate: dataSource,
-                    pageCount:
-                        (controller.doAllGlobalModel.length / rowsPerPage)
+                    pageCount: controller.doAllGlobalModel.isEmpty
+                        ? 1
+                        : (controller.doAllGlobalModel.length / rowsPerPage)
                             .ceilToDouble(),
                     direction: Axis.horizontal,
                   ),

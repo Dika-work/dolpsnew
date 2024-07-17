@@ -275,8 +275,9 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
                   )),
                   SfDataPager(
                     delegate: dataSource,
-                    pageCount:
-                        (controller.doGlobalHarianModel.length / rowsPerPage)
+                    pageCount: controller.doGlobalHarianModel.isEmpty
+                        ? 1
+                        : (controller.doGlobalHarianModel.length / rowsPerPage)
                             .ceilToDouble(),
                     direction: Axis.horizontal,
                   ),

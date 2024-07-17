@@ -53,7 +53,7 @@ class DoTambahAll extends GetView<DataAllTambahController> {
           return const CustomCircularLoader();
         } else {
           final dataSource = controller.doGlobalHarianModel.isEmpty
-              ? EmptyDataSource()
+              ? EmptyAllDataSource()
               : DataAllTambahSource(
                   allGlobal: controller.doGlobalHarianModel,
                   startIndex: currentPage * rowsPerPage,
@@ -275,8 +275,9 @@ class DoTambahAll extends GetView<DataAllTambahController> {
                   )),
                   SfDataPager(
                     delegate: dataSource,
-                    pageCount:
-                        (controller.doGlobalHarianModel.length / rowsPerPage)
+                    pageCount: controller.doGlobalHarianModel.isEmpty
+                        ? 1
+                        : (controller.doGlobalHarianModel.length / rowsPerPage)
                             .ceilToDouble(),
                     direction: Axis.horizontal,
                   ),

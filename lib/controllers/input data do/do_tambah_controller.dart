@@ -131,7 +131,7 @@ class DataDoTambahanController extends GetxController {
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
-        message: 'Menambahkan data user baru..',
+        message: 'Menambahkan data do tambah baru..',
       );
     } catch (e) {
       print('Error while adding data: $e');

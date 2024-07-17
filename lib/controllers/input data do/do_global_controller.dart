@@ -132,7 +132,7 @@ class DataDOGlobalController extends GetxController {
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
-        message: 'Menambahkan data user baru..',
+        message: 'Menambahkan data do global baru..',
       );
       CustomFullScreenLoader.stopLoading();
     } catch (e) {
