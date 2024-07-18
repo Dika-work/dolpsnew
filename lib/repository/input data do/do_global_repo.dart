@@ -33,14 +33,13 @@ class DataDoGlobalRepository extends GetxController {
     String jumlah5,
     String jumlah6,
     String user,
-    String plant,
   ) async {
     try {
-      final response = await http.post(
-        Uri.parse(
-            '${storageUtil.baseURL}/DO/api/tambah_do_global.php?id_plant=$idPlant&tujuan=$tujuan&tgl=$tgl&jam=$jam&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm&jumlah_5=$jumlah5&jumlah_6=$jumlah6&user=$user&plant=$plant'),
-      );
-
+      final response = await http.post(Uri.parse(
+              '${storageUtil.baseURL}/DO/api/api_do_global.php?id_plant=$idPlant&tujuan=$tujuan&tgl=$tgl&jam=$jam&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm&jumlah_5=$jumlah5&jumlah_6=$jumlah6&user=$user')
+          // Uri.parse(
+          // '${storageUtil.baseURL}/DO/api/tambah_do_global.php?id_plant=$idPlant&tujuan=$tujuan&tgl=$tgl&jam=$jam&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm&jumlah_5=$jumlah5&jumlah_6=$jumlah6&user=$user'),
+          );
       if (response.statusCode != 200) {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',

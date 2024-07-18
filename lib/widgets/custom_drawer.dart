@@ -358,12 +358,13 @@ class CustomDrawer extends StatelessWidget {
                         content: Column(
                           children: [
                             ListTile(
+                              onTap: () => Get.toNamed('/request-mobil'),
                               leading: const Icon(
                                 Iconsax.record,
                                 color: AppColors.darkExpandableContent,
                               ),
                               title: Text(
-                                'Request Mobile',
+                                'Request Mobil',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall

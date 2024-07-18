@@ -105,18 +105,18 @@ class DataDOGlobalController extends GetxController {
 
     try {
       await dataGlobalRepo.addDataGlobal(
-          idplant.value,
-          tujuanDisplayValue,
-          tgl.value,
-          CustomHelperFunctions.formattedTime,
-          srdController.text,
-          mksController.text,
-          ptkController.text,
-          bjmController.text,
-          jumlah5.text,
-          jumlah6.text,
-          namaUser,
-          plant.value);
+        idplant.value,
+        tujuanDisplayValue,
+        tgl.value,
+        CustomHelperFunctions.formattedTime,
+        srdController.text,
+        mksController.text,
+        ptkController.text,
+        bjmController.text,
+        jumlah5.text,
+        jumlah6.text,
+        namaUser,
+      );
       print('Stopped loading dialog');
 
       srdController.clear();

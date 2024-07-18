@@ -8,12 +8,14 @@ import 'package:doplsnew/screens/input%20data%20do/do_global.dart';
 import 'package:doplsnew/screens/input%20data%20do/do_harian.dart';
 import 'package:doplsnew/screens/input%20data%20do/do_kurang.dart';
 import 'package:doplsnew/screens/input%20data%20do/do_tambah.dart';
+import 'package:doplsnew/screens/input%20data%20realisasi/request_kendaraan_screen.dart';
 import 'package:doplsnew/screens/tampil%20seluruh%20data/do_global_all.dart';
 import 'package:doplsnew/screens/tampil%20seluruh%20data/do_kurang_all.dart';
 import 'package:doplsnew/screens/tampil%20seluruh%20data/do_tambah_all.dart';
 import 'package:get/get.dart';
 
 import '../controllers/input data do/do_harian_controller.dart';
+import '../controllers/input data realisasi/request_kendaraan_controller.dart';
 import '../controllers/tampil seluruh data/all_global_controller.dart';
 import '../screens/login.dart';
 import '../screens/manajemen user/data_user_screen.dart';
@@ -93,6 +95,13 @@ class AppRoutes {
             page: () => const DoTambahAll(),
             binding: BindingsBuilder(() {
               Get.put(DataAllTambahController());
+            })),
+        // Input data realisasi
+        GetPage(
+            name: '/request-mobil',
+            page: () => const RequestKendaraanScreen(),
+            binding: BindingsBuilder(() {
+              Get.put(RequestKendaraanController());
             })),
       ];
 }
