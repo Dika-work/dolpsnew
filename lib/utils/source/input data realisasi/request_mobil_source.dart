@@ -137,7 +137,9 @@ class RequestMobilSource extends DataGridSource {
 //         index++;
 //         return DataGridRow(cells: [
 //           DataGridCell<int>(columnName: 'No', value: index),
-//         DataGridCell<String>(columnName: 'Username', value: e.),
+//           DataGridCell<String>(columnName: 'No Kendaraan', value: e.),
+//           DataGridCell<String>(columnName: 'Kapasitas', value: e.),
+//           DataGridCell<String>(columnName: 'Supir', value: e.),
 
 //         ]);
 //       },
@@ -146,4 +148,22 @@ class RequestMobilSource extends DataGridSource {
 
 //   final List<RequestKendaraanModel> model;
 //   List<DataGridRow> _dataGrid = [];
+
+//   @override
+//   List<DataGridRow> get rows => _dataGrid;
+
+//   @override
+//   DataGridRowAdapter? buildRow(DataGridRow row) {
+//     return DataGridRowAdapter(cells: row.getCells().map<Widget>(
+//       (e) {
+//         return Center(
+//           child: Text(
+//             e.value.toString(),
+//             maxLines: 1,
+//             overflow: TextOverflow.ellipsis,
+//           ),
+//         );
+//       },
+//     ).toList());
+//   }
 // }

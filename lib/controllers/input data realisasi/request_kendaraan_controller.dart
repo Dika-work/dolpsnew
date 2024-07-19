@@ -15,7 +15,6 @@ class RequestKendaraanController extends GetxController {
   final storageUtil = StorageUtil();
   final isRequestLoading = Rx<bool>(false);
   GlobalKey<FormState> requestKendaraanKey = GlobalKey<FormState>();
-  GlobalKey<FormState> kirimKendaraanKey = GlobalKey<FormState>();
 
   final tgl =
       CustomHelperFunctions.getFormattedDateDatabase(DateTime.now()).obs;

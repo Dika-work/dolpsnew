@@ -1,4 +1,5 @@
 import 'package:doplsnew/models/input%20data%20realisasi/request_kendaraan_model.dart';
+import 'package:doplsnew/screens/input%20data%20realisasi/kirim_kendaraan.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:doplsnew/utils/source/input%20data%20realisasi/request_mobil_source.dart';
 import 'package:flutter/material.dart';
@@ -106,6 +107,33 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                 print('..INI LIHAT REQUEST MOBIL..');
               },
               onKirim: (RequestKendaraanModel model) {
+                CustomDialogs.defaultDialog(
+                    context: context,
+                    titleWidget: Text(
+                      'Tambah data plant kendaraan',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    contentWidget: AddKirimKendaraan(model: model),
+                    onConfirm: () {
+                      CustomDialogs.defaultDialog(
+                        context: context,
+                        titleWidget: Text(
+                          'Konfirmasi pengiriman',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        contentWidget: Text(
+                          'Apakah anda sudah yakin untuk melakukan pengiriman?',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        confirmText: 'Konfirmasi',
+                        onConfirm: () {
+                          print(
+                              '...OKEE MANTAP BERHASIL DI KONFIRMASI PENGIRIMAN...');
+                        },
+                      );
+                      print('...INI DATA SUDAH DI KIRIM...');
+                    },
+                    confirmText: 'Oke');
                 print('...INI KIRIM REQUEST KENDARAAN...');
               },
               onEdit: (RequestKendaraanModel model) {
