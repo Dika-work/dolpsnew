@@ -31,7 +31,6 @@ class _CustomSearchTextFormFieldState extends State<CustomSearchTextFormField> {
   bool search = false;
   bool textVisible = false;
 
-  // Function to update the visibility of the clear icon
   void _updateTextVisibility() {
     setState(() {
       textVisible = widget.textEditingController.text.isNotEmpty;
@@ -41,20 +40,16 @@ class _CustomSearchTextFormFieldState extends State<CustomSearchTextFormField> {
   @override
   void initState() {
     super.initState();
-    // Add a listener to the textEditingController
     widget.textEditingController.addListener(_updateTextVisibility);
   }
 
   @override
   void dispose() {
-    // Remove the listener when the widget is disposed
     widget.textEditingController.removeListener(_updateTextVisibility);
     super.dispose();
   }
 
   Widget change(double width, BuildContext context) {
-    // final dark = CustomHelperFunctions.isDarkMode(context);
-
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 250),
       top: 10,

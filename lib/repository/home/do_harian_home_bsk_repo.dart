@@ -10,8 +10,8 @@ class DoHarianHomeBskRepository extends GetxController {
   final storageUtil = StorageUtil();
 
   Future<List<DoHarianHomeBskModel>> fetchGlobalHarianBesokContent() async {
-    final response = await http.get(
-        Uri.parse('${storageUtil.baseURL}/DO/api/tampil_do_harian_besok.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_do_harian.php?action=getDataBesok'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DoHarianHomeBskModel.fromJson(model)).toList();

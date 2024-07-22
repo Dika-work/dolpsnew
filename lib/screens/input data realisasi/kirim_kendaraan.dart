@@ -1,20 +1,83 @@
-import 'package:doplsnew/controllers/input%20data%20realisasi/fetch_kendaraan_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
+import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../controllers/input data realisasi/fetch_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/fetch_sopir_controller.dart';
+import '../../controllers/input data realisasi/kirim_kendaraan_controller.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/animation_loader.dart';
 import '../../widgets/dropdown.dart';
 
 class KirimKendaraanScreen extends StatelessWidget {
-  const KirimKendaraanScreen({super.key});
+  const KirimKendaraanScreen(this.model, {super.key});
+
+  final RequestKendaraanModel model;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    final controller = Get.put(KirimKendaraanController());
+    late Map<String, double> columnWidths = {
+      'No': double.nan,
+      'Plant': double.nan,
+      'Type': 130,
+      'Kendaraan': 150,
+      'Jenis': double.nan,
+      'Status': double.nan,
+      'LV Kerusakan': double.nan,
+      'Supir': double.nan,
+      'Hapus': 50,
+    };
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Tambah data plant kendaraan honda',
+          maxLines: 2,
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Get.back(),
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(model.pengurus),
+            Text(model.tgl),
+            Text(model.jam),
+            Text(model.plant),
+            Text(model.tujuan),
+            Text(model.type == 0 ? 'REGULER' : 'MUTASI'),
+            Text(model.jenis),
+            Text(model.jumlah.toString()),
+          ],
+        ),
+      ),
+      // body: Obx(
+      //   () {
+      //     if (controller.isLoadingKendaraan.value &&
+      //         controller.kirimKendaraanModel.isEmpty) {
+      //       return const CustomCircularLoader();
+      //     } else if (controller.kirimKendaraanModel.isEmpty) {
+      //       return GestureDetector(
+      //         onTap: () {},
+      //         child: CustomAnimationLoaderWidget(
+      //           text: 'Tambahkan Data Baru',
+      //           animation: 'assets/animations/add-data-animation.json',
+      //           height: CustomHelperFunctions.screenHeight() * 0.4,
+      //           width: CustomHelperFunctions.screenHeight(),
+      //         ),
+      //       );
+      //     } else
+      //   },
+      // ),
+    );
   }
 }
 
@@ -48,7 +111,7 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
     jenisKendaraan = widget.model.jenis;
     jumlahKendaraan = widget.model.jumlah;
 
-    // Set default value for jenisKendaraan in the controller
+    // Set default value for jenisKendaraan di controller
     final fetchKendaraanController = Get.put(FetchKendaraanController());
     fetchKendaraanController.setSelectedJenisKendaraan(jenisKendaraan);
   }
@@ -116,6 +179,24 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                 },
               );
             }),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Jumlah Kendaraan'),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: jumlahKendaraan.toString(),
+              ),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Plot Kendaraan'),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              readOnly: true,
+              decoration: const InputDecoration(
+                hintText: 'Plot Kendaraan',
+              ),
+            ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('No Polisi'),
             Obx(() {

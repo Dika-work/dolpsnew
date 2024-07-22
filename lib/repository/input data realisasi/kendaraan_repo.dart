@@ -10,8 +10,8 @@ class KendaraanRepository extends GetxController {
   final storageUtil = StorageUtil();
 
   Future<List<KendaraanModel>> fetchKendaraanContent() async {
-    final response = await http
-        .get(Uri.parse('${storageUtil.baseURL}/DO/api/kendaraan_tampil.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_master_data.php?action=Kendaraan'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => KendaraanModel.fromJson(model)).toList();

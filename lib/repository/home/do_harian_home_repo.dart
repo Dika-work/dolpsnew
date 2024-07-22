@@ -9,8 +9,8 @@ class DoHarianHomeRepository extends GetxController {
   final storageUtil = StorageUtil();
 
   Future<List<DoHarianHomeModel>> fetchGlobalHarianContent() async {
-    final response = await http.get(
-        Uri.parse('${storageUtil.baseURL}/DO/api/tampil_do_harian_fix.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_do_harian.php?action=getDataFix'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DoHarianHomeModel.fromJson(model)).toList();

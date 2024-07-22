@@ -35,8 +35,21 @@ class DataDoGlobalRepository extends GetxController {
     String user,
   ) async {
     try {
-      final response = await http.post(Uri.parse(
-              '${storageUtil.baseURL}/DO/api/api_do_global.php?id_plant=$idPlant&tujuan=$tujuan&tgl=$tgl&jam=$jam&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm&jumlah_5=$jumlah5&jumlah_6=$jumlah6&user=$user')
+      final response = await http.post(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php'),
+          body: {
+            'id_plant': idPlant,
+            'tujuan': tujuan,
+            'tgl': tgl,
+            'jam': jam,
+            'jumlah_1': srd,
+            'jumlah_2': mks,
+            'jumlah_3': ptk,
+            'jumlah_4': bjm,
+            'jumlah_5': jumlah5,
+            'jumlah_6': jumlah6,
+            'user': user,
+          }
           // Uri.parse(
           // '${storageUtil.baseURL}/DO/api/tambah_do_global.php?id_plant=$idPlant&tujuan=$tujuan&tgl=$tgl&jam=$jam&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm&jumlah_5=$jumlah5&jumlah_6=$jumlah6&user=$user'),
           );
@@ -56,7 +69,7 @@ class DataDoGlobalRepository extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>> editDOGlobalContent(
+  Future<void> editDOGlobalContent(
     int id,
     String tgl,
     int idPlant,
@@ -68,8 +81,19 @@ class DataDoGlobalRepository extends GetxController {
   ) async {
     try {
       print('...PROSES AWALANAN DI REPOSITORY DO Global...');
-      final response = await http.post(Uri.parse(
-          '${storageUtil.baseURL}/DO/api/edit_do_global.php?id=$id&tgl=$tgl&id_plant=$idPlant&tujuan=$tujuan&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm'));
+      final response = await http.put(
+        Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php'),
+        body: {
+          'id': id.toString(),
+          'tgl': tgl,
+          'id_plant': idPlant.toString(),
+          'tujuan': tujuan,
+          'jumlah_1': srd.toString(),
+          'jumlah_2': mks.toString(),
+          'jumlah_3': ptk.toString(),
+          'jumlah_4': bjm.toString(),
+        },
+      );
 
       print('...BERHASIL DI REPOSITORY...');
 
@@ -101,16 +125,16 @@ class DataDoGlobalRepository extends GetxController {
         message: 'Terjadi kesalahan saat mengedit DO Global',
       );
     }
-    return {};
   }
 
-  Future<Map<String, dynamic>> deleteDOGlobalContent(
+  Future<void> deleteDOGlobalContent(
     int id,
   ) async {
     try {
       print('...PROSES AWALANAN DELETE DI REPOSITORY DO Global...');
-      final response = await http.post(Uri.parse(
-          '${storageUtil.baseURL}/DO/api/hapus_do_global.php?id=$id'));
+      final response = await http.delete(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php'),
+          body: {'id': id});
 
       print('...BERHASIL DI REPOSITORY...');
 
@@ -142,6 +166,5 @@ class DataDoGlobalRepository extends GetxController {
         message: 'Terjadi kesalahan saat menghapus DO Global',
       );
     }
-    return {};
   }
 }

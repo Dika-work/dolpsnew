@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:doplsnew/models/input%20data%20realisasi/request_kendaraan_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
+import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../utils/popups/snackbar.dart';
 
 class RequestKendaraanRepository extends GetxController {

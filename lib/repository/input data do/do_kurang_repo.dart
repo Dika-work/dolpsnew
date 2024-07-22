@@ -11,8 +11,8 @@ class DataDoKurangRepository extends GetxController {
   final storageUtil = StorageUtil();
 
   Future<List<DoKurangModel>> fetchDataKurangContent() async {
-    final response = await http
-        .get(Uri.parse('${storageUtil.baseURL}/DO/api/tampil_do_kurang.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_do_kurang.php?action=getData'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DoKurangModel.fromJson(model)).toList();
@@ -37,9 +37,21 @@ class DataDoKurangRepository extends GetxController {
   ) async {
     try {
       final response = await http.post(
-        Uri.parse(
-            '${storageUtil.baseURL}/DO/api/tambah_do_kurang.php?id_plant=$idPlant&tujuan=$tujuan&tgl=$tgl&jam=$jam&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm&jumlah_5=$jumlah5&jumlah_6=$jumlah6&user=$user&plant=$plant'),
-      );
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_kurang.php'),
+          body: {
+            'id_plant': idPlant,
+            'tujuan': tujuan,
+            'tgl': tgl,
+            'jam': jam,
+            'jumlah_1': srd,
+            'jumlah_2': mks,
+            'jumlah_3': ptk,
+            'jumlah_4': bjm,
+            'jumlah_5': jumlah5,
+            'jumlah_6': jumlah6,
+            'user': user,
+            'plant': plant
+          });
 
       if (response.statusCode != 200) {
         SnackbarLoader.errorSnackBar(
@@ -57,7 +69,7 @@ class DataDoKurangRepository extends GetxController {
     }
   }
 
-  Future<Map<String, dynamic>> editDOKurangContent(
+  Future<void> editDOKurangContent(
     int id,
     String tgl,
     int idPlant,
@@ -69,8 +81,18 @@ class DataDoKurangRepository extends GetxController {
   ) async {
     try {
       print('...PROSES AWALANAN DI REPOSITORY DO Kurang...');
-      final response = await http.post(Uri.parse(
-          '${storageUtil.baseURL}/DO/api/edit_do_kurang.php?id=$id&tgl=$tgl&id_plant=$idPlant&tujuan=$tujuan&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm'));
+      final response = await http.put(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_kurang.php'),
+          body: {
+            'id': id.toString(),
+            'tgl': tgl,
+            'id_plant': idPlant.toString(),
+            'tujuan': tujuan,
+            'jumlah_1': srd.toString(),
+            'jumlah_2': mks.toString(),
+            'jumlah_3': ptk.toString(),
+            'jumlah_4': bjm.toString(),
+          });
 
       print('...BERHASIL DI REPOSITORY...');
 
@@ -102,16 +124,16 @@ class DataDoKurangRepository extends GetxController {
         message: 'Terjadi kesalahan saat mengedit DO Kurang',
       );
     }
-    return {};
   }
 
-  Future<Map<String, dynamic>> deleteDOKurangContent(
+  Future<void> deleteDOKurangContent(
     int id,
   ) async {
     try {
       print('...PROSES AWALANAN DELETE DI REPOSITORY DO Kurang...');
-      final response = await http.post(Uri.parse(
-          '${storageUtil.baseURL}/DO/api/hapus_do_kurang.php?id=$id'));
+      final response = await http.delete(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_kurang.php'),
+          body: {'id': id.toString()});
 
       print('...BERHASIL DI REPOSITORY...');
 
@@ -143,6 +165,5 @@ class DataDoKurangRepository extends GetxController {
         message: 'Terjadi kesalahan saat menghapus DO Kurang',
       );
     }
-    return {};
   }
 }

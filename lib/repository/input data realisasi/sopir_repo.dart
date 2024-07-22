@@ -10,8 +10,8 @@ class SopirRepository extends GetxController {
   final storageUtil = StorageUtil();
 
   Future<List<SopirModel>> fetchGlobalHarianContent() async {
-    final response = await http
-        .get(Uri.parse('${storageUtil.baseURL}/DO/api/sopir_tampil.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_master_data.php?action=Sopir'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => SopirModel.fromJson(model)).toList();

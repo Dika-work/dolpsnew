@@ -26,11 +26,11 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'No': double.nan,
       'Pengurus': double.nan,
       'Tanggal': 130,
-      'Jam': 150,
+      'Jam': 100,
       'Plant': double.nan,
       'Tujuan': double.nan,
-      'Type': double.nan,
-      'Jenis': double.nan,
+      'Type': 130,
+      'Jenis': 150,
       'Jumlah': double.nan,
       'Lihat': 50,
       'Kirim': 50,
@@ -107,33 +107,34 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                 print('..INI LIHAT REQUEST MOBIL..');
               },
               onKirim: (RequestKendaraanModel model) {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: Text(
-                      'Tambah data plant kendaraan',
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    contentWidget: AddKirimKendaraan(model: model),
-                    onConfirm: () {
-                      CustomDialogs.defaultDialog(
-                        context: context,
-                        titleWidget: Text(
-                          'Konfirmasi pengiriman',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        contentWidget: Text(
-                          'Apakah anda sudah yakin untuk melakukan pengiriman?',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                        confirmText: 'Konfirmasi',
-                        onConfirm: () {
-                          print(
-                              '...OKEE MANTAP BERHASIL DI KONFIRMASI PENGIRIMAN...');
-                        },
-                      );
-                      print('...INI DATA SUDAH DI KIRIM...');
-                    },
-                    confirmText: 'Oke');
+                Get.to(() => KirimKendaraanScreen(model));
+                // CustomDialogs.defaultDialog(
+                //     context: context,
+                //     titleWidget: Text(
+                //       'Tambah data plant kendaraan',
+                //       style: Theme.of(context).textTheme.headlineMedium,
+                //     ),
+                //     contentWidget: AddKirimKendaraan(model: model),
+                //     onConfirm: () {
+                //       CustomDialogs.defaultDialog(
+                //         context: context,
+                //         titleWidget: Text(
+                //           'Konfirmasi pengiriman',
+                //           style: Theme.of(context).textTheme.headlineMedium,
+                //         ),
+                //         contentWidget: Text(
+                //           'Apakah anda sudah yakin untuk melakukan pengiriman?',
+                //           style: Theme.of(context).textTheme.bodyMedium,
+                //         ),
+                //         confirmText: 'Konfirmasi',
+                //         onConfirm: () {
+                //           print(
+                //               '...OKEE MANTAP BERHASIL DI KONFIRMASI PENGIRIMAN...');
+                //         },
+                //       );
+                //       print('...INI DATA SUDAH DI KIRIM...');
+                //     },
+                //     confirmText: 'Oke');
                 print('...INI KIRIM REQUEST KENDARAAN...');
               },
               onEdit: (RequestKendaraanModel model) {

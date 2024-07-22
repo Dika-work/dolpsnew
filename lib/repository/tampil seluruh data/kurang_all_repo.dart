@@ -10,8 +10,8 @@ class KurangAllRepository extends GetxController {
   final storageUtil = StorageUtil();
 
   Future<List<DoKurangAllModel>> fetchGlobalHarianContent() async {
-    final response = await http.get(
-        Uri.parse('${storageUtil.baseURL}/DO/api/tampil_do_kurang_all.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_do_kurang.php?action=getDataAll'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DoKurangAllModel.fromJson(model)).toList();
