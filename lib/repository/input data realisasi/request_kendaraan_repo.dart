@@ -11,8 +11,8 @@ class RequestKendaraanRepository extends GetxController {
   final storageUtil = StorageUtil();
 
   Future<List<RequestKendaraanModel>> fetchTampilRequest() async {
-    final response = await http
-        .get(Uri.parse('${storageUtil.baseURL}/DO/api/req_tampil.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_request_ken.php?action=getData'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list
@@ -35,8 +35,19 @@ class RequestKendaraanRepository extends GetxController {
     int statusReq,
   ) async {
     try {
-      final response = await http.post(Uri.parse(
-          '${storageUtil.baseURL}/DO/api/req_tambah.php?jam_req=$jam&tgl_req=$tgl&nama_pengurus=$pengurus&plant_req=$plant&tujuan_req=$tujuan&type_req=$type&jenis_req=$jenis&jumlah_req=$jumlahReq&status_req=$statusReq'));
+      final response = await http.post(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_request_ken.php'),
+          body: {
+            'jam_req': jam,
+            'tgl_req': tgl,
+            'nama_pengurus': pengurus,
+            'plant_req': plant,
+            'tujuan_req': tujuan,
+            'type_req': type.toString(),
+            'jenis_req': jenis,
+            'jumlah_req': jumlahReq,
+            'status_req': statusReq
+          });
       if (response.statusCode != 200) {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
@@ -44,7 +55,7 @@ class RequestKendaraanRepository extends GetxController {
         );
       }
     } catch (e) {
-      print('Error while adding data: $e');
+      print('Error while adding data request kendaraan honda: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',

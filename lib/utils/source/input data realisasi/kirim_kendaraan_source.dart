@@ -16,7 +16,9 @@ class KirimKendaraanSource extends DataGridSource {
     required this.onDelete,
     required this.kirimKendaraanModel,
     int startIndex = 0,
-  }) {}
+  }) {
+    _updateDataPager(kirimKendaraanModel, startIndex);
+  }
 
   List<DataGridRow> _kirimKendaraanData = [];
   final controller = Get.put(KirimKendaraanController());
@@ -72,8 +74,8 @@ class KirimKendaraanSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Plant', value: data.plant),
           DataGridCell<String>(columnName: 'Type', value: data.type),
           DataGridCell<String>(columnName: 'Kendaraan', value: data.kendaraan),
-          DataGridCell<String>(columnName: 'Jenis', value: data.jenisKendaraan),
-          DataGridCell<String>(columnName: 'Status', value: data.status),
+          DataGridCell<String>(columnName: 'Jenis', value: data.kendaraan),
+          DataGridCell<int>(columnName: 'Status', value: data.status),
           DataGridCell<String>(
               columnName: 'LV Kerusakan', value: data.lvKerusakaan),
           DataGridCell<String>(columnName: 'Supir', value: data.supir),

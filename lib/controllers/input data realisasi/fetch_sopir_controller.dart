@@ -6,7 +6,8 @@ import '../../repository/input data realisasi/sopir_repo.dart';
 class FetchSopirController extends GetxController {
   final sopirRepo = Get.put(SopirRepository());
   RxList<SopirModel> sopirModel = <SopirModel>[].obs;
-  RxString selectedSopir = ''.obs;
+  RxString selectedSopirDisplay = ''.obs; // Untuk tampilan dropdown
+  RxString selectedSopirNama = ''.obs; // Nama sopir yang disimpan
 
   @override
   void onInit() {
@@ -14,13 +15,25 @@ class FetchSopirController extends GetxController {
     super.onInit();
   }
 
+  void updateSelectedSopir(String value) {
+    selectedSopirDisplay.value = value;
+    // Cari nama sopir dari value yang dipilih
+    final sopir = sopirModel.firstWhere(
+      (sopir) => '${sopir.nama} - (${sopir.namaPanggilan})' == value,
+      orElse: () =>
+          SopirModel(id: 0, nama: '', namaPanggilan: '', namaDivisi: ''),
+    );
+    selectedSopirNama.value = sopir.nama;
+  }
+
   Future<void> fetchSopirData() async {
     try {
       final dataSopir = await sopirRepo.fetchGlobalHarianContent();
       sopirModel.assignAll(dataSopir);
       if (sopirModel.isNotEmpty) {
-        selectedSopir.value =
+        selectedSopirDisplay.value =
             '${sopirModel.first.nama} - (${sopirModel.first.namaPanggilan})';
+        selectedSopirNama.value = sopirModel.first.nama;
       }
     } catch (e) {
       print('Error while fetching sopir data: $e');

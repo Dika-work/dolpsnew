@@ -8,6 +8,8 @@ class FetchKendaraanController extends GetxController {
   RxList<KendaraanModel> kendaraanModel = <KendaraanModel>[].obs;
   RxString selectedKendaraan = ''.obs;
   RxString selectedJenisKendaraan = ''.obs;
+  RxInt selectedKendaraanId =
+      0.obs; // Tambahkan ini untuk menyimpan ID kendaraan
 
   @override
   void onInit() {
@@ -40,8 +42,10 @@ class FetchKendaraanController extends GetxController {
   void updateSelectedKendaraan() {
     if (filteredKendaraanModel.isNotEmpty) {
       selectedKendaraan.value = filteredKendaraanModel.first.noPolisi;
+      selectedKendaraanId.value = filteredKendaraanModel.first.idKendaraan;
     } else {
       selectedKendaraan.value = '';
+      selectedKendaraanId.value = 0;
     }
   }
 

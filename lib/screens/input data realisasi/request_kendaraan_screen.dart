@@ -35,7 +35,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Lihat': 50,
       'Kirim': 50,
       'Edit': 50,
-      'Hapus': 50,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -107,7 +106,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                 print('..INI LIHAT REQUEST MOBIL..');
               },
               onKirim: (RequestKendaraanModel model) {
-                Get.to(() => KirimKendaraanScreen(model));
+                Get.to(() => KirimKendaraanScreen(model: model,));
                 // CustomDialogs.defaultDialog(
                 //     context: context,
                 //     titleWidget: Text(
@@ -139,9 +138,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
               },
               onEdit: (RequestKendaraanModel model) {
                 print('...INI EDIT REQUEST KENDARAAN...');
-              },
-              onHapus: (RequestKendaraanModel model) {
-                print('...INI HAPUS REQUEST KENDARAAN...');
               },
               requestKendaraanModel: controller.requestKendaraanModel,
               startIndex: currentPage * rowsPerPage,
@@ -388,22 +384,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                                 ),
                                 child: Text(
                                   'Edit',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
-                            width: columnWidths['Hapus']!,
-                            columnName: 'Hapus',
-                            label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'Hapus',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium

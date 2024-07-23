@@ -29,15 +29,15 @@ class RequestKendaraanModel {
 
   factory RequestKendaraanModel.fromJson(Map<String, dynamic> json) {
     return RequestKendaraanModel(
-      idReq: json['id_req'] ?? '',
+      idReq: json['id_req'] ?? 0,
       pengurus: json['nama_pengurus'] ?? '',
       tgl: json['tgl_req'] ?? '',
       jam: json['jam_req'] ?? '',
       plant: json['plant_req'] ?? '',
       tujuan: json['tujuan_req'] ?? '',
-      type: json['type_req'] ?? '',
+      type: json['type_req'] ?? 0,
       jenis: json['jenis_req'] ?? '',
-      jumlah: json['jumlah_req'] ?? '',
+      jumlah: json['jumlah_req'] ?? 0,
       statusReq: json['status_req'] ?? 0,
       inisialDepan: json['inisial_depan'] ?? '',
       inisitalBelakang: json['inisial_belakang'] ?? '',

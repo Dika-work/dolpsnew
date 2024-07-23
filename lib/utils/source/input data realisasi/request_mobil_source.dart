@@ -12,7 +12,6 @@ class RequestMobilSource extends DataGridSource {
   final void Function(RequestKendaraanModel)? onLihat;
   final void Function(RequestKendaraanModel)? onKirim;
   final void Function(RequestKendaraanModel)? onEdit;
-  final void Function(RequestKendaraanModel)? onHapus;
   final List<RequestKendaraanModel> requestKendaraanModel;
   int startIndex = 0;
 
@@ -20,7 +19,6 @@ class RequestMobilSource extends DataGridSource {
     required this.onLihat,
     required this.onKirim,
     required this.onEdit,
-    required this.onHapus,
     required this.requestKendaraanModel,
     int startIndex = 0,
   }) {
@@ -77,14 +75,6 @@ class RequestMobilSource extends DataGridSource {
           onPressed: () {
             if (onEdit != null) {
               onEdit!(requestKendaraanModel[startIndex + rowIndex]);
-            }
-          },
-        ),
-        IconButton(
-          icon: const Icon(Iconsax.trash),
-          onPressed: () {
-            if (onHapus != null) {
-              onHapus!(requestKendaraanModel[startIndex + rowIndex]);
             }
           },
         ),

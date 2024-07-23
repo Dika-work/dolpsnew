@@ -10,7 +10,7 @@ class DoGlobalHarianRepository extends GetxController {
 
   Future<List<DoGlobalHarianModel>> fetchGlobalHarianContent() async {
     final response = await http
-        .get(Uri.parse('${storageUtil.baseURL}/DO/api/tampil_do_global.php'));
+        .get(Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php?action=getDataAll'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DoGlobalHarianModel.fromJson(model)).toList();
