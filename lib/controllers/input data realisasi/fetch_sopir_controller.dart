@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/sopir_model.dart';
@@ -6,8 +7,9 @@ import '../../repository/input data realisasi/sopir_repo.dart';
 class FetchSopirController extends GetxController {
   final sopirRepo = Get.put(SopirRepository());
   RxList<SopirModel> sopirModel = <SopirModel>[].obs;
-  RxString selectedSopirDisplay = ''.obs; // Untuk tampilan dropdown
-  RxString selectedSopirNama = ''.obs; // Nama sopir yang disimpan
+  RxString selectedSopirDisplay = ''.obs;
+  RxString selectedSopirNama = ''.obs;
+  RxString searchQuery = ''.obs;
 
   @override
   void onInit() {
@@ -17,7 +19,6 @@ class FetchSopirController extends GetxController {
 
   void updateSelectedSopir(String value) {
     selectedSopirDisplay.value = value;
-    // Cari nama sopir dari value yang dipilih
     final sopir = sopirModel.firstWhere(
       (sopir) => '${sopir.nama} - (${sopir.namaPanggilan})' == value,
       orElse: () =>
@@ -39,5 +40,14 @@ class FetchSopirController extends GetxController {
       print('Error while fetching sopir data: $e');
       sopirModel.assignAll([]);
     }
+  }
+
+  List<SopirModel> get filteredSopir {
+    if (searchQuery.value.isEmpty) {
+      return sopirModel;
+    }
+    return sopirModel.where((sopir) =>
+        sopir.nama.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
+        sopir.namaPanggilan.toLowerCase().contains(searchQuery.value.toLowerCase())).toList();
   }
 }

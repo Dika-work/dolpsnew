@@ -105,37 +105,10 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                 //     confirmText: 'Oke');
                 print('..INI LIHAT REQUEST MOBIL..');
               },
-              onKirim: (RequestKendaraanModel model) {
-                Get.to(() => KirimKendaraanScreen(model: model,));
-                // CustomDialogs.defaultDialog(
-                //     context: context,
-                //     titleWidget: Text(
-                //       'Tambah data plant kendaraan',
-                //       style: Theme.of(context).textTheme.headlineMedium,
-                //     ),
-                //     contentWidget: AddKirimKendaraan(model: model),
-                //     onConfirm: () {
-                //       CustomDialogs.defaultDialog(
-                //         context: context,
-                //         titleWidget: Text(
-                //           'Konfirmasi pengiriman',
-                //           style: Theme.of(context).textTheme.headlineMedium,
-                //         ),
-                //         contentWidget: Text(
-                //           'Apakah anda sudah yakin untuk melakukan pengiriman?',
-                //           style: Theme.of(context).textTheme.bodyMedium,
-                //         ),
-                //         confirmText: 'Konfirmasi',
-                //         onConfirm: () {
-                //           print(
-                //               '...OKEE MANTAP BERHASIL DI KONFIRMASI PENGIRIMAN...');
-                //         },
-                //       );
-                //       print('...INI DATA SUDAH DI KIRIM...');
-                //     },
-                //     confirmText: 'Oke');
-                print('...INI KIRIM REQUEST KENDARAAN...');
-              },
+              onKirim: (RequestKendaraanModel model) =>
+                  Get.to(() => KirimKendaraanScreen(
+                        model: model,
+                      )),
               onEdit: (RequestKendaraanModel model) {
                 print('...INI EDIT REQUEST KENDARAAN...');
               },

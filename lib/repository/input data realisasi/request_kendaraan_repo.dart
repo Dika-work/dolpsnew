@@ -45,8 +45,8 @@ class RequestKendaraanRepository extends GetxController {
             'tujuan_req': tujuan,
             'type_req': type.toString(),
             'jenis_req': jenis,
-            'jumlah_req': jumlahReq,
-            'status_req': statusReq
+            'jumlah_req': jumlahReq.toString(),
+            'status_req': statusReq.toString()
           });
       if (response.statusCode != 200) {
         SnackbarLoader.errorSnackBar(

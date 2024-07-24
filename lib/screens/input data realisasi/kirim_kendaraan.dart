@@ -2,6 +2,7 @@ import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/models/input%20data%20realisasi/kirim_kendaraan_model.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:doplsnew/utils/source/input%20data%20realisasi/kirim_kendaraan_source.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -11,8 +12,11 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../controllers/input data realisasi/fetch_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/fetch_sopir_controller.dart';
 import '../../controllers/input data realisasi/kirim_kendaraan_controller.dart';
+import '../../models/input data realisasi/kendaraan_model.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
+import '../../models/input data realisasi/sopir_model.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../widgets/dropdown.dart';
 
@@ -303,7 +307,6 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
     return Form(
       key: kirimKendaraanKey,
       child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -411,43 +414,55 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('No Polisi'),
-            Obx(() {
-              return DropDownWidget(
-                value: fetchKendaraanController.selectedKendaraan.value.isEmpty
-                    ? null
-                    : fetchKendaraanController.selectedKendaraan.value,
-                items: fetchKendaraanController.filteredKendaraanModel
-                    .map((kendaraan) => kendaraan.noPolisi)
-                    .toList(),
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    fetchKendaraanController.selectedKendaraan.value = newValue;
-                    // Cari ID kendaraan dari nomor polisi yang dipilih
-                    final selectedKendaraan = fetchKendaraanController
-                        .filteredKendaraanModel
-                        .firstWhere(
-                            (kendaraan) => kendaraan.noPolisi == newValue);
+            Obx(
+              () => DropdownSearch<KendaraanModel>(
+                items: fetchKendaraanController.filteredKendaraanModel,
+                itemAsString: (KendaraanModel kendaraan) => kendaraan.noPolisi,
+                selectedItem: fetchKendaraanController.kendaraanModel.isNotEmpty
+                    ? fetchKendaraanController.kendaraanModel.first
+                    : null,
+                onChanged: (KendaraanModel? kendaraan) {
+                  if (kendaraan != null) {
+                    fetchKendaraanController.selectedKendaraan.value =
+                        kendaraan.noPolisi;
                     fetchKendaraanController.selectedKendaraanId.value =
-                        selectedKendaraan.idKendaraan;
+                        kendaraan.idKendaraan;
                   }
                 },
-              );
-            }),
+                popupProps: const PopupProps.menu(
+                  showSearchBox: true,
+                  searchFieldProps: TextFieldProps(
+                    decoration: InputDecoration(
+                      hintText: 'Search Kendaraan...',
+                    ),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Sopir'),
             Obx(
-              () => DropDownWidget(
-                value: sopirController.selectedSopirDisplay.value.isEmpty
-                    ? null
-                    : sopirController.selectedSopirDisplay.value,
-                items: sopirController.sopirModel
-                    .map((sopir) => '${sopir.nama} - (${sopir.namaPanggilan})')
-                    .toList(),
-                onChanged: (String? value) {
-                  if (value != null) {
-                    sopirController.updateSelectedSopir(value);
+              () => DropdownSearch<SopirModel>(
+                items: sopirController.filteredSopir,
+                itemAsString: (SopirModel sopir) =>
+                    '${sopir.nama} - (${sopir.namaPanggilan})',
+                selectedItem: sopirController.sopirModel.isNotEmpty
+                    ? sopirController.sopirModel.first
+                    : null,
+                onChanged: (SopirModel? sopir) {
+                  if (sopir != null) {
+                    sopirController.updateSelectedSopir(
+                        '${sopir.nama} - (${sopir.namaPanggilan})');
                   }
                 },
+                popupProps: const PopupProps.menu(
+                  showSearchBox: true,
+                  searchFieldProps: TextFieldProps(
+                    decoration: InputDecoration(
+                      hintText: 'Search Sopir...',
+                    ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: CustomSize.spaceBtwSections),
@@ -458,23 +473,78 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                     int kendaraan =
                         fetchKendaraanController.selectedKendaraanId.value;
                     String supir = sopirController.selectedSopirNama.value;
-                    print(
-                        '...INI BAGIAN TAMBAH DATA PADA DATA DO REALISASI HONDA...');
-                    print('idReq: $idReq');
-                    print('plant: $plant');
-                    print('tujuan: $tujuan');
-                    print('plant2 : ${controller.selectedPlant.value}');
-                    print('tujuan2: ${controller.selectedTujuan.value}');
-                    print('type: $typeDO');
-                    print('kendaraan: $kendaraan');
-                    print('supir: $supir');
-                    print('jam: ${CustomHelperFunctions.formattedTime}');
-                    print('tgl: $tgl');
-                    print('bulan: $bulan');
-                    print('tahun: $tahun');
-                    print('user: $user');
-                    print('Jumlah kendaraan :$jumlahKendaraan');
-                    print('...SELESAI...');
+
+                    CustomDialogs.defaultDialog(
+                        context: context,
+                        titleWidget: Text(
+                          'Konfirmasi Penambahan🤭',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        contentWidget: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                                'Dengan ini saya $user yakin akan menambahkan data yang telah sesuai dibawah ini :',
+                                style: Theme.of(context).textTheme.titleMedium),
+                            const SizedBox(height: CustomSize.spaceBtwItems),
+                            Text('idReq: $idReq'),
+                            Text('plant: $plant'),
+                            Text('tujuan: $tujuan'),
+                            Text('plant2 : ${controller.selectedPlant.value}'),
+                            Text('tujuan2: ${controller.selectedTujuan.value}'),
+                            Text('type: ${typeDO == 0 ? 'REGULER' : 'MUTASI'}'),
+                            Text(
+                                'kendaraan: ${fetchKendaraanController.selectedKendaraan}'),
+                            Text('supir: $supir'),
+                            Text('jam: ${CustomHelperFunctions.formattedTime}'),
+                            Text(
+                                'tgl: ${CustomHelperFunctions.getFormattedDate(parsedDate)}'),
+                            Text('bulan: $bulan'),
+                            Text('tahun: $tahun'),
+                            Text('user: $user'),
+                            Text('Jumlah kendaraan :$jumlahKendaraan'),
+                          ],
+                        ),
+                        onConfirm: () {
+                          CustomDialogs.defaultDialog(
+                            context: context,
+                            titleWidget: Text(
+                              'Konfirmasi pengiriman',
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
+                            contentWidget: Text(
+                              'Apakah anda sudah yakin untuk melakukan pengiriman?',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            confirmText: 'Konfirmasi',
+                            onConfirm: () {
+                              print(
+                                  '...INI BAGIAN TAMBAH DATA PADA DATA DO REALISASI HONDA...');
+                              print('idReq: $idReq');
+                              print('plant: $plant');
+                              print('tujuan: $tujuan');
+                              print(
+                                  'plant2 : ${controller.selectedPlant.value}');
+                              print(
+                                  'tujuan2: ${controller.selectedTujuan.value}');
+                              print('type: $typeDO');
+                              print('kendaraan: $kendaraan');
+                              print('supir: $supir');
+                              print(
+                                  'jam: ${CustomHelperFunctions.formattedTime}');
+                              print('tgl: $tgl');
+                              print('bulan: $bulan');
+                              print('tahun: $tahun');
+                              print('user: $user');
+                              print('Jumlah kendaraan :$jumlahKendaraan');
+                              print('...SELESAI...');
+                            },
+                          );
+                          print('...INI DATA SUDAH DI KIRIM...');
+                        },
+                        confirmText: 'Oke');
                     // if (kendaraan.isEmpty) {
                     //    SnackbarLoader.errorSnackBar(
                     //     title: 'Gagal😪',

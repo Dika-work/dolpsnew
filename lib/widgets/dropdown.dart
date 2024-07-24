@@ -10,11 +10,13 @@ class DropDownWidget extends StatelessWidget {
     required this.value,
     this.onChanged,
     required this.items,
+    this.widthDropdownValue = 200,
   });
 
   final String? value;
   final void Function(String?)? onChanged;
   final List<String> items;
+  final double? widthDropdownValue;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class DropDownWidget extends StatelessWidget {
         ),
         dropdownStyleData: DropdownStyleData(
           maxHeight: 200,
-          width: 200,
+          width: widthDropdownValue,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: AppColors.light,
