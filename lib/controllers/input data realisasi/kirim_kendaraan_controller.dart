@@ -1,15 +1,17 @@
+import 'package:doplsnew/controllers/input%20data%20realisasi/plot_kendaraan_controller.dart';
 import 'package:doplsnew/repository/input%20data%20realisasi/plot_repo.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/kirim_kendaraan_model.dart';
 import '../../repository/input data realisasi/kirim_kendaraan_repo.dart';
+import '../../utils/popups/full_screen_loader.dart';
 
 class KirimKendaraanController extends GetxController {
   final isLoadingKendaraan = Rx<bool>(false);
   RxList<KirimKendaraanModel> kirimKendaraanModel = <KirimKendaraanModel>[].obs;
   final kirimKendaraanRepo = Get.put(KirimKendaraanRepository());
-  final jumlahPlotKendaraan = Get.put(PlotRepository());
+  final jumlahPlotKendaraan = Get.put(PlotKendaraanController());
 
   RxString selectedPlant = '1100'.obs;
   RxString selectedTujuan = 'Sunter'.obs;
@@ -31,25 +33,27 @@ class KirimKendaraanController extends GetxController {
 
   Future<void> addKirimKendaraanContent(
     int idReq,
-  int jumlahKendaraan,
-  String plant,
-  String tujuan,
-  String plant2,
-  String tujuan2,
-  int type,  
-  String kendaraan,
-  String supir,
-  String jam,
-  String tgl,
-  int bulan,  
-  int tahun,  
-  String user,
+    int jumlahKendaraan,
+    String plant,
+    String tujuan,
+    String plant2,
+    String tujuan2,
+    int type,
+    int kendaraan,
+    String supir,
+    String jam,
+    String tgl,
+    int bulan,
+    int tahun,
+    String user,
   ) async {
     isLoadingKendaraan.value = true;
 
     // Menambahkan plot kendaraan sesuai jumlah
-    for (int i = 0; i < jumlahKendaraan; i++) {
-      await jumlahPlotKendaraan.jumlahPlot(idReq, tgl, type, plant);
+    await jumlahPlotKendaraan.fetchPlot(
+        idReq, tgl, type, plant, jumlahKendaraan);
+    final jumlahPlot = jumlahPlotKendaraan.plotModel.first.jumlahPlot;
+    if (jumlahKendaraan != jumlahPlot) {
       await kirimKendaraanRepo.addKirimKendaraan(
         idReq,
         plant,
@@ -65,13 +69,21 @@ class KirimKendaraanController extends GetxController {
         tahun,
         user,
       );
-    }
 
-    SnackbarLoader.successSnackBar(
-      title: 'Berhasil✨',
-      message: 'Menambahkan data do realisasi..',
-    );
-    isLoadingKendaraan.value = false;
-    Get.back();
+      SnackbarLoader.successSnackBar(
+        title: 'Berhasil✨',
+        message: 'Menambahkan data do realisasi..',
+      );
+      CustomFullScreenLoader.stopLoading();
+      CustomFullScreenLoader.stopLoading();
+      isLoadingKendaraan.value = false;
+    } else {
+      SnackbarLoader.successSnackBar(
+        title: 'Gagal',
+        message: 'Jumlah kendaraan dan jumlah plot sudah sesuai..',
+      );
+      isLoadingKendaraan.value = false;
+      Get.back();
+    }
   }
 }

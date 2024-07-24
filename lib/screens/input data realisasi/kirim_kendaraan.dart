@@ -12,6 +12,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../controllers/input data realisasi/fetch_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/fetch_sopir_controller.dart';
 import '../../controllers/input data realisasi/kirim_kendaraan_controller.dart';
+import '../../controllers/input data realisasi/plot_kendaraan_controller.dart';
 import '../../models/input data realisasi/kendaraan_model.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../models/input data realisasi/sopir_model.dart';
@@ -296,6 +297,8 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
     // Set default value for jenisKendaraan di controller
     final fetchKendaraanController = Get.put(FetchKendaraanController());
     fetchKendaraanController.setSelectedJenisKendaraan(jenisKendaraan);
+    final plotController = Get.put(PlotKendaraanController());
+    plotController.fetchPlot(idReq, tgl, typeDO, plant, jumlahKendaraan);
   }
 
   @override
@@ -303,6 +306,7 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
     final fetchKendaraanController = Get.put(FetchKendaraanController());
     final sopirController = Get.put(FetchSopirController());
     final controller = Get.put(KirimKendaraanController());
+    final plotController = Get.put(PlotKendaraanController());
 
     return Form(
       key: kirimKendaraanKey,
@@ -346,7 +350,7 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                 hintText: CustomHelperFunctions.getFormattedDate(parsedDate),
               ),
             ),
-            widget.model.type == 1
+            typeDO == 1
                 ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -405,13 +409,17 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plot Kendaraan'),
-            TextFormField(
-              keyboardType: TextInputType.number,
-              readOnly: true,
-              decoration: const InputDecoration(
-                hintText: 'Plot Kendaraan',
-              ),
-            ),
+            Obx(() {
+              return TextFormField(
+                keyboardType: TextInputType.number,
+                readOnly: true,
+                decoration: InputDecoration(
+                  hintText: plotController.plotModel.isNotEmpty
+                      ? plotController.plotModel.first.jumlahPlot.toString()
+                      : 'Loading...',
+                ),
+              );
+            }),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('No Polisi'),
             Obx(
@@ -474,102 +482,140 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                         fetchKendaraanController.selectedKendaraanId.value;
                     String supir = sopirController.selectedSopirNama.value;
 
-                    CustomDialogs.defaultDialog(
-                        context: context,
-                        titleWidget: Text(
-                          'Konfirmasi Penambahan🤭',
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        contentWidget: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                                'Dengan ini saya $user yakin akan menambahkan data yang telah sesuai dibawah ini :',
-                                style: Theme.of(context).textTheme.titleMedium),
-                            const SizedBox(height: CustomSize.spaceBtwItems),
-                            Text('idReq: $idReq'),
-                            Text('plant: $plant'),
-                            Text('tujuan: $tujuan'),
-                            Text('plant2 : ${controller.selectedPlant.value}'),
-                            Text('tujuan2: ${controller.selectedTujuan.value}'),
-                            Text('type: ${typeDO == 0 ? 'REGULER' : 'MUTASI'}'),
-                            Text(
-                                'kendaraan: ${fetchKendaraanController.selectedKendaraan}'),
-                            Text('supir: $supir'),
-                            Text('jam: ${CustomHelperFunctions.formattedTime}'),
-                            Text(
-                                'tgl: ${CustomHelperFunctions.getFormattedDate(parsedDate)}'),
-                            Text('bulan: $bulan'),
-                            Text('tahun: $tahun'),
-                            Text('user: $user'),
-                            Text('Jumlah kendaraan :$jumlahKendaraan'),
-                          ],
-                        ),
-                        onConfirm: () {
-                          CustomDialogs.defaultDialog(
+                    plotController.isJumlahKendaraanSama.value
+                        ? Get.back()
+                        : CustomDialogs.defaultDialog(
                             context: context,
                             titleWidget: Text(
-                              'Konfirmasi pengiriman',
+                              'Konfirmasi Penambahan🤭',
                               style: Theme.of(context).textTheme.headlineMedium,
                             ),
-                            contentWidget: Text(
-                              'Apakah anda sudah yakin untuk melakukan pengiriman?',
-                              style: Theme.of(context).textTheme.bodyMedium,
+                            contentWidget: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                    'Dengan ini saya $user yakin akan menambahkan data yang telah sesuai dibawah ini :',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium),
+                                const SizedBox(
+                                    height: CustomSize.spaceBtwItems),
+                                Text('idReq: $idReq'),
+                                Text('plant: $plant'),
+                                Text('tujuan: $tujuan'),
+                                Text(
+                                    'plant2 : ${controller.selectedPlant.value}'),
+                                Text(
+                                    'tujuan2: ${controller.selectedTujuan.value}'),
+                                Text(
+                                    'type: ${typeDO == 0 ? 'REGULER' : 'MUTASI'}'),
+                                Text(
+                                    'kendaraan: ${fetchKendaraanController.selectedKendaraan}'),
+                                Text('supir: $supir'),
+                                Text(
+                                    'jam: ${CustomHelperFunctions.formattedTime}'),
+                                Text(
+                                    'tgl: ${CustomHelperFunctions.getFormattedDate(parsedDate)}'),
+                                Text('bulan: $bulan'),
+                                Text('tahun: $tahun'),
+                                Text('user: $user'),
+                                Text('Jumlah kendaraan :$jumlahKendaraan'),
+                              ],
                             ),
-                            confirmText: 'Konfirmasi',
                             onConfirm: () {
-                              print(
-                                  '...INI BAGIAN TAMBAH DATA PADA DATA DO REALISASI HONDA...');
-                              print('idReq: $idReq');
-                              print('plant: $plant');
-                              print('tujuan: $tujuan');
-                              print(
-                                  'plant2 : ${controller.selectedPlant.value}');
-                              print(
-                                  'tujuan2: ${controller.selectedTujuan.value}');
-                              print('type: $typeDO');
-                              print('kendaraan: $kendaraan');
-                              print('supir: $supir');
-                              print(
-                                  'jam: ${CustomHelperFunctions.formattedTime}');
-                              print('tgl: $tgl');
-                              print('bulan: $bulan');
-                              print('tahun: $tahun');
-                              print('user: $user');
-                              print('Jumlah kendaraan :$jumlahKendaraan');
-                              print('...SELESAI...');
+                              CustomDialogs.defaultDialog(
+                                context: context,
+                                titleWidget: Text(
+                                  'Konfirmasi pengiriman',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
+                                ),
+                                contentWidget: Text(
+                                  'Apakah anda sudah yakin untuk melakukan pengiriman?',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                                confirmText: 'Konfirmasi',
+                                onConfirm: () {
+                                  if (kendaraan == 0) {
+                                    SnackbarLoader.errorSnackBar(
+                                      title: 'Gagal😪',
+                                      message:
+                                          'Pastikan nomor polisi telah di isi 😁',
+                                    );
+                                  } else {
+                                    print(
+                                        '...INI BAGIAN TAMBAH DATA PADA DATA DO REALISASI HONDA...');
+                                    print('idReq: $idReq');
+                                    print('plant: $plant');
+                                    print('tujuan: $tujuan');
+                                    print(
+                                        'plant2 : ${controller.selectedPlant.value}');
+                                    print(
+                                        'tujuan2: ${controller.selectedTujuan.value}');
+                                    print('type: $typeDO');
+                                    print('kendaraan: $kendaraan');
+                                    print('supir: $supir');
+                                    print(
+                                        'jam: ${CustomHelperFunctions.formattedTime}');
+                                    print('tgl: $tgl');
+                                    print('bulan: $bulan');
+                                    print('tahun: $tahun');
+                                    print('user: $user');
+                                    print('Jumlah kendaraan :$jumlahKendaraan');
+                                    print('...SELESAI...');
+                                    typeDO == 0
+                                        ?
+                                        // Jika typeDO 0, kirim data tanpa plant2 dan tujuan2
+                                        controller.addKirimKendaraanContent(
+                                            idReq,
+                                            jumlahKendaraan,
+                                            plant,
+                                            tujuan,
+                                            '', // plant2 kosong
+                                            '', // tujuan2 kosong
+                                            typeDO,
+                                            kendaraan,
+                                            supir,
+                                            CustomHelperFunctions.formattedTime,
+                                            tgl,
+                                            bulan,
+                                            tahun,
+                                            user,
+                                          )
+                                        :
+                                        // Jika typeDO 1, kirim data dengan plant2 dan tujuan2
+                                        controller.addKirimKendaraanContent(
+                                            idReq,
+                                            jumlahKendaraan,
+                                            plant,
+                                            tujuan,
+                                            controller.selectedPlant.value,
+                                            controller.selectedTujuan.value,
+                                            typeDO,
+                                            kendaraan,
+                                            supir,
+                                            CustomHelperFunctions.formattedTime,
+                                            tgl,
+                                            bulan,
+                                            tahun,
+                                            user,
+                                          );
+                                  }
+                                },
+                              );
+                              print('...INI DATA SUDAH DI KIRIM...');
                             },
-                          );
-                          print('...INI DATA SUDAH DI KIRIM...');
-                        },
-                        confirmText: 'Oke');
-                    // if (kendaraan.isEmpty) {
-                    //    SnackbarLoader.errorSnackBar(
-                    //     title: 'Gagal😪',
-                    //     message: 'Pastikan nomor polisi telah di isi 😁',
-                    //   );
-                    // } else {
-                    //   controller.addKirimKendaraanContent(
-                    //       idReq,
-                    //       jumlahKendaraan,
-                    //       plant,
-                    //       tujuan,
-                    //       controller.selectedPlant.value,
-                    //       controller.selectedTujuan.value,
-                    //       typeDO,
-                    //       kendaraan,
-                    //       supir,
-                    //       CustomHelperFunctions.formattedTime,
-                    //       tgl,
-                    //       bulan,
-                    //       tahun,
-                    //       user);
-                    // }
+                            confirmText: 'Oke');
                   },
-                  child: const Text('Tambah Data')),
-            )
+                  child: Obx(
+                    () => Text(plotController.isJumlahKendaraanSama.value
+                        ? 'Selesai'
+                        : 'Tambah Data'),
+                  )),
+            ),
           ],
         ),
       ),
