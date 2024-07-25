@@ -65,6 +65,7 @@ class KirimKendaraanScreen extends StatelessWidget {
                     source: KirimKendaraanSource(
                       onDelete: (KirimKendaraanModel model) {
                         print('..INI HAPUS KIRIM KENDARAAN..');
+                        controller.hapusKirimKendaraan(model.id);
                       },
                       kirimKendaraanModel: controller.kirimKendaraanModel,
                     ),

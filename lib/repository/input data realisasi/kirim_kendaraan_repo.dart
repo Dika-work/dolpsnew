@@ -1,11 +1,24 @@
+import 'dart:convert';
+
+import 'package:doplsnew/models/input%20data%20realisasi/kirim_kendaraan_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../utils/popups/snackbar.dart';
 
-class KirimKendaraanRepository extends GetxController {
+class KirimKendaraanRepository {
   final storageUtil = StorageUtil();
+
+  Future<List<KirimKendaraanModel>> fetchKirimKendaraan() async {
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getData'));
+    if (response.statusCode == 200) {
+      Iterable list = json.decode(response.body);
+      return list.map((e) => KirimKendaraanModel.fromJson(e)).toList();
+    } else {
+      throw Exception('Gagal untuk mengambil data Kirim Kendaraan ☠');
+    }
+  }
 
   Future<void> addKirimKendaraan(
     int idReq,
@@ -54,6 +67,42 @@ class KirimKendaraanRepository extends GetxController {
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
       );
       return;
+    }
+  }
+
+  Future<void> hapusKirimKendaraan(int id) async {
+    try {
+      final response = await http.delete(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_realisasi.php'),
+          body: {'id': id.toString()});
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Data DO Harian berhasil dihapus',
+          );
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal menghapus DO Harian, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di hapus kirim kendaraan: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus kirim kendaraan',
+      );
     }
   }
 }

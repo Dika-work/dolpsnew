@@ -1,4 +1,5 @@
 class KirimKendaraanModel {
+  int id;
   String plant;
   String tujuan;
   String plant2;
@@ -14,25 +15,26 @@ class KirimKendaraanModel {
   int status;
   String lvKerusakaan;
 
-  KirimKendaraanModel({
-    required this.plant,
-    required this.tujuan,
-    required this.plant2,
-    required this.tujuan2,
-    required this.type,
-    required this.kendaraan,
-    required this.supir,
-    required this.jam,
-    required this.tgl,
-    required this.bulan,
-    required this.tahun,
-    required this.user,
-    required this.status,
-    required this.lvKerusakaan
-  });
+  KirimKendaraanModel(
+      {required this.id,
+      required this.plant,
+      required this.tujuan,
+      required this.plant2,
+      required this.tujuan2,
+      required this.type,
+      required this.kendaraan,
+      required this.supir,
+      required this.jam,
+      required this.tgl,
+      required this.bulan,
+      required this.tahun,
+      required this.user,
+      required this.status,
+      required this.lvKerusakaan});
 
   factory KirimKendaraanModel.fromJson(Map<String, dynamic> json) {
     return KirimKendaraanModel(
+      id: json['id'] ?? 0,
       plant: json['plant'] ?? '',
       tujuan: json['tujuan'] ?? '',
       plant2: json['plant_2'] ?? '',

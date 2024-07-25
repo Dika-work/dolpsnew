@@ -1,9 +1,9 @@
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/tampil%20seluruh%20data/do_harian_all_lps.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../models/tampil seluruh data/do_harian_all_lps.dart';
 import '../../constant/custom_size.dart';
 
 class DataAllHarianLpsSource extends DataGridSource {

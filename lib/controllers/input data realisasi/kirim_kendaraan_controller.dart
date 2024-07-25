@@ -28,6 +28,25 @@ class KirimKendaraanController extends GetxController {
     '1900': 'Bekasi'
   };
 
+  @override
+  void onInit() {
+    fetchDataKirimKendaraan();
+    super.onInit();
+  }
+
+  Future<void> fetchDataKirimKendaraan() async {
+    try {
+      isLoadingKendaraan.value = true;
+      final getKirimKendaraan = await kirimKendaraanRepo.fetchKirimKendaraan();
+      kirimKendaraanModel.assignAll(getKirimKendaraan);
+    } catch (e) {
+      print('Error while fetching data kirim kendaraan: $e');
+      kirimKendaraanModel.assignAll([]);
+    } finally {
+      isLoadingKendaraan.value = false;
+    }
+  }
+
   void updateSelectedPlant(String plant) {
     selectedPlant.value = plant;
     selectedTujuan.value = tujuanMap[plant] ?? '';
@@ -75,6 +94,8 @@ class KirimKendaraanController extends GetxController {
       noPolisiController.resetSelectedKendaraan();
       supirController.resetSelectedSopir();
 
+      await fetchDataKirimKendaraan();
+
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
         message: 'Menambahkan data do realisasi..',
@@ -87,6 +108,18 @@ class KirimKendaraanController extends GetxController {
       );
       isLoadingKendaraan.value = false;
       Get.back();
+    }
+  }
+
+  Future<void> hapusKirimKendaraan(int id) async {
+    try {
+      await kirimKendaraanRepo.hapusKirimKendaraan(id);
+      await fetchDataKirimKendaraan();
+    } catch (e) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus kirim kendaraan😒',
+      );
     }
   }
 }

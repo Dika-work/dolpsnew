@@ -15,7 +15,6 @@ class KirimKendaraanSource extends DataGridSource {
   KirimKendaraanSource({
     required this.onDelete,
     required this.kirimKendaraanModel,
-    int startIndex = 0,
   }) {
     _updateDataPager(kirimKendaraanModel, startIndex);
   }
@@ -61,27 +60,52 @@ class KirimKendaraanSource extends DataGridSource {
         ]);
   }
 
+  List<DataGridRow> _generateEmptyRows(int count) {
+    return List.generate(count, (index) {
+      return const DataGridRow(cells: [
+        DataGridCell<String>(columnName: 'No', value: '-'),
+        DataGridCell<String>(columnName: 'Plant', value: '-'),
+        DataGridCell<String>(columnName: 'Type', value: '-'),
+        DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
+        DataGridCell<String>(columnName: 'Jenis', value: '-'),
+        DataGridCell<String>(columnName: 'Status', value: '-'),
+        DataGridCell<String>(columnName: 'LV Kerusakan', value: '-'),
+        DataGridCell<String>(columnName: 'Supir', value: '-'),
+      ]);
+    });
+  }
+
   void _updateDataPager(
       List<KirimKendaraanModel> kirimKendaraanModel, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
-    _kirimKendaraanData =
-        kirimKendaraanModel.skip(startIndex).take(10).map<DataGridRow>(
-      (data) {
-        index++;
-        return DataGridRow(cells: [
-          DataGridCell<int>(columnName: 'No', value: index),
-          DataGridCell<String>(columnName: 'Plant', value: data.plant),
-          DataGridCell<String>(columnName: 'Type', value: data.type),
-          DataGridCell<String>(columnName: 'Kendaraan', value: data.kendaraan),
-          DataGridCell<String>(columnName: 'Jenis', value: data.kendaraan),
-          DataGridCell<int>(columnName: 'Status', value: data.status),
-          DataGridCell<String>(
-              columnName: 'LV Kerusakan', value: data.lvKerusakaan),
-          DataGridCell<String>(columnName: 'Supir', value: data.supir),
-        ]);
-      },
-    ).toList();
+
+    if (kirimKendaraanModel.isEmpty) {
+      _kirimKendaraanData = _generateEmptyRows(7);
+    } else {
+      _kirimKendaraanData =
+          kirimKendaraanModel.skip(startIndex).take(10).map<DataGridRow>(
+        (data) {
+          index++;
+          return DataGridRow(cells: [
+            DataGridCell<int>(columnName: 'No', value: index),
+            DataGridCell<String>(columnName: 'Plant', value: data.plant),
+            DataGridCell<String>(
+                columnName: 'Type',
+                value: data.type == '0' ? 'REGULER' : 'MUTASI'),
+            DataGridCell<String>(
+                columnName: 'Kendaraan', value: data.kendaraan),
+            DataGridCell<String>(columnName: 'Jenis', value: data.kendaraan),
+            DataGridCell<String>(
+                columnName: 'Status',
+                value: data.status == 0 ? 'READY' : 'NOT'),
+            DataGridCell<String>(
+                columnName: 'LV Kerusakan', value: data.lvKerusakaan),
+            DataGridCell<String>(columnName: 'Supir', value: data.supir),
+          ]);
+        },
+      ).toList();
+    }
   }
 
   @override

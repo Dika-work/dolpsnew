@@ -1,7 +1,7 @@
 import 'package:doplsnew/models/input%20data%20realisasi/request_kendaraan_model.dart';
+import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/request_kendaraan_controller.dart';
@@ -53,31 +53,30 @@ class RequestMobilSource extends DataGridSource {
           );
         }),
         // Action cells (lihat and kirim)
-        IconButton(
-          icon: const Icon(Iconsax.eye),
-          onPressed: () {
-            if (onLihat != null) {
-              onLihat!(requestKendaraanModel[startIndex + rowIndex]);
-            }
-          },
-        ),
-        IconButton(
-          icon: const Icon(Iconsax.send),
-          onPressed: () {
-            if (onKirim != null) {
-              onKirim!(requestKendaraanModel[startIndex + rowIndex]);
-            }
-          },
-        ),
+        ElevatedButton(
+            onPressed: () {
+              if (onLihat != null) {
+                onLihat!(requestKendaraanModel[startIndex + rowIndex]);
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
+            child: const Text('Lihat')),
+        ElevatedButton(
+            onPressed: () {
+              if (onKirim != null) {
+                onKirim!(requestKendaraanModel[startIndex + rowIndex]);
+              }
+            },
+            child: const Text('Kirim')),
         // Action cells (edit & hapus)
-        IconButton(
-          icon: const Icon(Iconsax.edit),
-          onPressed: () {
-            if (onEdit != null) {
-              onEdit!(requestKendaraanModel[startIndex + rowIndex]);
-            }
-          },
-        ),
+        ElevatedButton(
+            onPressed: () {
+              if (onEdit != null) {
+                onEdit!(requestKendaraanModel[startIndex + rowIndex]);
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.yellow),
+            child:  Text('Edit',style: Theme.of(Get.context!).textTheme.bodyMedium?.apply(color: AppColors.black),)),
       ],
     );
   }
@@ -116,44 +115,3 @@ class RequestMobilSource extends DataGridSource {
     return true;
   }
 }
-
-// class LihatRequestMobil extends DataGridSource {
-//   LihatRequestMobil({
-//     required this.model,
-//   }) {
-//     int index = 0;
-//     _dataGrid = model.map(
-//       (e) {
-//         index++;
-//         return DataGridRow(cells: [
-//           DataGridCell<int>(columnName: 'No', value: index),
-//           DataGridCell<String>(columnName: 'No Kendaraan', value: e.),
-//           DataGridCell<String>(columnName: 'Kapasitas', value: e.),
-//           DataGridCell<String>(columnName: 'Supir', value: e.),
-
-//         ]);
-//       },
-//     ).toList();
-//   }
-
-//   final List<RequestKendaraanModel> model;
-//   List<DataGridRow> _dataGrid = [];
-
-//   @override
-//   List<DataGridRow> get rows => _dataGrid;
-
-//   @override
-//   DataGridRowAdapter? buildRow(DataGridRow row) {
-//     return DataGridRowAdapter(cells: row.getCells().map<Widget>(
-//       (e) {
-//         return Center(
-//           child: Text(
-//             e.value.toString(),
-//             maxLines: 1,
-//             overflow: TextOverflow.ellipsis,
-//           ),
-//         );
-//       },
-//     ).toList());
-//   }
-// }

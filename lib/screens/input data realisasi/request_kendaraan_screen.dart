@@ -1,5 +1,6 @@
 import 'package:doplsnew/models/input%20data%20realisasi/request_kendaraan_model.dart';
 import 'package:doplsnew/screens/input%20data%20realisasi/kirim_kendaraan.dart';
+import 'package:doplsnew/screens/input%20data%20realisasi/lihat_kendaraan.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:doplsnew/utils/source/input%20data%20realisasi/request_mobil_source.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../controllers/input data realisasi/lihat_kendaraan_controller.dart';
+import '../../controllers/input data realisasi/plot_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/request_kendaraan_controller.dart';
 import '../../helpers/helper_function.dart';
 import '../../utils/constant/custom_size.dart';
@@ -32,9 +35,9 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Type': 130,
       'Jenis': 150,
       'Jumlah': double.nan,
-      'Lihat': 50,
-      'Kirim': 50,
-      'Edit': 50,
+      'Lihat': 80,
+      'Kirim': 80,
+      'Edit': 80,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -87,23 +90,35 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
           } else {
             final dataSource = RequestMobilSource(
               onLihat: (RequestKendaraanModel model) {
-                // CustomDialogs.defaultDialog(
-                //     context: context,
-                //     titleWidget: Text(
-                //       'Detail request kendaraan',
-                //       style: Theme.of(context).textTheme.headlineMedium,
-                //     ),
-                //     contentWidget: Column(
-                //       mainAxisSize: MainAxisSize.min,
-                //       children: [
-                //         Center(
-                //           child: Text('Detail request kendaraan'),
-                //         ),
-                //         Text('Testing aja')
-                //       ],
-                //     ),
-                //     confirmText: 'Oke');
-                print('..INI LIHAT REQUEST MOBIL..');
+                final lihatKendaraanController =
+                    Get.put(LihatKendaraanController());
+                final plotKendaraanController =
+                    Get.put(PlotKendaraanController());
+
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return LihatKendaraanScreen(
+                      model: model,
+                      controller: lihatKendaraanController,
+                      plotKendaraanController: plotKendaraanController,
+                    );
+                  },
+                );
+
+                lihatKendaraanController.fetchLihatKendaraan(
+                  model.type,
+                  model.plant,
+                  model.idReq,
+                );
+
+                plotKendaraanController.fetchPlot(
+                  model.idReq,
+                  model.tgl,
+                  model.type,
+                  model.plant,
+                  model.jumlah,
+                );
               },
               onKirim: (RequestKendaraanModel model) =>
                   Get.to(() => KirimKendaraanScreen(
@@ -159,6 +174,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                     Expanded(
                         child: SfDataGrid(
                       source: dataSource,
+                      rowHeight: 65,
                       columnWidthMode: ColumnWidthMode.auto,
                       allowPullToRefresh: true,
                       gridLinesVisibility: GridLinesVisibility.both,
