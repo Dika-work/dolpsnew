@@ -1,17 +1,19 @@
+import 'package:doplsnew/controllers/input%20data%20realisasi/fetch_kendaraan_controller.dart';
+import 'package:doplsnew/controllers/input%20data%20realisasi/fetch_sopir_controller.dart';
 import 'package:doplsnew/controllers/input%20data%20realisasi/plot_kendaraan_controller.dart';
-import 'package:doplsnew/repository/input%20data%20realisasi/plot_repo.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/kirim_kendaraan_model.dart';
 import '../../repository/input data realisasi/kirim_kendaraan_repo.dart';
-import '../../utils/popups/full_screen_loader.dart';
 
 class KirimKendaraanController extends GetxController {
   final isLoadingKendaraan = Rx<bool>(false);
   RxList<KirimKendaraanModel> kirimKendaraanModel = <KirimKendaraanModel>[].obs;
   final kirimKendaraanRepo = Get.put(KirimKendaraanRepository());
   final jumlahPlotKendaraan = Get.put(PlotKendaraanController());
+  final noPolisiController = Get.put(FetchKendaraanController());
+  final supirController = Get.put(FetchSopirController());
 
   RxString selectedPlant = '1100'.obs;
   RxString selectedTujuan = 'Sunter'.obs;
@@ -70,12 +72,13 @@ class KirimKendaraanController extends GetxController {
         user,
       );
 
+      noPolisiController.resetSelectedKendaraan();
+      supirController.resetSelectedSopir();
+
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
         message: 'Menambahkan data do realisasi..',
       );
-      CustomFullScreenLoader.stopLoading();
-      CustomFullScreenLoader.stopLoading();
       isLoadingKendaraan.value = false;
     } else {
       SnackbarLoader.successSnackBar(

@@ -8,8 +8,7 @@ class FetchKendaraanController extends GetxController {
   RxList<KendaraanModel> kendaraanModel = <KendaraanModel>[].obs;
   RxString selectedKendaraan = ''.obs;
   RxString selectedJenisKendaraan = ''.obs;
-  RxInt selectedKendaraanId =
-      0.obs; // Tambahkan ini untuk menyimpan ID kendaraan
+  RxInt selectedKendaraanId = 0.obs;
 
   @override
   void onInit() {
@@ -21,9 +20,6 @@ class FetchKendaraanController extends GetxController {
     try {
       final dataKendaraan = await kendaraanRepo.fetchKendaraanContent();
       kendaraanModel.assignAll(dataKendaraan);
-      if (selectedKendaraan.isNotEmpty) {
-        selectedKendaraan.value = kendaraanModel.first.noPolisi;
-      }
     } catch (e) {
       print('Error while fetching kendaraan data : $e');
       kendaraanModel.assignAll([]);
@@ -31,26 +27,42 @@ class FetchKendaraanController extends GetxController {
   }
 
   List<KendaraanModel> get filteredKendaraanModel {
-    if (selectedJenisKendaraan.isEmpty) {
-      return [];
+    if (selectedJenisKendaraan.value.isEmpty) {
+      return kendaraanModel;
     }
-    return kendaraanModel.where((kendaraan) {
-      return kendaraan.jenisKendaraan == selectedJenisKendaraan.value;
-    }).toList();
+    return kendaraanModel
+        .where(
+          (kendaraan) => kendaraan.jenisKendaraan
+              .toLowerCase()
+              .contains(selectedJenisKendaraan.value.toLowerCase()),
+        )
+        .toList();
   }
 
-  void updateSelectedKendaraan() {
-    if (filteredKendaraanModel.isNotEmpty) {
-      selectedKendaraan.value = filteredKendaraanModel.first.noPolisi;
-      selectedKendaraanId.value = filteredKendaraanModel.first.idKendaraan;
-    } else {
-      selectedKendaraan.value = '';
-      selectedKendaraanId.value = 0;
-    }
+  void updateSelectedKendaraan(String value) {
+    final kendaraan = filteredKendaraanModel.firstWhere(
+      (kendaraan) => kendaraan.noPolisi == value,
+      orElse: () => KendaraanModel(
+        idKendaraan: 0,
+        noPolisi: '',
+        jenisKendaraan: '',
+        kapasitas: '',
+        merek: '',
+        type: '',
+      ),
+    );
+
+    selectedKendaraan.value = kendaraan.noPolisi;
+    selectedKendaraanId.value = kendaraan.idKendaraan;
   }
 
   void setSelectedJenisKendaraan(String jenis) {
     selectedJenisKendaraan.value = jenis;
-    updateSelectedKendaraan();
+    updateSelectedKendaraan(selectedKendaraan.value); // Menjaga konsistensi
+  }
+
+  void resetSelectedKendaraan() {
+    selectedKendaraan.value = '';
+    selectedKendaraanId.value = 0;
   }
 }

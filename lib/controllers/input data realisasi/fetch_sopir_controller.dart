@@ -30,11 +30,7 @@ class FetchSopirController extends GetxController {
     try {
       final dataSopir = await sopirRepo.fetchGlobalHarianContent();
       sopirModel.assignAll(dataSopir);
-      if (sopirModel.isNotEmpty) {
-        selectedSopirDisplay.value =
-            '${sopirModel.first.nama} - (${sopirModel.first.namaPanggilan})';
-        selectedSopirNama.value = sopirModel.first.nama;
-      }
+      // Jangan menetapkan nilai default pada selectedSopirDisplay
     } catch (e) {
       print('Error while fetching sopir data: $e');
       sopirModel.assignAll([]);
@@ -45,8 +41,19 @@ class FetchSopirController extends GetxController {
     if (searchQuery.value.isEmpty) {
       return sopirModel;
     }
-    return sopirModel.where((sopir) =>
-        sopir.nama.toLowerCase().contains(searchQuery.value.toLowerCase()) ||
-        sopir.namaPanggilan.toLowerCase().contains(searchQuery.value.toLowerCase())).toList();
+    return sopirModel
+        .where((sopir) =>
+            sopir.nama
+                .toLowerCase()
+                .contains(searchQuery.value.toLowerCase()) ||
+            sopir.namaPanggilan
+                .toLowerCase()
+                .contains(searchQuery.value.toLowerCase()))
+        .toList();
+  }
+
+  void resetSelectedSopir() {
+    selectedSopirDisplay.value = '';
+    selectedSopirNama.value = '';
   }
 }

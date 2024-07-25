@@ -2,6 +2,7 @@ import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/models/input%20data%20realisasi/kirim_kendaraan_model.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:doplsnew/utils/source/input%20data%20realisasi/kirim_kendaraan_source.dart';
+import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +18,6 @@ import '../../models/input data realisasi/kendaraan_model.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../models/input data realisasi/sopir_model.dart';
 import '../../utils/constant/custom_size.dart';
-import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../widgets/dropdown.dart';
 
@@ -383,22 +383,6 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                   )
                 : const SizedBox.shrink(),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            const Text('Jenis Kendaraan'),
-            Obx(() {
-              return DropDownWidget(
-                value: fetchKendaraanController.selectedJenisKendaraan.value,
-                items: [
-                  jenisKendaraan
-                ], // Hanya menampilkan nilai dari initState
-                onChanged: (String? newValue) {
-                  if (newValue != null) {
-                    fetchKendaraanController
-                        .setSelectedJenisKendaraan(newValue);
-                  }
-                },
-              );
-            }),
-            const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Jumlah Kendaraan'),
             TextFormField(
               keyboardType: TextInputType.number,
@@ -420,201 +404,212 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                 ),
               );
             }),
-            const SizedBox(height: CustomSize.spaceBtwItems),
-            const Text('No Polisi'),
-            Obx(
-              () => DropdownSearch<KendaraanModel>(
-                items: fetchKendaraanController.filteredKendaraanModel,
-                itemAsString: (KendaraanModel kendaraan) => kendaraan.noPolisi,
-                selectedItem: fetchKendaraanController.kendaraanModel.isNotEmpty
-                    ? fetchKendaraanController.kendaraanModel.first
-                    : null,
-                onChanged: (KendaraanModel? kendaraan) {
-                  if (kendaraan != null) {
-                    fetchKendaraanController.selectedKendaraan.value =
-                        kendaraan.noPolisi;
-                    fetchKendaraanController.selectedKendaraanId.value =
-                        kendaraan.idKendaraan;
-                  }
-                },
-                popupProps: const PopupProps.menu(
-                  showSearchBox: true,
-                  searchFieldProps: TextFieldProps(
-                    decoration: InputDecoration(
-                      hintText: 'Search Kendaraan...',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: CustomSize.spaceBtwItems),
-            const Text('Sopir'),
-            Obx(
-              () => DropdownSearch<SopirModel>(
-                items: sopirController.filteredSopir,
-                itemAsString: (SopirModel sopir) =>
-                    '${sopir.nama} - (${sopir.namaPanggilan})',
-                selectedItem: sopirController.sopirModel.isNotEmpty
-                    ? sopirController.sopirModel.first
-                    : null,
-                onChanged: (SopirModel? sopir) {
-                  if (sopir != null) {
-                    sopirController.updateSelectedSopir(
-                        '${sopir.nama} - (${sopir.namaPanggilan})');
-                  }
-                },
-                popupProps: const PopupProps.menu(
-                  showSearchBox: true,
-                  searchFieldProps: TextFieldProps(
-                    decoration: InputDecoration(
-                      hintText: 'Search Sopir...',
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: CustomSize.spaceBtwSections),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                  onPressed: () {
-                    int kendaraan =
-                        fetchKendaraanController.selectedKendaraanId.value;
-                    String supir = sopirController.selectedSopirNama.value;
-
-                    plotController.isJumlahKendaraanSama.value
-                        ? Get.back()
-                        : CustomDialogs.defaultDialog(
-                            context: context,
-                            titleWidget: Text(
-                              'Konfirmasi Penambahan🤭',
-                              style: Theme.of(context).textTheme.headlineMedium,
+            Obx(() => plotController.isJumlahKendaraanSama.value
+                ? const SizedBox.shrink()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: CustomSize.spaceBtwItems),
+                      const Text('Jenis Kendaraan'),
+                      Obx(() {
+                        return DropDownWidget(
+                          value: fetchKendaraanController
+                              .selectedJenisKendaraan.value,
+                          items: [
+                            jenisKendaraan
+                          ], // Hanya menampilkan nilai dari initState
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              fetchKendaraanController
+                                  .setSelectedJenisKendaraan(newValue);
+                            }
+                          },
+                        );
+                      }),
+                      const SizedBox(height: CustomSize.spaceBtwItems),
+                      const Text('No Polisi'),
+                      Obx(() {
+                        return DropdownSearch<KendaraanModel>(
+                          items:
+                              fetchKendaraanController.filteredKendaraanModel,
+                          itemAsString: (KendaraanModel kendaraan) =>
+                              kendaraan.noPolisi,
+                          selectedItem: fetchKendaraanController
+                                  .selectedKendaraan.value.isNotEmpty
+                              ? fetchKendaraanController.filteredKendaraanModel
+                                  .firstWhere(
+                                  (kendaraan) =>
+                                      kendaraan.noPolisi ==
+                                      fetchKendaraanController
+                                          .selectedKendaraan.value,
+                                  orElse: () => KendaraanModel(
+                                    idKendaraan: 0,
+                                    noPolisi: '',
+                                    jenisKendaraan: '',
+                                    kapasitas: '',
+                                    merek: '',
+                                    type: '',
+                                  ),
+                                )
+                              : null,
+                          dropdownBuilder:
+                              (context, KendaraanModel? selectedItem) {
+                            return Text(
+                              selectedItem != null
+                                  ? selectedItem.noPolisi
+                                  : 'Pilih No Polisi',
+                              style: TextStyle(
+                                color: selectedItem == null
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            );
+                          },
+                          onChanged: (KendaraanModel? kendaraan) {
+                            if (kendaraan != null) {
+                              fetchKendaraanController.selectedKendaraan.value =
+                                  kendaraan.noPolisi;
+                              fetchKendaraanController.selectedKendaraanId
+                                  .value = kendaraan.idKendaraan;
+                            } else {
+                              fetchKendaraanController.resetSelectedKendaraan();
+                            }
+                          },
+                          popupProps: const PopupProps.menu(
+                            showSearchBox: true,
+                            searchFieldProps: TextFieldProps(
+                              decoration: InputDecoration(
+                                hintText: 'Search Kendaraan...',
+                              ),
                             ),
-                            contentWidget: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                    'Dengan ini saya $user yakin akan menambahkan data yang telah sesuai dibawah ini :',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium),
-                                const SizedBox(
-                                    height: CustomSize.spaceBtwItems),
-                                Text('idReq: $idReq'),
-                                Text('plant: $plant'),
-                                Text('tujuan: $tujuan'),
-                                Text(
-                                    'plant2 : ${controller.selectedPlant.value}'),
-                                Text(
-                                    'tujuan2: ${controller.selectedTujuan.value}'),
-                                Text(
-                                    'type: ${typeDO == 0 ? 'REGULER' : 'MUTASI'}'),
-                                Text(
-                                    'kendaraan: ${fetchKendaraanController.selectedKendaraan}'),
-                                Text('supir: $supir'),
-                                Text(
-                                    'jam: ${CustomHelperFunctions.formattedTime}'),
-                                Text(
-                                    'tgl: ${CustomHelperFunctions.getFormattedDate(parsedDate)}'),
-                                Text('bulan: $bulan'),
-                                Text('tahun: $tahun'),
-                                Text('user: $user'),
-                                Text('Jumlah kendaraan :$jumlahKendaraan'),
-                              ],
+                          ),
+                        );
+                      }),
+                      const SizedBox(height: CustomSize.spaceBtwItems),
+                      const Text('Sopir'),
+                      Obx(
+                        () => DropdownSearch<SopirModel>(
+                          items: sopirController.filteredSopir,
+                          itemAsString: (SopirModel sopir) =>
+                              '${sopir.nama} - (${sopir.namaPanggilan})',
+                          selectedItem: sopirController
+                                  .selectedSopirDisplay.value.isNotEmpty
+                              ? sopirController.sopirModel.firstWhere(
+                                  (sopir) =>
+                                      '${sopir.nama} - (${sopir.namaPanggilan})' ==
+                                      sopirController
+                                          .selectedSopirDisplay.value,
+                                  orElse: () => SopirModel(
+                                      id: 0,
+                                      nama: '',
+                                      namaPanggilan: '',
+                                      namaDivisi: ''),
+                                )
+                              : null,
+                          dropdownBuilder: (context, SopirModel? selectedItem) {
+                            return Text(
+                              selectedItem != null && selectedItem.id != 0
+                                  ? '${selectedItem.nama} - (${selectedItem.namaPanggilan})'
+                                  : 'Pilih Sopir',
+                              style: TextStyle(
+                                color:
+                                    selectedItem == null || selectedItem.id == 0
+                                        ? Colors.grey
+                                        : Colors.black,
+                              ),
+                            );
+                          },
+                          onChanged: (SopirModel? sopir) {
+                            if (sopir != null && sopir.id != 0) {
+                              sopirController.updateSelectedSopir(
+                                  '${sopir.nama} - (${sopir.namaPanggilan})');
+                            }
+                          },
+                          popupProps: const PopupProps.menu(
+                            showSearchBox: true,
+                            searchFieldProps: TextFieldProps(
+                              decoration: InputDecoration(
+                                hintText: 'Search Sopir...',
+                              ),
                             ),
-                            onConfirm: () {
-                              CustomDialogs.defaultDialog(
-                                context: context,
-                                titleWidget: Text(
-                                  'Konfirmasi pengiriman',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium,
-                                ),
-                                contentWidget: Text(
-                                  'Apakah anda sudah yakin untuk melakukan pengiriman?',
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                confirmText: 'Konfirmasi',
-                                onConfirm: () {
-                                  if (kendaraan == 0) {
-                                    SnackbarLoader.errorSnackBar(
-                                      title: 'Gagal😪',
-                                      message:
-                                          'Pastikan nomor polisi telah di isi 😁',
-                                    );
-                                  } else {
-                                    print(
-                                        '...INI BAGIAN TAMBAH DATA PADA DATA DO REALISASI HONDA...');
-                                    print('idReq: $idReq');
-                                    print('plant: $plant');
-                                    print('tujuan: $tujuan');
-                                    print(
-                                        'plant2 : ${controller.selectedPlant.value}');
-                                    print(
-                                        'tujuan2: ${controller.selectedTujuan.value}');
-                                    print('type: $typeDO');
-                                    print('kendaraan: $kendaraan');
-                                    print('supir: $supir');
-                                    print(
-                                        'jam: ${CustomHelperFunctions.formattedTime}');
-                                    print('tgl: $tgl');
-                                    print('bulan: $bulan');
-                                    print('tahun: $tahun');
-                                    print('user: $user');
-                                    print('Jumlah kendaraan :$jumlahKendaraan');
-                                    print('...SELESAI...');
-                                    typeDO == 0
-                                        ?
-                                        // Jika typeDO 0, kirim data tanpa plant2 dan tujuan2
-                                        controller.addKirimKendaraanContent(
-                                            idReq,
-                                            jumlahKendaraan,
-                                            plant,
-                                            tujuan,
-                                            '', // plant2 kosong
-                                            '', // tujuan2 kosong
-                                            typeDO,
-                                            kendaraan,
-                                            supir,
-                                            CustomHelperFunctions.formattedTime,
-                                            tgl,
-                                            bulan,
-                                            tahun,
-                                            user,
-                                          )
-                                        :
-                                        // Jika typeDO 1, kirim data dengan plant2 dan tujuan2
-                                        controller.addKirimKendaraanContent(
-                                            idReq,
-                                            jumlahKendaraan,
-                                            plant,
-                                            tujuan,
-                                            controller.selectedPlant.value,
-                                            controller.selectedTujuan.value,
-                                            typeDO,
-                                            kendaraan,
-                                            supir,
-                                            CustomHelperFunctions.formattedTime,
-                                            tgl,
-                                            bulan,
-                                            tahun,
-                                            user,
-                                          );
-                                  }
-                                },
-                              );
-                              print('...INI DATA SUDAH DI KIRIM...');
-                            },
-                            confirmText: 'Oke');
-                  },
-                  child: Obx(
-                    () => Text(plotController.isJumlahKendaraanSama.value
-                        ? 'Selesai'
-                        : 'Tambah Data'),
+                          ),
+                        ),
+                      ),
+                    ],
                   )),
+            const SizedBox(height: CustomSize.spaceBtwSections),
+            Obx(
+              () => SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                    onPressed: () {
+                      int kendaraan =
+                          fetchKendaraanController.selectedKendaraanId.value;
+                      String supir = sopirController.selectedSopirNama.value;
+
+                      plotController.isJumlahKendaraanSama.value
+                          ? Get.back()
+                          : kendaraan == 0 || supir == ''
+                              ? SnackbarLoader.errorSnackBar(
+                                  title: 'Gagal😪',
+                                  message:
+                                      'Pastikan nomor polisi dan supir telah di pilih',
+                                )
+                              : typeDO == 0
+                                  ?
+                                  // Jika typeDO 0, kirim data tanpa plant2 dan tujuan2
+                                  controller.addKirimKendaraanContent(
+                                      idReq,
+                                      jumlahKendaraan,
+                                      plant,
+                                      tujuan,
+                                      '', // plant2 kosong
+                                      '', // tujuan2 kosong
+                                      typeDO,
+                                      kendaraan,
+                                      supir,
+                                      CustomHelperFunctions.formattedTime,
+                                      tgl,
+                                      bulan,
+                                      tahun,
+                                      user,
+                                    )
+                                  :
+                                  // Jika typeDO 1, kirim data dengan plant2 dan tujuan2
+                                  controller.addKirimKendaraanContent(
+                                      idReq,
+                                      jumlahKendaraan,
+                                      plant,
+                                      tujuan,
+                                      controller.selectedPlant.value,
+                                      controller.selectedTujuan.value,
+                                      typeDO,
+                                      kendaraan,
+                                      supir,
+                                      CustomHelperFunctions.formattedTime,
+                                      tgl,
+                                      bulan,
+                                      tahun,
+                                      user,
+                                    );
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            plotController.isJumlahKendaraanSama.value
+                                ? AppColors.success
+                                : AppColors.primary),
+                    child: Obx(
+                      () => Text(
+                        plotController.isJumlahKendaraanSama.value
+                            ? 'Selesai'
+                            : 'Tambah Data',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.apply(color: AppColors.white),
+                      ),
+                    )),
+              ),
             ),
           ],
         ),
