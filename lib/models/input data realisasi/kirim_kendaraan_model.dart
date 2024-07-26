@@ -9,8 +9,8 @@ class KirimKendaraanModel {
   String supir;
   String jam;
   String tgl;
-  String bulan;
-  String tahun;
+  int bulan;
+  int tahun;
   String user;
   int status;
   String lvKerusakaan;
@@ -44,8 +44,8 @@ class KirimKendaraanModel {
       supir: json['supir'] ?? '',
       jam: json['jam'] ?? '',
       tgl: json['tgl'] ?? '',
-      bulan: json['bulan'] ?? '',
-      tahun: json['tahun'] ?? '',
+      bulan: json['bulan'] ?? 0,
+      tahun: json['tahun'] ?? 0,
       user: json['user'] ?? '',
       status: json['status'] ?? 0,
       lvKerusakaan: json['lv_kerusakan'] ?? '',

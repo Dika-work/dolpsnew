@@ -14,6 +14,7 @@ class KendaraanRepository extends GetxController {
         '${storageUtil.baseURL}/DO/api/api_master_data.php?action=Kendaraan'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
+      print('..INI RESPONSE KENDARAAN.. : ${list.toList()}');
       return list.map((model) => KendaraanModel.fromJson(model)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data DO Global Harian zzz☠️');

@@ -21,7 +21,6 @@ class FetchKendaraanController extends GetxController {
       final dataKendaraan = await kendaraanRepo.fetchKendaraanContent();
       kendaraanModel.assignAll(dataKendaraan);
     } catch (e) {
-      print('Error while fetching kendaraan data : $e');
       kendaraanModel.assignAll([]);
     }
   }
@@ -30,13 +29,16 @@ class FetchKendaraanController extends GetxController {
     if (selectedJenisKendaraan.value.isEmpty) {
       return kendaraanModel;
     }
-    return kendaraanModel
+
+    final filtered = kendaraanModel
         .where(
           (kendaraan) => kendaraan.jenisKendaraan
               .toLowerCase()
               .contains(selectedJenisKendaraan.value.toLowerCase()),
         )
         .toList();
+
+    return filtered;
   }
 
   void updateSelectedKendaraan(String value) {
@@ -49,6 +51,18 @@ class FetchKendaraanController extends GetxController {
         kapasitas: '',
         merek: '',
         type: '',
+        type2: '',
+        batangan: '',
+        wilayah: '',
+        karoseri: '',
+        hidrolik: '',
+        gps: '',
+        tahunRakit: '',
+        tahunBeli: '',
+        status: '',
+        kapasitasB: '',
+        kapasitasC: '',
+        plat: '',
       ),
     );
 

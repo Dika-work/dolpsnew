@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../utils/popups/snackbar.dart';
 
-class RequestKendaraanRepository extends GetxController {
+class RequestKendaraanRepository {
   final storageUtil = StorageUtil();
 
   Future<List<RequestKendaraanModel>> fetchTampilRequest() async {
@@ -63,4 +62,92 @@ class RequestKendaraanRepository extends GetxController {
       return;
     }
   }
+
+  Future<void> editRequestKendaraan(
+    int idReq,
+    String tgl,
+    String plant,
+    String tujuan,
+    int type,
+    String jenisReq,
+    int jumlahReq,
+  ) async {
+    try {
+      final response = await http.put(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_request_ken.php'),
+          body: {
+            'id_req': idReq.toString(),
+            'tgl_req': tgl,
+            'plant_req': plant,
+            'tujuan_req': tujuan,
+            'type_req': type.toString(),
+            'jenis_req': jenisReq,
+            'jumlah_req': jumlahReq.toString()
+          });
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Request kendaraan berhasil diubah',
+          );
+        } else {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal mengedit Request kendaraan, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di catch di repository Request Kendaraan: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit Request Kendaraan',
+      );
+    }
+  }
+
+  // Future<void> deleteReqKendaraan(int id) async {
+  //   try {
+  //     final response = await http.delete(
+  //         Uri.parse('${storageUtil.baseURL}/DO/api/api_request_ken.php'),
+  //         body: {'id': id});
+
+  //     if (response.statusCode == 200) {
+  //       final responseData = json.decode(response.body);
+  //       if (responseData['status'] == 'success') {
+  //         SnackbarLoader.successSnackBar(
+  //           title: 'Sukses 😃',
+  //           message: 'Request kendaraan berhasil dihapus',
+  //         );
+  //       } else {
+  //         SnackbarLoader.errorSnackBar(
+  //           title: 'Gagal😪',
+  //           message: responseData['message'] ?? 'Ada yang salah🤷',
+  //         );
+  //       }
+  //       return responseData;
+  //     } else {
+  //       SnackbarLoader.errorSnackBar(
+  //         title: 'Gagal😪',
+  //         message:
+  //             'Gagal menghapus Request kendaraan, status code: ${response.statusCode}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print('Error di catch di repository Delete Request Kendaraan: $e');
+  //     SnackbarLoader.errorSnackBar(
+  //       title: 'Gagal😪',
+  //       message: 'Terjadi kesalahan saat menghapus Request Kendaraan',
+  //     );
+  //   }
+  // }
 }

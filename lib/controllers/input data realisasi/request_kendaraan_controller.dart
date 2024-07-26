@@ -172,4 +172,31 @@ class RequestKendaraanController extends GetxController {
       return;
     }
   }
+
+  Future<void> editReqKendaraan(
+    int idReq,
+    String tgl,
+    String plant,
+    String tujuan,
+    int type,
+    String jenisReq,
+    int jumlahReq,
+  ) async {
+    try {
+      await requestRepo.editRequestKendaraan(
+        idReq, tgl, plant, tujuan, type, jenisReq, jumlahReq);
+    await fetchRequestKendaraan();
+    CustomFullScreenLoader.stopLoading();
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit Request Kendaraan',
+      );
+    }
+  }
+
+  // Future<void> hapusReqKendaraan(int id) async {
+  //   await requestRepo.deleteReqKendaraan(id);
+  // }
 }

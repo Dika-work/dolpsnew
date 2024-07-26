@@ -81,7 +81,7 @@ class KirimKendaraanSource extends DataGridSource {
     index = startIndex;
 
     if (kirimKendaraanModel.isEmpty) {
-      _kirimKendaraanData = _generateEmptyRows(7);
+      _kirimKendaraanData = _generateEmptyRows(5);
     } else {
       _kirimKendaraanData =
           kirimKendaraanModel.skip(startIndex).take(10).map<DataGridRow>(
