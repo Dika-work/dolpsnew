@@ -45,13 +45,15 @@ class DataAllGlobalSource extends DataGridSource {
               ),
             ),
           );
-        }).toList(),
+        }),
         // Action cells (edit and delete)
         IconButton(
           icon: const Icon(Iconsax.edit),
           onPressed: () {
-            if (onEdited != null) {
+            if (onEdited != null && allGlobal.isNotEmpty) {
               onEdited!(allGlobal[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),

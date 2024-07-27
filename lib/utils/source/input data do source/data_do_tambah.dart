@@ -54,16 +54,20 @@ class DataDoTambahSource extends DataGridSource {
         IconButton(
           icon: const Icon(Iconsax.edit),
           onPressed: () {
-            if (onEdited != null) {
+            if (onEdited != null && doTambah.isNotEmpty) {
               onEdited!(doTambah[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),
         IconButton(
           icon: const Icon(Iconsax.trash),
           onPressed: () {
-            if (onDeleted != null) {
+            if (onDeleted != null && doTambah.isNotEmpty) {
               onDeleted!(doTambah[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),

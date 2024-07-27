@@ -15,6 +15,7 @@ class KirimKendaraanSource extends DataGridSource {
   KirimKendaraanSource({
     required this.onDelete,
     required this.kirimKendaraanModel,
+    int startIndex = 0,
   }) {
     _updateDataPager(kirimKendaraanModel, startIndex);
   }
@@ -52,8 +53,10 @@ class KirimKendaraanSource extends DataGridSource {
           // Action cells hapus
           IconButton(
               onPressed: () {
-                if (onDelete != null) {
+                if (onDelete != null && kirimKendaraanModel.isNotEmpty) {
                   onDelete!(kirimKendaraanModel[startIndex + rowIndex]);
+                } else {
+                  return;
                 }
               },
               icon: const Icon(Iconsax.trash))
@@ -81,7 +84,7 @@ class KirimKendaraanSource extends DataGridSource {
     index = startIndex;
 
     if (kirimKendaraanModel.isEmpty) {
-      _kirimKendaraanData = _generateEmptyRows(5);
+      _kirimKendaraanData = _generateEmptyRows(1);
     } else {
       _kirimKendaraanData =
           kirimKendaraanModel.skip(startIndex).take(10).map<DataGridRow>(
@@ -93,9 +96,8 @@ class KirimKendaraanSource extends DataGridSource {
             DataGridCell<String>(
                 columnName: 'Type',
                 value: data.type == '0' ? 'REGULER' : 'MUTASI'),
-            DataGridCell<String>(
-                columnName: 'Kendaraan', value: data.kendaraan),
-            DataGridCell<String>(columnName: 'Jenis', value: data.kendaraan),
+            DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
+            DataGridCell<String>(columnName: 'Jenis', value: data.jenisKen),
             DataGridCell<String>(
                 columnName: 'Status',
                 value: data.status == 0 ? 'READY' : 'NOT'),

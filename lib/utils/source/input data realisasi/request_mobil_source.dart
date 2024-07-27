@@ -55,28 +55,40 @@ class RequestMobilSource extends DataGridSource {
         // Action cells (lihat and kirim)
         ElevatedButton(
             onPressed: () {
-              if (onLihat != null) {
+              if (onLihat != null && requestKendaraanModel.isNotEmpty) {
                 onLihat!(requestKendaraanModel[startIndex + rowIndex]);
+              } else {
+                return;
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
             child: const Text('Lihat')),
         ElevatedButton(
             onPressed: () {
-              if (onKirim != null) {
+              if (onKirim != null && requestKendaraanModel.isNotEmpty) {
                 onKirim!(requestKendaraanModel[startIndex + rowIndex]);
+              } else {
+                return;
               }
             },
             child: const Text('Kirim')),
         // Action cells (edit & hapus)
         ElevatedButton(
             onPressed: () {
-              if (onEdit != null) {
+              if (onEdit != null && requestKendaraanModel.isNotEmpty) {
                 onEdit!(requestKendaraanModel[startIndex + rowIndex]);
+              } else {
+                return;
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.yellow),
-            child:  Text('Edit',style: Theme.of(Get.context!).textTheme.bodyMedium?.apply(color: AppColors.black),)),
+            child: Text(
+              'Edit',
+              style: Theme.of(Get.context!)
+                  .textTheme
+                  .bodyMedium
+                  ?.apply(color: AppColors.black),
+            )),
       ],
     );
   }

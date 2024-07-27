@@ -23,12 +23,23 @@ import '../../widgets/dropdown.dart';
 
 class KirimKendaraanScreen extends StatelessWidget {
   final RequestKendaraanModel model;
+  final int selectedIndex;
 
-  const KirimKendaraanScreen({super.key, required this.model});
+  const KirimKendaraanScreen(
+      {super.key, required this.model, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(KirimKendaraanController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchDataKirimKendaraan(
+        model.type,
+        model.plant,
+        model.idReq, // Misalkan ID di sini adalah ID dari RequestKendaraanModel
+      );
+    });
+
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Plant': double.nan,
@@ -40,6 +51,10 @@ class KirimKendaraanScreen extends StatelessWidget {
       'Supir': double.nan,
       'Hapus': 50,
     };
+
+    const int rowsPerPage = 10;
+    int currentPage = 0;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -58,196 +73,220 @@ class KirimKendaraanScreen extends StatelessWidget {
               controller.kirimKendaraanModel.isEmpty) {
             return const CustomCircularLoader();
           } else {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  SfDataGrid(
-                    source: KirimKendaraanSource(
-                      onDelete: (KirimKendaraanModel model) {
-                        print('..INI HAPUS KIRIM KENDARAAN..');
-                        controller.hapusKirimKendaraan(model.id);
+            final dataSource = KirimKendaraanSource(
+              startIndex: currentPage * rowsPerPage,
+              onDelete: (KirimKendaraanModel model) {
+                print('..INI HAPUS KIRIM KENDARAAN..');
+                controller.hapusKirimKendaraan(
+                  model.idReq,
+                  model.tgl,
+                  model.type,
+                  model.plant,
+                  model.id,
+                );
+              },
+              kirimKendaraanModel: controller.kirimKendaraanModel,
+            );
+
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return ListView(
+                  children: [
+                    SfDataGrid(
+                      source: dataSource,
+                      columnWidthMode: ColumnWidthMode.auto,
+                      allowPullToRefresh: true,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      headerGridLinesVisibility: GridLinesVisibility.both,
+                      allowColumnsResizing: true,
+                      onColumnResizeUpdate:
+                          (ColumnResizeUpdateDetails details) {
+                        columnWidths[details.column.columnName] = details.width;
+                        return true;
                       },
-                      kirimKendaraanModel: controller.kirimKendaraanModel,
-                    ),
-                    columnWidthMode: ColumnWidthMode.auto,
-                    allowPullToRefresh: true,
-                    gridLinesVisibility: GridLinesVisibility.both,
-                    headerGridLinesVisibility: GridLinesVisibility.both,
-                    allowColumnsResizing: true,
-                    onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
-                      columnWidths[details.column.columnName] = details.width;
-                      return true;
-                    },
-                    columns: [
-                      GridColumn(
-                        width: columnWidths['No']!,
-                        columnName: 'No',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'No',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Plant']!,
-                        columnName: 'Plant',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Plant',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Type']!,
-                        columnName: 'Type',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Type',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Kendaraan']!,
-                        columnName: 'Kendaraan',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Kendaraan',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Jenis']!,
-                        columnName: 'Jenis',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Jenis',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Status']!,
-                        columnName: 'Status',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Status',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['LV Kerusakan']!,
-                        columnName: 'LV Kerusakan',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'LV Kerusakan',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Supir']!,
-                        columnName: 'Supir',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Supir',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                          width: columnWidths['Hapus']!,
-                          columnName: 'Hapus',
+                      columns: [
+                        GridColumn(
+                          width: columnWidths['No']!,
+                          columnName: 'No',
                           label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Hapus',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ))),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: CustomSize.md, vertical: CustomSize.lg),
-                    child: AddKirimKendaraan(model: model),
-                  )
-                ],
-              ),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'No',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Plant']!,
+                          columnName: 'Plant',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Plant',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Type']!,
+                          columnName: 'Type',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Type',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Kendaraan']!,
+                          columnName: 'Kendaraan',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Kendaraan',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Jenis']!,
+                          columnName: 'Jenis',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Jenis',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Status']!,
+                          columnName: 'Status',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Status',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['LV Kerusakan']!,
+                          columnName: 'LV Kerusakan',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'LV Kerusakan',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Supir']!,
+                          columnName: 'Supir',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Supir',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
+                            width: columnWidths['Hapus']!,
+                            columnName: 'Hapus',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Hapus',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                      ],
+                    ),
+                    Center(
+                      child: SfDataPager(
+                        delegate: dataSource,
+                        pageCount: controller.kirimKendaraanModel.isEmpty
+                            ? 1
+                            : (controller.kirimKendaraanModel.length /
+                                    rowsPerPage)
+                                .ceilToDouble(),
+                        direction: Axis.horizontal,
+                      ),
+                    ),
+                    const Divider(height: CustomSize.dividerHeight),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: CustomSize.md, vertical: CustomSize.lg),
+                      child: AddKirimKendaraan(model: model),
+                    ),
+                  ],
+                );
+              },
             );
           }
         },
@@ -555,73 +594,83 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
               () => SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                    onPressed: () {
-                      int kendaraan =
-                          fetchKendaraanController.selectedKendaraanId.value;
-                      String supir = sopirController.selectedSopirNama.value;
+                  onPressed: () {
+                    int kendaraan =
+                        fetchKendaraanController.selectedKendaraanId.value;
+                    String supir = sopirController.selectedSopirNama.value;
 
-                      plotController.isJumlahKendaraanSama.value
-                          ? Get.back()
-                          : kendaraan == 0 || supir == ''
-                              ? SnackbarLoader.errorSnackBar(
-                                  title: 'Gagal😪',
-                                  message:
-                                      'Pastikan nomor polisi dan supir telah di pilih',
-                                )
-                              : typeDO == 0
-                                  ?
-                                  // Jika typeDO 0, kirim data tanpa plant2 dan tujuan2
-                                  controller.addKirimKendaraanContent(
-                                      idReq,
-                                      jumlahKendaraan,
-                                      plant,
-                                      tujuan,
-                                      '', // plant2 kosong
-                                      '', // tujuan2 kosong
-                                      typeDO,
-                                      kendaraan,
-                                      supir,
-                                      CustomHelperFunctions.formattedTime,
-                                      tgl,
-                                      bulan,
-                                      tahun,
-                                      user,
-                                    )
-                                  :
-                                  // Jika typeDO 1, kirim data dengan plant2 dan tujuan2
-                                  controller.addKirimKendaraanContent(
-                                      idReq,
-                                      jumlahKendaraan,
-                                      plant,
-                                      tujuan,
-                                      controller.selectedPlant.value,
-                                      controller.selectedTujuan.value,
-                                      typeDO,
-                                      kendaraan,
-                                      supir,
-                                      CustomHelperFunctions.formattedTime,
-                                      tgl,
-                                      bulan,
-                                      tahun,
-                                      user,
-                                    );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            plotController.isJumlahKendaraanSama.value
-                                ? AppColors.success
-                                : AppColors.primary),
-                    child: Obx(
-                      () => Text(
-                        plotController.isJumlahKendaraanSama.value
-                            ? 'Selesai'
-                            : 'Tambah Data',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.apply(color: AppColors.white),
-                      ),
-                    )),
+                    if (plotController.isJumlahKendaraanSama.value) {
+                      // Jika jumlah kendaraan dan plot sudah sama, kembali
+                      Get.back();
+                    } else if (kendaraan == 0 || supir == '') {
+                      // Jika kendaraan atau sopir belum dipilih
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Gagal😪',
+                        message:
+                            'Pastikan nomor polisi dan supir telah di pilih',
+                      );
+                    } else {
+                      // Jika typeDO adalah 0, kirim data tanpa plant2 dan tujuan2
+                      if (typeDO == 0) {
+                        controller.addKirimKendaraanContent(
+                          idReq,
+                          jumlahKendaraan,
+                          plant,
+                          tujuan,
+                          '', // plant2 kosong
+                          '', // tujuan2 kosong
+                          typeDO,
+                          kendaraan,
+                          supir,
+                          CustomHelperFunctions.formattedTime,
+                          tgl,
+                          bulan,
+                          tahun,
+                          user,
+                        );
+                      } else {
+                        // Jika typeDO adalah 1, kirim data dengan plant2 dan tujuan2
+                        controller.addKirimKendaraanContent(
+                          idReq,
+                          jumlahKendaraan,
+                          plant,
+                          tujuan,
+                          controller.selectedPlant.value,
+                          controller.selectedTujuan.value,
+                          typeDO,
+                          kendaraan,
+                          supir,
+                          CustomHelperFunctions.formattedTime,
+                          tgl,
+                          bulan,
+                          tahun,
+                          user,
+                        );
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: plotController.isJumlahKendaraanSama.value
+                        ? AppColors.success
+                        : AppColors.primary,
+                  ),
+                  child: controller.isLoadingKendaraan.value
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.white,
+                            backgroundColor: Colors.transparent,
+                          ),
+                        )
+                      : Text(
+                          plotController.isJumlahKendaraanSama.value
+                              ? 'Selesai'
+                              : 'Tambah Data',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.apply(color: AppColors.white),
+                        ),
+                ),
               ),
             ),
           ],

@@ -29,112 +29,126 @@ class LihatKendaraanScreen extends StatelessWidget {
       'Supir': 150,
     };
 
+    const int rowsPerPage = 10;
+
+    int currentPage = 0;
+
     return Obx(
       () {
+        final dataSource = LihatKendaraanSource(
+          lihatKendaraanModel: controller.lihatModel,
+          startIndex: currentPage * rowsPerPage,
+        );
         return AlertDialog(
           content: SizedBox(
-            width: double.maxFinite,
-            child: controller.isLoadingLihat.value &&
-                    controller.lihatModel.isEmpty
-                ? const CustomCircularLoader()
-                : Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('Detail Request Kendaraan',
-                          style: Theme.of(context).textTheme.headlineMedium),
-                      const SizedBox(height: CustomSize.spaceBtwSections),
-                      SfDataGrid(
-                        source: LihatKendaraanSource(
-                            lihatKendaraanModel: controller.lihatModel),
-                        columnWidthMode: ColumnWidthMode.auto,
-                        allowPullToRefresh: true,
-                        gridLinesVisibility: GridLinesVisibility.both,
-                        headerGridLinesVisibility: GridLinesVisibility.both,
-                        allowColumnsResizing: true,
-                        onColumnResizeUpdate:
-                            (ColumnResizeUpdateDetails details) {
-                          columnWidths[details.column.columnName] =
-                              details.width;
-                          return true;
-                        },
-                        columns: [
-                          GridColumn(
-                            width: columnWidths['No']!,
-                            columnName: 'No',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'No',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['No Kendaraan']!,
-                            columnName: 'No Kendaraan',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'No Kendaraan',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+              width: double.maxFinite,
+              child: controller.isLoadingLihat.value &&
+                      controller.lihatModel.isEmpty
+                  ? const CustomCircularLoader()
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Detail Request Kendaraan',
+                            style: Theme.of(context).textTheme.headlineMedium),
+                        const SizedBox(height: CustomSize.spaceBtwSections),
+                        SfDataGrid(
+                          source: dataSource,
+                          columnWidthMode: ColumnWidthMode.auto,
+                          allowPullToRefresh: true,
+                          gridLinesVisibility: GridLinesVisibility.both,
+                          headerGridLinesVisibility: GridLinesVisibility.both,
+                          allowColumnsResizing: true,
+                          onColumnResizeUpdate:
+                              (ColumnResizeUpdateDetails details) {
+                            columnWidths[details.column.columnName] =
+                                details.width;
+                            return true;
+                          },
+                          columns: [
+                            GridColumn(
+                              width: columnWidths['No']!,
+                              columnName: 'No',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['Kapasitas']!,
-                            columnName: 'Kapasitas',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Kapasitas',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['Supir']!,
-                            columnName: 'Supir',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Supir',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
+                            GridColumn(
+                              width: columnWidths['No Kendaraan']!,
+                              columnName: 'No Kendaraan',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No Kendaraan',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-          ),
+                            GridColumn(
+                              width: columnWidths['Kapasitas']!,
+                              columnName: 'Kapasitas',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Kapasitas',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnWidths['Supir']!,
+                              columnName: 'Supir',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Supir',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SfDataPager(
+                          delegate: dataSource,
+                          pageCount: controller.lihatModel.isEmpty
+                              ? 1
+                              : (controller.lihatModel.length / rowsPerPage)
+                                  .ceilToDouble(),
+                          direction: Axis.horizontal,
+                        ),
+                      ],
+                    )),
           actions: [
             TextButton(
               onPressed: () {

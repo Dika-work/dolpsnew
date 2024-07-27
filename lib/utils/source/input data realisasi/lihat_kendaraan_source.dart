@@ -5,12 +5,14 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../models/input data realisasi/lihat_kendaraan_model.dart';
 
-
 class LihatKendaraanSource extends DataGridSource {
   final List<LihatKendaraanModel> lihatKendaraanModel;
   int startIndex = 0;
 
-  LihatKendaraanSource({required this.lihatKendaraanModel}) {
+  LihatKendaraanSource({
+    required this.lihatKendaraanModel,
+    int startIndex = 0,
+  }) {
     _updateDataPager(lihatKendaraanModel, startIndex);
   }
 
@@ -58,7 +60,7 @@ class LihatKendaraanSource extends DataGridSource {
     index = startIndex;
 
     if (kirimKendaraanModel.isEmpty) {
-      _lihatKendaraan = _generateEmptyRows(5);
+      _lihatKendaraan = _generateEmptyRows(1);
     } else {
       _lihatKendaraan =
           kirimKendaraanModel.skip(startIndex).take(10).map<DataGridRow>(

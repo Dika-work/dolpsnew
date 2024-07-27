@@ -1,8 +1,6 @@
-import 'package:doplsnew/models/input%20data%20realisasi/request_kendaraan_model.dart';
 import 'package:doplsnew/screens/input%20data%20realisasi/kirim_kendaraan.dart';
 import 'package:doplsnew/screens/input%20data%20realisasi/lihat_kendaraan.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
-import 'package:doplsnew/utils/source/input%20data%20realisasi/request_mobil_source.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -14,10 +12,12 @@ import '../../controllers/input data realisasi/lihat_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/plot_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/request_kendaraan_controller.dart';
 import '../../helpers/helper_function.dart';
+import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
+import '../../utils/source/input data realisasi/request_mobil_source.dart';
 import '../../widgets/dropdown.dart';
 
 class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
@@ -35,9 +35,9 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Type': 130,
       'Jenis': 150,
       'Jumlah': double.nan,
-      'Lihat': 80,
-      'Kirim': 80,
-      'Edit': 80,
+      'Lihat': 100,
+      'Kirim': 100,
+      'Edit': 100,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -123,6 +123,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
               onKirim: (RequestKendaraanModel model) =>
                   Get.to(() => KirimKendaraanScreen(
                         model: model,
+                        selectedIndex: model.idReq,
                       )),
               onEdit: (RequestKendaraanModel model) {
                 Map<String, dynamic> updatedValues = {};
@@ -437,9 +438,11 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                     )),
                     SfDataPager(
                       delegate: dataSource,
-                      pageCount: (controller.requestKendaraanModel.length /
-                              rowsPerPage)
-                          .ceilToDouble(),
+                      pageCount: controller.requestKendaraanModel.isEmpty
+                          ? 1
+                          : (controller.requestKendaraanModel.length /
+                                  rowsPerPage)
+                              .ceilToDouble(),
                       direction: Axis.horizontal,
                     ),
                   ],

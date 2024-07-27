@@ -12,11 +12,36 @@ class PlotKendaraanController extends GetxController {
     try {
       final plot = await plotKendaraanRepo.jumlahPlot(idReq, tgl, type, plant);
       plotModel.assignAll(plot);
+
+      // Log data detail
+      print(
+          "PlotModel setelah fetch: ${plot.map((e) => e.jumlahPlot).toList()}");
+
       isJumlahKendaraanSama.value =
           plotModel.isNotEmpty && plotModel.first.jumlahPlot == jumlahKendaraan;
+
+      // Log nilai isJumlahKendaraanSama
+      print(
+          "isJumlahKendaraanSama setelah fetch: ${isJumlahKendaraanSama.value}");
     } catch (e) {
-      print('error saat mengambil data jumlah plot');
+      print('Error saat mengambil data jumlah plot');
       plotModel.assignAll([]);
+    }
+  }
+
+  Future<int> getJumlahKendaraan(
+      int idReq, String tgl, int type, String plant) async {
+    try {
+      final plot = await plotKendaraanRepo.jumlahPlot(idReq, tgl, type, plant);
+      final jumlahKendaraan = plot.isNotEmpty ? plot.first.jumlahPlot : 0;
+
+      // Log jumlah kendaraan
+      print("Jumlah kendaraan: $jumlahKendaraan");
+
+      return jumlahKendaraan;
+    } catch (e) {
+      print('Error saat menghitung jumlah kendaraan');
+      return 0;
     }
   }
 }

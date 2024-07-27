@@ -54,16 +54,20 @@ class DataDoGlobalSource extends DataGridSource {
         IconButton(
           icon: const Icon(Iconsax.edit),
           onPressed: () {
-            if (onEdited != null) {
+            if (onEdited != null && doGlobal.isNotEmpty) {
               onEdited!(doGlobal[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),
         IconButton(
           icon: const Icon(Iconsax.trash),
           onPressed: () {
-            if (onDeleted != null) {
+            if (onDeleted != null && doGlobal.isNotEmpty) {
               onDeleted!(doGlobal[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),

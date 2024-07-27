@@ -53,16 +53,20 @@ class DataDoKurangSource extends DataGridSource {
         IconButton(
           icon: const Icon(Iconsax.edit),
           onPressed: () {
-            if (onEdited != null) {
+            if (onEdited != null && doKurang.isNotEmpty) {
               onEdited!(doKurang[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),
         IconButton(
           icon: const Icon(Iconsax.trash),
           onPressed: () {
-            if (onDeleted != null) {
+            if (onDeleted != null && doKurang.isNotEmpty) {
               onDeleted!(doKurang[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),

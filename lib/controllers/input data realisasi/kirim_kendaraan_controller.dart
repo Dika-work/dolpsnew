@@ -14,9 +14,10 @@ class KirimKendaraanController extends GetxController {
   final jumlahPlotKendaraan = Get.put(PlotKendaraanController());
   final noPolisiController = Get.put(FetchKendaraanController());
   final supirController = Get.put(FetchSopirController());
+  final plotController = Get.put(PlotKendaraanController());
 
-  RxString selectedPlant = '1100'.obs;
-  RxString selectedTujuan = 'Sunter'.obs;
+  RxString selectedPlant = '1300'.obs;
+  RxString selectedTujuan = 'Cibitung'.obs;
 
   final Map<String, String> tujuanMap = {
     '1100': 'Sunter',
@@ -28,16 +29,18 @@ class KirimKendaraanController extends GetxController {
     '1900': 'Bekasi'
   };
 
-  @override
-  void onInit() {
-    fetchDataKirimKendaraan();
-    super.onInit();
-  }
+  // @override
+  // void onInit() {
+  //   fetchDataKirimKendaraan();
+  //   super.onInit();
+  // }
 
-  Future<void> fetchDataKirimKendaraan() async {
+  Future<void> fetchDataKirimKendaraan(
+      int type, String plant, int idReq) async {
     try {
       isLoadingKendaraan.value = true;
-      final getKirimKendaraan = await kirimKendaraanRepo.fetchKirimKendaraan();
+      final getKirimKendaraan =
+          await kirimKendaraanRepo.fetchKirimKendaraan(type, plant, idReq);
       kirimKendaraanModel.assignAll(getKirimKendaraan);
     } catch (e) {
       print('Error while fetching data kirim kendaraan: $e');
@@ -93,33 +96,47 @@ class KirimKendaraanController extends GetxController {
 
       noPolisiController.resetSelectedKendaraan();
       supirController.resetSelectedSopir();
-
-      await fetchDataKirimKendaraan();
+      await plotController.fetchPlot(idReq, tgl, type, plant, jumlahKendaraan);
+      await fetchDataKirimKendaraan(type, plant, idReq);
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
         message: 'Menambahkan data do realisasi..',
       );
-      isLoadingKendaraan.value = false;
     } else {
       SnackbarLoader.successSnackBar(
         title: 'Gagal',
         message: 'Jumlah kendaraan dan jumlah plot sudah sesuai..',
       );
-      isLoadingKendaraan.value = false;
-      Get.back();
     }
+    isLoadingKendaraan.value = false;
   }
 
-  Future<void> hapusKirimKendaraan(int id) async {
+  Future<void> hapusKirimKendaraan(
+      int idReq, String tgl, int type, String plant, int id) async {
     try {
+      isLoadingKendaraan.value = true;
+
+      print("Mulai hapus kirim kendaraan...");
       await kirimKendaraanRepo.hapusKirimKendaraan(id);
-      await fetchDataKirimKendaraan();
+
+      final jumlahKendaraan =
+          await plotController.getJumlahKendaraan(idReq, tgl, type, plant);
+      await plotController.fetchPlot(idReq, tgl, type, plant, jumlahKendaraan);
+      plotController.isJumlahKendaraanSama.value = false;
+
+      // Debug: Periksa status setelah fetchPlot
+      print(
+          "isJumlahKendaraanSama setelah hapus: ${plotController.isJumlahKendaraanSama.value}");
+
+      await fetchDataKirimKendaraan(type, plant, idReq);
     } catch (e) {
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Terjadi kesalahan saat menghapus kirim kendaraan😒',
       );
+    } finally {
+      isLoadingKendaraan.value = false;
     }
   }
 }

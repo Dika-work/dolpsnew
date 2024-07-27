@@ -9,9 +9,10 @@ import '../../utils/popups/snackbar.dart';
 class KirimKendaraanRepository {
   final storageUtil = StorageUtil();
 
-  Future<List<KirimKendaraanModel>> fetchKirimKendaraan() async {
+  Future<List<KirimKendaraanModel>> fetchKirimKendaraan(
+      int type, String plant, int idReq) async {
     final response = await http.get(Uri.parse(
-        '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getData'));
+        '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getDataReq&type=$type&plant=$plant&id_request=$idReq'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((e) => KirimKendaraanModel.fromJson(e)).toList();

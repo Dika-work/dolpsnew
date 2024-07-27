@@ -113,7 +113,7 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
             },
           );
           return LayoutBuilder(
-            builder: (context, constraint) {
+            builder: (__, _) {
               return Column(
                 children: [
                   GestureDetector(

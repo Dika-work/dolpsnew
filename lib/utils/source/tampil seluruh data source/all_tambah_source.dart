@@ -51,8 +51,10 @@ class DataAllTambahSource extends DataGridSource {
         IconButton(
           icon: const Icon(Iconsax.edit),
           onPressed: () {
-            if (onEdited != null) {
+            if (onEdited != null && allGlobal.isNotEmpty) {
               onEdited!(allGlobal[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),

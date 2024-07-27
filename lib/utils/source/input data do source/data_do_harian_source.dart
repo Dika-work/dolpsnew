@@ -51,16 +51,20 @@ class DataDoHarianSource extends DataGridSource {
         IconButton(
           icon: const Icon(Iconsax.edit),
           onPressed: () {
-            if (onEdited != null) {
+            if (onEdited != null && doHarian.isNotEmpty) {
               onEdited!(doHarian[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),
         IconButton(
           icon: const Icon(Iconsax.trash),
           onPressed: () {
-            if (onDeleted != null) {
+            if (onDeleted != null && doHarian.isNotEmpty) {
               onDeleted!(doHarian[startIndex + rowIndex]);
+            } else {
+              return;
             }
           },
         ),
