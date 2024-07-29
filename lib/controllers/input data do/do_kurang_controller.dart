@@ -161,9 +161,9 @@ class DataDOKurangController extends GetxController {
     int ptk,
     int bjm,
   ) async {
-    const CustomCircularLoader();
-
     try {
+      const CustomCircularLoader();
+
       await dataKurangRepo.editDOKurangContent(
           id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
 
@@ -183,9 +183,9 @@ class DataDOKurangController extends GetxController {
   Future<void> hapusDOKurang(
     int id,
   ) async {
-    const CustomCircularLoader();
-
     try {
+      const CustomCircularLoader();
+
       await dataKurangRepo.deleteDOKurangContent(id);
 
       await fetchDataDoKurang();

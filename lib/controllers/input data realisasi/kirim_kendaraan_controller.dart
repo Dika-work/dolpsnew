@@ -1,6 +1,8 @@
 import 'package:doplsnew/controllers/input%20data%20realisasi/fetch_kendaraan_controller.dart';
 import 'package:doplsnew/controllers/input%20data%20realisasi/fetch_sopir_controller.dart';
 import 'package:doplsnew/controllers/input%20data%20realisasi/plot_kendaraan_controller.dart';
+import 'package:doplsnew/controllers/input%20data%20realisasi/request_kendaraan_controller.dart';
+import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +17,7 @@ class KirimKendaraanController extends GetxController {
   final noPolisiController = Get.put(FetchKendaraanController());
   final supirController = Get.put(FetchSopirController());
   final plotController = Get.put(PlotKendaraanController());
+  final reqController = Get.put(RequestKendaraanController());
 
   RxString selectedPlant = '1300'.obs;
   RxString selectedTujuan = 'Cibitung'.obs;
@@ -134,6 +137,26 @@ class KirimKendaraanController extends GetxController {
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Terjadi kesalahan saat menghapus kirim kendaraan😒',
+      );
+    } finally {
+      isLoadingKendaraan.value = false;
+    }
+  }
+
+  Future<void> selesaiKirimKendaraan(int idReq) async {
+    try {
+      isLoadingKendaraan.value = true;
+
+      print('memulai selesai kirim kendaraan');
+      await kirimKendaraanRepo.selesaiKirimKendaraan(idReq);
+      await reqController.fetchRequestKendaraan();
+
+      CustomFullScreenLoader.stopLoading();
+    } catch (e) {
+      print('error di selesai kirim kendaraan controller : $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat selesai kirim kendaraan😒',
       );
     } finally {
       isLoadingKendaraan.value = false;

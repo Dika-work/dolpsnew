@@ -35,6 +35,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Type': 130,
       'Jenis': 150,
       'Jumlah': double.nan,
+      'Status Req': double.nan,
       'Lihat': 100,
       'Kirim': 100,
       'Edit': 100,
@@ -381,6 +382,22 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                                 ),
                                 child: Text(
                                   'Jumlah',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['Status Req']!,
+                            columnName: 'Status Req',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Status Req',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium

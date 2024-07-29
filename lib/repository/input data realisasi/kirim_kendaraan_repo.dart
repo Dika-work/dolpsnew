@@ -106,4 +106,44 @@ class KirimKendaraanRepository {
       );
     }
   }
+
+  Future<void> selesaiKirimKendaraan(int idReq) async {
+    try {
+      final response = await http.put(
+        Uri.parse(
+            '${storageUtil.baseURL}/DO/api/api_request_ken.php?action=SelesaiReq'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: {
+          'id_req': idReq.toString(),
+          'status_req': '1',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'error') {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😢',
+            message: responseData['message'] ?? 'Ada yang salah😒',
+          );
+        } else {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses🎉',
+            message: 'Kendaraan berhasil diselesaikan',
+          );
+        }
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😢',
+          message: 'Server mengembalikan status code ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error di selesai kirim kendaraan: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat selesai kirim kendaraan',
+      );
+    }
+  }
 }

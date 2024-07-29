@@ -12,9 +12,9 @@ class LoginRepository extends GetxController {
   Future<UserModel?> fetchUserDetails(String username, String password) async {
     try {
       print('Mengirim permintaan ke server...');
-      final response = await http.post(
+      final response = await http.get(
         Uri.parse(
-          '${storageUtil.baseURL}/DO/api/login_user.php?username=$username&password=$password',
+          '${storageUtil.baseURL}/DO/api/api_user.php?action=Login&username=$username&password=$password',
         ),
       );
 
@@ -24,9 +24,9 @@ class LoginRepository extends GetxController {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        if (data['response'] != null &&
-            data['response'] is Map<String, dynamic>) {
-          final user = UserModel.fromJson(data['response']);
+        // Periksa kunci yang benar
+        if (data['status'] == 'success' && data['data'] != null) {
+          final user = UserModel.fromJson(data['data']);
           storageUtil.saveUserDetails(user);
           print('ini gambarnya : ${user.gambar}');
           Get.offNamed('/rootpage');

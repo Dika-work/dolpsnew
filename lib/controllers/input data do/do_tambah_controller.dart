@@ -161,9 +161,9 @@ class DataDoTambahanController extends GetxController {
     int ptk,
     int bjm,
   ) async {
-    const CustomCircularLoader();
-
     try {
+      const CustomCircularLoader();
+
       await dataTambahRepo.editDOTambahContent(
           id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
 
@@ -184,15 +184,17 @@ class DataDoTambahanController extends GetxController {
   Future<void> hapusDOTambah(
     int id,
   ) async {
-    const CustomCircularLoader();
-
     try {
+      const CustomCircularLoader();
+
       await dataTambahRepo.deleteDOTambahContent(id);
 
       await fetchDataDoTambah();
       await dataHarianHomeController.fetchDataDoGlobal();
       await dataHarianHomeBskController.fetchHarianBesok();
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Terjadi kesalahan saat menghapus DO Tambah😒',

@@ -12,8 +12,8 @@ class DataUserRepository extends GetxController {
 
   // fetch data
   Future<List<DataUserModel>> fetchDataUserContent() async {
-    final response = await http
-        .get(Uri.parse('${storageUtil.baseURL}/DO/api/tampil_user.php'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_user.php?action=getUsers'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DataUserModel.fromJson(model)).toList();
@@ -35,8 +35,18 @@ class DataUserRepository extends GetxController {
       String dealer) async {
     try {
       print('...PROSES AWALAN DI REPOSITORY ADD DATA USER...');
-      final response = await http.post(Uri.parse(
-          '${storageUtil.baseURL}/DO/api/tambah_user.php?username=$username&password=$password&nama=$nama&tipe=$tipe&app=$app&gambar=$gambar&wilayah=$wilayah&plant=$plant&dealer=$dealer'));
+      final response = await http
+          .post(Uri.parse('${storageUtil.baseURL}/DO/api/api_user.php'), body: {
+        'username': username,
+        'password': password,
+        'nama': nama,
+        'tipe': tipe,
+        'app': app,
+        'gambar': gambar,
+        'wilayah': wilayah,
+        'plant': plant,
+        'dealer': dealer
+      });
       print('...BERHASIL DI REPOSITORY...');
 
       print('INI RESPONSE NYA $response');
@@ -57,7 +67,7 @@ class DataUserRepository extends GetxController {
   }
 
   // edit data user
-  Future<Map<String, dynamic>> editDataUserContent(
+  Future<void> editDataUserContent(
     String username,
     String password,
     String nama,
@@ -70,9 +80,21 @@ class DataUserRepository extends GetxController {
   ) async {
     try {
       print('...PROSES AWALAN DI REPOSITORY EDIT DATA USER...');
-      final response = await http.post(Uri.parse(
-        '${storageUtil.baseURL}/DO/api/edit_user.php?username=$username&password=$password&nama=$nama&tipe=$tipe&app=$app&gambar=$gambar&wilayah=$wilayah&plant=$plant&dealer=$dealer',
-      ));
+      final response = await http.put(
+          Uri.parse(
+            '${storageUtil.baseURL}/DO/api/api_user.php',
+          ),
+          body: {
+            'username': username,
+            'password': password,
+            'nama': nama,
+            'tipe': tipe,
+            'app': app,
+            'gambar': gambar,
+            'wilayah': wilayah,
+            'plant': plant,
+            'dealer': dealer
+          });
 
       print('...BERHASIL DI REPOSITORY...');
 
@@ -104,6 +126,47 @@ class DataUserRepository extends GetxController {
         message: 'Terjadi kesalahan saat mengedit data user',
       );
     }
-    return {};
   }
+
+  // hapus user
+  // Future<void> hapusDataUserContent() async {
+  //   try {
+  //     print('...PROSES AWALAN DI REPOSITORY EDIT DATA USER...');
+  //     final response = await http.delete(
+  //       Uri.parse(
+  //         '${storageUtil.baseURL}/DO/api/api_user.php',
+  //       ),
+  //     );
+
+  //     print('...BERHASIL DI REPOSITORY...');
+
+  //     if (response.statusCode == 200) {
+  //       final responseData = json.decode(response.body);
+  //       if (responseData['status'] == 'success') {
+  //         SnackbarLoader.successSnackBar(
+  //           title: 'Sukses 😃',
+  //           message: 'Data user berhasil diubah',
+  //         );
+  //       } else {
+  //         SnackbarLoader.errorSnackBar(
+  //           title: 'Gagal😪',
+  //           message: responseData['message'] ?? 'Ada yang salah🤷',
+  //         );
+  //       }
+  //       return responseData;
+  //     } else {
+  //       SnackbarLoader.errorSnackBar(
+  //         title: 'Gagal😪',
+  //         message:
+  //             'Gagal mengedit data user, status code: ${response.statusCode}',
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print('Error di catch di repository user: $e');
+  //     SnackbarLoader.errorSnackBar(
+  //       title: 'Gagal😪',
+  //       message: 'Terjadi kesalahan saat mengedit data user',
+  //     );
+  //   }
+  // }
 }

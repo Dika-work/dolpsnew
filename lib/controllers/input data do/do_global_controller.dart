@@ -156,9 +156,9 @@ class DataDOGlobalController extends GetxController {
     int ptk,
     int bjm,
   ) async {
-    const CustomCircularLoader();
-
     try {
+      const CustomCircularLoader();
+
       await dataGlobalRepo.editDOGlobalContent(
           id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
 
@@ -177,9 +177,9 @@ class DataDOGlobalController extends GetxController {
   Future<void> hapusDOGlobal(
     int id,
   ) async {
-    const CustomCircularLoader();
-
     try {
+      const CustomCircularLoader();
+
       await dataGlobalRepo.deleteDOGlobalContent(id);
 
       await fetchDataDoGlobal();

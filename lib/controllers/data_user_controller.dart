@@ -123,9 +123,8 @@ class DataUserController extends GetxController {
     String selectedPlant,
     String selectedDealer,
   ) async {
-    const CustomCircularLoader();
-
     try {
+      const CustomCircularLoader();
       // Perform the edit operation
       await dataUserRepo.editDataUserContent(
         userName,
@@ -149,6 +148,42 @@ class DataUserController extends GetxController {
       );
     }
   }
+
+  // hapus user
+  // Future<void> hapusUserData(
+  //   String userName,
+  //   String password,
+  //   String nama,
+  //   String selectedTipe,
+  //   String selectedWilayah,
+  //   String selectedPlant,
+  //   String selectedDealer,
+  // ) async {
+  //   try {
+  //     const CustomCircularLoader();
+  //     // Perform the edit operation
+  //     await dataUserRepo.hapusDataUserContent(
+  //       userName,
+  //       password,
+  //       nama,
+  //       selectedTipe,
+  //       'do',
+  //       image.value?.path ?? '',
+  //       selectedWilayah,
+  //       selectedPlant,
+  //       selectedDealer,
+  //     );
+
+  //     fetchUserData();
+  //     // Show success snackbar handled inside editDataUserContent
+  //   } catch (e) {
+  //     CustomFullScreenLoader.stopLoading();
+  //     SnackbarLoader.errorSnackBar(
+  //       title: 'Gagal😪',
+  //       message: 'Terjadi kesalahan saat mengedit data user',
+  //     );
+  //   }
+  // }
 
   // get image from device
   Future<XFile?> pickImage() async {

@@ -601,7 +601,9 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
 
                     if (plotController.isJumlahKendaraanSama.value) {
                       // Jika jumlah kendaraan dan plot sudah sama, kembali
-                      Get.back();
+                      controller.selesaiKirimKendaraan(
+                          idReq);
+                      // Get.back();
                     } else if (kendaraan == 0 || supir == '') {
                       // Jika kendaraan atau sopir belum dipilih
                       SnackbarLoader.errorSnackBar(

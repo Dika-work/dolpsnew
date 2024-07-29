@@ -95,7 +95,7 @@ class KirimKendaraanSource extends DataGridSource {
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(
                 columnName: 'Type',
-                value: data.type == '0' ? 'REGULER' : 'MUTASI'),
+                value: data.type == 0 ? 'REGULER' : 'MUTASI'),
             DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
             DataGridCell<String>(columnName: 'Jenis', value: data.jenisKen),
             DataGridCell<String>(
