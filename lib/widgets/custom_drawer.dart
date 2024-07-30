@@ -372,6 +372,7 @@ class CustomDrawer extends StatelessWidget {
                               ),
                             ),
                             ListTile(
+                              onTap: () => Get.toNamed('/do-reguler'),
                               leading: const Icon(
                                 Iconsax.record,
                                 color: AppColors.darkExpandableContent,
@@ -385,6 +386,7 @@ class CustomDrawer extends StatelessWidget {
                               ),
                             ),
                             ListTile(
+                              onTap: () => Get.toNamed('/do-mutasi'),
                               leading: const Icon(
                                 Iconsax.record,
                                 color: AppColors.darkExpandableContent,

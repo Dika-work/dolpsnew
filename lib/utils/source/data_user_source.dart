@@ -132,7 +132,7 @@ class DataUserDataSource extends DataGridSource {
 
     newCellValue = displayText; // Initialize with current value
 
-    if (column.columnName == 'Username' || column.columnName == 'Gambar') {
+    if ( column.columnName == 'No' ||column.columnName == 'Username' || column.columnName == 'Gambar') {
       // Return null for 'Username' and 'Gambar' columns
       return null;
     } else if (column.columnName == 'Nama') {
