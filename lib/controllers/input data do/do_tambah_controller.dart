@@ -8,7 +8,7 @@ import '../../models/input data do/do_tambah_model.dart';
 import '../../models/user_model.dart';
 import '../../repository/input data do/do_tambah_repo.dart';
 import '../../utils/constant/storage_util.dart';
-import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../home/do_harian_home_bsk_controller.dart';
@@ -89,10 +89,10 @@ class DataDoTambahanController extends GetxController {
   }
 
   Future<void> addDataDoTambah() async {
-    const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
 
     if (!addTambahKey.currentState!.validate()) {
-      print('Form validation do harian failed');
+      CustomFullScreenLoader.stopLoading();
       return;
     }
 
@@ -107,48 +107,38 @@ class DataDoTambahanController extends GetxController {
       return;
     }
 
-    try {
-      await dataTambahRepo.addDataTambah(
-          idplant.value,
-          tujuanDisplayValue,
-          tgl.value,
-          CustomHelperFunctions.formattedTime,
-          srdController.text,
-          mksController.text,
-          ptkController.text,
-          bjmController.text,
-          jumlah5.text,
-          jumlah6.text,
-          namaUser,
-          plant.value);
-      print('Stopped loading dialog');
-      CustomFullScreenLoader.stopLoading();
+    await dataTambahRepo.addDataTambah(
+        idplant.value,
+        tujuanDisplayValue,
+        tgl.value,
+        CustomHelperFunctions.formattedTime,
+        srdController.text,
+        mksController.text,
+        ptkController.text,
+        bjmController.text,
+        jumlah5.text,
+        jumlah6.text,
+        namaUser,
+        plant.value);
 
-      srdController.clear();
-      mksController.clear();
-      ptkController.clear();
-      bjmController.clear();
+    srdController.clear();
+    mksController.clear();
+    ptkController.clear();
+    bjmController.clear();
 
-      plant.value = '1100';
-      tujuan.value = '1';
+    plant.value = '1100';
+    tujuan.value = '1';
 
-      await fetchDataDoTambah();
-      await dataHarianHomeController.fetchDataDoGlobal();
-      await dataHarianHomeBskController.fetchHarianBesok();
+    await fetchDataDoTambah();
+    await dataHarianHomeController.fetchDataDoGlobal();
+    await dataHarianHomeBskController.fetchHarianBesok();
+    CustomFullScreenLoader.stopLoading();
 
-      SnackbarLoader.successSnackBar(
-        title: 'Berhasil✨',
-        message: 'Menambahkan data do tambah baru..',
-      );
-    } catch (e) {
-      print('Error while adding data: $e');
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Error☠️',
-        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
-      );
-      return;
-    }
+    SnackbarLoader.successSnackBar(
+      title: 'Berhasil✨',
+      message: 'Menambahkan data do tambah baru..',
+    );
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> editDOTambah(
@@ -161,44 +151,26 @@ class DataDoTambahanController extends GetxController {
     int ptk,
     int bjm,
   ) async {
-    try {
-      const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
+    await dataTambahRepo.editDOTambahContent(
+        id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+    CustomFullScreenLoader.stopLoading();
 
-      await dataTambahRepo.editDOTambahContent(
-          id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
-
-      await fetchDataDoTambah();
-      await dataHarianHomeController.fetchDataDoGlobal();
-      await dataHarianHomeBskController.fetchHarianBesok();
-      print('...INI DATA DO TAMBAH EDIT...');
-      CustomFullScreenLoader.stopLoading();
-    } catch (e) {
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat mengedit DO Tambah😒',
-      );
-    }
+    await fetchDataDoTambah();
+    await dataHarianHomeController.fetchDataDoGlobal();
+    await dataHarianHomeBskController.fetchHarianBesok();
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> hapusDOTambah(
     int id,
   ) async {
-    try {
-      const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
+    await dataTambahRepo.deleteDOTambahContent(id);
 
-      await dataTambahRepo.deleteDOTambahContent(id);
-
-      await fetchDataDoTambah();
-      await dataHarianHomeController.fetchDataDoGlobal();
-      await dataHarianHomeBskController.fetchHarianBesok();
-    } catch (e) {
-      CustomFullScreenLoader.stopLoading();
-
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat menghapus DO Tambah😒',
-      );
-    }
+    await fetchDataDoTambah();
+    await dataHarianHomeController.fetchDataDoGlobal();
+    await dataHarianHomeBskController.fetchHarianBesok();
+    CustomFullScreenLoader.stopLoading();
   }
 }

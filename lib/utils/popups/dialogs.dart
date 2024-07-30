@@ -1,4 +1,9 @@
+import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import '../../widgets/loading_text_animation.dart';
+import '../theme/app_colors.dart';
 
 class CustomDialogs {
   static defaultDialog({
@@ -59,6 +64,42 @@ class CustomDialogs {
               child: Text(confirmText),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  static loadingIndicator() {
+    showDialog(
+      context: Get.overlayContext!,
+      barrierDismissible: false,
+      barrierColor: Colors.transparent, // Set barrier color to transparent
+      builder: (_) {
+        return PopScope(
+          canPop: false,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: Container(
+                  width: 50.0,
+                  height: 50.0,
+                  padding: const EdgeInsets.all(8.0), // Adjust padding if needed
+                  decoration: const BoxDecoration(
+                    color: AppColors
+                        .primary, // Adjust color to match your primary color
+                    shape: BoxShape.circle,
+                  ),
+                  child: const CircularProgressIndicator(
+                    color: AppColors.white,
+                    backgroundColor: Colors.transparent,
+                  ),
+                ),
+              ),
+              const SizedBox(height: CustomSize.spaceBtwItems),
+              const LoadingText()
+            ],
+          ),
         );
       },
     );

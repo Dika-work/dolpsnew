@@ -30,7 +30,7 @@ class StorageUtil {
   }
 
   final selectedIndex = 0.obs;
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<Widget> widgetOptions = <Widget>[
     const Homepage(),

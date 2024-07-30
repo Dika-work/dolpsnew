@@ -57,7 +57,7 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
             onTap: () {
               CustomDialogs.defaultDialog(
                   context: context,
-                  titleWidget: const Text('Input DO Harian'),
+                  titleWidget: const Text('Input DO Tambahan'),
                   contentWidget: AddDOTambahan(
                     controller: controller,
                   ),

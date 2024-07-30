@@ -1,13 +1,12 @@
 import 'package:doplsnew/repository/input%20data%20realisasi/request_kendaraan_repo.dart';
+import 'package:doplsnew/utils/popups/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 
 import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../models/user_model.dart';
 import '../../utils/constant/storage_util.dart';
-import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../home/do_harian_home_controller.dart';
@@ -142,44 +141,35 @@ class RequestKendaraanController extends GetxController {
   }
 
   Future<void> addRequestKendaraan() async {
+    CustomDialogs.loadingIndicator();
+
     if (!requestKendaraanKey.currentState!.validate()) {
       return;
     }
 
-    try {
-      const CustomCircularLoader();
+    await requestRepo.addRequestKendaraan(
+        CustomHelperFunctions.formattedTime, //
+        tgl.value, //
+        namaUser,
+        plant.value, //
+        tujuanDisplayValue, //
+        typeDOValue.value, //
+        jenisKendaraan.value,
+        jumlahKendaraanController.text,
+        0);
 
-      await requestRepo.addRequestKendaraan(
-          CustomHelperFunctions.formattedTime, //
-          tgl.value, //
-          namaUser,
-          plant.value, //
-          tujuanDisplayValue, //
-          typeDOValue.value, //
-          jenisKendaraan.value,
-          jumlahKendaraanController.text,
-          0);
+    plant.value = '1100';
+    jenisKendaraan.value = 'MOBIL MOTOR 16';
+    jumlahKendaraanController.clear();
 
-      plant.value = '1100';
-      jenisKendaraan.value = 'MOBIL MOTOR 16';
-      jumlahKendaraanController.clear();
+    await fetchRequestKendaraan();
+    CustomFullScreenLoader.stopLoading();
 
-      await fetchRequestKendaraan();
-      CustomFullScreenLoader.stopLoading();
-
-      SnackbarLoader.successSnackBar(
-        title: 'Berhasil✨',
-        message: 'Menambahkan data do global baru..',
-      );
-    } catch (e) {
-      print('Error while adding data: $e');
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Error☠️',
-        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
-      );
-      return;
-    } 
+    SnackbarLoader.successSnackBar(
+      title: 'Berhasil✨',
+      message: 'Menambahkan data do global baru..',
+    );
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> editReqKendaraan(
@@ -191,18 +181,13 @@ class RequestKendaraanController extends GetxController {
     String jenisReq,
     int jumlahReq,
   ) async {
-    try {
-      await requestRepo.editRequestKendaraan(
-          idReq, tgl, plant, tujuan, type, jenisReq, jumlahReq);
-      await fetchRequestKendaraan();
-      CustomFullScreenLoader.stopLoading();
-    } catch (e) {
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat mengedit Request Kendaraan',
-      );
-    }
+    CustomDialogs.loadingIndicator();
+
+    await requestRepo.editRequestKendaraan(
+        idReq, tgl, plant, tujuan, type, jenisReq, jumlahReq);
+    await fetchRequestKendaraan();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
   }
 
   // Future<void> hapusReqKendaraan(int id) async {

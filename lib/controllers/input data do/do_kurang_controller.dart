@@ -8,7 +8,7 @@ import '../../models/input data do/do_kurang_model.dart';
 import '../../models/user_model.dart';
 import '../../repository/input data do/do_kurang_repo.dart';
 import '../../utils/constant/storage_util.dart';
-import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../home/do_harian_home_bsk_controller.dart';
@@ -89,10 +89,10 @@ class DataDOKurangController extends GetxController {
   }
 
   Future<void> addDataDOKurang() async {
-    const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
 
     if (!addKurangKey.currentState!.validate()) {
-      print('Form validation do harian failed');
+      CustomFullScreenLoader.stopLoading();
       return;
     }
 
@@ -107,48 +107,39 @@ class DataDOKurangController extends GetxController {
       return;
     }
 
-    try {
-      await dataKurangRepo.addDataKurang(
-          idplant.value,
-          tujuanDisplayValue,
-          tgl.value,
-          CustomHelperFunctions.formattedTime,
-          srdController.text,
-          mksController.text,
-          ptkController.text,
-          bjmController.text,
-          jumlah5.text,
-          jumlah6.text,
-          namaUser,
-          plant.value);
-      print('Stopped loading dialog');
+    await dataKurangRepo.addDataKurang(
+        idplant.value,
+        tujuanDisplayValue,
+        tgl.value,
+        CustomHelperFunctions.formattedTime,
+        srdController.text,
+        mksController.text,
+        ptkController.text,
+        bjmController.text,
+        jumlah5.text,
+        jumlah6.text,
+        namaUser,
+        plant.value);
+    print('Stopped loading dialog');
 
-      srdController.clear();
-      mksController.clear();
-      ptkController.clear();
-      bjmController.clear();
+    srdController.clear();
+    mksController.clear();
+    ptkController.clear();
+    bjmController.clear();
 
-      plant.value = '1100';
-      tujuan.value = '1';
+    plant.value = '1100';
+    tujuan.value = '1';
 
-      await fetchDataDoKurang();
-      await dataHarianHomeController.fetchDataDoGlobal();
-      await dataHarianHomeBskController.fetchHarianBesok();
+    await fetchDataDoKurang();
+    await dataHarianHomeController.fetchDataDoGlobal();
+    await dataHarianHomeBskController.fetchHarianBesok();
+    CustomFullScreenLoader.stopLoading();
 
-      SnackbarLoader.successSnackBar(
-        title: 'Berhasil✨',
-        message: 'Menambahkan data do kurang baru..',
-      );
-      CustomFullScreenLoader.stopLoading();
-    } catch (e) {
-      print('Error while adding data: $e');
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Error☠️',
-        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
-      );
-      return;
-    }
+    SnackbarLoader.successSnackBar(
+      title: 'Berhasil✨',
+      message: 'Menambahkan data do kurang baru..',
+    );
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> editDOGlobal(
@@ -161,41 +152,27 @@ class DataDOKurangController extends GetxController {
     int ptk,
     int bjm,
   ) async {
-    try {
-      const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
 
-      await dataKurangRepo.editDOKurangContent(
-          id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+    await dataKurangRepo.editDOKurangContent(
+        id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+    CustomFullScreenLoader.stopLoading();
 
-      await fetchDataDoKurang();
-      await dataHarianHomeController.fetchDataDoGlobal();
-      await dataHarianHomeBskController.fetchHarianBesok();
-      CustomFullScreenLoader.stopLoading();
-    } catch (e) {
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat mengedit DO Global😒',
-      );
-    }
+    await fetchDataDoKurang();
+    await dataHarianHomeController.fetchDataDoGlobal();
+    await dataHarianHomeBskController.fetchHarianBesok();
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> hapusDOKurang(
     int id,
   ) async {
-    try {
-      const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
+    await dataKurangRepo.deleteDOKurangContent(id);
 
-      await dataKurangRepo.deleteDOKurangContent(id);
-
-      await fetchDataDoKurang();
-      await dataHarianHomeController.fetchDataDoGlobal();
-      await dataHarianHomeBskController.fetchHarianBesok();
-    } catch (e) {
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat menghapus DO Kurang😒',
-      );
-    }
+    await fetchDataDoKurang();
+    await dataHarianHomeController.fetchDataDoGlobal();
+    await dataHarianHomeBskController.fetchHarianBesok();
+    CustomFullScreenLoader.stopLoading();
   }
 }

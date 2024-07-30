@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:doplsnew/models/input%20data%20do/do_harian_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
+import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
-class DataDoHarianRepository extends GetxController {
+class DataDoHarianRepository {
   final storageUtil = StorageUtil();
 
   Future<List<DoHarianModel>> fetchDataHarianContent() async {
@@ -54,12 +54,14 @@ class DataDoHarianRepository extends GetxController {
           });
 
       if (response.statusCode != 200) {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error while adding data: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
@@ -104,6 +106,7 @@ class DataDoHarianRepository extends GetxController {
             message: 'DO Harian berhasil diubah',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -111,6 +114,8 @@ class DataDoHarianRepository extends GetxController {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
+
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -118,6 +123,7 @@ class DataDoHarianRepository extends GetxController {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di catch di repository do harian: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
@@ -145,6 +151,7 @@ class DataDoHarianRepository extends GetxController {
             message: 'Data DO Harian berhasil dihapus',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -152,6 +159,7 @@ class DataDoHarianRepository extends GetxController {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -159,6 +167,7 @@ class DataDoHarianRepository extends GetxController {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di catch di repository do Harian: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',

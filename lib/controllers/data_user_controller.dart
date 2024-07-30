@@ -1,12 +1,12 @@
 import 'package:doplsnew/models/get_all_user_model.dart';
 import 'package:doplsnew/repository/data_user_repo.dart';
-import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
+import '../utils/popups/dialogs.dart';
 import '../utils/popups/snackbar.dart';
 
 class DataUserController extends GetxController {
@@ -52,11 +52,7 @@ class DataUserController extends GetxController {
   }
 
   Future<void> addUserData() async {
-    print('Adding new user data...');
-    CustomFullScreenLoader.openLoadingDialog(
-      'Adding new user data...',
-      'assets/animations/141594-animation-of-docer.json',
-    );
+    CustomDialogs.loadingIndicator();
 
     if (!addUserKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
@@ -64,31 +60,17 @@ class DataUserController extends GetxController {
       return;
     }
 
-    try {
-      await dataUserRepo.addDataUserContent(
-        usernameController.text,
-        passwordController.text,
-        namaController.text,
-        tipe.value,
-        'do',
-        image.value!.path,
-        wilayah.value,
-        plant.value,
-        dealer.value,
-      );
-      print('Data added successfully');
-    } catch (e) {
-      print('Error while adding data: $e');
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Error☠️',
-        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
-      );
-      return;
-    }
-
-    CustomFullScreenLoader.stopLoading();
-    print('Stopped loading dialog');
+    await dataUserRepo.addDataUserContent(
+      usernameController.text,
+      passwordController.text,
+      namaController.text,
+      tipe.value,
+      'do',
+      image.value!.path,
+      wilayah.value,
+      plant.value,
+      dealer.value,
+    );
 
     // reset text controllers
     usernameController.clear();
@@ -104,12 +86,14 @@ class DataUserController extends GetxController {
 
     print('Controllers and variables reset');
     await fetchUserData();
+    CustomFullScreenLoader.stopLoading();
     print('User data fetched');
 
     SnackbarLoader.successSnackBar(
       title: 'Berhasil✨',
       message: 'Menambahkan data user baru..',
     );
+    CustomFullScreenLoader.stopLoading();
 
     print('Navigated back');
   }
@@ -123,30 +107,22 @@ class DataUserController extends GetxController {
     String selectedPlant,
     String selectedDealer,
   ) async {
-    try {
-      const CustomCircularLoader();
-      // Perform the edit operation
-      await dataUserRepo.editDataUserContent(
-        userName,
-        password,
-        nama,
-        selectedTipe,
-        'do',
-        image.value?.path ?? '',
-        selectedWilayah,
-        selectedPlant,
-        selectedDealer,
-      );
+    CustomDialogs.loadingIndicator();
+    await dataUserRepo.editDataUserContent(
+      userName,
+      password,
+      nama,
+      selectedTipe,
+      'do',
+      image.value?.path ?? '',
+      selectedWilayah,
+      selectedPlant,
+      selectedDealer,
+    );
+    CustomFullScreenLoader.stopLoading();
 
-      fetchUserData();
-      // Show success snackbar handled inside editDataUserContent
-    } catch (e) {
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat mengedit data user',
-      );
-    }
+    await fetchUserData();
+    CustomFullScreenLoader.stopLoading();
   }
 
   // hapus user

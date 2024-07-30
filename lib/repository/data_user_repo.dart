@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:doplsnew/models/get_all_user_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../utils/popups/full_screen_loader.dart';
 import '../utils/popups/snackbar.dart';
 
-class DataUserRepository extends GetxController {
+class DataUserRepository {
   final storageUtil = StorageUtil();
 
   // fetch data
@@ -52,13 +52,16 @@ class DataUserRepository extends GetxController {
       print('INI RESPONSE NYA $response');
 
       if (response.statusCode != 200) {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
-          message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
+          message:
+              'Pastikan telah terkoneksi dengan wifi kantor : ${response.statusCode}😁',
         );
       }
     } catch (e) {
       print('ini error di catch di repository user $e');
+      CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
@@ -106,6 +109,7 @@ class DataUserRepository extends GetxController {
             message: 'Data user berhasil diubah',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -113,6 +117,7 @@ class DataUserRepository extends GetxController {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -120,6 +125,7 @@ class DataUserRepository extends GetxController {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di catch di repository user: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',

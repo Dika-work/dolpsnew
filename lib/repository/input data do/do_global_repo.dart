@@ -3,16 +3,16 @@ import 'dart:convert';
 import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
+import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
-class DataDoGlobalRepository extends GetxController {
+class DataDoGlobalRepository {
   final storageUtil = StorageUtil();
 
   Future<List<DoGlobalModel>> fetchDataGlobalContent() async {
-    final response = await http
-        .get(Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php?action=getData'));
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_do_global.php?action=getData'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DoGlobalModel.fromJson(model)).toList();
@@ -54,13 +54,15 @@ class DataDoGlobalRepository extends GetxController {
           // '${storageUtil.baseURL}/DO/api/tambah_do_global.php?id_plant=$idPlant&tujuan=$tujuan&tgl=$tgl&jam=$jam&jumlah_1=$srd&jumlah_2=$mks&jumlah_3=$ptk&jumlah_4=$bjm&jumlah_5=$jumlah5&jumlah_6=$jumlah6&user=$user'),
           );
       if (response.statusCode != 200) {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
-          message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
+          message:
+              'Pastikan telah terkoneksi dengan wifi kantor : ${response.statusCode}😁',
         );
       }
     } catch (e) {
-      print('Error while adding data: $e');
+      CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
         message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
@@ -105,6 +107,7 @@ class DataDoGlobalRepository extends GetxController {
             message: 'DO Global berhasil diubah',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -112,6 +115,7 @@ class DataDoGlobalRepository extends GetxController {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -119,6 +123,7 @@ class DataDoGlobalRepository extends GetxController {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di catch di repository do Global: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
@@ -134,7 +139,7 @@ class DataDoGlobalRepository extends GetxController {
       print('...PROSES AWALANAN DELETE DI REPOSITORY DO Global...');
       final response = await http.delete(
           Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php'),
-          body: {'id': id});
+          body: {'id': id.toString()});
 
       print('...BERHASIL DI REPOSITORY...');
 
@@ -146,6 +151,7 @@ class DataDoGlobalRepository extends GetxController {
             message: 'Data DO Global berhasil dihapus',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -153,6 +159,7 @@ class DataDoGlobalRepository extends GetxController {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -160,6 +167,7 @@ class DataDoGlobalRepository extends GetxController {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di catch di repository do Global: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',

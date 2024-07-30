@@ -6,7 +6,7 @@ import '../../models/input data do/do_global_model.dart';
 import '../../models/user_model.dart';
 import '../../repository/input data do/do_global_repo.dart';
 import '../../utils/constant/storage_util.dart';
-import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../home/do_global_harian_controller.dart';
@@ -85,10 +85,10 @@ class DataDOGlobalController extends GetxController {
   }
 
   Future<void> addDataDOGlobal() async {
-    const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
 
     if (!addGlobalKey.currentState!.validate()) {
-      print('Form validation do Global failed');
+      CustomFullScreenLoader.stopLoading();
       return;
     }
 
@@ -103,47 +103,38 @@ class DataDOGlobalController extends GetxController {
       return;
     }
 
-    try {
-      await dataGlobalRepo.addDataGlobal(
-        idplant.value,
-        tujuanDisplayValue,
-        tgl.value,
-        CustomHelperFunctions.formattedTime,
-        srdController.text,
-        mksController.text,
-        ptkController.text,
-        bjmController.text,
-        jumlah5.text,
-        jumlah6.text,
-        namaUser,
-      );
-      print('Stopped loading dialog');
+    await dataGlobalRepo.addDataGlobal(
+      idplant.value,
+      tujuanDisplayValue,
+      tgl.value,
+      CustomHelperFunctions.formattedTime,
+      srdController.text,
+      mksController.text,
+      ptkController.text,
+      bjmController.text,
+      jumlah5.text,
+      jumlah6.text,
+      namaUser,
+    );
+    print('Stopped loading dialog');
 
-      srdController.clear();
-      mksController.clear();
-      ptkController.clear();
-      bjmController.clear();
+    srdController.clear();
+    mksController.clear();
+    ptkController.clear();
+    bjmController.clear();
 
-      plant.value = '1100';
-      tujuan.value = '1';
+    plant.value = '1100';
+    tujuan.value = '1';
 
-      await fetchDataDoGlobal();
-      await doGlobalHarianController.fetchDataDoGlobal();
+    await fetchDataDoGlobal();
+    await doGlobalHarianController.fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
 
-      SnackbarLoader.successSnackBar(
-        title: 'Berhasil✨',
-        message: 'Menambahkan data do global baru..',
-      );
-      CustomFullScreenLoader.stopLoading();
-    } catch (e) {
-      print('Error while adding data: $e');
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Error☠️',
-        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
-      );
-      return;
-    }
+    SnackbarLoader.successSnackBar(
+      title: 'Berhasil✨',
+      message: 'Menambahkan data do global baru..',
+    );
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> editDOGlobal(
@@ -156,39 +147,25 @@ class DataDOGlobalController extends GetxController {
     int ptk,
     int bjm,
   ) async {
-    try {
-      const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
 
-      await dataGlobalRepo.editDOGlobalContent(
-          id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+    await dataGlobalRepo.editDOGlobalContent(
+        id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+    CustomFullScreenLoader.stopLoading();
 
-      await fetchDataDoGlobal();
-      await doGlobalHarianController.fetchDataDoGlobal();
-      CustomFullScreenLoader.stopLoading();
-    } catch (e) {
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat mengedit DO Global😒',
-      );
-    }
+    await fetchDataDoGlobal();
+    await doGlobalHarianController.fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> hapusDOGlobal(
     int id,
   ) async {
-    try {
-      const CustomCircularLoader();
+    CustomDialogs.loadingIndicator();
+    await dataGlobalRepo.deleteDOGlobalContent(id);
 
-      await dataGlobalRepo.deleteDOGlobalContent(id);
-
-      await fetchDataDoGlobal();
-      await doGlobalHarianController.fetchDataDoGlobal();
-    } catch (e) {
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat menghapus DO Global😒',
-      );
-    }
+    await fetchDataDoGlobal();
+    await doGlobalHarianController.fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
   }
 }

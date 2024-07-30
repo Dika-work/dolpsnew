@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:doplsnew/models/input%20data%20do/do_kurang_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
+import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
-class DataDoKurangRepository extends GetxController {
+class DataDoKurangRepository {
   final storageUtil = StorageUtil();
 
   Future<List<DoKurangModel>> fetchDataKurangContent() async {
@@ -54,12 +54,14 @@ class DataDoKurangRepository extends GetxController {
           });
 
       if (response.statusCode != 200) {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error while adding data: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
@@ -104,6 +106,7 @@ class DataDoKurangRepository extends GetxController {
             message: 'DO Kurang berhasil diubah',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -111,6 +114,7 @@ class DataDoKurangRepository extends GetxController {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -118,6 +122,7 @@ class DataDoKurangRepository extends GetxController {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di catch di repository do Kurang: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
@@ -145,6 +150,7 @@ class DataDoKurangRepository extends GetxController {
             message: 'Data DO Kurang berhasil dihapus',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -152,6 +158,7 @@ class DataDoKurangRepository extends GetxController {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -159,6 +166,7 @@ class DataDoKurangRepository extends GetxController {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di catch di repository do Kurang: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
