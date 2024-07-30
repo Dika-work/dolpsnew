@@ -155,7 +155,7 @@ class RequestKendaraanController extends GetxController {
         tujuanDisplayValue, //
         typeDOValue.value, //
         jenisKendaraan.value,
-        jumlahKendaraanController.text,
+        jumlahKendaraanController.text.trim(),
         0);
 
     plant.value = '1100';

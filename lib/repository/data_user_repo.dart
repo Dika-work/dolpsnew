@@ -35,35 +35,58 @@ class DataUserRepository {
       String dealer) async {
     try {
       print('...PROSES AWALAN DI REPOSITORY ADD DATA USER...');
-      final response = await http
-          .post(Uri.parse('${storageUtil.baseURL}/DO/api/api_user.php'), body: {
-        'username': username,
-        'password': password,
-        'nama': nama,
-        'tipe': tipe,
-        'app': app,
-        'gambar': gambar,
-        'wilayah': wilayah,
-        'plant': plant,
-        'dealer': dealer
-      });
+
+      var uri = Uri.parse('${storageUtil.baseURL}/DO/api/api_user.php');
+
+      var request = http.MultipartRequest('POST', uri);
+
+      request.fields['username'] = username;
+      request.fields['password'] = password;
+      request.fields['nama'] = nama;
+      request.fields['tipe'] = tipe;
+      request.fields['app'] = app;
+      request.fields['wilayah'] = wilayah;
+      request.fields['plant'] = plant;
+      request.fields['dealer'] = dealer;
+
+      var pic = await http.MultipartFile.fromPath('gambar', gambar);
+      request.files.add(pic);
+
+      var streamResponse = await request.send();
+      var responseBody = await http.Response.fromStream(streamResponse);
+
       print('...BERHASIL DI REPOSITORY...');
+      print('Response Body: ${responseBody.body}'); // Tambahkan log ini
 
-      print('INI RESPONSE NYA $response');
+      if (responseBody.statusCode == 200) {
+        final data = json.decode(responseBody.body);
 
-      if (response.statusCode != 200) {
-        CustomFullScreenLoader.stopLoading();
+        if (data['status'] == 'success') {
+          print('Data inserted successfully: ${data['message']}');
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 🎉',
+            message: data['message'],
+          );
+        } else if (data['status'] == 'error') {
+          print('Error: ${data['message']}');
+          SnackbarLoader.errorSnackBar(
+            title: 'Error 😞',
+            message: data['message'],
+          );
+        }
+      } else {
+        print(
+            'Server returned non-200 status code: ${responseBody.statusCode}');
         SnackbarLoader.errorSnackBar(
-          title: 'Gagal😪',
-          message:
-              'Pastikan telah terkoneksi dengan wifi kantor : ${response.statusCode}😁',
+          title: 'Gagal 😞',
+          message: 'Server returned non-200 status code.',
         );
       }
     } catch (e) {
       print('ini error di catch di repository user $e');
       CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
+        title: 'Gagal 😪',
         message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
       );
     }

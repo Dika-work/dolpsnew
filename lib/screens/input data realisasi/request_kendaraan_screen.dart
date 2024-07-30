@@ -35,7 +35,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Type': 130,
       'Jenis': 150,
       'Jumlah': double.nan,
-      'Status Req': double.nan,
       'Lihat': 100,
       'Kirim': 100,
       'Edit': 100,
@@ -188,7 +187,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
               startIndex: currentPage * rowsPerPage,
             );
 
-            List<GridColumn> columnCanNotAllAction = [
+            List<GridColumn> column = [
               GridColumn(
                   width: columnWidths['No']!,
                   columnName: 'No',
@@ -328,185 +327,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                       ),
                       child: Text(
                         'Jumlah',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Status Req']!,
-                  columnName: 'Status Req',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Status Req',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-            ];
-
-            List<GridColumn> columnCanAllAction = [
-              GridColumn(
-                  width: columnWidths['No']!,
-                  columnName: 'No',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'No',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Pengurus']!,
-                  columnName: 'Pengurus',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Pengurus',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Tanggal']!,
-                  columnName: 'Tanggal',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Tanggal',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Jam']!,
-                  columnName: 'Jam',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Jam',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Plant']!,
-                  columnName: 'Plant',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Plant',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Tujuan']!,
-                  columnName: 'Tujuan',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Tujuan',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Type']!,
-                  columnName: 'Type',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Type',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Jenis']!,
-                  columnName: 'Jenis',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Jenis',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Jumlah']!,
-                  columnName: 'Jumlah',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Jumlah',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Status Req']!,
-                  columnName: 'Status Req',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Status Req',
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
@@ -617,11 +437,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                         columnWidths[details.column.columnName] = details.width;
                         return true;
                       },
-                      columns: controller.rolesLihat.value == 0 &&
-                              controller.rolesKirim.value == 0 &&
-                              controller.rolesEdit.value == 0
-                          ? columnCanNotAllAction
-                          : columnCanAllAction,
+                      columns: column,
                     )),
                     SfDataPager(
                       delegate: dataSource,

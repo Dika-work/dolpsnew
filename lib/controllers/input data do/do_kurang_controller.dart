@@ -112,12 +112,12 @@ class DataDOKurangController extends GetxController {
         tujuanDisplayValue,
         tgl.value,
         CustomHelperFunctions.formattedTime,
-        srdController.text,
-        mksController.text,
-        ptkController.text,
-        bjmController.text,
-        jumlah5.text,
-        jumlah6.text,
+        srdController.text.trim(),
+        mksController.text.trim(),
+        ptkController.text.trim(),
+        bjmController.text.trim(),
+        jumlah5.text.trim(),
+        jumlah6.text.trim(),
         namaUser,
         plant.value);
     print('Stopped loading dialog');

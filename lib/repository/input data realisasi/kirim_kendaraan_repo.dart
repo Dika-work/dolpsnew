@@ -4,6 +4,7 @@ import 'package:doplsnew/models/input%20data%20realisasi/kirim_kendaraan_model.d
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
 
+import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
 class KirimKendaraanRepository {
@@ -56,12 +57,14 @@ class KirimKendaraanRepository {
           });
 
       if (response.statusCode != 200) {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error while adding data kirim kendaraan: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
@@ -85,6 +88,7 @@ class KirimKendaraanRepository {
             message: 'Data DO Harian berhasil dihapus',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
@@ -92,6 +96,7 @@ class KirimKendaraanRepository {
         }
         return responseData;
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
@@ -99,6 +104,7 @@ class KirimKendaraanRepository {
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di hapus kirim kendaraan: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
@@ -127,18 +133,21 @@ class KirimKendaraanRepository {
             message: responseData['message'] ?? 'Ada yang salah😒',
           );
         } else {
+          CustomFullScreenLoader.stopLoading();
           SnackbarLoader.successSnackBar(
             title: 'Sukses🎉',
             message: 'Kendaraan berhasil diselesaikan',
           );
         }
       } else {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😢',
           message: 'Server mengembalikan status code ${response.statusCode}',
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       print('Error di selesai kirim kendaraan: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',

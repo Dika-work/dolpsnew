@@ -4,10 +4,12 @@ import 'package:doplsnew/controllers/input%20data%20realisasi/plot_kendaraan_con
 import 'package:doplsnew/controllers/input%20data%20realisasi/request_kendaraan_controller.dart';
 import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/kirim_kendaraan_model.dart';
 import '../../repository/input data realisasi/kirim_kendaraan_repo.dart';
+import '../../utils/popups/dialogs.dart';
 
 class KirimKendaraanController extends GetxController {
   final isLoadingKendaraan = Rx<bool>(false);
@@ -18,6 +20,8 @@ class KirimKendaraanController extends GetxController {
   final supirController = Get.put(FetchSopirController());
   final plotController = Get.put(PlotKendaraanController());
   final reqController = Get.put(RequestKendaraanController());
+
+  GlobalKey<FormState> kirimKendaraanKey = GlobalKey<FormState>();
 
   RxString selectedPlant = '1300'.obs;
   RxString selectedTujuan = 'Cibitung'.obs;
@@ -31,12 +35,6 @@ class KirimKendaraanController extends GetxController {
     '1800': 'Dawuan',
     '1900': 'Bekasi'
   };
-
-  // @override
-  // void onInit() {
-  //   fetchDataKirimKendaraan();
-  //   super.onInit();
-  // }
 
   Future<void> fetchDataKirimKendaraan(
       int type, String plant, int idReq) async {
@@ -74,7 +72,12 @@ class KirimKendaraanController extends GetxController {
     int tahun,
     String user,
   ) async {
-    isLoadingKendaraan.value = true;
+    CustomDialogs.loadingIndicator();
+
+    if (!kirimKendaraanKey.currentState!.validate()) {
+      CustomFullScreenLoader.stopLoading();
+      return;
+    }
 
     // Menambahkan plot kendaraan sesuai jumlah
     await jumlahPlotKendaraan.fetchPlot(
@@ -106,60 +109,40 @@ class KirimKendaraanController extends GetxController {
         title: 'Berhasil✨',
         message: 'Menambahkan data do realisasi..',
       );
+      CustomFullScreenLoader.stopLoading();
     } else {
+      CustomFullScreenLoader.stopLoading();
       SnackbarLoader.successSnackBar(
         title: 'Gagal',
         message: 'Jumlah kendaraan dan jumlah plot sudah sesuai..',
       );
     }
-    isLoadingKendaraan.value = false;
   }
 
   Future<void> hapusKirimKendaraan(
       int idReq, String tgl, int type, String plant, int id) async {
-    try {
-      isLoadingKendaraan.value = true;
+    CustomDialogs.loadingIndicator();
+    print("Mulai hapus kirim kendaraan...");
+    await kirimKendaraanRepo.hapusKirimKendaraan(id);
 
-      print("Mulai hapus kirim kendaraan...");
-      await kirimKendaraanRepo.hapusKirimKendaraan(id);
+    final jumlahKendaraan =
+        await plotController.getJumlahKendaraan(idReq, tgl, type, plant);
+    await plotController.fetchPlot(idReq, tgl, type, plant, jumlahKendaraan);
+    plotController.isJumlahKendaraanSama.value = false;
 
-      final jumlahKendaraan =
-          await plotController.getJumlahKendaraan(idReq, tgl, type, plant);
-      await plotController.fetchPlot(idReq, tgl, type, plant, jumlahKendaraan);
-      plotController.isJumlahKendaraanSama.value = false;
+    // Debug: Periksa status setelah fetchPlot
+    print(
+        "isJumlahKendaraanSama setelah hapus: ${plotController.isJumlahKendaraanSama.value}");
 
-      // Debug: Periksa status setelah fetchPlot
-      print(
-          "isJumlahKendaraanSama setelah hapus: ${plotController.isJumlahKendaraanSama.value}");
-
-      await fetchDataKirimKendaraan(type, plant, idReq);
-    } catch (e) {
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat menghapus kirim kendaraan😒',
-      );
-    } finally {
-      isLoadingKendaraan.value = false;
-    }
+    await fetchDataKirimKendaraan(type, plant, idReq);
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> selesaiKirimKendaraan(int idReq) async {
-    try {
-      isLoadingKendaraan.value = true;
+    CustomDialogs.loadingIndicator();
+    await kirimKendaraanRepo.selesaiKirimKendaraan(idReq);
+    await reqController.fetchRequestKendaraan();
 
-      print('memulai selesai kirim kendaraan');
-      await kirimKendaraanRepo.selesaiKirimKendaraan(idReq);
-      await reqController.fetchRequestKendaraan();
-
-      CustomFullScreenLoader.stopLoading();
-    } catch (e) {
-      print('error di selesai kirim kendaraan controller : $e');
-      SnackbarLoader.errorSnackBar(
-        title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat selesai kirim kendaraan😒',
-      );
-    } finally {
-      isLoadingKendaraan.value = false;
-    }
+    CustomFullScreenLoader.stopLoading();
   }
 }

@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/home/do_harian_home_bsk.dart';
 import '../../utils/constant/storage_util.dart';
 
-class DoHarianHomeBskRepository extends GetxController {
+class DoHarianHomeBskRepository {
   final storageUtil = StorageUtil();
 
   Future<List<DoHarianHomeBskModel>> fetchGlobalHarianBesokContent() async {

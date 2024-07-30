@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
 
-class LoginRepository extends GetxController {
+class LoginRepository {
   final storageUtil = Get.put(StorageUtil());
 
   Future<UserModel?> fetchUserDetails(String username, String password) async {

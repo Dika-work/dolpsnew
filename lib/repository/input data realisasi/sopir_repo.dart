@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
 import '../../models/input data realisasi/sopir_model.dart';
 
-class SopirRepository extends GetxController {
+class SopirRepository {
   final storageUtil = StorageUtil();
 
   Future<List<SopirModel>> fetchGlobalHarianContent() async {

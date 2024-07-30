@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
 import '../../models/tampil seluruh data/do_kurang_all.dart';
 
-class KurangAllRepository extends GetxController {
+class KurangAllRepository {
   final storageUtil = StorageUtil();
 
   Future<List<DoKurangAllModel>> fetchGlobalHarianContent() async {

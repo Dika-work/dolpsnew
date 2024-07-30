@@ -92,7 +92,6 @@ class RequestMobilSource extends DataGridSource {
                         return;
                       }
                     },
-
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.yellow),
                     child: Text(
@@ -129,7 +128,6 @@ class RequestMobilSource extends DataGridSource {
             columnName: 'Type', value: data.type == 0 ? 'REGULER' : 'MUTASI'),
         DataGridCell<String>(columnName: 'Jenis', value: data.jenis),
         DataGridCell<int>(columnName: 'Jumlah', value: data.jumlah),
-        DataGridCell<int>(columnName: 'Status Req', value: data.statusReq),
       ]);
     }).toList();
     notifyListeners(); // Memanggil notifikasi untuk memperbarui UI

@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:doplsnew/models/tampil%20seluruh%20data/do_global_all.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
-class GlobalAllRepository extends GetxController {
+class GlobalAllRepository {
   final storageUtil = StorageUtil();
 
   Future<List<DoGlobalAllModel>> fetchGlobalHarianContent() async {

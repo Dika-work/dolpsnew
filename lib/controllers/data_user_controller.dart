@@ -61,9 +61,9 @@ class DataUserController extends GetxController {
     }
 
     await dataUserRepo.addDataUserContent(
-      usernameController.text,
-      passwordController.text,
-      namaController.text,
+      usernameController.text.trim(),
+      passwordController.text.trim(),
+      namaController.text.trim(),
       tipe.value,
       'do',
       image.value!.path,
@@ -88,13 +88,6 @@ class DataUserController extends GetxController {
     await fetchUserData();
     CustomFullScreenLoader.stopLoading();
     print('User data fetched');
-
-    SnackbarLoader.successSnackBar(
-      title: 'Berhasil✨',
-      message: 'Menambahkan data user baru..',
-    );
-    CustomFullScreenLoader.stopLoading();
-
     print('Navigated back');
   }
 

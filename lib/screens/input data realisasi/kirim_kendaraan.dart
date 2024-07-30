@@ -44,11 +44,11 @@ class KirimKendaraanScreen extends StatelessWidget {
       'No': double.nan,
       'Plant': double.nan,
       'Type': 130,
-      'Kendaraan': 150,
-      'Jenis': double.nan,
+      'Kendaraan': 120,
+      'Jenis': 130,
       'Status': double.nan,
-      'LV Kerusakan': double.nan,
-      'Supir': double.nan,
+      'LV Kerusakan': 100,
+      'Supir': 130,
       'Hapus': 50,
     };
 
@@ -305,8 +305,6 @@ class AddKirimKendaraan extends StatefulWidget {
 }
 
 class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
-  GlobalKey<FormState> kirimKendaraanKey = GlobalKey<FormState>();
-
   late int idReq;
   late DateTime parsedDate;
   late String tgl;
@@ -349,7 +347,7 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
     final plotController = Get.put(PlotKendaraanController());
 
     return Form(
-      key: kirimKendaraanKey,
+      key: controller.kirimKendaraanKey,
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -601,8 +599,7 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
 
                     if (plotController.isJumlahKendaraanSama.value) {
                       // Jika jumlah kendaraan dan plot sudah sama, kembali
-                      controller.selesaiKirimKendaraan(
-                          idReq);
+                      controller.selesaiKirimKendaraan(idReq);
                       // Get.back();
                     } else if (kendaraan == 0 || supir == '') {
                       // Jika kendaraan atau sopir belum dipilih
@@ -656,22 +653,15 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                         ? AppColors.success
                         : AppColors.primary,
                   ),
-                  child: controller.isLoadingKendaraan.value
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.white,
-                            backgroundColor: Colors.transparent,
-                          ),
-                        )
-                      : Text(
-                          plotController.isJumlahKendaraanSama.value
-                              ? 'Selesai'
-                              : 'Tambah Data',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.apply(color: AppColors.white),
-                        ),
+                  child: Text(
+                    plotController.isJumlahKendaraanSama.value
+                        ? 'Selesai'
+                        : 'Tambah Data',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.apply(color: AppColors.white),
+                  ),
                 ),
               ),
             ),

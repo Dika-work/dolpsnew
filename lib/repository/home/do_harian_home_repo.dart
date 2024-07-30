@@ -3,9 +3,8 @@ import 'dart:convert';
 import 'package:doplsnew/models/home/do_harian_home.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
-import 'package:get/get.dart';
 
-class DoHarianHomeRepository extends GetxController {
+class DoHarianHomeRepository {
   final storageUtil = StorageUtil();
 
   Future<List<DoHarianHomeModel>> fetchGlobalHarianContent() async {
