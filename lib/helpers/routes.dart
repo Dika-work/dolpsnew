@@ -7,6 +7,7 @@ import '../controllers/input data do/do_tambah_controller.dart';
 import '../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../controllers/input data realisasi/do_reguler_controller.dart';
 import '../controllers/input data realisasi/request_kendaraan_controller.dart';
+import '../controllers/master data/type_motor_controller.dart';
 import '../controllers/tampil seluruh data/all_global_controller.dart';
 import '../controllers/tampil seluruh data/all_harian_lps_controller.dart';
 import '../controllers/tampil seluruh data/all_kurang_controller.dart';
@@ -20,6 +21,7 @@ import '../screens/input data realisasi/do_reguler.dart';
 import '../screens/input data realisasi/request_kendaraan_screen.dart';
 import '../screens/login.dart';
 import '../screens/manajemen user/data_user_screen.dart';
+import '../screens/master data/type_motor_screen.dart';
 import '../screens/onboarding.dart';
 import '../screens/profile.dart';
 import '../screens/rootpage.dart';
@@ -118,6 +120,13 @@ class AppRoutes {
             page: () => const DoMutasiScreen(),
             binding: BindingsBuilder(() {
               Get.put(DoMutasiController());
+            })),
+        // master data
+         GetPage(
+            name: '/type-motor',
+            page: () => const TypeMotorScreen(),
+            binding: BindingsBuilder(() {
+              Get.put(TypeMotorController());
             })),
       ];
 }

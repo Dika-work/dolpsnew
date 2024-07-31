@@ -130,6 +130,7 @@ class CustomDrawer extends StatelessWidget {
                           ),
                         ),
                         ListTile(
+                          onTap: () => Get.toNamed('/type-motor'),
                           leading: const Icon(
                             Iconsax.record,
                             color: AppColors.darkExpandableContent,
