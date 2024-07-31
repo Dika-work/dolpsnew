@@ -13,13 +13,13 @@ class DoRealisasiModel {
   int bulan;
   int tahun;
   String user;
-  String userPengurus; // Nullable
+  String userPengurus;
   int jumlahUnit;
   String edit;
   int status;
   String statusPengiriman;
-  String tgl2; // Nullable
-  String userUbah; // Nullable
+  String tgl2;
+  String userUbah;
   String statusMemo;
   String gabungan;
   String tglReal;
@@ -46,6 +46,7 @@ class DoRealisasiModel {
   String? hutangStay; // Nullable
   String? hutangAcBesar; // Nullable
   String? hutangPlastik; // Nullable
+  String? klasifikasi;
   int statusAnalisa; // Nullable
   int statusKerusakan; // Nullable
 
@@ -97,6 +98,7 @@ class DoRealisasiModel {
     this.hutangStay,
     this.hutangAcBesar,
     this.hutangPlastik,
+    this.klasifikasi,
     required this.statusAnalisa,
     required this.statusKerusakan,
   });
@@ -150,6 +152,7 @@ class DoRealisasiModel {
       hutangStay: json['hutang_stay'],
       hutangAcBesar: json['hutang_ac_besar'],
       hutangPlastik: json['hutang_plastik'],
+      klasifikasi: json['klasifikasi'],
       statusAnalisa: json['status_analisa'] ?? 0,
       statusKerusakan: json['status_kerusakan'] ?? 0,
     );

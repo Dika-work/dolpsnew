@@ -1,7 +1,5 @@
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/input%20data%20realisasi/kirim_kendaraan_model.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
-import 'package:doplsnew/utils/source/input%20data%20realisasi/kirim_kendaraan_source.dart';
 import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +13,12 @@ import '../../controllers/input data realisasi/fetch_sopir_controller.dart';
 import '../../controllers/input data realisasi/kirim_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/plot_kendaraan_controller.dart';
 import '../../models/input data realisasi/kendaraan_model.dart';
+import '../../models/input data realisasi/kirim_kendaraan_model.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../models/input data realisasi/sopir_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/popups/snackbar.dart';
+import '../../utils/source/input data realisasi/kirim_kendaraan_source.dart';
 import '../../widgets/dropdown.dart';
 
 class KirimKendaraanScreen extends StatelessWidget {
@@ -358,8 +358,9 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                hintText: plant,
-              ),
+                  hintText: plant,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Tujuan'),
@@ -367,8 +368,9 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                hintText: tujuan,
-              ),
+                  hintText: tujuan,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Type DO'),
@@ -376,8 +378,9 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                hintText: typeDO == 0 ? 'REGULER' : 'MUTASI',
-              ),
+                  hintText: typeDO == 0 ? 'REGULER' : 'MUTASI',
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Tanggal Request'),
@@ -385,8 +388,9 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                hintText: CustomHelperFunctions.getFormattedDate(parsedDate),
-              ),
+                  hintText: CustomHelperFunctions.getFormattedDate(parsedDate),
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             typeDO == 1
                 ? Column(
@@ -426,8 +430,9 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
               keyboardType: TextInputType.number,
               readOnly: true,
               decoration: InputDecoration(
-                hintText: jumlahKendaraan.toString(),
-              ),
+                  hintText: jumlahKendaraan.toString(),
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plot Kendaraan'),
@@ -436,10 +441,11 @@ class _AddKirimKendaraanState extends State<AddKirimKendaraan> {
                 keyboardType: TextInputType.number,
                 readOnly: true,
                 decoration: InputDecoration(
-                  hintText: plotController.plotModel.isNotEmpty
-                      ? plotController.plotModel.first.jumlahPlot.toString()
-                      : 'Loading...',
-                ),
+                    hintText: plotController.plotModel.isNotEmpty
+                        ? plotController.plotModel.first.jumlahPlot.toString()
+                        : 'Loading...',
+                    filled: true,
+                    fillColor: AppColors.buttonDisabled),
               );
             }),
             Obx(() => plotController.isJumlahKendaraanSama.value

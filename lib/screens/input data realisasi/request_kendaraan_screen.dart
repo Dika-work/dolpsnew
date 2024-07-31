@@ -18,6 +18,7 @@ import '../../utils/loader/animation_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/input data realisasi/request_mobil_source.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
 class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
@@ -545,9 +546,10 @@ class AddRequestKendaraan extends StatelessWidget {
                 keyboardType: TextInputType.none,
                 readOnly: true,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
-                  hintText: controller.tujuanDisplayValue,
-                ),
+                    prefixIcon: const Icon(Iconsax.truck_fast),
+                    hintText: controller.tujuanDisplayValue,
+                    filled: true,
+                    fillColor: AppColors.buttonDisabled),
               ),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
@@ -557,9 +559,10 @@ class AddRequestKendaraan extends StatelessWidget {
                 keyboardType: TextInputType.none,
                 readOnly: true,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
-                  hintText: controller.jumlahHarian.toString(),
-                ),
+                    prefixIcon: const Icon(Iconsax.truck_fast),
+                    hintText: controller.jumlahHarian.toString(),
+                    filled: true,
+                    fillColor: AppColors.buttonDisabled),
               ),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
@@ -717,9 +720,10 @@ class _EditRequestKendaraanState extends State<EditRequestKendaraan> {
             keyboardType: TextInputType.none,
             readOnly: true,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Iconsax.truck_fast),
-              hintText: tujuanDisplayValue,
-            ),
+                prefixIcon: const Icon(Iconsax.truck_fast),
+                hintText: tujuanDisplayValue,
+                filled: true,
+                fillColor: AppColors.buttonDisabled),
           ),
           const SizedBox(height: 8.0),
           Text(

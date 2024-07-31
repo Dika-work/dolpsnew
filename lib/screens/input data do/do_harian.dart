@@ -13,6 +13,7 @@ import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/input data do source/data_do_harian_source.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
 class InputDataDoHarian extends GetView<DataDoHarianController> {
@@ -433,9 +434,10 @@ class AddDOHarian extends StatelessWidget {
                 keyboardType: TextInputType.none,
                 readOnly: true,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
-                  hintText: controller.tujuanDisplayValue,
-                ),
+                    prefixIcon: const Icon(Iconsax.truck_fast),
+                    hintText: controller.tujuanDisplayValue,
+                    filled: true,
+                    fillColor: AppColors.buttonDisabled),
               ),
             ),
             Obx(() => Text('Tujuan ${controller.tujuanDisplayValue}')),
@@ -550,10 +552,6 @@ class _EditDataDOHarianState extends State<EditDataDOHarian> {
     '1900': '9', //9
   };
 
-  String get tujuanDisplayValue => tujuanMap[plant] ?? '';
-
-  String get idPlantValue => idPlantMap[idPlant.toString()] ?? '';
-
   @override
   void initState() {
     super.initState();
@@ -636,9 +634,10 @@ class _EditDataDOHarianState extends State<EditDataDOHarian> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: tujuan,
-              ),
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: tujuan,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             Text('Tujuan $tujuan'),
             Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),

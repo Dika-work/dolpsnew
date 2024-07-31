@@ -11,6 +11,7 @@ import '../../controllers/tampil seluruh data/all_global_controller.dart';
 import '../../helpers/helper_function.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/circular_loader.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
 class DoGlobalAll extends GetView<DataAllGlobalController> {
@@ -417,9 +418,10 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: tujuan,
-              ),
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: tujuan,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             Text('Tujuan $tujuan'),
             Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),

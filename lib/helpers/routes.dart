@@ -1,32 +1,32 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20do/do_kurang_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20do/do_tambah_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20realisasi/do_mutasi_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20realisasi/do_reguler_controller.dart';
-import 'package:doplsnew/controllers/tampil%20seluruh%20data/all_harian_lps_controller.dart';
-import 'package:doplsnew/controllers/tampil%20seluruh%20data/all_kurang_controller.dart';
-import 'package:doplsnew/controllers/tampil%20seluruh%20data/all_tambah_controller.dart';
-import 'package:doplsnew/screens/input%20data%20do/do_global.dart';
-import 'package:doplsnew/screens/input%20data%20do/do_harian.dart';
-import 'package:doplsnew/screens/input%20data%20do/do_kurang.dart';
-import 'package:doplsnew/screens/input%20data%20do/do_tambah.dart';
-import 'package:doplsnew/screens/input%20data%20realisasi/do_mutasi.dart';
-import 'package:doplsnew/screens/input%20data%20realisasi/request_kendaraan_screen.dart';
-import 'package:doplsnew/screens/tampil%20seluruh%20data/do_global_all.dart';
-import 'package:doplsnew/screens/tampil%20seluruh%20data/do_kurang_all.dart';
-import 'package:doplsnew/screens/tampil%20seluruh%20data/do_tambah_all.dart';
 import 'package:get/get.dart';
 
+import '../controllers/input data do/do_global_controller.dart';
 import '../controllers/input data do/do_harian_controller.dart';
+import '../controllers/input data do/do_kurang_controller.dart';
+import '../controllers/input data do/do_tambah_controller.dart';
+import '../controllers/input data realisasi/do_mutasi_controller.dart';
+import '../controllers/input data realisasi/do_reguler_controller.dart';
 import '../controllers/input data realisasi/request_kendaraan_controller.dart';
 import '../controllers/tampil seluruh data/all_global_controller.dart';
+import '../controllers/tampil seluruh data/all_harian_lps_controller.dart';
+import '../controllers/tampil seluruh data/all_kurang_controller.dart';
+import '../controllers/tampil seluruh data/all_tambah_controller.dart';
+import '../screens/input data do/do_global.dart';
+import '../screens/input data do/do_harian.dart';
+import '../screens/input data do/do_kurang.dart';
+import '../screens/input data do/do_tambah.dart';
+import '../screens/input data realisasi/do_mutasi.dart';
 import '../screens/input data realisasi/do_reguler.dart';
+import '../screens/input data realisasi/request_kendaraan_screen.dart';
 import '../screens/login.dart';
 import '../screens/manajemen user/data_user_screen.dart';
 import '../screens/onboarding.dart';
 import '../screens/profile.dart';
 import '../screens/rootpage.dart';
+import '../screens/tampil seluruh data/do_global_all.dart';
 import '../screens/tampil seluruh data/do_harian_lps.dart';
+import '../screens/tampil seluruh data/do_kurang_all.dart';
+import '../screens/tampil seluruh data/do_tambah_all.dart';
 
 class AppRoutes {
   static List<GetPage> routes() => [
