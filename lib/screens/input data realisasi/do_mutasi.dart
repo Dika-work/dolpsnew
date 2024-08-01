@@ -21,15 +21,14 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
       'Plant': double.nan,
       'Type': double.nan,
       'Tgl': double.nan,
+      'Supir(Panggilan)': 200,
       'Kendaraan': double.nan,
       'Jenis': double.nan,
       'Status': double.nan,
-      'LV': double.nan,
-      'Supir(Panggilan)': 200,
       'Jumlah': double.nan,
       'Lihat': double.nan,
-      'Action': double.nan,
-      'Batal': double.nan,
+      'Action': 120,
+      'Batal': 80,
       'Edit': double.nan,
       'Hapus': double.nan,
     };
@@ -90,13 +89,15 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                     child: SfDataGrid(
                         source: dataSource,
                         columnWidthMode: ColumnWidthMode.auto,
+                        rowHeight: 65,
                         allowPullToRefresh: true,
                         gridLinesVisibility: GridLinesVisibility.both,
                         headerGridLinesVisibility: GridLinesVisibility.both,
                         allowColumnsResizing: true,
                         onColumnResizeUpdate:
                             (ColumnResizeUpdateDetails details) {
-                          columnWidths[details.column.columnName] = details.width;
+                          columnWidths[details.column.columnName] =
+                              details.width;
                           return true;
                         },
                         columns: [
@@ -181,6 +182,22 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
                           GridColumn(
+                              width: columnWidths['Supir(Panggilan)']!,
+                              columnName: 'Supir(Panggilan)',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Supir(Panggilan)',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
                               width: columnWidths['Kendaraan']!,
                               columnName: 'Kendaraan',
                               label: Container(
@@ -223,38 +240,6 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                   ),
                                   child: Text(
                                     'Status',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
-                          GridColumn(
-                              width: columnWidths['LV']!,
-                              columnName: 'LV',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'LV',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
-                          GridColumn(
-                              width: columnWidths['Supir(Panggilan)']!,
-                              columnName: 'Supir(Panggilan)',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Supir(Panggilan)',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium

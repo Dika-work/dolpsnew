@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/master data/type_motor.dart';
+import '../../models/master data/type_motor_model.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
@@ -132,6 +132,45 @@ class TypeMotorRepository {
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Terjadi kesalahan saat mengedit Type motor',
+      );
+    }
+  }
+
+  Future<void> hapusTypeMotor(int idType) async {
+    try {
+      final response = await http.delete(
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_type_motor.php'),
+          body: {'id_type': idType.toString()});
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Data DO Harian berhasil dihapus',
+          );
+        } else {
+          CustomFullScreenLoader.stopLoading();
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+        }
+        return responseData;
+      } else {
+        CustomFullScreenLoader.stopLoading();
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal menghapus DO Harian, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      print('Error di hapus kirim kendaraan: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus kirim kendaraan',
       );
     }
   }

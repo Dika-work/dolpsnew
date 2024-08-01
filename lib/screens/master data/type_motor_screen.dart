@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/master data/type_motor_controller.dart';
 import '../../helpers/helper_function.dart';
-import '../../models/master data/type_motor.dart';
+import '../../models/master data/type_motor_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
@@ -37,7 +37,7 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
     };
 
     // const double dataPagerHeight = 60.0;
-    const int rowsPerPage = 7;
+    const int rowsPerPage = 10;
 
     int currentPage = 0;
 
@@ -106,7 +106,7 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
               print('..TRIGGER BTN EDIT DI MASTER TYPE MOTOR...');
             },
             onHapus: (TypeMotorModel model) {
-              // controller.hapusDOGlobal(model.id);
+              controller.hapusTypeMotorData(model.idType);
               print('..TRIGGER BTN HAPUS DI MASTER TYPE MOTOR...');
             },
           );

@@ -9,6 +9,8 @@ class KirimKendaraanModel {
   String kendaraan;
   String noPolisi;
   String jenisKen;
+  String inisialDepan;
+  String inisialBelakang;
   String supir;
   String jam;
   String tgl;
@@ -16,7 +18,6 @@ class KirimKendaraanModel {
   int tahun;
   String user;
   int status;
-  String lvKerusakaan;
 
   KirimKendaraanModel(
       {required this.id,
@@ -29,14 +30,15 @@ class KirimKendaraanModel {
       required this.kendaraan,
       required this.noPolisi,
       required this.jenisKen,
+      required this.inisialDepan,
+      required this.inisialBelakang,
       required this.supir,
       required this.jam,
       required this.tgl,
       required this.bulan,
       required this.tahun,
       required this.user,
-      required this.status,
-      required this.lvKerusakaan});
+      required this.status});
 
   factory KirimKendaraanModel.fromJson(Map<String, dynamic> json) {
     return KirimKendaraanModel(
@@ -50,6 +52,8 @@ class KirimKendaraanModel {
       kendaraan: json['kendaraan'] ?? '',
       noPolisi: json['no_polisi'] ?? '',
       jenisKen: json['jenis_ken'] ?? '',
+      inisialDepan: json['inisial_depan'] ?? '',
+      inisialBelakang: json['inisial_belakang'] ?? '',
       supir: json['supir'] ?? '',
       jam: json['jam'] ?? '',
       tgl: json['tgl'] ?? '',
@@ -57,7 +61,6 @@ class KirimKendaraanModel {
       tahun: json['tahun'] ?? 0,
       user: json['user'] ?? '',
       status: json['status'] ?? 0,
-      lvKerusakaan: json['lv_kerusakan'] ?? '',
     );
   }
 }

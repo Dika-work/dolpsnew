@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../../helpers/helper_function.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../constant/custom_size.dart';
+import '../../theme/app_colors.dart';
 
 class DoMutasiSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onLihat;
@@ -60,55 +60,81 @@ class DoMutasiSource extends DataGridSource {
             },
           ),
           // Lihat
-          IconButton(
-              onPressed: () {
-                if (onLihat != null && doRealisasiModel.isNotEmpty) {
-                  onLihat!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              icon: const Icon(Iconsax.eye)),
+          controller.rolesLihat.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onLihat != null && doRealisasiModel.isNotEmpty) {
+                      onLihat!(doRealisasiModel[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
+                  child: const Text('Lihat')),
           // Action
-          IconButton(
-              onPressed: () {
-                if (onAction != null && doRealisasiModel.isNotEmpty) {
-                  onAction!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              icon: const Icon(Iconsax.activity)),
+          controller.rolesJumlah.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onAction != null && doRealisasiModel.isNotEmpty) {
+                      onAction!(doRealisasiModel[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary),
+                  child: const Text('Jumlah Unit')),
           // Batal
-          IconButton(
-              onPressed: () {
-                if (onBatal != null && doRealisasiModel.isNotEmpty) {
-                  onBatal!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              icon: const Icon(Iconsax.forbidden)),
+          controller.rolesBatal.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onBatal != null && doRealisasiModel.isNotEmpty) {
+                      onBatal!(doRealisasiModel[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.error),
+                  child: const Text('Batal')),
           // Edit
-          IconButton(
-              onPressed: () {
-                if (onEdit != null && doRealisasiModel.isNotEmpty) {
-                  onEdit!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              icon: const Icon(Iconsax.edit)),
+          controller.rolesEdit.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null && doRealisasiModel.isNotEmpty) {
+                      onEdit!(doRealisasiModel[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.yellow),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  )),
           // Hapus
-          IconButton(
-              onPressed: () {
-                if (onHapus != null && doRealisasiModel.isNotEmpty) {
-                  onHapus!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              icon: const Icon(Iconsax.edit)),
+          controller.rolesHapus.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onHapus != null && doRealisasiModel.isNotEmpty) {
+                      onHapus!(doRealisasiModel[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.error),
+                  child: const Text('Hapus')),
         ]);
   }
 
@@ -118,15 +144,13 @@ class DoMutasiSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
-          DataGridCell<String>(columnName: 'User', value: '-'),
+          DataGridCell<String>(columnName: 'Tujuan', value: '-'),
           DataGridCell<String>(columnName: 'Plant', value: '-'),
           DataGridCell<String>(columnName: 'Type', value: '-'),
           DataGridCell<String>(columnName: 'Tgl', value: '-'),
-          DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
-          DataGridCell<String>(columnName: 'Jenis', value: '-'),
-          DataGridCell<String>(columnName: 'Status', value: '-'),
-          DataGridCell<String>(columnName: 'LV', value: '-'),
           DataGridCell<String>(columnName: 'Supir(Panggilan)', value: '-'),
+          DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
+          DataGridCell<String>(columnName: 'Status', value: '-'),
           DataGridCell<String>(columnName: 'Jumlah', value: '-'),
           DataGridCell<String>(columnName: 'Lihat', value: '-'),
           DataGridCell<String>(columnName: 'Action', value: '-'),
@@ -151,25 +175,24 @@ class DoMutasiSource extends DataGridSource {
         (data) {
           index++;
           final tglParsed =
-          CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
+              CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
           return DataGridRow(cells: [
             DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(columnName: 'User', value: data.user),
+            DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(
-                columnName: 'Type',
-                value: data.type == 0 ? 'REGULER' : 'MUTASI'),
+                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
-            DataGridCell<String>(
-                columnName: 'Kendaraan', value: data.kendaraan),
-            DataGridCell<String>(columnName: 'Jenis', value: data.jenisKen),
-            DataGridCell<String>(
-                columnName: 'Status',
-                value: data.status == 0 ? 'READY' : 'NOT'),
-            const DataGridCell<String>(columnName: 'LV', value: '-'),
             DataGridCell<String>(
                 columnName: 'Supir(Panggilan)',
                 value: '${data.supir}\n(${data.namaPanggilan})'),
+            DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
+            DataGridCell<String>(
+                columnName: 'Jenis',
+                value: '${data.inisialDepan}${data.inisialBelakang}'),
+            DataGridCell<String>(
+                columnName: 'Status',
+                value: data.status == 0 ? 'READY' : 'NOT'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
           ]);
         },

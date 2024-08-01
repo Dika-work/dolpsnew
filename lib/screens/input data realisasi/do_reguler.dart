@@ -20,11 +20,10 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'User': double.nan,
       'Plant': double.nan,
       'Type': double.nan,
-      'Tgl': double.nan,
-      'Kendaraan': double.nan,
+      'Tgl': 130,
+      'Kendaraan': 120,
       'Jenis': double.nan,
       'Status': double.nan,
-      'LV': double.nan,
       'Supir(Panggilan)': 200,
       'Jumlah': double.nan,
       'Lihat': double.nan,
@@ -90,13 +89,15 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                     child: SfDataGrid(
                         source: dataSource,
                         columnWidthMode: ColumnWidthMode.auto,
+                        rowHeight: 65,
                         allowPullToRefresh: true,
                         gridLinesVisibility: GridLinesVisibility.both,
                         headerGridLinesVisibility: GridLinesVisibility.both,
                         allowColumnsResizing: true,
                         onColumnResizeUpdate:
                             (ColumnResizeUpdateDetails details) {
-                          columnWidths[details.column.columnName] = details.width;
+                          columnWidths[details.column.columnName] =
+                              details.width;
                           return true;
                         },
                         columns: [
@@ -149,22 +150,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
                           GridColumn(
-                              width: columnWidths['Type']!,
-                              columnName: 'Type',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Type',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
-                          GridColumn(
                               width: columnWidths['Tgl']!,
                               columnName: 'Tgl',
                               label: Container(
@@ -181,6 +166,22 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
                           GridColumn(
+                              width: columnWidths['Supir(Panggilan)']!,
+                              columnName: 'Supir(Panggilan)',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Supir(Panggilan)',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
                               width: columnWidths['Kendaraan']!,
                               columnName: 'Kendaraan',
                               label: Container(
@@ -191,6 +192,22 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                   ),
                                   child: Text(
                                     'Kendaraan',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Type']!,
+                              columnName: 'Type',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Type',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -223,38 +240,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                   ),
                                   child: Text(
                                     'Status',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
-                          GridColumn(
-                              width: columnWidths['LV']!,
-                              columnName: 'LV',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'LV',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
-                          GridColumn(
-                              width: columnWidths['Supir(Panggilan)']!,
-                              columnName: 'Supir(Panggilan)',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Supir(Panggilan)',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium

@@ -43,11 +43,10 @@ class KirimKendaraanScreen extends StatelessWidget {
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Plant': double.nan,
-      'Type': 130,
+      'Type': double.nan,
       'Kendaraan': 120,
       'Jenis': 130,
       'Status': double.nan,
-      'LV Kerusakan': 100,
       'Supir': 130,
       'Hapus': 50,
     };
@@ -160,6 +159,24 @@ class KirimKendaraanScreen extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
+                          width: columnWidths['Supir']!,
+                          columnName: 'Supir',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Supir',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        GridColumn(
                           width: columnWidths['Kendaraan']!,
                           columnName: 'Kendaraan',
                           label: Container(
@@ -206,42 +223,6 @@ class KirimKendaraanScreen extends StatelessWidget {
                             ),
                             child: Text(
                               'Status',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          width: columnWidths['LV Kerusakan']!,
-                          columnName: 'LV Kerusakan',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'LV Kerusakan',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          width: columnWidths['Supir']!,
-                          columnName: 'Supir',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Supir',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

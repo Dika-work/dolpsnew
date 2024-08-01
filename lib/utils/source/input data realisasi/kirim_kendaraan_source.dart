@@ -69,11 +69,10 @@ class KirimKendaraanSource extends DataGridSource {
         DataGridCell<String>(columnName: 'No', value: '-'),
         DataGridCell<String>(columnName: 'Plant', value: '-'),
         DataGridCell<String>(columnName: 'Type', value: '-'),
+        DataGridCell<String>(columnName: 'Supir', value: '-'),
         DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
         DataGridCell<String>(columnName: 'Jenis', value: '-'),
         DataGridCell<String>(columnName: 'Status', value: '-'),
-        DataGridCell<String>(columnName: 'LV Kerusakan', value: '-'),
-        DataGridCell<String>(columnName: 'Supir', value: '-'),
       ]);
     });
   }
@@ -94,16 +93,15 @@ class KirimKendaraanSource extends DataGridSource {
             DataGridCell<int>(columnName: 'No', value: index),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(
-                columnName: 'Type',
-                value: data.type == 0 ? 'REGULER' : 'MUTASI'),
+                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
+            DataGridCell<String>(columnName: 'Supir', value: data.supir),
             DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
-            DataGridCell<String>(columnName: 'Jenis', value: data.jenisKen),
+            DataGridCell<String>(
+                columnName: 'Jenis',
+                value: '${data.inisialDepan}${data.inisialBelakang}'),
             DataGridCell<String>(
                 columnName: 'Status',
                 value: data.status == 0 ? 'READY' : 'NOT'),
-            DataGridCell<String>(
-                columnName: 'LV Kerusakan', value: data.lvKerusakaan),
-            DataGridCell<String>(columnName: 'Supir', value: data.supir),
           ]);
         },
       ).toList();

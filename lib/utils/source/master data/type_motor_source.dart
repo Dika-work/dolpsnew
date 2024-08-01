@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/master data/type_motor_controller.dart';
-import '../../../models/master data/type_motor.dart';
+import '../../../models/master data/type_motor_model.dart';
 import '../../constant/custom_size.dart';
 
 class TypeMotorSource extends DataGridSource {

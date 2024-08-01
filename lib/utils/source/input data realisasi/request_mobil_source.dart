@@ -125,8 +125,10 @@ class RequestMobilSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
-            columnName: 'Type', value: data.type == 0 ? 'REGULER' : 'MUTASI'),
-        DataGridCell<String>(columnName: 'Jenis', value: data.jenis),
+            columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
+        DataGridCell<String>(
+            columnName: 'Jenis',
+            value: '${data.inisialDepan}${data.inisitalBelakang}'),
         DataGridCell<int>(columnName: 'Jumlah', value: data.jumlah),
       ]);
     }).toList();

@@ -25,7 +25,7 @@ class LihatKendaraanScreen extends StatelessWidget {
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'No Kendaraan': 150,
-      'Kapasitas': 150,
+      'Jenis': 150,
       'Supir': 150,
     };
 
@@ -84,6 +84,24 @@ class LihatKendaraanScreen extends StatelessWidget {
                               ),
                             ),
                             GridColumn(
+                              width: columnWidths['Supir']!,
+                              columnName: 'Supir',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Supir',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
                               width: columnWidths['No Kendaraan']!,
                               columnName: 'No Kendaraan',
                               label: Container(
@@ -102,8 +120,8 @@ class LihatKendaraanScreen extends StatelessWidget {
                               ),
                             ),
                             GridColumn(
-                              width: columnWidths['Kapasitas']!,
-                              columnName: 'Kapasitas',
+                              width: columnWidths['Jenis']!,
+                              columnName: 'Jenis',
                               label: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
@@ -111,25 +129,7 @@ class LihatKendaraanScreen extends StatelessWidget {
                                   color: Colors.lightBlue.shade100,
                                 ),
                                 child: Text(
-                                  'Kapasitas',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                            GridColumn(
-                              width: columnWidths['Supir']!,
-                              columnName: 'Supir',
-                              label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'Supir',
+                                  'Jenis',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium

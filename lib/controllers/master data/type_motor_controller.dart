@@ -3,7 +3,7 @@ import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../models/master data/type_motor.dart';
+import '../../models/master data/type_motor_model.dart';
 import '../../repository/master data/type_motor_repo.dart';
 import '../../utils/popups/snackbar.dart';
 
@@ -132,6 +132,15 @@ class TypeMotorController extends GetxController {
     CustomFullScreenLoader.stopLoading();
 
     await fetchTypeMotorData();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> hapusTypeMotorData(int idType) async {
+    CustomDialogs.loadingIndicator();
+
+    await typeMotorRepo.hapusTypeMotor(idType);
+    await fetchTypeMotorData();
+
     CustomFullScreenLoader.stopLoading();
   }
 }

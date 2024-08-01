@@ -47,9 +47,9 @@ class LihatKendaraanSource extends DataGridSource {
     return List.generate(count, (index) {
       return const DataGridRow(cells: [
         DataGridCell<String>(columnName: 'No', value: '-'),
-        DataGridCell<String>(columnName: 'No Kendaraan', value: '-'),
-        DataGridCell<String>(columnName: 'Kapasitas', value: '-'),
         DataGridCell<String>(columnName: 'Supir', value: '-'),
+        DataGridCell<String>(columnName: 'No Kendaraan', value: '-'),
+        DataGridCell<String>(columnName: 'Jenis', value: '-'),
       ]);
     });
   }
@@ -68,10 +68,10 @@ class LihatKendaraanSource extends DataGridSource {
           index++;
           return DataGridRow(cells: [
             DataGridCell<int>(columnName: 'No', value: index),
+            DataGridCell<String>(columnName: 'Supir', value: data.supir),
             DataGridCell<String>(
                 columnName: 'No Kendaraan', value: data.noPolisi),
-            DataGridCell<String>(columnName: 'Kapasitas', value: data.jenisKen),
-            DataGridCell<String>(columnName: 'Supir', value: data.supir),
+            DataGridCell<String>(columnName: 'Jenis', value: data.jenisKen),
           ]);
         },
       ).toList();
