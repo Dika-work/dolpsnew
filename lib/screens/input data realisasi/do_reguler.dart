@@ -1,3 +1,5 @@
+import 'package:doplsnew/controllers/input%20data%20realisasi/tambah_type_motor_controller.dart';
+import 'package:doplsnew/screens/input%20data%20realisasi/component/tambah_type_kendaraan.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,7 +29,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'Supir(Panggilan)': 200,
       'Jumlah': double.nan,
       'Lihat': double.nan,
-      'Action': double.nan,
+      'Action': 120,
       'Batal': double.nan,
       'Edit': double.nan,
       'Hapus': double.nan,
@@ -55,15 +57,23 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
             final dataSource = DoRegulerSource(
               onLihat: (DoRealisasiModel model) {},
               onAction: (DoRealisasiModel model) {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Tambah Jumlah Kendaraan'),
-                    contentWidget: JumlahUnit(
-                      model: model,
-                    ),
-                    // onConfirm: controller.addRequestKendaraan,
-                    cancelText: 'Close',
-                    confirmText: 'Tambahkan');
+                final tambahTypeMotorController =
+                    Get.put(TambahTypeMotorController());
+                if (model.status == 0) {
+                  CustomDialogs.defaultDialog(
+                      context: context,
+                      titleWidget: const Text('Tambah Jumlah Kendaraan'),
+                      contentWidget: JumlahUnit(model: model),
+                      onConfirm: () => controller.tambahJumlahUnit(model.id),
+                      cancelText: 'Close',
+                      confirmText: 'Tambahkan');
+                } else if (model.status == 1) {
+                  tambahTypeMotorController.fetchTambahTypeMotor(model.id);
+                  Get.to(() => TambahTypeKendaraan(
+                      model: model, controller: tambahTypeMotorController));
+                } else if (model.status == 2) {
+                  print('...NAVIGATE KE ACCECORISS MOTORR...');
+                }
               },
               onBatal: (DoRealisasiModel model) {},
               onEdit: (DoRealisasiModel model) {

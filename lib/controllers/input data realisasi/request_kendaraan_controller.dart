@@ -135,6 +135,7 @@ class RequestKendaraanController extends GetxController {
       requestKendaraanModel.assignAll(requestKendaraan);
     } catch (e) {
       print('Error fetching request tampil kendaraan : $e');
+      throw Exception('Gagal saat mengambil data request kendaraan');
     } finally {
       isRequestLoading.value = false;
     }

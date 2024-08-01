@@ -1,3 +1,5 @@
+import 'package:doplsnew/utils/popups/dialogs.dart';
+import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/do_realisasi_model.dart';
@@ -13,12 +15,22 @@ class DoRegulerController extends GetxController {
   RxString roleUser = ''.obs;
   final storageUtil = StorageUtil();
 
+  // roles users
+  RxInt rolesLihat = 0.obs;
+  RxInt rolesBatal = 0.obs;
+  RxInt rolesEdit = 0.obs;
+  RxInt rolesHapus = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       roleUser.value = user.tipe;
+      rolesLihat.value = user.lihat;
+      rolesBatal.value = user.batal;
+      rolesEdit.value = user.edit;
+      rolesHapus.value = user.hapus;
     }
     fetchRegulerContent();
   }
@@ -34,5 +46,14 @@ class DoRegulerController extends GetxController {
     } finally {
       isLoadingReguler.value = false;
     }
+  }
+
+  Future<void> tambahJumlahUnit(int id) async {
+    CustomDialogs.loadingIndicator();
+
+    await doRegulerRepo.tambahJumlahUnit(id);
+    await fetchRegulerContent();
+
+    CustomFullScreenLoader.stopLoading();
   }
 }

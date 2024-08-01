@@ -40,6 +40,7 @@ class DoRegulerSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _doRegulerData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
+    var request = doRealisasiModel[startIndex + rowIndex];
 
     return DataGridRowAdapter(
         color: isEvenRow ? Colors.white : Colors.grey[200],
@@ -60,63 +61,91 @@ class DoRegulerSource extends DataGridSource {
             },
           ),
           // Lihat
-          ElevatedButton(
-              onPressed: () {
-                if (onLihat != null && doRealisasiModel.isNotEmpty) {
-                  onLihat!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: AppColors.success),
-              child: const Text('Lihat')),
+          controller.rolesLihat.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onLihat != null && doRealisasiModel.isNotEmpty) {
+                      onLihat!(request);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
+                  child: const Text('Lihat')),
           // Action
           ElevatedButton(
-              onPressed: () {
-                if (onAction != null && doRealisasiModel.isNotEmpty) {
-                  onAction!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-              child: const Text('Jumlah Unit')),
+            onPressed: () {
+              if (onAction != null && doRealisasiModel.isNotEmpty) {
+                onAction!(request);
+              } else {
+                return;
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: request.status == 0
+                  ? AppColors.primary
+                  : request.status == 1
+                      ? AppColors.pink
+                      : AppColors.accent,
+            ),
+            child: Text(
+              request.status == 0
+                  ? 'Jumlah Unit'
+                  : request.status == 1
+                      ? 'Type Motor'
+                      : 'ACC',
+            ),
+          ),
           // Batal
-          ElevatedButton(
-              onPressed: () {
-                if (onBatal != null && doRealisasiModel.isNotEmpty) {
-                  onBatal!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-              child: const Text('Batal')),
+          controller.rolesBatal.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onBatal != null && doRealisasiModel.isNotEmpty) {
+                      onBatal!(request);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.error),
+                  child: const Text('Batal')),
           // Edit
-          ElevatedButton(
-              onPressed: () {
-                if (onEdit != null && doRealisasiModel.isNotEmpty) {
-                  onEdit!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: AppColors.yellow),
-              child:  Text('Edit',style: Theme.of(Get.context!).textTheme.bodyMedium?.apply(color: AppColors.black),)),
+          controller.rolesEdit.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null && doRealisasiModel.isNotEmpty) {
+                      onEdit!(request);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.yellow),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  )),
           // Hapus
-          ElevatedButton(
-              onPressed: () {
-                if (onHapus != null && doRealisasiModel.isNotEmpty) {
-                  onHapus!(doRealisasiModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-              child: const Text('Hapus')),
+          controller.rolesHapus.value == 0
+              ? const SizedBox.shrink()
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onHapus != null && doRealisasiModel.isNotEmpty) {
+                      onHapus!(request);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.error),
+                  child: const Text('Hapus')),
         ]);
   }
 

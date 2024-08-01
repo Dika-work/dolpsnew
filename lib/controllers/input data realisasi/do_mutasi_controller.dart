@@ -13,7 +13,6 @@ class DoMutasiController extends GetxController {
   RxString roleUser = ''.obs;
   // roles users
   RxInt rolesLihat = 0.obs;
-  RxInt rolesJumlah = 0.obs;
   RxInt rolesBatal = 0.obs;
   RxInt rolesEdit = 0.obs;
   RxInt rolesHapus = 0.obs;
@@ -27,7 +26,6 @@ class DoMutasiController extends GetxController {
     if (user != null) {
       roleUser.value = user.tipe;
       rolesLihat.value = user.lihat;
-      rolesJumlah.value = user.jumlah;
       rolesBatal.value = user.batal;
       rolesEdit.value = user.edit;
       rolesHapus.value = user.hapus;

@@ -74,9 +74,7 @@ class DoMutasiSource extends DataGridSource {
                       backgroundColor: AppColors.success),
                   child: const Text('Lihat')),
           // Action
-          controller.rolesJumlah.value == 0
-              ? const SizedBox.shrink()
-              : ElevatedButton(
+          ElevatedButton(
                   onPressed: () {
                     if (onAction != null && doRealisasiModel.isNotEmpty) {
                       onAction!(doRealisasiModel[startIndex + rowIndex]);
