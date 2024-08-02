@@ -34,4 +34,8 @@ class TambahTypeMotorController extends GetxController {
       formFields.removeAt(index);
     }
   }
+
+  void resetAllFields() {
+    formFields.clear();
+  }
 }

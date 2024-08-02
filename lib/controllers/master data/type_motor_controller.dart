@@ -144,3 +144,55 @@ class TypeMotorController extends GetxController {
     CustomFullScreenLoader.stopLoading();
   }
 }
+
+class TypeMotorHondaController extends GetxController {
+  final isTypeHondaLoading = Rx<bool>(false);
+  final typeMotorHondaRepo = Get.put(TypeMotorHondaRepository());
+  RxList<TypeMotorHondaModel> typeMotorHondaModel = <TypeMotorHondaModel>[].obs;
+
+  RxString selectedTypeMotor = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchTypeMotorHonda();
+  }
+
+  List<TypeMotorHondaModel> get filteredMerkMotor {
+    if (selectedTypeMotor.value.isEmpty) {
+      return typeMotorHondaModel;
+    }
+
+    final filtered = typeMotorHondaModel
+        .where((motor) => motor.typeMotor
+            .toLowerCase()
+            .contains(selectedTypeMotor.value.toLowerCase()))
+        .toList();
+
+    return filtered;
+  }
+
+  void updateSelectedTypeMotor(String value) {
+    selectedTypeMotor.value = value;
+  }
+
+  void setSelectedTypeMotor(String typeMotor) {
+    selectedTypeMotor.value = typeMotor;
+  }
+
+  void resetSelectedTypeMotor() {
+    selectedTypeMotor.value = '';
+  }
+
+  Future<void> fetchTypeMotorHonda() async {
+    try {
+      isTypeHondaLoading(true);
+      final dataHonda = await typeMotorHondaRepo.fetchTypeMotorHondaContent();
+      typeMotorHondaModel.assignAll(dataHonda);
+    } catch (e) {
+      typeMotorHondaModel.assignAll([]);
+    } finally {
+      isTypeHondaLoading(false);
+    }
+  }
+}
