@@ -280,10 +280,7 @@ class TambahTypeKendaraan extends StatelessWidget {
           // textformfield srd, mks, ptk, bjm
           ValueListenableBuilder<TabDaerahTujuan>(
             valueListenable: selectedDaerahTujuan,
-            builder: (_, value, ___) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                controller.resetAllFields();
-              });
+            builder: (_, value, __) {
               return SizedBox(
                 width: double.infinity,
                 child: Row(
@@ -297,14 +294,17 @@ class TambahTypeKendaraan extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(CustomSize.sm),
                           decoration: BoxDecoration(
-                              color: value == TabDaerahTujuan.srd
-                                  ? AppColors.grey
-                                  : AppColors.white,
-                              border: BorderDirectional(
-                                  top: BorderSide(
-                                      color: value == TabDaerahTujuan.srd
-                                          ? AppColors.primary
-                                          : AppColors.buttonDisabled))),
+                            color: value == TabDaerahTujuan.srd
+                                ? AppColors.grey
+                                : AppColors.white,
+                            border: BorderDirectional(
+                              top: BorderSide(
+                                color: value == TabDaerahTujuan.srd
+                                    ? AppColors.primary
+                                    : AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ),
                           child: Text(
                             'SRD',
                             textAlign: TextAlign.center,
@@ -328,14 +328,17 @@ class TambahTypeKendaraan extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(CustomSize.sm),
                           decoration: BoxDecoration(
-                              color: value == TabDaerahTujuan.mks
-                                  ? AppColors.grey
-                                  : AppColors.white,
-                              border: BorderDirectional(
-                                  top: BorderSide(
-                                      color: value == TabDaerahTujuan.mks
-                                          ? AppColors.primary
-                                          : AppColors.buttonDisabled))),
+                            color: value == TabDaerahTujuan.mks
+                                ? AppColors.grey
+                                : AppColors.white,
+                            border: BorderDirectional(
+                              top: BorderSide(
+                                color: value == TabDaerahTujuan.mks
+                                    ? AppColors.primary
+                                    : AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ),
                           child: Text(
                             'MKS',
                             textAlign: TextAlign.center,
@@ -359,14 +362,17 @@ class TambahTypeKendaraan extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(CustomSize.sm),
                           decoration: BoxDecoration(
-                              color: value == TabDaerahTujuan.ptk
-                                  ? AppColors.grey
-                                  : AppColors.white,
-                              border: BorderDirectional(
-                                  top: BorderSide(
-                                      color: value == TabDaerahTujuan.ptk
-                                          ? AppColors.primary
-                                          : AppColors.buttonDisabled))),
+                            color: value == TabDaerahTujuan.ptk
+                                ? AppColors.grey
+                                : AppColors.white,
+                            border: BorderDirectional(
+                              top: BorderSide(
+                                color: value == TabDaerahTujuan.ptk
+                                    ? AppColors.primary
+                                    : AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ),
                           child: Text(
                             'PTK',
                             textAlign: TextAlign.center,
@@ -390,14 +396,17 @@ class TambahTypeKendaraan extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(CustomSize.sm),
                           decoration: BoxDecoration(
-                              color: value == TabDaerahTujuan.bjm
-                                  ? AppColors.grey
-                                  : AppColors.white,
-                              border: BorderDirectional(
-                                  top: BorderSide(
-                                      color: value == TabDaerahTujuan.bjm
-                                          ? AppColors.primary
-                                          : AppColors.buttonDisabled))),
+                            color: value == TabDaerahTujuan.bjm
+                                ? AppColors.grey
+                                : AppColors.white,
+                            border: BorderDirectional(
+                              top: BorderSide(
+                                color: value == TabDaerahTujuan.bjm
+                                    ? AppColors.primary
+                                    : AppColors.buttonDisabled,
+                              ),
+                            ),
+                          ),
                           child: Text(
                             'BJM',
                             textAlign: TextAlign.center,
@@ -417,232 +426,73 @@ class TambahTypeKendaraan extends StatelessWidget {
               );
             },
           ),
-          // body value Listenable builder
           const SizedBox(height: CustomSize.spaceBtwSections),
           ValueListenableBuilder<TabDaerahTujuan>(
             valueListenable: selectedDaerahTujuan,
             builder: (_, value, __) {
-              switch (value) {
-                case TabDaerahTujuan.srd:
-                  return Column(
-                    children: [
-                      Obx(() {
-                        return ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: controller.formFields.length,
-                          itemBuilder: (context, index) {
-                            return DynamicFormFieldHonda(
-                              index: index,
-                              data: controller.formFields[index],
-                              onDropdownChanged: (value) {
-                                controller.formFields[index].dropdownValue =
-                                    value;
-                              },
-                              onTextFieldChanged: (value) {
-                                controller.formFields[index].textFieldValue =
-                                    value;
-                              },
-                              onRemove: () {
-                                controller.removeField(index);
-                              },
-                            );
+              return Column(
+                children: [
+                  Obx(() {
+                    final fields = controller.formFieldsPerTab[value] ?? [];
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: fields.length,
+                      itemBuilder: (context, index) {
+                        final field = fields[index];
+                        return DynamicFormFieldHonda(
+                          index: index,
+                          tab: value,
+                          data: field,
+                          onDropdownChanged: (newValue) {
+                            field.dropdownValue = newValue;
+                            controller.formFieldsPerTab[value]![index] = field;
                           },
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: CustomSize.spaceBtwItems),
+                          onTextFieldChanged: (newValue) {
+                            field.textFieldValue = newValue;
+                            controller.formFieldsPerTab[value]![index] = field;
+                            controller.updateTextFieldValue(
+                                value, index, newValue);
+                          },
+                          onRemove: () {
+                            controller.removeField(value, index);
+                          },
                         );
-                      }),
-                      const SizedBox(height: CustomSize.spaceBtwSections),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: controller.addField,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.sm)),
-                            child: const Text(
-                              'Tambah Jenis\nSRD',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: controller.resetAllFields,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.md)),
-                            child: const Text('Reset Jenis'),
-                          ),
-                        ],
+                      },
+                      separatorBuilder: (_, __) =>
+                          const SizedBox(height: CustomSize.spaceBtwItems),
+                    );
+                  }),
+                  const SizedBox(height: CustomSize.spaceBtwSections),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          controller.addField(value);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(CustomSize.sm),
+                        ),
+                        child: Text(
+                          'Tambah Jenis\n${value.name.toUpperCase()}',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          controller.resetFields(value);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(CustomSize.md),
+                        ),
+                        child: const Text('Reset Jenis'),
                       ),
                     ],
-                  );
-                case TabDaerahTujuan.mks:
-                  return Column(
-                    children: [
-                      Obx(() {
-                        return ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: controller.formFields.length,
-                          itemBuilder: (context, index) {
-                            return DynamicFormFieldHonda(
-                              index: index,
-                              data: controller.formFields[index],
-                              onDropdownChanged: (value) {
-                                controller.formFields[index].dropdownValue =
-                                    value;
-                              },
-                              onTextFieldChanged: (value) {
-                                controller.formFields[index].textFieldValue =
-                                    value;
-                              },
-                              onRemove: () {
-                                controller.removeField(index);
-                              },
-                            );
-                          },
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: CustomSize.spaceBtwItems),
-                        );
-                      }),
-                      const SizedBox(height: CustomSize.spaceBtwSections),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: controller.addField,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.sm)),
-                            child: const Text(
-                              'Tambah Jenis\nMKS',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: controller.resetAllFields,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.md)),
-                            child: const Text('Reset Jenis'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                case TabDaerahTujuan.ptk:
-                  return Column(
-                    children: [
-                      Obx(() {
-                        return ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: controller.formFields.length,
-                          itemBuilder: (context, index) {
-                            return DynamicFormFieldHonda(
-                              index: index,
-                              data: controller.formFields[index],
-                              onDropdownChanged: (value) {
-                                controller.formFields[index].dropdownValue =
-                                    value;
-                              },
-                              onTextFieldChanged: (value) {
-                                controller.formFields[index].textFieldValue =
-                                    value;
-                              },
-                              onRemove: () {
-                                controller.removeField(index);
-                              },
-                            );
-                          },
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: CustomSize.spaceBtwItems),
-                        );
-                      }),
-                      const SizedBox(height: CustomSize.spaceBtwSections),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: controller.addField,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.sm)),
-                            child: const Text(
-                              'Tambah Jenis\nPTK',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: controller.resetAllFields,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.md)),
-                            child: const Text('Reset Jenis'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                case TabDaerahTujuan.bjm:
-                  return Column(
-                    children: [
-                      Obx(() {
-                        return ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: controller.formFields.length,
-                          itemBuilder: (context, index) {
-                            return DynamicFormFieldHonda(
-                              index: index,
-                              data: controller.formFields[index],
-                              onDropdownChanged: (value) {
-                                controller.formFields[index].dropdownValue =
-                                    value;
-                              },
-                              onTextFieldChanged: (value) {
-                                controller.formFields[index].textFieldValue =
-                                    value;
-                              },
-                              onRemove: () {
-                                controller.removeField(index);
-                              },
-                            );
-                          },
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(height: CustomSize.spaceBtwItems),
-                        );
-                      }),
-                      const SizedBox(height: CustomSize.spaceBtwSections),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: controller.addField,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.sm)),
-                            child: const Text(
-                              'Tambah Jenis\nBJM',
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: controller.resetAllFields,
-                            style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.all(CustomSize.md)),
-                            child: const Text('Reset Jenis'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                default:
-                  return Center(
-                    child: Text(
-                      'Pilih Daerah Tujuan',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  );
-              }
+                  ),
+                ],
+              );
             },
           ),
         ],
