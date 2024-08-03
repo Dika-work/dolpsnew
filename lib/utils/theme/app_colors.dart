@@ -30,7 +30,6 @@ class AppColors {
 
   // Expandable Container Colors
   static const Color lightExpandable = Color(0xFF222D31);
-  static const Color darkExpandable = Color(0xFFF6F6F6);
   static const Color lightExpandableContent = Color(0xFF2C3B42);
   static const Color darkExpandableContent = Color(0xFFF4F4F4);
 
@@ -53,5 +52,6 @@ class AppColors {
   static const Color lightGrey = Color(0xFFF9F9F9);
   static const Color white = Color(0xFFFFFFFF);
   static const Color yellow = Color(0xFFFFF44F);
+  static const Color gold = Color(0xFFFFDF00);
   static const Color pink = Color(0xFFFF6EC7);
 }

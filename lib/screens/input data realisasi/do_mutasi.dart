@@ -19,7 +19,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
       'No': double.nan,
       'Tujuan': double.nan,
       'Plant': double.nan,
-      'Type': double.nan,
+      'Tipe': double.nan,
       'Tgl': double.nan,
       'Supir(Panggilan)': 200,
       'Kendaraan': double.nan,
@@ -30,6 +30,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
       'Action': 120,
       'Batal': 80,
       'Edit': double.nan,
+      'Type': double.nan,
       'Hapus': double.nan,
     };
     const int rowsPerPage = 10;
@@ -38,7 +39,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Data Reguler DO LPS',
+          'Data Mutasi DO LPS',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         leading: IconButton(
@@ -67,15 +68,22 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
               },
               onBatal: (DoRealisasiModel model) {},
               onEdit: (DoRealisasiModel model) {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Edit DO Realisasi'),
-                    contentWidget: EditRealisasi(
-                      model: model,
-                    ),
-                    // onConfirm: controller.edit,
-                    cancelText: 'Close',
-                    confirmText: 'Edit');
+                if (model.status == 0 || model.status == 1) {
+                  CustomDialogs.defaultDialog(
+                      context: context,
+                      titleWidget: const Text('Edit DO Realisasi'),
+                      contentWidget: EditRealisasi(
+                        model: model,
+                      ),
+                      // onConfirm: controller.edit,
+                      cancelText: 'Close',
+                      confirmText: 'Edit');
+                } else {
+                  print('..INI BTN EDIT STATUS 2..');
+                }
+              },
+              onType: (DoRealisasiModel model) {
+                print('..INI BTN ON TYPE..');
               },
               onHapus: (DoRealisasiModel model) {},
               doRealisasiModel: controller.doRealisasiModel,
@@ -150,8 +158,8 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
                           GridColumn(
-                              width: columnWidths['Type']!,
-                              columnName: 'Type',
+                              width: columnWidths['Tipe']!,
+                              columnName: 'Tipe',
                               label: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -159,7 +167,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                     color: Colors.lightBlue.shade100,
                                   ),
                                   child: Text(
-                                    'Type',
+                                    'Tipe',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -320,6 +328,22 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                   ),
                                   child: Text(
                                     'Edit',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Type']!,
+                              columnName: 'Type',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Type',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium

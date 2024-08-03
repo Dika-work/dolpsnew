@@ -13,6 +13,7 @@ class DoRegulerSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onAction;
   final void Function(DoRealisasiModel)? onBatal;
   final void Function(DoRealisasiModel)? onEdit;
+  final void Function(DoRealisasiModel)? onType;
   final void Function(DoRealisasiModel)? onHapus;
   final List<DoRealisasiModel> doRealisasiModel;
   int startIndex = 0;
@@ -22,6 +23,7 @@ class DoRegulerSource extends DataGridSource {
     required this.onAction,
     required this.onBatal,
     required this.onEdit,
+    required this.onType,
     required this.onHapus,
     required this.doRealisasiModel,
     int startIndex = 0,
@@ -100,15 +102,17 @@ class DoRegulerSource extends DataGridSource {
           // Batal
           controller.rolesBatal.value == 0
               ? const SizedBox.shrink()
-              : ElevatedButton(
-                  onPressed: () {
-                    if (onBatal != null) {
-                      onBatal!(request);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.error),
-                  child: const Text('Batal')),
+              : request.status == 0
+                  ? ElevatedButton(
+                      onPressed: () {
+                        if (onBatal != null) {
+                          onBatal!(request);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.error),
+                      child: const Text('Batal'))
+                  : const SizedBox.shrink(),
           // Edit
           controller.rolesEdit.value == 0
               ? const SizedBox.shrink()
@@ -119,7 +123,10 @@ class DoRegulerSource extends DataGridSource {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.yellow),
+                      backgroundColor:
+                          request.status == 0 || request.status == 1
+                              ? AppColors.yellow
+                              : AppColors.gold),
                   child: Text(
                     'Edit',
                     style: Theme.of(Get.context!)
@@ -127,6 +134,24 @@ class DoRegulerSource extends DataGridSource {
                         .bodyMedium
                         ?.apply(color: AppColors.black),
                   )),
+          // Type
+          request.status == 2
+              ? ElevatedButton(
+                  onPressed: () {
+                    if (onType != null) {
+                      onType!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
+                  child: Text(
+                    'Type',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  ))
+              : const SizedBox.shrink(),
           // Hapus
           controller.rolesHapus.value == 0
               ? const SizedBox.shrink()
@@ -145,6 +170,7 @@ class DoRegulerSource extends DataGridSource {
           const SizedBox.shrink(), // Action
           const SizedBox.shrink(), // Batal
           const SizedBox.shrink(), // Edit
+          const SizedBox.shrink(), // Type
           const SizedBox.shrink(), // Hapus
         ]
       ],

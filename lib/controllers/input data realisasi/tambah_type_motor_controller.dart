@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import '../../models/input data realisasi/tambah_type_motor_model.dart';
 import '../../repository/input data realisasi/tambah_type_motor_repo.dart';
 import '../../screens/input data realisasi/component/tambah_type_kendaraan.dart';
+import '../../utils/popups/dialogs.dart';
+import '../../utils/popups/full_screen_loader.dart';
+import '../../utils/popups/snackbar.dart';
 
 class TambahTypeMotorController extends GetxController {
   final isLoadingTambahType = Rx<bool>(false);
@@ -41,6 +44,26 @@ class TambahTypeMotorController extends GetxController {
     } finally {
       isLoadingTambahType.value = false;
     }
+  }
+
+  Future<void> addTypeMotorDaerah(
+      int idPacking,
+      int idRealisasi,
+      String jamDetail,
+      String tglDetail,
+      String daerah,
+      String typeMotor,
+      int jumlah) async {
+    CustomDialogs.loadingIndicator();
+
+    await tambahTypeMotorRepo.addTypeMotorDaerah(idPacking, idRealisasi,
+        jamDetail, tglDetail, daerah, typeMotor, jumlah);
+    CustomFullScreenLoader.stopLoading();
+
+    SnackbarLoader.successSnackBar(
+      title: 'Berhasil✨',
+      message: 'Menambahkan data type motor baru..',
+    );
   }
 
   void addField(TabDaerahTujuan tab) {

@@ -52,87 +52,133 @@ class TambahTypeKendaraan extends StatelessWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        padding: const EdgeInsets.symmetric(
+            horizontal: CustomSize.md, vertical: CustomSize.lg),
         children: [
-          const Text('Tujuan'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                hintText: model.tujuan,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwSections),
-
-          const Text('Plant'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                hintText: model.plant,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Plant'),
+                    TextFormField(
+                      keyboardType: TextInputType.none,
+                      readOnly: true,
+                      controller: TextEditingController(text: model.plant),
+                      decoration: const InputDecoration(
+                          filled: true, fillColor: AppColors.buttonDisabled),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: CustomSize.spaceBtwItems),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Tujuan'),
+                  TextFormField(
+                    keyboardType: TextInputType.none,
+                    readOnly: true,
+                    controller: TextEditingController(text: model.tujuan),
+                    decoration: const InputDecoration(
+                        filled: true, fillColor: AppColors.buttonDisabled),
+                  ),
+                ],
+              )),
+            ],
           ),
           const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Type'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                hintText: model.type == 0 ? 'REGULER' : 'Mutasi',
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Jenis'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                hintText: model.jenisKen,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
+          Row(children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Tipe'),
+                  TextFormField(
+                    keyboardType: TextInputType.none,
+                    readOnly: true,
+                    controller: TextEditingController(
+                        text: model.type == 0 ? 'REGULER' : 'MUTASI'),
+                    decoration: const InputDecoration(
+                        filled: true, fillColor: AppColors.buttonDisabled),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: CustomSize.spaceBtwItems),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Jenis'),
+                  TextFormField(
+                    controller: TextEditingController(
+                        text: '${model.inisialDepan}${model.inisialBelakang}'),
+                    keyboardType: TextInputType.none,
+                    readOnly: true,
+                    decoration: const InputDecoration(
+                        filled: true, fillColor: AppColors.buttonDisabled),
+                  ),
+                ],
+              ),
+            ),
+          ]),
           const SizedBox(height: CustomSize.spaceBtwItems),
           const Text('No Kendaraan'),
           TextFormField(
+            controller: TextEditingController(text: model.noPolisi),
             keyboardType: TextInputType.none,
             readOnly: true,
-            decoration: InputDecoration(
-                hintText: model.noPolisi,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
+            decoration: const InputDecoration(
+                filled: true, fillColor: AppColors.buttonDisabled),
           ),
           const SizedBox(height: CustomSize.spaceBtwItems),
           const Text('Supir'),
           TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                hintText: model.supir,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Jumlah Total Unit Motor'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                hintText: model.jumlahUnit.toString(),
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Total Plot'),
-          TextFormField(
+            controller: TextEditingController(text: model.supir),
             keyboardType: TextInputType.none,
             readOnly: true,
             decoration: const InputDecoration(
-                hintText: 'total plot',
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
+                filled: true, fillColor: AppColors.buttonDisabled),
+          ),
+          const SizedBox(height: CustomSize.spaceBtwItems),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Total Unit Motor'),
+                    TextFormField(
+                      controller: TextEditingController(
+                          text: model.jumlahUnit.toString()),
+                      keyboardType: TextInputType.none,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                          filled: true, fillColor: AppColors.buttonDisabled),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: CustomSize.spaceBtwItems),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Total Plot'),
+                    TextFormField(
+                      controller: TextEditingController(text: 'Total plot'),
+                      keyboardType: TextInputType.none,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                          filled: true, fillColor: AppColors.buttonDisabled),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: CustomSize.spaceBtwSections),
           // table nya

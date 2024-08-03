@@ -24,7 +24,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'Tgl': 130,
       'Supir(Panggilan)': 200,
       'Kendaraan': 120,
-      'Type': double.nan,
+      'Tipe': double.nan,
       'Jenis': double.nan,
       'Status': double.nan,
       'Jumlah': double.nan,
@@ -32,6 +32,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'Action': 120,
       'Batal': double.nan,
       'Edit': double.nan,
+      'Type': double.nan,
       'Hapus': double.nan,
     };
     const int rowsPerPage = 10;
@@ -77,15 +78,22 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
               },
               onBatal: (DoRealisasiModel model) {},
               onEdit: (DoRealisasiModel model) {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Edit DO Realisasi'),
-                    contentWidget: EditRealisasi(
-                      model: model,
-                    ),
-                    // onConfirm: controller.edit,
-                    cancelText: 'Close',
-                    confirmText: 'Edit');
+                if (model.status == 0 || model.status == 1) {
+                  CustomDialogs.defaultDialog(
+                      context: context,
+                      titleWidget: const Text('Edit DO Realisasi'),
+                      contentWidget: EditRealisasi(
+                        model: model,
+                      ),
+                      // onConfirm: controller.edit,
+                      cancelText: 'Close',
+                      confirmText: 'Edit');
+                } else {
+                  print('..INI BTN EDIT STATUS 2..');
+                }
+              },
+              onType: (DoRealisasiModel model) {
+                print('..INI BTN ON TYPE..');
               },
               onHapus: (DoRealisasiModel model) {},
               doRealisasiModel: controller.doRealisasiModel,
@@ -208,8 +216,8 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
                           GridColumn(
-                              width: columnWidths['Type']!,
-                              columnName: 'Type',
+                              width: columnWidths['Tipe']!,
+                              columnName: 'Tipe',
                               label: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -217,7 +225,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                     color: Colors.lightBlue.shade100,
                                   ),
                                   child: Text(
-                                    'Type',
+                                    'Tipe',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
@@ -330,6 +338,22 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                   ),
                                   child: Text(
                                     'Edit',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Type']!,
+                              columnName: 'Type',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Type',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium
