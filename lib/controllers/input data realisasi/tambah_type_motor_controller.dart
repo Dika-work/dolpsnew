@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/tambah_type_motor_model.dart';
@@ -18,7 +19,8 @@ class TambahTypeMotorController extends GetxController {
   });
 
   // Data TextFormField terpisah untuk setiap tab
-  final textFieldValuesPerTab = RxMap<TabDaerahTujuan, List<String?>>({
+  final controllersPerTab =
+      RxMap<TabDaerahTujuan, List<TextEditingController>>({
     TabDaerahTujuan.srd: [],
     TabDaerahTujuan.mks: [],
     TabDaerahTujuan.ptk: [],
@@ -42,54 +44,53 @@ class TambahTypeMotorController extends GetxController {
   }
 
   void addField(TabDaerahTujuan tab) {
+    // Add form field data...
     final fields = formFieldsPerTab[tab] ?? [];
     fields.add(FormFieldData());
-    formFieldsPerTab[tab] =
-        List.from(fields); // Create a new list to ensure update is recognized
+    formFieldsPerTab[tab] = List.from(fields);
 
-    final textFieldValues = textFieldValuesPerTab[tab] ?? [];
-    textFieldValues.add(null); // Add a new null value for the new field
-    textFieldValuesPerTab[tab] =
-        List.from(textFieldValues); // Ensure update is recognized
-
-    print("Added field to tab $tab: ${formFieldsPerTab[tab]}"); // Debugging
+    // Add a new TextEditingController
+    final controllers = controllersPerTab[tab] ?? [];
+    controllers.add(TextEditingController());
+    controllersPerTab[tab] = List.from(controllers);
   }
 
   void removeField(TabDaerahTujuan tab, int index) {
+    // Remove form field data...
     final fields = formFieldsPerTab[tab] ?? [];
     if (index >= 0 && index < fields.length) {
       fields.removeAt(index);
-      formFieldsPerTab[tab] =
-          List.from(fields); // Create a new list to ensure update is recognized
+      formFieldsPerTab[tab] = List.from(fields);
 
-      final textFieldValues = textFieldValuesPerTab[tab] ?? [];
-      if (index >= 0 && index < textFieldValues.length) {
-        textFieldValues.removeAt(index);
-        textFieldValuesPerTab[tab] =
-            List.from(textFieldValues); // Ensure update is recognized
+      // Remove TextEditingController
+      final controllers = controllersPerTab[tab] ?? [];
+      if (index >= 0 && index < controllers.length) {
+        controllers[index]
+            .dispose(); // Dispose controller to prevent memory leaks
+        controllers.removeAt(index);
+        controllersPerTab[tab] = List.from(controllers);
       }
-
-      print(
-          "Removed field from tab $tab: ${formFieldsPerTab[tab]}"); // Debugging
     }
   }
 
   void resetFields(TabDaerahTujuan tab) {
     // Reset fields and text field values for the specified tab
     formFieldsPerTab[tab] = [];
-    textFieldValuesPerTab[tab] = [];
+
+    // Dispose all controllers associated with the tab
+    final controllers = controllersPerTab[tab] ?? [];
+    for (var controller in controllers) {
+      controller.dispose(); // Properly dispose to avoid memory leaks
+    }
+    controllersPerTab[tab] = [];
 
     print("Reset fields for tab $tab"); // Debugging
   }
 
   void updateTextFieldValue(TabDaerahTujuan tab, int index, String? value) {
-    final textFieldValues = textFieldValuesPerTab[tab] ?? [];
-    if (index >= 0 && index < textFieldValues.length) {
-      // Update the value for the specific tab and index
-      textFieldValues[index] = value;
-      textFieldValuesPerTab[tab] =
-          List.from(textFieldValues); // Ensure the update is recognized
-      update(); // Trigger the UI update
+    final controllers = controllersPerTab[tab] ?? [];
+    if (index >= 0 && index < controllers.length) {
+      controllers[index].text = value ?? '';
     }
   }
 }

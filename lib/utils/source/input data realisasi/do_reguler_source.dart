@@ -40,35 +40,36 @@ class DoRegulerSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _doRegulerData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-    var request = doRealisasiModel[startIndex + rowIndex];
+    var request = doRealisasiModel.isNotEmpty &&
+            startIndex + rowIndex < doRealisasiModel.length
+        ? doRealisasiModel[startIndex + rowIndex]
+        : null;
 
     return DataGridRowAdapter(
-        color: isEvenRow ? Colors.white : Colors.grey[200],
-        cells: [
-          ...row.getCells().map<Widget>(
-            (e) {
-              return Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: CustomSize.md),
-                  child: Text(
-                    e.value.toString(),
-                    textAlign: TextAlign.center,
-                  ),
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: [
+        ...row.getCells().take(10).map<Widget>(
+          (e) {
+            return Center(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+                child: Text(
+                  e.value.toString(),
+                  textAlign: TextAlign.center,
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
+        ),
+        if (request != null) ...[
           // Lihat
           controller.rolesLihat.value == 0
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onLihat != null && doRealisasiModel.isNotEmpty) {
+                    if (onLihat != null) {
                       onLihat!(request);
-                    } else {
-                      return;
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -77,10 +78,8 @@ class DoRegulerSource extends DataGridSource {
           // Action
           ElevatedButton(
             onPressed: () {
-              if (onAction != null && doRealisasiModel.isNotEmpty) {
+              if (onAction != null) {
                 onAction!(request);
-              } else {
-                return;
               }
             },
             style: ElevatedButton.styleFrom(
@@ -103,10 +102,8 @@ class DoRegulerSource extends DataGridSource {
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onBatal != null && doRealisasiModel.isNotEmpty) {
+                    if (onBatal != null) {
                       onBatal!(request);
-                    } else {
-                      return;
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -117,10 +114,8 @@ class DoRegulerSource extends DataGridSource {
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onEdit != null && doRealisasiModel.isNotEmpty) {
+                    if (onEdit != null) {
                       onEdit!(request);
-                    } else {
-                      return;
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -137,16 +132,23 @@ class DoRegulerSource extends DataGridSource {
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onHapus != null && doRealisasiModel.isNotEmpty) {
+                    if (onHapus != null) {
                       onHapus!(request);
-                    } else {
-                      return;
                     }
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.error),
                   child: const Text('Hapus')),
-        ]);
+        ] else ...[
+          // Placeholder for when no data is available
+          const SizedBox.shrink(), // Lihat
+          const SizedBox.shrink(), // Action
+          const SizedBox.shrink(), // Batal
+          const SizedBox.shrink(), // Edit
+          const SizedBox.shrink(), // Hapus
+        ]
+      ],
+    );
   }
 
   List<DataGridRow> _generateEmptyRows(int count) {
@@ -164,11 +166,6 @@ class DoRegulerSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Jenis', value: '-'),
           DataGridCell<String>(columnName: 'Status', value: '-'),
           DataGridCell<String>(columnName: 'Jumlah', value: '-'),
-          DataGridCell<String>(columnName: 'Lihat', value: '-'),
-          DataGridCell<String>(columnName: 'Action', value: '-'),
-          DataGridCell<String>(columnName: 'Batal', value: '-'),
-          DataGridCell<String>(columnName: 'Edit', value: '-'),
-          DataGridCell<String>(columnName: 'Hapus', value: '-'),
         ]);
       },
     );

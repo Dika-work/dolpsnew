@@ -31,6 +31,16 @@ class DynamicFormFieldHonda extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final typeMotorHondaController = Get.put(TypeMotorHondaController());
+    final controller = Get.find<TambahTypeMotorController>();
+    final textController = controller.controllersPerTab[tab]?[index];
+
+    if (textController == null) {
+      // Handle the case where the TextEditingController is not found
+      print(
+          'Error: TextEditingController not found for index $index and tab $tab');
+      return SizedBox
+          .shrink(); // Return an empty widget or handle appropriately
+    }
 
     return Row(
       children: [
@@ -95,23 +105,17 @@ class DynamicFormFieldHonda extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: Obx(() {
-            final textFieldValue = Get.put(TambahTypeMotorController())
-                    .textFieldValuesPerTab[tab]?[index] ??
-                '';
-            return TextFormField(
-              initialValue: textFieldValue,
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                onTextFieldChanged(value);
-                Get.find<TambahTypeMotorController>()
-                    .updateTextFieldValue(tab, index, value);
-              },
-              decoration: InputDecoration(
-                labelText: 'JML ${index + 1}',
-              ),
-            );
-          }),
+          child: TextFormField(
+            controller: textController,
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              onTextFieldChanged(value);
+              controller.updateTextFieldValue(tab, index, value);
+            },
+            decoration: InputDecoration(
+              labelText: 'JML ${index + 1}',
+            ),
+          ),
         ),
         IconButton(
           icon: const Icon(Iconsax.trash, color: AppColors.error),

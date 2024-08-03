@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
@@ -277,221 +279,134 @@ class TambahTypeKendaraan extends StatelessWidget {
             },
           ),
           const SizedBox(height: CustomSize.spaceBtwSections),
-          // textformfield srd, mks, ptk, bjm
           ValueListenableBuilder<TabDaerahTujuan>(
             valueListenable: selectedDaerahTujuan,
             builder: (_, value, __) {
               return SizedBox(
                 width: double.infinity,
-                child: Row(
+                child: Column(
                   children: [
-                    // srd
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          selectedDaerahTujuan.value = TabDaerahTujuan.srd;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(CustomSize.sm),
-                          decoration: BoxDecoration(
-                            color: value == TabDaerahTujuan.srd
-                                ? AppColors.grey
-                                : AppColors.white,
-                            border: BorderDirectional(
-                              top: BorderSide(
-                                color: value == TabDaerahTujuan.srd
-                                    ? AppColors.primary
-                                    : AppColors.buttonDisabled,
+                    // Tab selector
+                    Row(
+                      children: TabDaerahTujuan.values.map((tab) {
+                        return Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              selectedDaerahTujuan.value = tab;
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(CustomSize.sm),
+                              decoration: BoxDecoration(
+                                color: value == tab
+                                    ? AppColors.grey
+                                    : AppColors.white,
+                                border: BorderDirectional(
+                                  top: BorderSide(
+                                    color: value == tab
+                                        ? AppColors.primary
+                                        : AppColors.buttonDisabled,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                tab.toString().split('.').last.toUpperCase(),
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: value == tab
+                                          ? FontWeight.w400
+                                          : FontWeight.normal,
+                                    ),
                               ),
                             ),
                           ),
-                          child: Text(
-                            'SRD',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontWeight: value == TabDaerahTujuan.srd
-                                        ? FontWeight.w400
-                                        : FontWeight.normal),
-                          ),
-                        ),
-                      ),
+                        );
+                      }).toList(),
                     ),
-                    // mks
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          selectedDaerahTujuan.value = TabDaerahTujuan.mks;
+                    const SizedBox(height: CustomSize.spaceBtwSections),
+                    // ListView for form fields
+                    Obx(() {
+                      final fields = controller
+                              .formFieldsPerTab[selectedDaerahTujuan.value] ??
+                          [];
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: fields.length,
+                        itemBuilder: (context, index) {
+                          return DynamicFormFieldHonda(
+                            index: index,
+                            tab: selectedDaerahTujuan.value,
+                            data: fields[index],
+                            onDropdownChanged: (value) {
+                              controller
+                                  .formFieldsPerTab[selectedDaerahTujuan.value]
+                                      ?[index]
+                                  .dropdownValue = value;
+                            },
+                            onTextFieldChanged: (value) {
+                              controller
+                                  .formFieldsPerTab[selectedDaerahTujuan.value]
+                                      ?[index]
+                                  .textFieldValue = value;
+                            },
+                            onRemove: () {
+                              controller.removeField(
+                                  selectedDaerahTujuan.value, index);
+                            },
+                          );
                         },
-                        child: Container(
-                          padding: const EdgeInsets.all(CustomSize.sm),
-                          decoration: BoxDecoration(
-                            color: value == TabDaerahTujuan.mks
-                                ? AppColors.grey
-                                : AppColors.white,
-                            border: BorderDirectional(
-                              top: BorderSide(
-                                color: value == TabDaerahTujuan.mks
-                                    ? AppColors.primary
-                                    : AppColors.buttonDisabled,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            'MKS',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontWeight: value == TabDaerahTujuan.mks
-                                        ? FontWeight.w400
-                                        : FontWeight.normal),
+                        separatorBuilder: (_, __) =>
+                            const SizedBox(height: CustomSize.spaceBtwItems),
+                      );
+                    }),
+                    const SizedBox(height: CustomSize.spaceBtwSections),
+                    // Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller.addField(selectedDaerahTujuan.value);
+                            },
+                            child: const Icon(Iconsax.add),
                           ),
                         ),
-                      ),
-                    ),
-                    // ptk
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          selectedDaerahTujuan.value = TabDaerahTujuan.ptk;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(CustomSize.sm),
-                          decoration: BoxDecoration(
-                            color: value == TabDaerahTujuan.ptk
-                                ? AppColors.grey
-                                : AppColors.white,
-                            border: BorderDirectional(
-                              top: BorderSide(
-                                color: value == TabDaerahTujuan.ptk
-                                    ? AppColors.primary
-                                    : AppColors.buttonDisabled,
-                              ),
-                            ),
-                          ),
-                          child: Text(
-                            'PTK',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontWeight: value == TabDaerahTujuan.ptk
-                                        ? FontWeight.w400
-                                        : FontWeight.normal),
+                        const SizedBox(width: CustomSize.sm),
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller
+                                  .resetFields(selectedDaerahTujuan.value);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.error),
+                            child: const Icon(FontAwesomeIcons.trash),
                           ),
                         ),
-                      ),
-                    ),
-                    // bjm
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          selectedDaerahTujuan.value = TabDaerahTujuan.bjm;
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(CustomSize.sm),
-                          decoration: BoxDecoration(
-                            color: value == TabDaerahTujuan.bjm
-                                ? AppColors.grey
-                                : AppColors.white,
-                            border: BorderDirectional(
-                              top: BorderSide(
-                                color: value == TabDaerahTujuan.bjm
-                                    ? AppColors.primary
-                                    : AppColors.buttonDisabled,
-                              ),
-                            ),
+                        const SizedBox(width: CustomSize.sm),
+                        Expanded(
+                          flex: 3,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller
+                                  .resetFields(selectedDaerahTujuan.value);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 20.0),
+                                backgroundColor: AppColors.success),
+                            child: const Text('Selesai'),
                           ),
-                          child: Text(
-                            'BJM',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontWeight: value == TabDaerahTujuan.bjm
-                                        ? FontWeight.w400
-                                        : FontWeight.normal),
-                          ),
-                        ),
-                      ),
+                        )
+                      ],
                     ),
                   ],
                 ),
-              );
-            },
-          ),
-          const SizedBox(height: CustomSize.spaceBtwSections),
-          ValueListenableBuilder<TabDaerahTujuan>(
-            valueListenable: selectedDaerahTujuan,
-            builder: (_, value, __) {
-              return Column(
-                children: [
-                  Obx(() {
-                    final fields = controller.formFieldsPerTab[value] ?? [];
-                    return ListView.separated(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: fields.length,
-                      itemBuilder: (context, index) {
-                        final field = fields[index];
-                        return DynamicFormFieldHonda(
-                          index: index,
-                          tab: value,
-                          data: field,
-                          onDropdownChanged: (newValue) {
-                            field.dropdownValue = newValue;
-                            controller.formFieldsPerTab[value]![index] = field;
-                          },
-                          onTextFieldChanged: (newValue) {
-                            field.textFieldValue = newValue;
-                            controller.formFieldsPerTab[value]![index] = field;
-                            controller.updateTextFieldValue(
-                                value, index, newValue);
-                          },
-                          onRemove: () {
-                            controller.removeField(value, index);
-                          },
-                        );
-                      },
-                      separatorBuilder: (_, __) =>
-                          const SizedBox(height: CustomSize.spaceBtwItems),
-                    );
-                  }),
-                  const SizedBox(height: CustomSize.spaceBtwSections),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          controller.addField(value);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(CustomSize.sm),
-                        ),
-                        child: Text(
-                          'Tambah Jenis\n${value.name.toUpperCase()}',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: () {
-                          controller.resetFields(value);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(CustomSize.md),
-                        ),
-                        child: const Text('Reset Jenis'),
-                      ),
-                    ],
-                  ),
-                ],
               );
             },
           ),

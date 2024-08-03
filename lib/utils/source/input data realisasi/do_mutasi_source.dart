@@ -40,34 +40,36 @@ class DoMutasiSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _doMutasiData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
+    var request = doRealisasiModel.isNotEmpty &&
+            startIndex + rowIndex < doRealisasiModel.length
+        ? doRealisasiModel[startIndex + rowIndex]
+        : null;
 
     return DataGridRowAdapter(
-        color: isEvenRow ? Colors.white : Colors.grey[200],
-        cells: [
-          ...row.getCells().map<Widget>(
-            (e) {
-              return Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: CustomSize.md),
-                  child: Text(
-                    e.value.toString(),
-                    textAlign: TextAlign.center,
-                  ),
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: [
+        ...row.getCells().take(10).map<Widget>(
+          (e) {
+            return Center(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+                child: Text(
+                  e.value.toString(),
+                  textAlign: TextAlign.center,
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
+        ),
+        if (request != null) ...[
           // Lihat
           controller.rolesLihat.value == 0
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onLihat != null && doRealisasiModel.isNotEmpty) {
-                      onLihat!(doRealisasiModel[startIndex + rowIndex]);
-                    } else {
-                      return;
+                    if (onLihat != null) {
+                      onLihat!(request);
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -75,25 +77,23 @@ class DoMutasiSource extends DataGridSource {
                   child: const Text('Lihat')),
           // Action
           ElevatedButton(
-                  onPressed: () {
-                    if (onAction != null && doRealisasiModel.isNotEmpty) {
-                      onAction!(doRealisasiModel[startIndex + rowIndex]);
-                    } else {
-                      return;
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary),
-                  child: const Text('Jumlah Unit')),
+            onPressed: () {
+              if (onAction != null) {
+                onAction!(request);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+            ),
+            child: const Text('Tambah Request'),
+          ),
           // Batal
           controller.rolesBatal.value == 0
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onBatal != null && doRealisasiModel.isNotEmpty) {
-                      onBatal!(doRealisasiModel[startIndex + rowIndex]);
-                    } else {
-                      return;
+                    if (onBatal != null) {
+                      onBatal!(request);
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -104,10 +104,8 @@ class DoMutasiSource extends DataGridSource {
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onEdit != null && doRealisasiModel.isNotEmpty) {
-                      onEdit!(doRealisasiModel[startIndex + rowIndex]);
-                    } else {
-                      return;
+                    if (onEdit != null) {
+                      onEdit!(request);
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -124,16 +122,23 @@ class DoMutasiSource extends DataGridSource {
               ? const SizedBox.shrink()
               : ElevatedButton(
                   onPressed: () {
-                    if (onHapus != null && doRealisasiModel.isNotEmpty) {
-                      onHapus!(doRealisasiModel[startIndex + rowIndex]);
-                    } else {
-                      return;
+                    if (onHapus != null) {
+                      onHapus!(request);
                     }
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.error),
                   child: const Text('Hapus')),
-        ]);
+        ] else ...[
+          // Placeholder for when no data is available
+          const SizedBox.shrink(), // Lihat
+          const SizedBox.shrink(), // Action
+          const SizedBox.shrink(), // Batal
+          const SizedBox.shrink(), // Edit
+          const SizedBox.shrink(), // Hapus
+        ]
+      ],
+    );
   }
 
   List<DataGridRow> _generateEmptyRows(int count) {
@@ -148,13 +153,9 @@ class DoMutasiSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Tgl', value: '-'),
           DataGridCell<String>(columnName: 'Supir(Panggilan)', value: '-'),
           DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
+          DataGridCell<String>(columnName: 'Jenis', value: '-'),
           DataGridCell<String>(columnName: 'Status', value: '-'),
           DataGridCell<String>(columnName: 'Jumlah', value: '-'),
-          DataGridCell<String>(columnName: 'Lihat', value: '-'),
-          DataGridCell<String>(columnName: 'Action', value: '-'),
-          DataGridCell<String>(columnName: 'Batal', value: '-'),
-          DataGridCell<String>(columnName: 'Edit', value: '-'),
-          DataGridCell<String>(columnName: 'Hapus', value: '-'),
         ]);
       },
     );

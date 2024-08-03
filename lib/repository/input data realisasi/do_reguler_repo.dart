@@ -24,7 +24,8 @@ class DoRegulerRepository {
   Future<void> tambahJumlahUnit(int id) async {
     try {
       final response = await http.put(
-          Uri.parse('${storageUtil.baseURL}/DO/api/api_packing_list_motor.php'),
+          Uri.parse(
+              '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=Jumlah'),
           body: {
             'id': id.toString(),
             'status': '1',
@@ -37,6 +38,7 @@ class DoRegulerRepository {
             title: 'Gagal😢',
             message: responseData['message'] ?? 'Ada yang salah😒',
           );
+          print(responseData['message']);
         } else {
           CustomFullScreenLoader.stopLoading();
           SnackbarLoader.successSnackBar(
