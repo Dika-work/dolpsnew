@@ -23,20 +23,14 @@ class TambahTypeMotorRepository {
     }
   }
 
-  Future<void> addTypeMotorDaerah(
-      int idPacking,
-      int idRealisasi,
-      String jamDetail,
-      String tglDetail,
-      String daerah,
-      String typeMotor,
-      int jumlah) async {
+  // func selesai di tambah type kendaraan
+  Future<void> addTypeMotorDaerah(int idRealisasi, String jamDetail,
+      String tglDetail, String daerah, String typeMotor, int jumlah) async {
     try {
       final response = await http.post(
           Uri.parse(
               '${storagetUtil.baseURL}/DO/api/api_packing_list_motor.php'),
           body: {
-            'id_packing': idPacking,
             'id_realisasi': idRealisasi,
             'jam_detail': jamDetail,
             'tgl_detail': tglDetail,
@@ -61,5 +55,48 @@ class TambahTypeMotorRepository {
       );
       return;
     }
+  }
+
+  // func total plot di tambah type kendaraan
+  Future<List<PlotModelRealisasi>> jumlahPlotRealisasi(int idRealisasi) async {
+    try {
+      final response = await http.get(Uri.parse(
+          '${storagetUtil.baseURL}/DO/api/api_packing_list_motor.php?action=Totalplot&id_realisasi=$idRealisasi'));
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        return data.map((e) => PlotModelRealisasi.fromJson(e)).toList();
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Something went wrong👻',
+          message: 'Please, contact developer...',
+        );
+        return [];
+      }
+    } catch (e) {
+      print('Error while fetching jumlah plot realisasi: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Error☠️',
+        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
+      );
+      return [];
+    }
+  }
+}
+
+class PlotModelRealisasi {
+  int idRealisasi;
+  int jumlahPlot;
+
+  PlotModelRealisasi({
+    required this.idRealisasi,
+    required this.jumlahPlot,
+  });
+
+  factory PlotModelRealisasi.fromJson(Map<String, dynamic> json) {
+    return PlotModelRealisasi(
+      idRealisasi: json['id_realisasi'] ?? 0,
+      jumlahPlot: json['plot'] ?? 0,
+    );
   }
 }

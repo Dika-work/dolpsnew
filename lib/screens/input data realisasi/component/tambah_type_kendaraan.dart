@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
+import '../../../helpers/helper_function.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../../utils/constant/custom_size.dart';
 import '../../../utils/loader/circular_loader.dart';
@@ -12,7 +13,7 @@ import '../../../utils/source/input data realisasi/tambah_type_motor_source.dart
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dynamic_formfield.dart';
 
-class TambahTypeKendaraan extends StatelessWidget {
+class TambahTypeKendaraan extends StatefulWidget {
   const TambahTypeKendaraan(
       {super.key, required this.model, required this.controller});
 
@@ -20,7 +21,29 @@ class TambahTypeKendaraan extends StatelessWidget {
   final TambahTypeMotorController controller;
 
   @override
+  State<TambahTypeKendaraan> createState() => _TambahTypeKendaraanState();
+}
+
+class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
+  late int id;
+  late String tgl;
+  late int jumlahMotor;
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.model.id;
+    tgl = CustomHelperFunctions.getFormattedDateDatabase(DateTime.now());
+    jumlahMotor = widget.model.jumlahUnit;
+
+    // set default untuk plot realisasi
+    final plotRealisasiController = Get.put(PlotRealisasiController());
+    plotRealisasiController.fetchPlotRealisasi(id, jumlahMotor);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final plotRealisasiController = Get.put(PlotRealisasiController());
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Type Motor': double.nan,
@@ -65,7 +88,8 @@ class TambahTypeKendaraan extends StatelessWidget {
                     TextFormField(
                       keyboardType: TextInputType.none,
                       readOnly: true,
-                      controller: TextEditingController(text: model.plant),
+                      controller:
+                          TextEditingController(text: widget.model.plant),
                       decoration: const InputDecoration(
                           filled: true, fillColor: AppColors.buttonDisabled),
                     ),
@@ -81,7 +105,8 @@ class TambahTypeKendaraan extends StatelessWidget {
                   TextFormField(
                     keyboardType: TextInputType.none,
                     readOnly: true,
-                    controller: TextEditingController(text: model.tujuan),
+                    controller:
+                        TextEditingController(text: widget.model.tujuan),
                     decoration: const InputDecoration(
                         filled: true, fillColor: AppColors.buttonDisabled),
                   ),
@@ -100,7 +125,7 @@ class TambahTypeKendaraan extends StatelessWidget {
                     keyboardType: TextInputType.none,
                     readOnly: true,
                     controller: TextEditingController(
-                        text: model.type == 0 ? 'REGULER' : 'MUTASI'),
+                        text: widget.model.type == 0 ? 'REGULER' : 'MUTASI'),
                     decoration: const InputDecoration(
                         filled: true, fillColor: AppColors.buttonDisabled),
                   ),
@@ -115,7 +140,8 @@ class TambahTypeKendaraan extends StatelessWidget {
                   const Text('Jenis'),
                   TextFormField(
                     controller: TextEditingController(
-                        text: '${model.inisialDepan}${model.inisialBelakang}'),
+                        text:
+                            '${widget.model.inisialDepan}${widget.model.inisialBelakang}'),
                     keyboardType: TextInputType.none,
                     readOnly: true,
                     decoration: const InputDecoration(
@@ -128,7 +154,7 @@ class TambahTypeKendaraan extends StatelessWidget {
           const SizedBox(height: CustomSize.spaceBtwItems),
           const Text('No Kendaraan'),
           TextFormField(
-            controller: TextEditingController(text: model.noPolisi),
+            controller: TextEditingController(text: widget.model.noPolisi),
             keyboardType: TextInputType.none,
             readOnly: true,
             decoration: const InputDecoration(
@@ -137,7 +163,7 @@ class TambahTypeKendaraan extends StatelessWidget {
           const SizedBox(height: CustomSize.spaceBtwItems),
           const Text('Supir'),
           TextFormField(
-            controller: TextEditingController(text: model.supir),
+            controller: TextEditingController(text: widget.model.supir),
             keyboardType: TextInputType.none,
             readOnly: true,
             decoration: const InputDecoration(
@@ -153,7 +179,7 @@ class TambahTypeKendaraan extends StatelessWidget {
                     const Text('Total Unit Motor'),
                     TextFormField(
                       controller: TextEditingController(
-                          text: model.jumlahUnit.toString()),
+                          text: widget.model.jumlahUnit.toString()),
                       keyboardType: TextInputType.none,
                       readOnly: true,
                       decoration: const InputDecoration(
@@ -168,13 +194,21 @@ class TambahTypeKendaraan extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text('Total Plot'),
-                    TextFormField(
-                      controller: TextEditingController(text: 'Total plot'),
-                      keyboardType: TextInputType.none,
-                      readOnly: true,
-                      decoration: const InputDecoration(
-                          filled: true, fillColor: AppColors.buttonDisabled),
-                    ),
+                    Obx(
+                      () => TextFormField(
+                        controller: TextEditingController(
+                            text: plotRealisasiController
+                                    .plotModelRealisasi.isNotEmpty
+                                ? plotRealisasiController
+                                    .plotModelRealisasi.first.jumlahPlot
+                                    .toString()
+                                : ''),
+                        keyboardType: TextInputType.none,
+                        readOnly: true,
+                        decoration: const InputDecoration(
+                            filled: true, fillColor: AppColors.buttonDisabled),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -184,12 +218,12 @@ class TambahTypeKendaraan extends StatelessWidget {
           // table nya
           Obx(
             () {
-              if (controller.isLoadingTambahType.value &&
-                  controller.tambahTypeMotorModel.isEmpty) {
+              if (widget.controller.isLoadingTambahType.value &&
+                  widget.controller.tambahTypeMotorModel.isEmpty) {
                 return const CustomCircularLoader();
               } else {
                 final dataSource = TambahTypeMotorSource(
-                  tambahTypeMotorModel: controller.tambahTypeMotorModel,
+                  tambahTypeMotorModel: widget.controller.tambahTypeMotorModel,
                   startIndex: currentPage * rowsPerPage,
                 );
 
@@ -312,9 +346,9 @@ class TambahTypeKendaraan extends StatelessWidget {
                     ),
                     SfDataPager(
                       delegate: dataSource,
-                      pageCount: controller.tambahTypeMotorModel.isEmpty
+                      pageCount: widget.controller.tambahTypeMotorModel.isEmpty
                           ? 1
-                          : (controller.tambahTypeMotorModel.length /
+                          : (widget.controller.tambahTypeMotorModel.length /
                                   rowsPerPage)
                               .ceilToDouble(),
                       direction: Axis.horizontal,
@@ -374,7 +408,7 @@ class TambahTypeKendaraan extends StatelessWidget {
                     const SizedBox(height: CustomSize.spaceBtwSections),
                     // ListView for form fields
                     Obx(() {
-                      final fields = controller
+                      final fields = widget.controller
                               .formFieldsPerTab[selectedDaerahTujuan.value] ??
                           [];
                       return ListView.separated(
@@ -387,19 +421,21 @@ class TambahTypeKendaraan extends StatelessWidget {
                             tab: selectedDaerahTujuan.value,
                             data: fields[index],
                             onDropdownChanged: (value) {
-                              controller
+                              widget
+                                  .controller
                                   .formFieldsPerTab[selectedDaerahTujuan.value]
                                       ?[index]
                                   .dropdownValue = value;
                             },
                             onTextFieldChanged: (value) {
-                              controller
+                              widget
+                                  .controller
                                   .formFieldsPerTab[selectedDaerahTujuan.value]
                                       ?[index]
                                   .textFieldValue = value;
                             },
                             onRemove: () {
-                              controller.removeField(
+                              widget.controller.removeField(
                                   selectedDaerahTujuan.value, index);
                             },
                           );
@@ -416,7 +452,8 @@ class TambahTypeKendaraan extends StatelessWidget {
                           flex: 1,
                           child: ElevatedButton(
                             onPressed: () {
-                              controller.addField(selectedDaerahTujuan.value);
+                              widget.controller
+                                  .addField(selectedDaerahTujuan.value);
                             },
                             child: const Icon(Iconsax.add),
                           ),
@@ -426,7 +463,7 @@ class TambahTypeKendaraan extends StatelessWidget {
                           flex: 1,
                           child: ElevatedButton(
                             onPressed: () {
-                              controller
+                              widget.controller
                                   .resetFields(selectedDaerahTujuan.value);
                             },
                             style: ElevatedButton.styleFrom(
@@ -439,8 +476,9 @@ class TambahTypeKendaraan extends StatelessWidget {
                           flex: 3,
                           child: ElevatedButton(
                             onPressed: () {
-                              controller
-                                  .resetFields(selectedDaerahTujuan.value);
+                              print(
+                                  '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');
+                                  widget.controller.addTypeMotorDaerah(id, CustomHelperFunctions.formattedTime, tgl, daerah, typeMotor, jumlah)
                             },
                             style: ElevatedButton.styleFrom(
                                 padding:

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import '../../repository/input data realisasi/plot_repo.dart';
+import '../../utils/popups/snackbar.dart';
 
 class PlotKendaraanController extends GetxController {
   final plotKendaraanRepo = Get.put(PlotRepository());
@@ -26,6 +27,10 @@ class PlotKendaraanController extends GetxController {
     } catch (e) {
       print('Error saat mengambil data jumlah plot');
       plotModel.assignAll([]);
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Gagal mengambil data jumlah plot. Silakan coba lagi.',
+      );
     }
   }
 

@@ -87,14 +87,16 @@ class DoRegulerSource extends DataGridSource {
             style: ElevatedButton.styleFrom(
               backgroundColor: request.status == 0
                   ? AppColors.primary
-                  : request.status == 1
+                  : request.status == 1 || request.status == 2
                       ? AppColors.pink
-                      : AppColors.accent,
+                      : request.status == 3
+                          ? AppColors.accent
+                          : Colors.transparent,
             ),
             child: Text(
               request.status == 0
                   ? 'Jumlah Unit'
-                  : request.status == 1
+                  : request.status == 1 || request.status == 2
                       ? 'Type Motor'
                       : 'ACC',
             ),

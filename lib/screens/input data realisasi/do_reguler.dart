@@ -68,11 +68,11 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                       onConfirm: () => controller.tambahJumlahUnit(model.id),
                       cancelText: 'Close',
                       confirmText: 'Tambahkan');
-                } else if (model.status == 1) {
+                } else if (model.status == 1 || model.status == 2) {
                   tambahTypeMotorController.fetchTambahTypeMotor(model.id);
                   Get.to(() => TambahTypeKendaraan(
                       model: model, controller: tambahTypeMotorController));
-                } else if (model.status == 2) {
+                } else if (model.status == 3) {
                   print('...NAVIGATE KE ACCECORISS MOTORR...');
                 }
               },
