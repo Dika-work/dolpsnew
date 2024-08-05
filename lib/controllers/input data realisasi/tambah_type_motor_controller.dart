@@ -120,10 +120,32 @@ class TambahTypeMotorController extends GetxController {
     print("Reset fields for tab $tab"); // Debugging
   }
 
+  void resetAllFields() {
+    for (var tab in TabDaerahTujuan.values) {
+      resetFields(tab); // Panggil resetFields untuk setiap tab
+    }
+  }
+
   void updateTextFieldValue(TabDaerahTujuan tab, int index, String? value) {
     final controllers = controllersPerTab[tab] ?? [];
     if (index >= 0 && index < controllers.length) {
       controllers[index].text = value ?? '';
+    }
+  }
+
+  // collect all value dropdown and textformfield on each tab
+  void collectData() {
+    for (var tab in TabDaerahTujuan.values) {
+      final fields = formFieldsPerTab[tab] ?? [];
+      final controllers = controllersPerTab[tab] ?? [];
+
+      for (var i = 0; i < fields.length; i++) {
+        final dropdownValue = fields[i].dropdownValue;
+        final textFieldValue = controllers[i].text;
+
+        print(
+            'Tab: $tab, Field Index: $i, Dropdown Value: $dropdownValue, TextField Value: $textFieldValue');
+      }
     }
   }
 }

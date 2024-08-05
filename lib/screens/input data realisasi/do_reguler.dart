@@ -61,13 +61,12 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                 final tambahTypeMotorController =
                     Get.put(TambahTypeMotorController());
                 if (model.status == 0) {
-                  CustomDialogs.defaultDialog(
-                      context: context,
-                      titleWidget: const Text('Tambah Jumlah Kendaraan'),
-                      contentWidget: JumlahUnit(model: model),
-                      onConfirm: () => controller.tambahJumlahUnit(model.id),
-                      cancelText: 'Close',
-                      confirmText: 'Tambahkan');
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return JumlahUnit(model: model);
+                    },
+                  );
                 } else if (model.status == 1 || model.status == 2) {
                   tambahTypeMotorController.fetchTambahTypeMotor(model.id);
                   Get.to(() => TambahTypeKendaraan(

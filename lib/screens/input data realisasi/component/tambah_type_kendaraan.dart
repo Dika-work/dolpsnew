@@ -9,6 +9,7 @@ import '../../../helpers/helper_function.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../../utils/constant/custom_size.dart';
 import '../../../utils/loader/circular_loader.dart';
+import '../../../utils/popups/snackbar.dart';
 import '../../../utils/source/input data realisasi/tambah_type_motor_source.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dynamic_formfield.dart';
@@ -53,9 +54,9 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
       'BJM': double.nan,
     };
 
-    const int rowsPerPage = 10;
+    const int rowsPerPage = 5;
     int currentPage = 0;
-    const double rowHeight = 25.0;
+    const double rowHeight = 55.0;
     const double headerHeight = 32.0;
 
     const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
@@ -475,15 +476,108 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                         Expanded(
                           flex: 3,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               print(
                                   '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');
-                                  widget.controller.addTypeMotorDaerah(id, CustomHelperFunctions.formattedTime, tgl, daerah, typeMotor, jumlah)
+
+                              bool hasData = false;
+                              bool hasValidData = true;
+
+                              for (var tab in TabDaerahTujuan.values) {
+                                final formData =
+                                    widget.controller.formFieldsPerTab[tab];
+                                final controllers =
+                                    widget.controller.controllersPerTab[tab];
+
+                                if (formData != null &&
+                                    formData.isNotEmpty &&
+                                    controllers != null) {
+                                  hasData = true;
+
+                                  for (int i = 0; i < formData.length; i++) {
+                                    final dropdownValue =
+                                        formData[i].dropdownValue;
+                                    final textFieldValue = controllers[i].text;
+                                    final jumlah =
+                                        int.tryParse(textFieldValue) ?? 0;
+
+                                    if (dropdownValue == null ||
+                                        dropdownValue.isEmpty ||
+                                        jumlah <= 0) {
+                                      hasValidData = false;
+                                      break;
+                                    }
+                                  }
+
+                                  if (!hasValidData) {
+                                    break;
+                                  }
+                                }
+                              }
+
+                              if (!hasData) {
+                                SnackbarLoader.errorSnackBar(
+                                  title: 'Error👌',
+                                  message:
+                                      'Harap tambahkan setidaknya satu field di salah satu tab.',
+                                );
+                              } else if (!hasValidData) {
+                                SnackbarLoader.errorSnackBar(
+                                  title: 'Error',
+                                  message:
+                                      'Harap isi semua dropdown dan jumlah dengan benar.',
+                                );
+                              } else {
+                                // Mengumpulkan dan memproses data yang valid
+                                widget.controller.collectData();
+
+                                for (var tab in TabDaerahTujuan.values) {
+                                  final formData =
+                                      widget.controller.formFieldsPerTab[tab];
+                                  final controllers =
+                                      widget.controller.controllersPerTab[tab];
+
+                                  if (formData != null && controllers != null) {
+                                    for (int i = 0; i < formData.length; i++) {
+                                      final typeMotor =
+                                          formData[i].dropdownValue ?? '';
+                                      final daerah = getNamaDaerah(
+                                          tab); // Gunakan nama daerah lengkap
+                                      final jumlah =
+                                          int.tryParse(controllers[i].text) ??
+                                              0;
+                                      final jamDetail =
+                                          CustomHelperFunctions.formattedTime;
+                                      final tglDetail = tgl;
+
+                                      // Kirim data yang benar ke database
+                                      await widget.controller
+                                          .addTypeMotorDaerah(
+                                        id,
+                                        jamDetail,
+                                        tglDetail,
+                                        daerah, // Nama daerah lengkap
+                                        typeMotor,
+                                        jumlah,
+                                      );
+                                    }
+                                  }
+                                }
+
+                                // Reset semua tab dan input field setelah sukses
+                                widget.controller.resetAllFields();
+                                SnackbarLoader.successSnackBar(
+                                  title: 'Berhasil',
+                                  message:
+                                      'Data berhasil ditambahkan dan semua field direset.',
+                                );
+                              }
                             },
                             style: ElevatedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 20.0),
-                                backgroundColor: AppColors.success),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 20.0),
+                              backgroundColor: AppColors.success,
+                            ),
                             child: const Text('Selesai'),
                           ),
                         )
@@ -497,6 +591,21 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
         ],
       ),
     );
+  }
+
+  String getNamaDaerah(TabDaerahTujuan tab) {
+    switch (tab) {
+      case TabDaerahTujuan.srd:
+        return "SAMARINDA";
+      case TabDaerahTujuan.mks:
+        return "MAKASAR";
+      case TabDaerahTujuan.ptk:
+        return "PONTIANAK";
+      case TabDaerahTujuan.bjm:
+        return "BANJARMASIN";
+      default:
+        return "";
+    }
   }
 }
 

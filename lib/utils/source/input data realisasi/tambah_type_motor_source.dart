@@ -63,7 +63,7 @@ class TambahTypeMotorSource extends DataGridSource {
       _tambahTypeMotor = _generateEmptyRows(1);
     } else {
       _tambahTypeMotor =
-          tambahTypeMotorModel.skip(startIndex).take(10).map<DataGridRow>(
+          tambahTypeMotorModel.skip(startIndex).take(5).map<DataGridRow>(
         (e) {
           index++;
           return DataGridRow(cells: [
@@ -81,7 +81,7 @@ class TambahTypeMotorSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
+    final int startIndex = newPageIndex * 5;
     _updateDataPager(controller.tambahTypeMotorModel, startIndex);
     notifyListeners();
     return true;

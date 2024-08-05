@@ -31,12 +31,12 @@ class TambahTypeMotorRepository {
           Uri.parse(
               '${storagetUtil.baseURL}/DO/api/api_packing_list_motor.php'),
           body: {
-            'id_realisasi': idRealisasi,
+            'id_realisasi': idRealisasi.toString(),
             'jam_detail': jamDetail,
             'tgl_detail': tglDetail,
             'daerah': daerah,
             'type_motor': typeMotor,
-            'jumlah': jumlah
+            'jumlah': jumlah.toString()
           });
 
       if (response.statusCode != 200) {

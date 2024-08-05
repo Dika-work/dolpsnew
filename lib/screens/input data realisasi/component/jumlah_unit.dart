@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
+import '../../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../../utils/constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
@@ -15,7 +17,7 @@ class JumlahUnit extends StatefulWidget {
 }
 
 class _JumlahUnitState extends State<JumlahUnit> {
-  late int idReq;
+  late int id;
   late String tujuan;
   late String plant;
   late int type;
@@ -27,7 +29,7 @@ class _JumlahUnitState extends State<JumlahUnit> {
   @override
   void initState() {
     super.initState();
-    idReq = widget.model.idReq;
+    id = widget.model.id;
     tujuan = widget.model.tujuan;
     plant = widget.model.plant;
     type = widget.model.type;
@@ -40,94 +42,117 @@ class _JumlahUnitState extends State<JumlahUnit> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('ini idReq nya : $idReq'),
-          const Text('Tujuan'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: tujuan,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Plant'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: plant,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Type'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: type == 0 ? 'REGULER' : 'MUTASI',
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Jenis'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: jenisKen,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('No Polisi'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: noPolisi,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Supir'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: supir,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          TextFormField(
-            controller: jumlahUnit,
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Jumlah motor tidak boleh kosong';
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              labelText: 'Jumlah Unit',
+    final controller = Get.put(DoRegulerController());
+    return AlertDialog(
+      content: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Tujuan'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: tujuan,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
-          ),
-        ],
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Plant'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: plant,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Type'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: type == 0 ? 'REGULER' : 'MUTASI',
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Jenis'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: jenisKen,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('No Polisi'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: noPolisi,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Supir'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                  prefixIcon: const Icon(Iconsax.truck_fast),
+                  hintText: supir,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            TextFormField(
+              controller: jumlahUnit,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Jumlah motor tidak boleh kosong';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                labelText: 'Jumlah Unit',
+              ),
+            ),
+          ],
+        ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: const Text('Close'),
+        ),
+        TextButton(
+          onPressed: () {
+            print('...INI ID DARI JUMLAH UNIT MOTOR : $id...');
+            print('...INI NAMA USER YANG INPUTNYA : ${controller.namaUser}...');
+            print(
+                '...INI JUMLAH INPUTAN MOTORNYA : ${int.parse(jumlahUnit.text)}...');
+            controller.tambahJumlahUnit(
+                id, controller.namaUser, int.parse(jumlahUnit.text));
+          },
+          // onPressed: () => controller.tambahJumlahUnit(
+          //     id, controller.namaUser, int.parse(jumlahUnit.text)),
+          child: const Text('Save'),
+        ),
+      ],
     );
   }
 }

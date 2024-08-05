@@ -14,6 +14,7 @@ class DoRegulerController extends GetxController {
 
   RxString roleUser = ''.obs;
   final storageUtil = StorageUtil();
+  String namaUser = '';
 
   // roles users
   RxInt rolesLihat = 0.obs;
@@ -26,6 +27,7 @@ class DoRegulerController extends GetxController {
     super.onInit();
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
+      namaUser = user.nama;
       roleUser.value = user.tipe;
       rolesLihat.value = user.lihat;
       rolesBatal.value = user.batal;
@@ -48,10 +50,10 @@ class DoRegulerController extends GetxController {
     }
   }
 
-  Future<void> tambahJumlahUnit(int id) async {
+  Future<void> tambahJumlahUnit(int id, String user, int jumlahUnit) async {
     CustomDialogs.loadingIndicator();
 
-    await doRegulerRepo.tambahJumlahUnit(id);
+    await doRegulerRepo.tambahJumlahUnit(id, user, jumlahUnit);
     await fetchRegulerContent();
 
     CustomFullScreenLoader.stopLoading();

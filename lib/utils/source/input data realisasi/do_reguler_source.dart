@@ -231,7 +231,7 @@ class DoRegulerSource extends DataGridSource {
                 value: '${data.inisialDepan}${data.inisialBelakang}'),
             DataGridCell<String>(
                 columnName: 'Status',
-                value: data.status == 0 ? 'READY' : 'NOT'),
+                value: data.statusAnalisa == 0 ? 'READY' : 'NOT'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
           ]);
         },
