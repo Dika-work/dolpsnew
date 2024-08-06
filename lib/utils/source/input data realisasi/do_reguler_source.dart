@@ -68,15 +68,17 @@ class DoRegulerSource extends DataGridSource {
           // Lihat
           controller.rolesLihat.value == 0
               ? const SizedBox.shrink()
-              : ElevatedButton(
-                  onPressed: () {
-                    if (onLihat != null) {
-                      onLihat!(request);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.success),
-                  child: const Text('Lihat')),
+              : request.status == 0
+                  ? const SizedBox.shrink()
+                  : ElevatedButton(
+                      onPressed: () {
+                        if (onLihat != null) {
+                          onLihat!(request);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.success),
+                      child: const Text('Lihat')),
           // Action
           ElevatedButton(
             onPressed: () {
@@ -137,7 +139,7 @@ class DoRegulerSource extends DataGridSource {
                         ?.apply(color: AppColors.black),
                   )),
           // Type
-          request.status == 2
+          request.status == 2 || request.status == 3
               ? ElevatedButton(
                   onPressed: () {
                     if (onType != null) {

@@ -57,6 +57,41 @@ class TambahTypeMotorRepository {
     }
   }
 
+  // tambah status type motor (change status to 2)
+  Future<void> changeStatusTypeMotor(int id, int status) async {
+    try {
+      final response = await http.put(
+          Uri.parse(
+              '${storagetUtil.baseURL}/DO/api/api_realisasi.php?action=Tipe'),
+          body: {'id': id.toString(), 'status': status.toString()});
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        print('ini ubah status tambah type motor : $responseData');
+        if (responseData['status'] == 'error') {
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😢',
+            message: responseData['message'] ?? 'Ada yang salah😒',
+          );
+          print(responseData['message']);
+        }
+      } else {
+        CustomFullScreenLoader.stopLoading();
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😢',
+          message: 'Server mengembalikan status code ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      print('Error di tambah jumlah unit: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat tambah jumlah unit',
+      );
+    }
+  }
+
   // func total plot di tambah type kendaraan
   Future<List<PlotModelRealisasi>> jumlahPlotRealisasi(int idRealisasi) async {
     try {

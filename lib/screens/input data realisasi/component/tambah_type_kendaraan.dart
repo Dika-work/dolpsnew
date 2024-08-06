@@ -38,13 +38,13 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
     jumlahMotor = widget.model.jumlahUnit;
 
     // set default untuk plot realisasi
-    final plotRealisasiController = Get.put(PlotRealisasiController());
+    final plotRealisasiController = Get.find<PlotRealisasiController>();
     plotRealisasiController.fetchPlotRealisasi(id, jumlahMotor);
   }
 
   @override
   Widget build(BuildContext context) {
-    final plotRealisasiController = Get.put(PlotRealisasiController());
+    final plotRealisasiController = Get.find<PlotRealisasiController>();
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Type Motor': double.nan,
@@ -79,6 +79,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
         padding: const EdgeInsets.symmetric(
             horizontal: CustomSize.md, vertical: CustomSize.lg),
         children: [
+          Text('ini id nya :$id'),
           Row(
             children: [
               Expanded(
@@ -179,8 +180,8 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                   children: [
                     const Text('Total Unit Motor'),
                     TextFormField(
-                      controller: TextEditingController(
-                          text: widget.model.jumlahUnit.toString()),
+                      controller:
+                          TextEditingController(text: jumlahMotor.toString()),
                       keyboardType: TextInputType.none,
                       readOnly: true,
                       decoration: const InputDecoration(
@@ -473,114 +474,133 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                           ),
                         ),
                         const SizedBox(width: CustomSize.sm),
-                        Expanded(
-                          flex: 3,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              print(
-                                  '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');
+                        Obx(() => Expanded(
+                              flex: 3,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  if (plotRealisasiController
+                                      .isJumlahPlotEqual.value) {
+                                    print(
+                                        '...INI JUMLAH PLOT REALISASI DAN JUMLAH UNIT MOTOR SUDAH SAMA...');
+                                    // widget.controller.selesaiTypeMotor(id);
+                                    // Get.back();
+                                  } else {
+                                    print(
+                                        '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');
 
-                              bool hasData = false;
-                              bool hasValidData = true;
+                                    bool hasData = false;
+                                    bool hasValidData = true;
 
-                              for (var tab in TabDaerahTujuan.values) {
-                                final formData =
-                                    widget.controller.formFieldsPerTab[tab];
-                                final controllers =
-                                    widget.controller.controllersPerTab[tab];
+                                    for (var tab in TabDaerahTujuan.values) {
+                                      final formData = widget
+                                          .controller.formFieldsPerTab[tab];
+                                      final controllers = widget
+                                          .controller.controllersPerTab[tab];
 
-                                if (formData != null &&
-                                    formData.isNotEmpty &&
-                                    controllers != null) {
-                                  hasData = true;
+                                      if (formData != null &&
+                                          formData.isNotEmpty &&
+                                          controllers != null) {
+                                        hasData = true;
 
-                                  for (int i = 0; i < formData.length; i++) {
-                                    final dropdownValue =
-                                        formData[i].dropdownValue;
-                                    final textFieldValue = controllers[i].text;
-                                    final jumlah =
-                                        int.tryParse(textFieldValue) ?? 0;
+                                        for (int i = 0;
+                                            i < formData.length;
+                                            i++) {
+                                          final dropdownValue =
+                                              formData[i].dropdownValue;
+                                          final textFieldValue =
+                                              controllers[i].text;
+                                          final jumlah =
+                                              int.tryParse(textFieldValue) ?? 0;
 
-                                    if (dropdownValue == null ||
-                                        dropdownValue.isEmpty ||
-                                        jumlah <= 0) {
-                                      hasValidData = false;
-                                      break;
+                                          if (dropdownValue == null ||
+                                              dropdownValue.isEmpty ||
+                                              jumlah <= 0) {
+                                            hasValidData = false;
+                                            break;
+                                          }
+                                        }
+
+                                        if (!hasValidData) {
+                                          break;
+                                        }
+                                      }
                                     }
-                                  }
 
-                                  if (!hasValidData) {
-                                    break;
-                                  }
-                                }
-                              }
-
-                              if (!hasData) {
-                                SnackbarLoader.errorSnackBar(
-                                  title: 'Error👌',
-                                  message:
-                                      'Harap tambahkan setidaknya satu field di salah satu tab.',
-                                );
-                              } else if (!hasValidData) {
-                                SnackbarLoader.errorSnackBar(
-                                  title: 'Error',
-                                  message:
-                                      'Harap isi semua dropdown dan jumlah dengan benar.',
-                                );
-                              } else {
-                                // Mengumpulkan dan memproses data yang valid
-                                widget.controller.collectData();
-
-                                for (var tab in TabDaerahTujuan.values) {
-                                  final formData =
-                                      widget.controller.formFieldsPerTab[tab];
-                                  final controllers =
-                                      widget.controller.controllersPerTab[tab];
-
-                                  if (formData != null && controllers != null) {
-                                    for (int i = 0; i < formData.length; i++) {
-                                      final typeMotor =
-                                          formData[i].dropdownValue ?? '';
-                                      final daerah = getNamaDaerah(
-                                          tab); // Gunakan nama daerah lengkap
-                                      final jumlah =
-                                          int.tryParse(controllers[i].text) ??
-                                              0;
-                                      final jamDetail =
-                                          CustomHelperFunctions.formattedTime;
-                                      final tglDetail = tgl;
-
-                                      // Kirim data yang benar ke database
-                                      await widget.controller
-                                          .addTypeMotorDaerah(
-                                        id,
-                                        jamDetail,
-                                        tglDetail,
-                                        daerah, // Nama daerah lengkap
-                                        typeMotor,
-                                        jumlah,
+                                    if (!hasData) {
+                                      SnackbarLoader.errorSnackBar(
+                                        title: 'Error👌',
+                                        message:
+                                            'Harap tambahkan setidaknya satu field di salah satu tab.',
                                       );
+                                    } else if (!hasValidData) {
+                                      SnackbarLoader.errorSnackBar(
+                                        title: 'Error',
+                                        message:
+                                            'Harap isi semua dropdown dan jumlah dengan benar.',
+                                      );
+                                    } else {
+                                      // Mengumpulkan dan memproses data yang valid
+                                      widget.controller.collectData();
+
+                                      for (var tab in TabDaerahTujuan.values) {
+                                        final formData = widget
+                                            .controller.formFieldsPerTab[tab];
+                                        final controllers = widget
+                                            .controller.controllersPerTab[tab];
+
+                                        if (formData != null &&
+                                            controllers != null) {
+                                          for (int i = 0;
+                                              i < formData.length;
+                                              i++) {
+                                            final typeMotor =
+                                                formData[i].dropdownValue ?? '';
+                                            final daerah = getNamaDaerah(
+                                                tab); // Gunakan nama daerah lengkap
+                                            final jumlah = int.tryParse(
+                                                    controllers[i].text) ??
+                                                0;
+                                            final jamDetail =
+                                                CustomHelperFunctions
+                                                    .formattedTime;
+                                            final tglDetail = tgl;
+
+                                            // Kirim data yang benar ke database
+                                            widget.controller.addTypeMotorDaerah(
+                                                id,
+                                                jamDetail,
+                                                tglDetail,
+                                                daerah, // Nama daerah lengkap
+                                                typeMotor,
+                                                jumlah,
+                                                jumlahMotor);
+                                            widget.controller.resetAllFields();
+                                          }
+                                        }
+                                      }
                                     }
                                   }
-                                }
-
-                                // Reset semua tab dan input field setelah sukses
-                                widget.controller.resetAllFields();
-                                SnackbarLoader.successSnackBar(
-                                  title: 'Berhasil',
-                                  message:
-                                      'Data berhasil ditambahkan dan semua field direset.',
-                                );
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 20.0),
-                              backgroundColor: AppColors.success,
-                            ),
-                            child: const Text('Selesai'),
-                          ),
-                        )
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20.0),
+                                  backgroundColor: plotRealisasiController
+                                          .isJumlahPlotEqual.value
+                                      ? AppColors.success
+                                      : AppColors.primary,
+                                ),
+                                child: Text(
+                                  plotRealisasiController
+                                          .isJumlahPlotEqual.value
+                                      ? 'Selesai'
+                                      : 'Simpan Data',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.apply(color: AppColors.white),
+                                ),
+                              ),
+                            ))
                       ],
                     ),
                   ],

@@ -1,3 +1,4 @@
+import 'package:doplsnew/controllers/input%20data%20realisasi/do_reguler_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -32,6 +33,7 @@ class TambahTypeMotorController extends GetxController {
 
   final tambahTypeMotorRepo = Get.put(TambahTypeMotorRepository());
   final plotRealisasiController = Get.put(PlotRealisasiController());
+  final doRegulerController = Get.put(DoRegulerController());
 
   Future<void> fetchTambahTypeMotor(int id) async {
     try {
@@ -47,33 +49,69 @@ class TambahTypeMotorController extends GetxController {
     }
   }
 
-  Future<void> addTypeMotorDaerah(int idRealisasi, String jamDetail,
-      String tglDetail, String daerah, String typeMotor, int jumlah) async {
-    CustomDialogs.loadingIndicator();
+  Future<void> addTypeMotorDaerah(
+      int idRealisasi,
+      String jamDetail,
+      String tglDetail,
+      String daerah,
+      String typeMotor,
+      int jumlah,
+      int jumlahMotor) async {
+    try {
+      CustomDialogs.loadingIndicator();
 
-    // menambahkan jumlah plot
-    await plotRealisasiController.fetchPlotRealisasi(idRealisasi, jumlah);
-    final jumlahPlotRealisasi =
-        plotRealisasiController.plotModelRealisasi.first.jumlahPlot;
-    if (jumlah != jumlahPlotRealisasi) {
-      await tambahTypeMotorRepo.addTypeMotorDaerah(
-          idRealisasi, jamDetail, tglDetail, daerah, typeMotor, jumlah);
-      // harusnya ini reset value dari dropdown dan textfield yg ada di tambah type motor
-      await plotRealisasiController.fetchPlotRealisasi(idRealisasi, jumlah);
-      await fetchTambahTypeMotor(idRealisasi);
+      // Mendapatkan jumlah plot yang sudah ada
+      await plotRealisasiController.fetchPlotRealisasi(
+          idRealisasi, jumlahMotor);
+      final jumlahPlotRealisasi =
+          plotRealisasiController.plotModelRealisasi.first.jumlahPlot;
 
-      SnackbarLoader.successSnackBar(
-        title: 'Berhasil✨',
-        message: 'Menambahkan data type motor..',
+      if (jumlahPlotRealisasi < jumlahMotor) {
+        // Menambahkan type motor daerah
+        await tambahTypeMotorRepo.addTypeMotorDaerah(
+            idRealisasi, jamDetail, tglDetail, daerah, typeMotor, jumlah);
+
+        // Update data setelah penambahan
+        await plotRealisasiController.fetchPlotRealisasi(
+            idRealisasi, jumlahMotor);
+        await fetchTambahTypeMotor(idRealisasi);
+
+        SnackbarLoader.successSnackBar(
+          title: 'Berhasil✨',
+          message: 'Menambahkan data type motor.',
+        );
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal',
+          message: 'Jumlah plot telah mencapai batas maksimal unit kendaraan.',
+        );
+      }
+    } catch (e) {
+      print('Error while adding type motor daerah: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Error',
+        message: 'Terjadi kesalahan saat menambahkan data type motor.',
       );
+    } finally {
       CustomFullScreenLoader.stopLoading();
-    } else {
-      CustomFullScreenLoader.stopLoading();
-      SnackbarLoader.successSnackBar(
-        title: 'Gagal',
-        message: 'Jumlah kendaraan dan jumlah plot sudah sesuai..',
-      );
     }
+  }
+
+  // selesai type motor
+  Future<void> selesaiTypeMotor(int idRealisasi) async {
+    CustomDialogs.loadingIndicator();
+    await tambahTypeMotorRepo.changeStatusTypeMotor(idRealisasi, 3);
+    await doRegulerController.fetchRegulerContent();
+
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> status2TypeMotor(int idRealisasi) async {
+    CustomDialogs.loadingIndicator();
+    await tambahTypeMotorRepo.changeStatusTypeMotor(idRealisasi, 2);
+    await doRegulerController.fetchRegulerContent();
+
+    CustomFullScreenLoader.stopLoading();
   }
 
   void addField(TabDaerahTujuan tab) {
@@ -162,21 +200,21 @@ class PlotRealisasiController extends GetxController {
           await tambahTypeMotorRepo.jumlahPlotRealisasi(idRealisasi);
       plotModelRealisasi.assignAll(plotRealisasi);
 
-      print('Plot Model Realisasi setelah fetch: ${plotModelRealisasi.map(
-        (element) => element.jumlahPlot,
-      )}');
-      isJumlahPlotEqual.value = plotModelRealisasi.isNotEmpty &&
-          plotModelRealisasi.first.jumlahPlot == jumlahMotor;
-
-      print('isJumlahPlotEqual setelah fetch ${isJumlahPlotEqual.value}');
+      if (plotModelRealisasi.isNotEmpty) {
+        int fetchedJumlahPlot = plotModelRealisasi.first.jumlahPlot;
+        print(
+            'Fetched jumlahPlot: $fetchedJumlahPlot, jumlahMotor: $jumlahMotor');
+        isJumlahPlotEqual.value = fetchedJumlahPlot == jumlahMotor;
+        print('isJumlahPlotEqual set to: ${isJumlahPlotEqual.value}');
+      } else {
+        isJumlahPlotEqual.value = false;
+        print('No plot data available, setting isJumlahPlotEqual to false.');
+      }
     } catch (e) {
-      print('Error saat mengambil data jumlah plot realisasi motor');
+      print('Error saat mengambil data jumlah plot realisasi motor: $e');
       plotModelRealisasi.assignAll([]);
-      SnackbarLoader.errorSnackBar(
-        title: 'Error',
-        message:
-            'Gagal mengambil data jumlah plot realisasi. Silakan coba lagi.',
-      );
+      isJumlahPlotEqual.value = false; // Pastikan ini di-reset jika ada error
+      print('Setting isJumlahPlotEqual to false due to error.');
     }
   }
 }
