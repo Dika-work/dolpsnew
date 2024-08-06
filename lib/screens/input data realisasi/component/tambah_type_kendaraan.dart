@@ -30,6 +30,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
   late String tgl;
   late int jumlahMotor;
   final isExceedingCapacity = false.obs;
+  final plotRealisasiController = Get.find<PlotRealisasiController>();
 
   @override
   void initState() {
@@ -39,20 +40,41 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
     jumlahMotor = widget.model.jumlahUnit;
 
     // set default untuk plot realisasi
-    final plotRealisasiController = Get.find<PlotRealisasiController>();
     plotRealisasiController.fetchPlotRealisasi(id, jumlahMotor).then((_) {
-      // Periksa apakah total plot melebihi jumlah unit motor
-      if (plotRealisasiController.plotModelRealisasi.isNotEmpty &&
-          plotRealisasiController.plotModelRealisasi.first.jumlahPlot >
-              jumlahMotor) {
-        isExceedingCapacity.value = true;
-      }
+      updateExceedingCapacity();
     });
+  }
+
+  void updateExceedingCapacity() {
+    if (plotRealisasiController.plotModelRealisasi.isNotEmpty) {
+      int totalPlot =
+          plotRealisasiController.plotModelRealisasi.first.jumlahPlot;
+
+      // Loop semua bidang dan jumlahkan total plot yang dimasukkan
+      for (var tab in TabDaerahTujuan.values) {
+        final formData = widget.controller.formFieldsPerTab[tab];
+        final controllers = widget.controller.controllersPerTab[tab];
+
+        if (formData != null && formData.isNotEmpty && controllers != null) {
+          for (int i = 0; i < formData.length; i++) {
+            final textFieldValue = controllers[i].text;
+            final jumlah = int.tryParse(textFieldValue) ?? 0;
+            totalPlot += jumlah;
+          }
+        }
+      }
+
+      // Periksa apakah total plot melebihi kapasitas motor
+      if (totalPlot > jumlahMotor) {
+        isExceedingCapacity.value = true;
+      } else {
+        isExceedingCapacity.value = false;
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final plotRealisasiController = Get.find<PlotRealisasiController>();
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Type Motor': double.nan,
@@ -514,13 +536,15 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                         );
                       } else {
                         return Padding(
-                          padding: const EdgeInsets.only(top: CustomSize.spaceBtwSections),
+                          padding: const EdgeInsets.only(
+                              top: CustomSize.spaceBtwSections),
                           child: Row(
                             children: [
                               Expanded(
                                 flex: 1,
                                 child: ElevatedButton(
                                   onPressed: () {
+                                    updateExceedingCapacity(); // Update status setelah menambah field
                                     widget.controller
                                         .addField(selectedDaerahTujuan.value);
                                   },
@@ -532,8 +556,9 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                 flex: 1,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    widget.controller
-                                        .resetFields(selectedDaerahTujuan.value);
+                                    updateExceedingCapacity(); // Update status setelah mereset field
+                                    widget.controller.resetFields(
+                                        selectedDaerahTujuan.value);
                                   },
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: AppColors.error),
@@ -549,27 +574,29 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                             .isJumlahPlotEqual.value) {
                                           print(
                                               '...INI JUMLAH PLOT REALISASI DAN JUMLAH UNIT MOTOR SUDAH SAMA...');
-                                          widget.controller.selesaiTypeMotor(id);
+                                          widget.controller
+                                              .selesaiTypeMotor(id);
                                           // Get.back();
                                         } else {
                                           print(
                                               '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');
-                          
+
                                           bool hasData = false;
                                           bool hasValidData = true;
-                          
+
                                           for (var tab
                                               in TabDaerahTujuan.values) {
-                                            final formData = widget
-                                                .controller.formFieldsPerTab[tab];
-                                            final controllers = widget.controller
+                                            final formData = widget.controller
+                                                .formFieldsPerTab[tab];
+                                            final controllers = widget
+                                                .controller
                                                 .controllersPerTab[tab];
-                          
+
                                             if (formData != null &&
                                                 formData.isNotEmpty &&
                                                 controllers != null) {
                                               hasData = true;
-                          
+
                                               for (int i = 0;
                                                   i < formData.length;
                                                   i++) {
@@ -580,7 +607,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                                 final jumlah = int.tryParse(
                                                         textFieldValue) ??
                                                     0;
-                          
+
                                                 if (dropdownValue == null ||
                                                     dropdownValue.isEmpty ||
                                                     jumlah <= 0) {
@@ -588,13 +615,13 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                                   break;
                                                 }
                                               }
-                          
+
                                               if (!hasValidData) {
                                                 break;
                                               }
                                             }
                                           }
-                          
+
                                           if (!hasData) {
                                             SnackbarLoader.errorSnackBar(
                                               title: 'Error👌',
@@ -610,7 +637,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                           } else {
                                             // Mengumpulkan dan memproses data yang valid
                                             widget.controller.collectData();
-                          
+
                                             for (var tab
                                                 in TabDaerahTujuan.values) {
                                               final formData = widget.controller
@@ -618,25 +645,26 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                               final controllers = widget
                                                   .controller
                                                   .controllersPerTab[tab];
-                          
+
                                               if (formData != null &&
                                                   controllers != null) {
                                                 for (int i = 0;
                                                     i < formData.length;
                                                     i++) {
-                                                  final typeMotor =
-                                                      formData[i].dropdownValue ??
-                                                          '';
+                                                  final typeMotor = formData[i]
+                                                          .dropdownValue ??
+                                                      '';
                                                   final daerah = getNamaDaerah(
                                                       tab); // Gunakan nama daerah lengkap
                                                   final jumlah = int.tryParse(
-                                                          controllers[i].text) ??
+                                                          controllers[i]
+                                                              .text) ??
                                                       0;
                                                   final jamDetail =
                                                       CustomHelperFunctions
                                                           .formattedTime;
                                                   final tglDetail = tgl;
-                          
+
                                                   // Kirim data yang benar ke database
                                                   widget.controller
                                                       .addTypeMotorDaerah(
@@ -647,6 +675,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                                           typeMotor,
                                                           jumlah,
                                                           jumlahMotor);
+                                                  updateExceedingCapacity();
                                                   widget.controller
                                                       .resetAllFields();
                                                 }
@@ -674,12 +703,12 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                             ?.apply(color: AppColors.white),
                                       ),
                                     ),
-                                  ))
+                                  )),
                             ],
                           ),
                         );
                       }
-                    })
+                    }),
                   ],
                 ),
               );

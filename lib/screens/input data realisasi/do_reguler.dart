@@ -77,22 +77,18 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
               },
               onBatal: (DoRealisasiModel model) {},
               onEdit: (DoRealisasiModel model) {
-                if (model.status == 0 || model.status == 1) {
-                  CustomDialogs.defaultDialog(
-                      context: context,
-                      titleWidget: const Text('Edit DO Realisasi'),
-                      contentWidget: EditRealisasi(
-                        model: model,
-                      ),
-                      // onConfirm: controller.edit,
-                      cancelText: 'Close',
-                      confirmText: 'Edit');
-                } else {
-                  print('..INI BTN EDIT STATUS 2..');
-                }
+                CustomDialogs.defaultDialog(
+                    context: context,
+                    titleWidget: const Text('Edit DO Realisasi'),
+                    contentWidget: EditRealisasi(
+                      model: model,
+                    ),
+                    // onConfirm: controller.edit,
+                    cancelText: 'Close',
+                    confirmText: 'Edit');
               },
               onType: (DoRealisasiModel model) {
-                print('..INI BTN ON TYPE..');
+                // Get.to(() => EditTypeKendaraan());
               },
               onHapus: (DoRealisasiModel model) {},
               doRealisasiModel: controller.doRealisasiModel,
@@ -391,5 +387,53 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
         },
       ),
     );
+  }
+}
+
+class EditTypeKendaraan extends StatefulWidget {
+  const EditTypeKendaraan(
+      {super.key, required this.controller, required this.model});
+
+  final DoRegulerController controller;
+  final DoRealisasiModel model;
+
+  @override
+  State<EditTypeKendaraan> createState() => _EditTypeKendaraanState();
+}
+
+class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
+  late int id;
+  late int jumlahUnit;
+  late String plant;
+  late String tujuan;
+  late int type;
+  late String jenisKen;
+  late String noPolisi;
+  late String supir;
+  late TextEditingController unitMotor;
+  late int totalPlot;
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.model.id;
+    jumlahUnit = widget.model.jumlahUnit;
+    plant = widget.model.plant;
+    tujuan = widget.model.tujuan;
+    type = widget.model.type;
+    jenisKen = '${widget.model.inisialDepan}${widget.model.inisialBelakang}';
+    noPolisi = widget.model.noPolisi;
+    supir = widget.model.supir;
+    unitMotor = TextEditingController(text: widget.model.jumlahUnit.toString());
+
+    // total plot
+    final plotController = Get.put(PlotRealisasiController());
+    plotController.fetchPlotRealisasi(id, jumlahUnit);
+    totalPlot = plotController.plotModelRealisasi.first.jumlahPlot;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
