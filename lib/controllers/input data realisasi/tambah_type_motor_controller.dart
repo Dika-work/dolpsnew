@@ -102,7 +102,7 @@ class TambahTypeMotorController extends GetxController {
     CustomDialogs.loadingIndicator();
     await tambahTypeMotorRepo.changeStatusTypeMotor(idRealisasi, 3);
     await doRegulerController.fetchRegulerContent();
-
+    CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }
 
