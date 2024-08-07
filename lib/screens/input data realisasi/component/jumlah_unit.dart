@@ -24,7 +24,7 @@ class _JumlahUnitState extends State<JumlahUnit> {
   late String jenisKen;
   late String noPolisi;
   late String supir;
-  late TextEditingController jumlahUnit;
+  late int jumlahUnit;
 
   @override
   void initState() {
@@ -36,8 +36,7 @@ class _JumlahUnitState extends State<JumlahUnit> {
     jenisKen = widget.model.jenisKen;
     noPolisi = widget.model.noPolisi;
     supir = widget.model.supir;
-    jumlahUnit =
-        TextEditingController(text: widget.model.jumlahUnit.toString());
+    jumlahUnit = widget.model.jumlahUnit;
   }
 
   @override
@@ -117,7 +116,6 @@ class _JumlahUnitState extends State<JumlahUnit> {
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
-              controller: jumlahUnit,
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -125,8 +123,8 @@ class _JumlahUnitState extends State<JumlahUnit> {
                 }
                 return null;
               },
-              decoration: const InputDecoration(
-                labelText: 'Jumlah Unit',
+              decoration: InputDecoration(
+                hintText: jumlahUnit.toString(),
               ),
             ),
           ],
@@ -143,10 +141,8 @@ class _JumlahUnitState extends State<JumlahUnit> {
           onPressed: () {
             print('...INI ID DARI JUMLAH UNIT MOTOR : $id...');
             print('...INI NAMA USER YANG INPUTNYA : ${controller.namaUser}...');
-            print(
-                '...INI JUMLAH INPUTAN MOTORNYA : ${int.parse(jumlahUnit.text)}...');
-            controller.tambahJumlahUnit(
-                id, controller.namaUser, int.parse(jumlahUnit.text));
+            print('...INI JUMLAH INPUTAN MOTORNYA : $jumlahUnit...');
+            controller.tambahJumlahUnit(id, controller.namaUser, jumlahUnit);
           },
           // onPressed: () => controller.tambahJumlahUnit(
           //     id, controller.namaUser, int.parse(jumlahUnit.text)),

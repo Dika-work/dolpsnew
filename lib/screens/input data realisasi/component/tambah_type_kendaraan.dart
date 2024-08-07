@@ -576,7 +576,6 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                               '...INI JUMLAH PLOT REALISASI DAN JUMLAH UNIT MOTOR SUDAH SAMA...');
                                           widget.controller
                                               .selesaiTypeMotor(id);
-                                          // Get.back();
                                         } else {
                                           print(
                                               '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');
@@ -637,50 +636,9 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                           } else {
                                             // Mengumpulkan dan memproses data yang valid
                                             widget.controller.collectData();
-
-                                            for (var tab
-                                                in TabDaerahTujuan.values) {
-                                              final formData = widget.controller
-                                                  .formFieldsPerTab[tab];
-                                              final controllers = widget
-                                                  .controller
-                                                  .controllersPerTab[tab];
-
-                                              if (formData != null &&
-                                                  controllers != null) {
-                                                for (int i = 0;
-                                                    i < formData.length;
-                                                    i++) {
-                                                  final typeMotor = formData[i]
-                                                          .dropdownValue ??
-                                                      '';
-                                                  final daerah = getNamaDaerah(
-                                                      tab); // Gunakan nama daerah lengkap
-                                                  final jumlah = int.tryParse(
-                                                          controllers[i]
-                                                              .text) ??
-                                                      0;
-                                                  final jamDetail =
-                                                      CustomHelperFunctions
-                                                          .formattedTime;
-                                                  final tglDetail = tgl;
-
-                                                  // Kirim data yang benar ke database
-                                                  widget.controller
-                                                      .addTypeMotorDaerah(
-                                                          id,
-                                                          jamDetail,
-                                                          tglDetail,
-                                                          daerah, // Nama daerah lengkap
-                                                          typeMotor,
-                                                          jumlah,
-                                                          jumlahMotor);
-                                                  updateExceedingCapacity();
-                                                  widget.controller
-                                                      .resetAllFields();
-                                                }
-                                              }
-                                            }
+                                            updateExceedingCapacity(); // Update status setelah submit data
+                                            widget.controller
+                                                .submitAllTabs(id, jumlahMotor);
                                           }
                                         }
                                       },

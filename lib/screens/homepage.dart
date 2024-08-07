@@ -84,7 +84,6 @@ class Homepage extends StatelessWidget {
                   child: SfDataGrid(
                     source: dataSource,
                     columnWidthMode: ColumnWidthMode.auto,
-                    allowPullToRefresh: true,
                     gridLinesVisibility: GridLinesVisibility.both,
                     headerGridLinesVisibility: GridLinesVisibility.both,
                     allowColumnsResizing: true,
@@ -286,7 +285,6 @@ class Homepage extends StatelessWidget {
                   child: SfDataGrid(
                     source: dataSource,
                     columnWidthMode: ColumnWidthMode.auto,
-                    allowPullToRefresh: true,
                     gridLinesVisibility: GridLinesVisibility.both,
                     headerGridLinesVisibility: GridLinesVisibility.both,
                     allowColumnsResizing: true,
@@ -485,7 +483,6 @@ class Homepage extends StatelessWidget {
                   child: SfDataGrid(
                     source: dataSource,
                     columnWidthMode: ColumnWidthMode.auto,
-                    allowPullToRefresh: true,
                     gridLinesVisibility: GridLinesVisibility.both,
                     headerGridLinesVisibility: GridLinesVisibility.both,
                     allowColumnsResizing: true,

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:doplsnew/controllers/input%20data%20realisasi/do_reguler_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
+import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/tambah_type_motor_model.dart';
 import '../../repository/input data realisasi/tambah_type_motor_repo.dart';
 import '../../screens/input data realisasi/component/tambah_type_kendaraan.dart';
@@ -49,55 +53,84 @@ class TambahTypeMotorController extends GetxController {
     }
   }
 
-  Future<void> addTypeMotorDaerah(
-      int idRealisasi,
-      String jamDetail,
-      String tglDetail,
-      String daerah,
-      String typeMotor,
-      int jumlah,
-      int jumlahMotor) async {
+  // Fungsi untuk mengirim data dari semua tab
+  Future<void> submitAllTabs(int idRealisasi, int jumlahMotor) async {
     try {
       CustomDialogs.loadingIndicator();
 
-      // Mendapatkan jumlah plot yang sudah ada
-      await plotRealisasiController.fetchPlotRealisasi(
-          idRealisasi, jumlahMotor);
-      final jumlahPlotRealisasi =
-          plotRealisasiController.plotModelRealisasi.first.jumlahPlot;
+      List<String> jamDetail = [];
+      List<String> tglDetail = [];
+      List<String> daerah = [];
+      List<String> typeMotor = [];
+      List<String> jumlah = [];
 
-      if (jumlahPlotRealisasi < jumlahMotor) {
-        // Menambahkan type motor daerah
-        await tambahTypeMotorRepo.addTypeMotorDaerah(
-            idRealisasi, jamDetail, tglDetail, daerah, typeMotor, jumlah);
+      for (var tab in TabDaerahTujuan.values) {
+        final formData = formFieldsPerTab[tab];
+        final controllers = controllersPerTab[tab];
 
-        // Update data setelah penambahan
+        if (formData != null && formData.isNotEmpty && controllers != null) {
+          for (int i = 0; i < formData.length; i++) {
+            final typeMotorValue = formData[i].dropdownValue ?? '';
+            final jumlahValue = int.tryParse(controllers[i].text) ?? 0;
+            final daerahValue = getNamaDaerah(tab); // Nama daerah lengkap
+            final jamDetailValue = CustomHelperFunctions.formattedTime;
+            final tglDetailValue =
+                CustomHelperFunctions.getFormattedDateDatabase(DateTime.now());
+
+            jamDetail.add(jamDetailValue);
+            tglDetail.add(tglDetailValue);
+            daerah.add(daerahValue);
+            typeMotor.add(typeMotorValue);
+            jumlah.add(jumlahValue.toString());
+          }
+        }
+      }
+
+      // Struktur data yang dikirimkan ke API
+      final dataToSend = {
+        "id_realisasi": idRealisasi.toString(),
+        "jam_detail": jamDetail,
+        "tgl_detail": tglDetail,
+        "daerah": daerah,
+        "type_motor": typeMotor,
+        "jumlah": jumlah
+      };
+
+      // Kirim data ke API
+      final response = await http.post(
+        Uri.parse(
+            'http://langgeng.dyndns.biz/DO/api/api_packing_list_motor.php?action=Testing'),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(dataToSend),
+      );
+
+      if (response.statusCode == 200) {
         await plotRealisasiController.fetchPlotRealisasi(
             idRealisasi, jumlahMotor);
         await fetchTambahTypeMotor(idRealisasi);
-
+        resetAllFields(); // Reset semua form
         SnackbarLoader.successSnackBar(
           title: 'Berhasil✨',
-          message: 'Menambahkan data type motor.',
+          message: 'Data berhasil dikirim.',
         );
       } else {
         SnackbarLoader.errorSnackBar(
-          title: 'Gagal',
-          message: 'Jumlah plot telah mencapai batas maksimal unit kendaraan.',
+          title: 'Gagal😢',
+          message: 'Gagal mengirim data. Coba lagi.',
         );
       }
     } catch (e) {
-      print('Error while adding type motor daerah: $e');
+      print('Error while sending data for all tabs: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Error',
-        message: 'Terjadi kesalahan saat menambahkan data type motor.',
+        message: 'Terjadi kesalahan saat mengirim data.',
       );
     } finally {
       CustomFullScreenLoader.stopLoading();
     }
   }
 
-  // selesai type motor
+  // Selesaikan type motor
   Future<void> selesaiTypeMotor(int idRealisasi) async {
     CustomDialogs.loadingIndicator();
     await tambahTypeMotorRepo.changeStatusTypeMotor(idRealisasi, 3);
@@ -184,6 +217,21 @@ class TambahTypeMotorController extends GetxController {
         print(
             'Tab: $tab, Field Index: $i, Dropdown Value: $dropdownValue, TextField Value: $textFieldValue');
       }
+    }
+  }
+
+  String getNamaDaerah(TabDaerahTujuan tab) {
+    switch (tab) {
+      case TabDaerahTujuan.srd:
+        return "SAMARINDA";
+      case TabDaerahTujuan.mks:
+        return "MAKASAR";
+      case TabDaerahTujuan.ptk:
+        return "PONTIANAK";
+      case TabDaerahTujuan.bjm:
+        return "BANJARMASIN";
+      default:
+        return "";
     }
   }
 }
