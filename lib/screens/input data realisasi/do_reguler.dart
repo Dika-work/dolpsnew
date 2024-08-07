@@ -1,4 +1,5 @@
 import 'package:doplsnew/controllers/input%20data%20realisasi/tambah_type_motor_controller.dart';
+import 'package:doplsnew/screens/input%20data%20realisasi/component/aksesoris.dart';
 import 'package:doplsnew/screens/input%20data%20realisasi/component/edit_type.dart';
 import 'package:doplsnew/screens/input%20data%20realisasi/component/tambah_type_kendaraan.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
@@ -73,7 +74,13 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                   Get.to(() => TambahTypeKendaraan(
                       model: model, controller: tambahTypeMotorController));
                 } else if (model.status == 3) {
-                  print('...NAVIGATE KE ACCECORISS MOTORR...');
+                  print('..INI BAKALAN KE AKSESORIS..');
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Aksesoris(model: model);
+                    },
+                  );
                 }
               },
               onBatal: (DoRealisasiModel model) {},

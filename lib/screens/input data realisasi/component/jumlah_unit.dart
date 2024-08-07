@@ -115,6 +115,7 @@ class _JumlahUnitState extends State<JumlahUnit> {
                   fillColor: AppColors.buttonDisabled),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Jumlah Unit'),
             TextFormField(
               keyboardType: TextInputType.number,
               validator: (value) {
@@ -138,14 +139,8 @@ class _JumlahUnitState extends State<JumlahUnit> {
           child: const Text('Close'),
         ),
         TextButton(
-          onPressed: () {
-            print('...INI ID DARI JUMLAH UNIT MOTOR : $id...');
-            print('...INI NAMA USER YANG INPUTNYA : ${controller.namaUser}...');
-            print('...INI JUMLAH INPUTAN MOTORNYA : $jumlahUnit...');
-            controller.tambahJumlahUnit(id, controller.namaUser, jumlahUnit);
-          },
-          // onPressed: () => controller.tambahJumlahUnit(
-          //     id, controller.namaUser, int.parse(jumlahUnit.text)),
+          onPressed: () =>
+              controller.tambahJumlahUnit(id, controller.namaUser, jumlahUnit),
           child: const Text('Save'),
         ),
       ],

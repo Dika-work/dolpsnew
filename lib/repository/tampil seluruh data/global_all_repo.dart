@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:doplsnew/models/tampil%20seluruh%20data/do_global_all.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
+
+import '../../models/tampil seluruh data/do_global_all.dart';
 
 class GlobalAllRepository {
   final storageUtil = StorageUtil();
