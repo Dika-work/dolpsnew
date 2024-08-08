@@ -120,15 +120,15 @@ class _AksesorisState extends State<Aksesoris> {
                       fontWeight: FontWeight.bold, color: Colors.red)),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildHutangPabrik('HLM', 'BP', 0, 0),
+            _buildHutangPabrik('HLM', 'BP', 0, 4),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildHutangPabrik('AC', 'BS', 0, 0),
+            _buildHutangPabrik('AC', 'BS', 1, 5),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildHutangPabrik('KS', 'PLT', 0, 0),
+            _buildHutangPabrik('KS', 'PLT', 2, 6),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildHutangPabrik('TS', 'Stay\nL/R', 0, 0),
+            _buildHutangPabrik('TS', 'Stay\nL/R', 3, 7),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildHutangPabrik('AC\nBesar', 'Plastik', 0, 0),
+            _buildHutangPabrik('AC\nBesar', 'Plastik', 8, 9),
           ],
         ),
       ),
@@ -224,15 +224,17 @@ class _AksesorisState extends State<Aksesoris> {
         ),
         Expanded(
           flex: 2,
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            readOnly: !controller.checkboxStatus[index],
-            controller: TextEditingController(text: valueTextForm.toString()),
-            decoration: controller.checkboxStatus[index]
-                ? null
-                : const InputDecoration(
-                    filled: true, fillColor: AppColors.buttonDisabled),
-          ),
+          child: Obx(() {
+            return TextFormField(
+              keyboardType: TextInputType.number,
+              readOnly: !controller.checkboxStatus[index],
+              controller: controller.controllers[index],
+              decoration: controller.checkboxStatus[index]
+                  ? null
+                  : const InputDecoration(
+                      filled: true, fillColor: AppColors.buttonDisabled),
+            );
+          }),
         ),
         SizedBox(
           width: 24,
@@ -242,6 +244,13 @@ class _AksesorisState extends State<Aksesoris> {
               value: controller.checkboxStatus[index],
               onChanged: (value) {
                 controller.checkboxStatus[index] = value!;
+                if (!value) {
+                  controller.newValues[index] = valueTextForm;
+                  controller.updateHutangValues();
+                } else {
+                  controller.controllers[index].text =
+                      controller.newValues[index].toString();
+                }
               },
             );
           }),
@@ -250,52 +259,57 @@ class _AksesorisState extends State<Aksesoris> {
     );
   }
 
-  _buildHutangPabrik(
-      String label1, String label2, int valueTextForm1, int valueTextForm2) {
-    return Row(
-      children: [
-        Expanded(
-            flex: 1,
-            child: Text(
-              label1,
-              style: Theme.of(context).textTheme.labelMedium,
-            )),
-        Text(
-          ' : ',
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
-        Expanded(
-          flex: 2,
-          child: TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            controller: TextEditingController(text: valueTextForm1.toString()),
-            decoration: const InputDecoration(
-                filled: true, fillColor: AppColors.buttonDisabled),
+  _buildHutangPabrik(String label1, String label2, int index1, int index2) {
+    final controller = Get.find<AksesorisController>();
+
+    return Obx(() {
+      return Row(
+        children: [
+          Expanded(
+              flex: 1,
+              child: Text(
+                label1,
+                style: Theme.of(context).textTheme.labelMedium,
+              )),
+          Text(
+            ' : ',
+            style: Theme.of(context).textTheme.labelMedium,
           ),
-        ),
-        const SizedBox(width: CustomSize.sm),
-        Expanded(
-            flex: 1,
-            child: Text(
-              label2,
-              style: Theme.of(context).textTheme.labelMedium,
-            )),
-        Text(
-          ' : ',
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
-        Expanded(
-          flex: 2,
-          child: TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            controller: TextEditingController(text: valueTextForm2.toString()),
-            decoration: const InputDecoration(
-                filled: true, fillColor: AppColors.buttonDisabled),
+          Expanded(
+            flex: 2,
+            child: TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              controller: TextEditingController(
+                  text: controller.hutangValues[index1].toString()),
+              decoration: const InputDecoration(
+                  filled: true, fillColor: AppColors.buttonDisabled),
+            ),
           ),
-        ),
-      ],
-    );
+          const SizedBox(width: CustomSize.sm),
+          Expanded(
+              flex: 1,
+              child: Text(
+                label2,
+                style: Theme.of(context).textTheme.labelMedium,
+              )),
+          Text(
+            ' : ',
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+          Expanded(
+            flex: 2,
+            child: TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              controller: TextEditingController(
+                  text: controller.hutangValues[index2].toString()),
+              decoration: const InputDecoration(
+                  filled: true, fillColor: AppColors.buttonDisabled),
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
