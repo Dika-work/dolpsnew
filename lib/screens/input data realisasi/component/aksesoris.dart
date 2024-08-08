@@ -1,3 +1,4 @@
+import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -157,8 +158,63 @@ class _AksesorisState extends State<Aksesoris> {
               return controller.areAllCheckboxesChecked
                   ? ElevatedButton(
                       onPressed: () {
+                        print('..INI MERUBAH STATUS JADI 4 TYPE MOTOR...');
+                        print('id: $id');
+                        print('user: ${controller.aksesorisModel.first.user}');
+                        print('jam: ${controller.aksesorisModel.first.jam}');
                         print(
-                            '...INI BAKALAN KE CLASS NAME SELESAI AKSESORIS...');
+                            'tanggal: ${CustomHelperFunctions.getFormattedDateDatabase(DateTime.now())}');
+                        print('ini hlm acc: ${controller.newValues[0]}');
+                        print('ini ac acc: ${controller.newValues[1]}');
+                        print('ini ks acc: ${controller.newValues[2]}');
+                        print('ini ts acc: ${controller.newValues[3]}');
+                        print('ini bp acc: ${controller.newValues[4]}');
+                        print('ini bs acc: ${controller.newValues[5]}');
+                        print('ini plt acc: ${controller.newValues[6]}');
+                        print('ini stay acc: ${controller.newValues[7]}');
+                        print('ini acBesar acc: ${controller.newValues[8]}');
+                        print('ini plastik acc: ${controller.newValues[9]}');
+                        print('..INI BAGIAN HUTANG PABRIK..');
+                        print('ini hutangHlm: ${controller.hutangValues[0]}');
+                        print('ini hutangAc: ${controller.hutangValues[1]}');
+                        print('ini hutangKs: ${controller.hutangValues[2]}');
+                        print('ini hutangTs: ${controller.hutangValues[3]}');
+                        print('ini hutangBp: ${controller.hutangValues[4]}');
+                        print('ini hutangBs: ${controller.hutangValues[5]}');
+                        print('ini hutangPlt: ${controller.hutangValues[6]}');
+                        print('ini hutangStay: ${controller.hutangValues[7]}');
+                        print(
+                            'ini hutangAcBesar: ${controller.hutangValues[8]}');
+                        print(
+                            'ini hutangPlastik: ${controller.hutangValues[9]}');
+                        print('..SELESAII..');
+                        controller.accSelesai(
+                          id,
+                          controller.aksesorisModel.first.user,
+                          CustomHelperFunctions.formattedTime,
+                          CustomHelperFunctions.getFormattedDateDatabase(
+                              DateTime.now()),
+                          controller.newValues[0],
+                          controller.newValues[1],
+                          controller.newValues[2],
+                          controller.newValues[3],
+                          controller.newValues[4],
+                          controller.newValues[5],
+                          controller.newValues[6],
+                          controller.newValues[7],
+                          controller.newValues[8],
+                          controller.newValues[9],
+                          controller.hutangValues[0],
+                          controller.hutangValues[1],
+                          controller.hutangValues[2],
+                          controller.hutangValues[3],
+                          controller.hutangValues[4],
+                          controller.hutangValues[5],
+                          controller.hutangValues[6],
+                          controller.hutangValues[7],
+                          controller.hutangValues[8],
+                          controller.hutangValues[9],
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(

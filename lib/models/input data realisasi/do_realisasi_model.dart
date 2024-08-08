@@ -31,24 +31,24 @@ class DoRealisasiModel {
   String lokasi;
   String plantDo;
   String namaDepan;
-  String? namaTengah; // Nullable
+  String? namaTengah;
   String namaBelakang;
   String inisialDepan;
   String inisialBelakang;
   String namaPanggilan;
-  String? hutangHelm; // Nullable
-  String? hutangAc; // Nullable
-  String? hutangKs; // Nullable
-  String? hutangTs; // Nullable
-  String? hutangBp; // Nullable
-  String? hutangBs; // Nullable
-  String? hutangPlt; // Nullable
-  String? hutangStay; // Nullable
-  String? hutangAcBesar; // Nullable
-  String? hutangPlastik; // Nullable
+  String? hutangHelm;
+  String? hutangAc;
+  String? hutangKs;
+  String? hutangTs;
+  String? hutangBp;
+  String? hutangBs;
+  String? hutangPlt;
+  String? hutangStay;
+  String? hutangAcBesar;
+  String? hutangPlastik;
   String? klasifikasi;
-  int statusAnalisa; // Nullable
-  int statusKerusakan; // Nullable
+  int statusAnalisa;
+  int statusKerusakan;
 
   DoRealisasiModel({
     required this.id,

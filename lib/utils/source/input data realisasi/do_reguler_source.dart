@@ -80,29 +80,47 @@ class DoRegulerSource extends DataGridSource {
                           backgroundColor: AppColors.success),
                       child: const Text('Lihat')),
           // Action
-          ElevatedButton(
-            onPressed: () {
-              if (onAction != null) {
-                onAction!(request);
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: request.status == 0
-                  ? AppColors.primary
-                  : request.status == 1 || request.status == 2
-                      ? AppColors.pink
-                      : request.status == 3
-                          ? AppColors.accent
-                          : Colors.transparent,
-            ),
-            child: Text(
-              request.status == 0
-                  ? 'Jumlah Unit'
-                  : request.status == 1 || request.status == 2
-                      ? 'Type Motor'
-                      : 'ACC',
-            ),
-          ),
+          request.status == 4
+              ? Column(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          print('..INI BAKALAN KE PLANT GABUNGAN..');
+                        },
+                        child: const Text('Plant Gabungan')),
+                    const SizedBox(width: CustomSize.sm),
+                    ElevatedButton(
+                        onPressed: () {
+                          print('..INI BAKALAN KE HUTANG ACC..');
+                        },
+                        child: const Text('Hutang ACC')),
+                  ],
+                )
+              : ElevatedButton(
+                  onPressed: () {
+                    if (onAction != null) {
+                      onAction!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: request.status == 0
+                        ? AppColors.primary
+                        : request.status == 1 || request.status == 2
+                            ? AppColors.pink
+                            : request.status == 3
+                                ? AppColors.success
+                                : Colors.transparent,
+                  ),
+                  child: Text(
+                    request.status == 0
+                        ? 'Jumlah Unit'
+                        : request.status == 1 || request.status == 2
+                            ? 'Type Motor'
+                            : request.status == 3
+                                ? 'ACC'
+                                : '',
+                  ),
+                ),
           // Batal
           controller.rolesBatal.value == 0
               ? const SizedBox.shrink()

@@ -3,10 +3,16 @@ import 'package:get/get.dart';
 
 import '../../models/input data realisasi/aksesoris_model.dart';
 import '../../repository/input data realisasi/aksesoris_repo.dart';
+import '../../utils/popups/dialogs.dart';
+import '../../utils/popups/full_screen_loader.dart';
+import '../../utils/popups/snackbar.dart';
+import 'do_reguler_controller.dart';
 
 class AksesorisController extends GetxController {
   final isLoadingAksesoris = Rx<bool>(false);
   final AksesorisRepository aksesorisRepo = Get.put(AksesorisRepository());
+  final DoRegulerController doRegulerController =
+      Get.put(DoRegulerController());
   RxList<AksesorisModel> aksesorisModel = <AksesorisModel>[].obs;
   RxList<bool> checkboxStatus = RxList<bool>.filled(
       10, false); // Sesuaikan panjang list sesuai jumlah checkbox
@@ -60,6 +66,109 @@ class AksesorisController extends GetxController {
       print('Error while fetching aksesoris: $e');
     } finally {
       isLoadingAksesoris.value = false;
+    }
+  }
+
+  Future<void> accSelesai(
+    int id,
+    String user,
+    String jam,
+    String tgl,
+    int hlm,
+    int ac,
+    int ks,
+    int ts,
+    int bp,
+    int bs,
+    int plt,
+    int stay,
+    int acBesar,
+    int plastik,
+    int hutangHlm,
+    int hutangAc,
+    int hutangKs,
+    int hutangTs,
+    int hutangBp,
+    int hutangBs,
+    int hutangPlt,
+    int hutangStay,
+    int hutangAcBesar,
+    int hutangPlastik,
+  ) async {
+    CustomDialogs.loadingIndicator();
+    try {
+      print('Sending motor data:');
+      print({
+        'no_realisasi': id,
+        'user_1': user,
+        'jam_1': jam,
+        'tgl_1': tgl,
+        'hlm_1': hlm,
+        'ac_1': ac,
+        'ks_1': ks,
+        'ts_1': ts,
+        'bp_1': bp,
+        'bs_1': bs,
+        'plt_1': plt,
+        'stay_1': stay,
+        'ac_besar_1': acBesar,
+        'plastik_1': plastik,
+      });
+      await aksesorisRepo.accMotor(id, user, jam, tgl, hlm, ac, ks, ts, bp, bs,
+          plt, stay, acBesar, plastik);
+
+      print('Sending hutang data:');
+      print({
+        'no_realisasi_hutang': id,
+        'user_hutang': user,
+        'jam_hutang': jam,
+        'tgl_hutang': tgl,
+        'hutang_hlm': hutangHlm,
+        'hutang_ac': hutangAc,
+        'hutang_ks': hutangKs,
+        'hutang_ts': hutangTs,
+        'hutang_bp': hutangBp,
+        'hutang_bs': hutangBs,
+        'hutang_plt': hutangPlt,
+        'hutang_stay': hutangStay,
+        'hutang_ac_besar': hutangAcBesar,
+        'hutang_plastik': hutangPlastik,
+      });
+      await aksesorisRepo.accHutang(
+          id,
+          user,
+          jam,
+          tgl,
+          hutangHlm,
+          hutangAc,
+          hutangKs,
+          hutangTs,
+          hutangBp,
+          hutangBs,
+          hutangPlt,
+          hutangStay,
+          hutangAcBesar,
+          hutangPlastik);
+
+      print('Marking as selesai:');
+      await aksesorisRepo.accSelesai(id);
+      await doRegulerController.fetchRegulerContent();
+
+      CustomFullScreenLoader.stopLoading();
+
+      SnackbarLoader.successSnackBar(
+        title: 'Berhasil✨',
+        message: 'Menambahkan data do harian baru..',
+      );
+
+      CustomFullScreenLoader.stopLoading();
+    } catch (e) {
+      print('Error in accSelesai: $e');
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+        title: 'Error☠️',
+        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
+      );
     }
   }
 
