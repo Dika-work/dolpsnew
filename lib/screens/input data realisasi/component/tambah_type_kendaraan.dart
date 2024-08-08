@@ -31,6 +31,8 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
   late int jumlahMotor;
   final isExceedingCapacity = false.obs;
   final plotRealisasiController = Get.find<PlotRealisasiController>();
+  final ValueNotifier<Set<TabDaerahTujuan>> highlightedTabs =
+      ValueNotifier<Set<TabDaerahTujuan>>({});
 
   @override
   void initState() {
@@ -71,6 +73,29 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
         isExceedingCapacity.value = false;
       }
     }
+  }
+
+  // Fungsi untuk memeriksa validitas data dan memperbarui highlightedTabs
+  void checkTabValidity() {
+    Set<TabDaerahTujuan> invalidTabs = {};
+    for (var tab in TabDaerahTujuan.values) {
+      final formData = widget.controller.formFieldsPerTab[tab];
+      final controllers = widget.controller.controllersPerTab[tab];
+
+      if (formData != null && formData.isNotEmpty && controllers != null) {
+        for (int i = 0; i < formData.length; i++) {
+          final dropdownValue = formData[i].dropdownValue;
+          final textFieldValue = controllers[i].text;
+          final jumlah = int.tryParse(textFieldValue) ?? 0;
+
+          if (dropdownValue == null || dropdownValue.isEmpty || jumlah <= 0) {
+            invalidTabs.add(tab);
+            break;
+          }
+        }
+      }
+    }
+    highlightedTabs.value = invalidTabs;
   }
 
   @override
@@ -402,39 +427,45 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                     Row(
                       children: TabDaerahTujuan.values.map((tab) {
                         return Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              selectedDaerahTujuan.value = tab;
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(CustomSize.sm),
-                              decoration: BoxDecoration(
-                                color: value == tab
-                                    ? AppColors.grey
-                                    : AppColors.white,
-                                border: BorderDirectional(
-                                  top: BorderSide(
-                                    color: value == tab
-                                        ? AppColors.primary
-                                        : AppColors.buttonDisabled,
+                            child: ValueListenableBuilder<Set<TabDaerahTujuan>>(
+                          valueListenable: highlightedTabs,
+                          builder: (context, highlighted, child) {
+                            return GestureDetector(
+                              onTap: () {
+                                selectedDaerahTujuan.value = tab;
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(CustomSize.sm),
+                                decoration: BoxDecoration(
+                                  color: value == tab
+                                      ? AppColors.grey
+                                      : AppColors.white,
+                                  border: BorderDirectional(
+                                    top: BorderSide(
+                                      color: highlighted.contains(tab)
+                                          ? Colors.red
+                                          : (value == tab
+                                              ? AppColors.primary
+                                              : AppColors.buttonDisabled),
+                                    ),
                                   ),
                                 ),
+                                child: Text(
+                                  tab.toString().split('.').last.toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: value == tab
+                                            ? FontWeight.w400
+                                            : FontWeight.normal,
+                                      ),
+                                ),
                               ),
-                              child: Text(
-                                tab.toString().split('.').last.toUpperCase(),
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: value == tab
-                                          ? FontWeight.w400
-                                          : FontWeight.normal,
-                                    ),
-                              ),
-                            ),
-                          ),
-                        );
+                            );
+                          },
+                        ));
                       }).toList(),
                     ),
                     const SizedBox(height: CustomSize.spaceBtwSections),
@@ -628,6 +659,9 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                                   'Harap tambahkan setidaknya satu field di salah satu tab.',
                                             );
                                           } else if (!hasValidData) {
+                                            setState(() {
+                                              checkTabValidity();
+                                            });
                                             SnackbarLoader.errorSnackBar(
                                               title: 'Error',
                                               message:

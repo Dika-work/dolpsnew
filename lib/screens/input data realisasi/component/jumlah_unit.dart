@@ -24,7 +24,8 @@ class _JumlahUnitState extends State<JumlahUnit> {
   late String jenisKen;
   late String noPolisi;
   late String supir;
-  late int jumlahUnit;
+  late TextEditingController jumlahUnit;
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -36,7 +37,25 @@ class _JumlahUnitState extends State<JumlahUnit> {
     jenisKen = widget.model.jenisKen;
     noPolisi = widget.model.noPolisi;
     supir = widget.model.supir;
-    jumlahUnit = widget.model.jumlahUnit;
+    jumlahUnit =
+        TextEditingController(text: widget.model.jumlahUnit.toString());
+
+    // Attach listener to the focus node
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        if (jumlahUnit.text == '0') {
+          jumlahUnit.clear();
+        }
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the form is disposed
+    _focusNode.dispose();
+    jumlahUnit.dispose();
+    super.dispose();
   }
 
   @override
@@ -117,6 +136,8 @@ class _JumlahUnitState extends State<JumlahUnit> {
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Jumlah Unit'),
             TextFormField(
+              controller: jumlahUnit,
+              focusNode: _focusNode,
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -124,9 +145,6 @@ class _JumlahUnitState extends State<JumlahUnit> {
                 }
                 return null;
               },
-              decoration: InputDecoration(
-                hintText: jumlahUnit.toString(),
-              ),
             ),
           ],
         ),
@@ -139,8 +157,8 @@ class _JumlahUnitState extends State<JumlahUnit> {
           child: const Text('Close'),
         ),
         TextButton(
-          onPressed: () =>
-              controller.tambahJumlahUnit(id, controller.namaUser, jumlahUnit),
+          onPressed: () => controller.tambahJumlahUnit(
+              id, controller.namaUser, int.parse(jumlahUnit.text)),
           child: const Text('Save'),
         ),
       ],

@@ -1,18 +1,18 @@
-import 'package:doplsnew/controllers/input%20data%20realisasi/tambah_type_motor_controller.dart';
-import 'package:doplsnew/screens/input%20data%20realisasi/component/aksesoris.dart';
-import 'package:doplsnew/screens/input%20data%20realisasi/component/edit_type.dart';
-import 'package:doplsnew/screens/input%20data%20realisasi/component/tambah_type_kendaraan.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_reguler_controller.dart';
+import '../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/source/input data realisasi/do_reguler_source.dart';
+import 'component/aksesoris.dart';
 import 'component/edit_realisasi.dart';
+import 'component/edit_type.dart';
 import 'component/jumlah_unit.dart';
+import 'component/tambah_type_kendaraan.dart';
 
 class DoRegulerScreen extends GetView<DoRegulerController> {
   const DoRegulerScreen({super.key});
