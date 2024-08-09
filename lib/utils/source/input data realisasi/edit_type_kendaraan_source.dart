@@ -46,7 +46,7 @@ class EditTypeKendaraanSource extends DataGridSource {
             },
           ),
           // Edit cell
-          Column(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
@@ -62,12 +62,7 @@ class EditTypeKendaraanSource extends DataGridSource {
                     },
                     child: const Text('Edit')),
               ),
-            ],
-          ),
-          // Hapus cell
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+              const SizedBox(width: 8.0),
               SizedBox(
                 height: 60,
                 width: 100,
@@ -85,6 +80,7 @@ class EditTypeKendaraanSource extends DataGridSource {
               ),
             ],
           ),
+          // Hapus cell
         ]);
   }
 

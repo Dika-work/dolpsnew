@@ -1,18 +1,20 @@
 import 'package:doplsnew/utils/loader/circular_loader.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
+import '../../../controllers/master data/type_motor_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../../models/input data realisasi/edit_type_motor_model.dart';
+import '../../../models/master data/type_motor_model.dart';
 import '../../../utils/constant/custom_size.dart';
+import '../../../utils/popups/dialogs.dart';
 import '../../../utils/source/input data realisasi/edit_type_kendaraan_source.dart';
 import '../../../utils/theme/app_colors.dart';
-import '../../../widgets/dropdown.dart';
 
 class EditTypeKendaraan extends StatefulWidget {
   const EditTypeKendaraan(
@@ -37,16 +39,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
   late TextEditingController unitMotor;
   int totalPlot = 0; // Inisialisasi dengan nilai default
   final plotController = Get.put(PlotRealisasiController());
-
-  final Map<String, String> tujuanMap = {
-    '1100': 'Sunter', //1
-    '1200': 'Pegangsaan', //2
-    '1300': 'Cibitung', //3
-    '1350': 'Cibitung', //4
-    '1700': 'Dawuan', //5
-    '1800': 'Dawuan', //6
-    '1900': 'Bekasi', //9
-  };
+  final typeMotorHondaController = Get.put(TypeMotorHondaController());
 
   @override
   void initState() {
@@ -60,6 +53,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
     noPolisi = widget.model.noPolisi;
     supir = widget.model.supir;
     unitMotor = TextEditingController(text: widget.model.jumlahUnit.toString());
+    typeMotorHondaController.fetchTypeMotorHonda();
 
     // Fetch total plot
     fetchTotalPlot();
@@ -91,8 +85,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
       'Type Motor': double.nan,
       'Daerah Tujuan': double.nan,
       'Jumlah': 120,
-      'Edit': 150,
-      'Hapus': 150,
+      'Action': 230,
     };
 
     const int rowsPerPage = 5;
@@ -114,18 +107,14 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
           padding: const EdgeInsets.symmetric(
               horizontal: CustomSize.md, vertical: CustomSize.lg),
           children: [
-            Text('ini id nya : $id'),
             const Text('Plant'),
-            DropDownWidget(
-              value: plant,
-              items: tujuanMap.keys.toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  print('Selected plant: $value');
-                  plant = value!;
-                  tujuan = tujuanMap[value]!;
-                });
-              },
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                  hintText: plant,
+                  filled: true,
+                  fillColor: AppColors.buttonDisabled),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Tujuan'),
@@ -133,7 +122,6 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
                   hintText: tujuan,
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
@@ -144,7 +132,6 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
                   hintText: type == 0 ? 'REGULER' : 'MUTASI',
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
@@ -155,7 +142,6 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
                   hintText: jenisKen,
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
@@ -166,7 +152,6 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
                   hintText: noPolisi,
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
@@ -177,7 +162,6 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
                   hintText: supir,
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
@@ -194,7 +178,6 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
                   hintText: totalPlot.toString(),
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
@@ -210,10 +193,159 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                     startIndex: currentPage * rowsPerPage,
                     editTypeMotorModel: controller.doRealisasiModel,
                     onEdited: (EditTypeMotorModel model) {
-                      print('..INI EDIT TYPE MOTOR..');
+                      // Set nilai awal selectedTypeMotor dengan model.typeMotor
+                      typeMotorHondaController
+                          .setSelectedTypeMotor(model.typeMotor);
+
+                      // Inisialisasi nilai default
+                      String selectedTypeMotor = model.typeMotor;
+                      String selectedDaerah = model.daerah;
+                      String jumlahMotor = model.jumlah.toString();
+
+                      CustomDialogs.defaultDialog(
+                        context: context,
+                        titleWidget: Text(
+                          'Edit Type Kendaraan',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        confirmText: 'Save',
+                        onConfirm: () {
+                          print('..INI VALUE YANG BERUBAH..');
+                          print('Type Motor: $selectedTypeMotor');
+                          print('Daerah Tujuan: $selectedDaerah');
+                          print('Jumlah: $jumlahMotor');
+                          print('...SELESAI....');
+                        },
+                        contentWidget: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                const Expanded(
+                                    flex: 1, child: Text('Type Motor')),
+                                const SizedBox(width: CustomSize.md),
+                                Expanded(
+                                  flex: 2,
+                                  child: Obx(() {
+                                    return DropdownSearch<TypeMotorHondaModel>(
+                                      items: typeMotorHondaController
+                                          .typeMotorHondaModel,
+                                      itemAsString:
+                                          (TypeMotorHondaModel kendaraan) =>
+                                              kendaraan.typeMotor,
+                                      selectedItem: typeMotorHondaController
+                                          .typeMotorHondaModel
+                                          .firstWhere(
+                                        (motor) =>
+                                            motor.typeMotor == model.typeMotor,
+                                        orElse: () => typeMotorHondaController
+                                            .typeMotorHondaModel.first,
+                                      ),
+                                      dropdownBuilder: (context,
+                                          TypeMotorHondaModel? selectedItem) {
+                                        return Text(
+                                          selectedItem != null
+                                              ? selectedItem.typeMotor
+                                              : 'Pilih Type Motor',
+                                          style: TextStyle(
+                                            color: selectedItem == null
+                                                ? Colors.grey
+                                                : Colors.black,
+                                          ),
+                                        );
+                                      },
+                                      onChanged:
+                                          (TypeMotorHondaModel? kendaraan) {
+                                        if (kendaraan != null) {
+                                          selectedTypeMotor =
+                                              kendaraan.typeMotor;
+                                          typeMotorHondaController
+                                              .setSelectedTypeMotor(
+                                                  kendaraan.typeMotor);
+                                        } else {
+                                          typeMotorHondaController
+                                              .resetSelectedTypeMotor();
+                                        }
+                                      },
+                                      popupProps: const PopupProps.menu(
+                                        showSearchBox: true,
+                                        searchFieldProps: TextFieldProps(
+                                          decoration: InputDecoration(
+                                            hintText: 'Search Type Motor...',
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: CustomSize.spaceBtwItems),
+                            Row(
+                              children: [
+                                const Expanded(
+                                    flex: 1, child: Text('Daerah\nTujuan')),
+                                const SizedBox(width: CustomSize.md),
+                                Expanded(
+                                  flex: 2,
+                                  child: DropdownButtonFormField<String>(
+                                    value: model.daerah,
+                                    items: [
+                                      'SAMARINDA',
+                                      'MAKASSAR',
+                                      'PONTIANAK',
+                                      'BANJARMASIN'
+                                    ].map((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                    onChanged: (String? newValue) {
+                                      if (newValue != null) {
+                                        selectedDaerah = newValue;
+                                        setState(() {
+                                          model.daerah = newValue;
+                                        });
+                                      }
+                                    },
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: CustomSize.spaceBtwItems),
+                            Row(
+                              children: [
+                                const Expanded(flex: 1, child: Text('Jumlah')),
+                                const SizedBox(width: CustomSize.md),
+                                Expanded(
+                                  flex: 2,
+                                  child: TextFormField(
+                                    initialValue: model.jumlah.toString(),
+                                    onChanged: (value) {
+                                      jumlahMotor = value;
+                                    },
+                                    keyboardType: TextInputType.number,
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
                     },
                     onDeleted: (EditTypeMotorModel model) {
-                      print('..INI DELETED TYPE MOTOR..');
+                      CustomDialogs.deleteDialog(context: context,onConfirm: () => print('..INI HAPUS TYPE MOTOR..'),);
                     },
                   );
 
@@ -309,8 +441,8 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                                     ),
                                   ),
                                   GridColumn(
-                                    width: columnWidths['Edit']!,
-                                    columnName: 'Edit',
+                                    width: columnWidths['Action']!,
+                                    columnName: 'Action',
                                     label: Container(
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
@@ -318,26 +450,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                                         color: Colors.lightBlue.shade100,
                                       ),
                                       child: Text(
-                                        'Edit',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  GridColumn(
-                                    width: columnWidths['Hapus']!,
-                                    columnName: 'Hapus',
-                                    label: Container(
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey),
-                                        color: Colors.lightBlue.shade100,
-                                      ),
-                                      child: Text(
-                                        'Hapus',
+                                        'Action',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium

@@ -26,7 +26,7 @@ class _EditRealisasiState extends State<EditRealisasi> {
   late String tujuan;
   late String plant;
   late String type;
-  late String jenisKen;
+  // late String jenisKen;
   late String noPolisi;
   late String supir;
   late int jumlahUnit;
@@ -43,12 +43,12 @@ class _EditRealisasiState extends State<EditRealisasi> {
     '1900': 'Bekasi',
   };
 
-  final List<String> jenisKendaraanList = [
-    'MOBIL MOTOR 16',
-    'MOBIL MOTOR 40',
-    'MOBIL MOTOR 64',
-    'MOBIL MOTOR 86',
-  ];
+  // final List<String> jenisKendaraanList = [
+  //   'MOBIL MOTOR 16',
+  //   'MOBIL MOTOR 40',
+  //   'MOBIL MOTOR 64',
+  //   'MOBIL MOTOR 86',
+  // ];
 
   final Map<String, int> typeDOMap = {
     'REGULER': 0,
@@ -64,7 +64,7 @@ class _EditRealisasiState extends State<EditRealisasi> {
     tujuan = widget.model.tujuan;
     plant = widget.model.plant;
     type = widget.model.type == 0 ? 'REGULER' : 'MUTASI';
-    jenisKen = widget.model.jenisKen;
+    // jenisKen = widget.model.jenisKen;
     noPolisi = widget.model.noPolisi;
     supir = widget.model.supir;
     jumlahUnit = widget.model.jumlahUnit;
@@ -83,24 +83,15 @@ class _EditRealisasiState extends State<EditRealisasi> {
     final fetchKendaraanController = Get.find<FetchKendaraanController>();
     final sopirController = Get.find<FetchSopirController>();
 
+    final TextEditingController jumlahController =
+        TextEditingController(text: widget.model.status.toString());
+
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('ini idReq nya : $idReq'),
-          const Text('Tujuan'),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: tujuan,
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
           const Text('Plant'),
           DropDownWidget(
             value: plant,
@@ -114,6 +105,17 @@ class _EditRealisasiState extends State<EditRealisasi> {
             },
           ),
           const SizedBox(height: CustomSize.spaceBtwItems),
+          const Text('Tujuan'),
+          TextFormField(
+            keyboardType: TextInputType.none,
+            readOnly: true,
+            decoration: InputDecoration(
+                prefixIcon: const Icon(Iconsax.truck_fast),
+                hintText: tujuan,
+                filled: true,
+                fillColor: AppColors.buttonDisabled),
+          ),
+          const SizedBox(height: CustomSize.spaceBtwItems),
           const Text('Type'),
           DropDownWidget(
             value: type,
@@ -122,18 +124,6 @@ class _EditRealisasiState extends State<EditRealisasi> {
               setState(() {
                 type = value!;
                 print('ini type yang telah di pilih : $type');
-              });
-            },
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text('Jenis'),
-          DropDownWidget(
-            value: jenisKen,
-            items: jenisKendaraanList,
-            onChanged: (String? value) {
-              setState(() {
-                jenisKen = value!;
-                print('ini jenisKen yang telah di pilih : $jenisKen');
               });
             },
           ),
@@ -235,13 +225,17 @@ class _EditRealisasiState extends State<EditRealisasi> {
           const SizedBox(height: CustomSize.spaceBtwItems),
           const Text('Jumlah Unit'),
           TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: jumlahUnit.toString(),
-                filled: true,
-                fillColor: AppColors.buttonDisabled),
+            controller: widget.model.status == 0 ? null : jumlahController,
+            keyboardType: widget.model.status == 0
+                ? TextInputType.none
+                : TextInputType.number,
+            readOnly: widget.model.status == 0 ? true : false,
+            decoration: widget.model.status == 0
+                ? InputDecoration(
+                    hintText: jumlahUnit.toString(),
+                    filled: true,
+                    fillColor: AppColors.buttonDisabled)
+                : null,
           ),
         ],
       ),

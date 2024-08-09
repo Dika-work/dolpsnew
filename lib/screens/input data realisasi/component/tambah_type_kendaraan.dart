@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../../helpers/helper_function.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
@@ -13,6 +14,7 @@ import '../../../utils/popups/snackbar.dart';
 import '../../../utils/source/input data realisasi/tambah_type_motor_source.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dynamic_formfield.dart';
+import 'edit_type.dart';
 
 class TambahTypeKendaraan extends StatefulWidget {
   const TambahTypeKendaraan(
@@ -100,6 +102,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
 
   @override
   Widget build(BuildContext context) {
+    final doRegulerController = Get.put(DoRegulerController());
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Type Motor': double.nan,
@@ -134,7 +137,6 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
         padding: const EdgeInsets.symmetric(
             horizontal: CustomSize.md, vertical: CustomSize.lg),
         children: [
-          Text('ini id nya :$id'),
           Row(
             children: [
               Expanded(
@@ -546,7 +548,11 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                 ElevatedButton(
                                   onPressed: () {
                                     print(
-                                        '...INI BAKALAN KE CLASS NAME EDIT TYPE...');
+                                        '...INI BAKALAN KE CLASS NAME EDIT TYPE zzz...');
+                                    Get.to(() => EditTypeKendaraan(
+                                        controller: doRegulerController,
+                                        model: doRegulerController
+                                            .doRealisasiModel.first));
                                   },
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(

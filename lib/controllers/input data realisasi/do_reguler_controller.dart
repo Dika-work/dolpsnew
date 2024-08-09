@@ -50,6 +50,8 @@ class DoRegulerController extends GetxController {
     }
   }
 
+  Future<void> editRealisasiReguler()async{}
+
   Future<void> tambahJumlahUnit(int id, String user, int jumlahUnit) async {
     CustomDialogs.loadingIndicator();
 

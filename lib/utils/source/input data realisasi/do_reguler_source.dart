@@ -220,7 +220,28 @@ class DoRegulerSource extends DataGridSource {
                             )),
                       ],
                     )
-                  : const SizedBox.shrink(),
+                  : Column(
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              if (onEdit != null) {
+                                onEdit!(request);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    request.status == 0 || request.status == 1
+                                        ? AppColors.yellow
+                                        : AppColors.gold),
+                            child: Text(
+                              'Edit',
+                              style: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.apply(color: AppColors.black),
+                            )),
+                      ],
+                    ),
           controller.rolesHapus.value == 0
               ? const SizedBox.shrink()
               : Column(

@@ -8,10 +8,10 @@ import '../theme/app_colors.dart';
 class CustomDialogs {
   static defaultDialog({
     required BuildContext context,
-    required Widget titleWidget,
+    Widget? titleWidget,
     required Widget contentWidget,
     String cancelText = 'Batal',
-    required String confirmText,
+    String? confirmText,
     Function()? onCancel,
     Function()? onConfirm,
   }) {
@@ -29,7 +29,7 @@ class CustomDialogs {
             ),
             TextButton(
               onPressed: onConfirm,
-              child: Text(confirmText),
+              child: Text(confirmText ?? ''),
             ),
           ],
         );
@@ -41,7 +41,7 @@ class CustomDialogs {
     required BuildContext context,
     String title = 'Konfirmasi Penghapusan',
     String content =
-        'Menghapus data ini akan menghapus semua data terkait. Apakah Anda yakin?',
+        'Menghapus data ini akan menghapus semua data yang terkait. Apakah Anda yakin?',
     String cancelText = 'Batal',
     String confirmText = 'Hapus',
     Function()? onCancel,
@@ -84,7 +84,8 @@ class CustomDialogs {
                 child: Container(
                   width: 50.0,
                   height: 50.0,
-                  padding: const EdgeInsets.all(8.0), // Adjust padding if needed
+                  padding:
+                      const EdgeInsets.all(8.0), // Adjust padding if needed
                   decoration: const BoxDecoration(
                     color: AppColors
                         .primary, // Adjust color to match your primary color

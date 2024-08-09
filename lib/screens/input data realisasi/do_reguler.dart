@@ -12,6 +12,7 @@ import 'component/aksesoris.dart';
 import 'component/edit_realisasi.dart';
 import 'component/edit_type.dart';
 import 'component/jumlah_unit.dart';
+import 'component/lihat_realisasi.dart';
 import 'component/tambah_type_kendaraan.dart';
 
 class DoRegulerScreen extends GetView<DoRegulerController> {
@@ -58,7 +59,15 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
             return const CustomCircularLoader();
           } else {
             final dataSource = DoRegulerSource(
-              onLihat: (DoRealisasiModel model) {},
+              onLihat: (DoRealisasiModel model) {
+                CustomDialogs.defaultDialog(
+                  context: context,
+                  contentWidget: LihatRealisasi(
+                    model: model,
+                  ),
+                  confirmText: 'Save',
+                );
+              },
               onAction: (DoRealisasiModel model) {
                 final tambahTypeMotorController =
                     Get.put(TambahTypeMotorController());
