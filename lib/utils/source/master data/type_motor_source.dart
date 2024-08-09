@@ -46,34 +46,41 @@ class TypeMotorSource extends DataGridSource {
               ),
             );
           }),
-          
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (onEdit != null && typeMotorModel.isNotEmpty) {
-                    onEdit!(typeMotorModel[startIndex + rowIndex]);
-                  } else {
-                    return;
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.success),
-                child: const Text('Edit'),
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null && typeMotorModel.isNotEmpty) {
+                      onEdit!(typeMotorModel[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
+                  child: const Text('Edit'),
+                ),
               ),
               const SizedBox(height: CustomSize.sm),
-              ElevatedButton(
-                onPressed: () {
-                  if (onHapus != null && typeMotorModel.isNotEmpty) {
-                    onHapus!(typeMotorModel[startIndex + rowIndex]);
-                  } else {
-                    return;
-                  }
-                },
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-                child: const Text('Hapus'),
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onHapus != null && typeMotorModel.isNotEmpty) {
+                      onHapus!(typeMotorModel[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.error),
+                  child: const Text('Hapus'),
+                ),
               )
             ],
           )

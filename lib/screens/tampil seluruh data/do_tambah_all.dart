@@ -28,8 +28,8 @@ class DoTambahAll extends GetView<DataAllTambahController> {
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
-      'Edit': 50,
-      'Hapus': 50,
+      'Edit': 150,
+      'Hapus': 150,
     };
 
     const int rowsPerPage = 7;
@@ -83,14 +83,9 @@ class DoTambahAll extends GetView<DataAllTambahController> {
                       child: SfDataGrid(
                     source: dataSource,
                     columnWidthMode: ColumnWidthMode.auto,
-                    allowPullToRefresh: true,
                     gridLinesVisibility: GridLinesVisibility.both,
                     headerGridLinesVisibility: GridLinesVisibility.both,
-                    allowColumnsResizing: true,
-                    onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
-                      columnWidths[details.column.columnName] = details.width;
-                      return true;
-                    },
+                    rowHeight: 65,
                     columns: [
                       GridColumn(
                         width: columnWidths['No']!,

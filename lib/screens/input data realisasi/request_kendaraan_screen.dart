@@ -36,9 +36,9 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Type': double.nan,
       'Jenis': double.nan,
       'Jumlah': double.nan,
-      'Lihat': 100,
-      'Kirim': 100,
-      'Edit': 100,
+      'Lihat': 150,
+      'Kirim': 150,
+      'Edit': 150,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -429,15 +429,8 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                       source: dataSource,
                       rowHeight: 65,
                       columnWidthMode: ColumnWidthMode.auto,
-                      allowPullToRefresh: true,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,
-                      allowColumnsResizing: true,
-                      onColumnResizeUpdate:
-                          (ColumnResizeUpdateDetails details) {
-                        columnWidths[details.column.columnName] = details.width;
-                        return true;
-                      },
                       columns: column,
                     )),
                     SfDataPager(

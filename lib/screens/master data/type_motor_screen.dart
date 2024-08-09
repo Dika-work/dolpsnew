@@ -33,7 +33,7 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
       'Stay L/R': double.nan,
       'Ac Besar': double.nan,
       'Plastik': double.nan,
-      'Action': 100,
+      'Action': 150,
     };
 
     // const double dataPagerHeight = 60.0;
@@ -161,16 +161,9 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
                     child: SfDataGrid(
                       source: dataSource,
                       columnWidthMode: ColumnWidthMode.auto,
-                      allowPullToRefresh: true,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,
-                      allowColumnsResizing: true,
-                      rowHeight: 150,
-                      onColumnResizeUpdate:
-                          (ColumnResizeUpdateDetails details) {
-                        columnWidths[details.column.columnName] = details.width;
-                        return true;
-                      },
+                      rowHeight: 65,
                       columns: [
                         GridColumn(
                             width: columnWidths['No']!,

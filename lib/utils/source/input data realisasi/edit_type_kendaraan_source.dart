@@ -46,26 +46,45 @@ class EditTypeKendaraanSource extends DataGridSource {
             },
           ),
           // Edit cell
-          ElevatedButton(
-              onPressed: () {
-                if (onEdited != null && editTypeMotorModel.isNotEmpty) {
-                  onEdited!(editTypeMotorModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              child: const Text('Edit')),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (onEdited != null && editTypeMotorModel.isNotEmpty) {
+                        onEdited!(editTypeMotorModel[startIndex + rowIndex]);
+                      } else {
+                        return;
+                      }
+                    },
+                    child: const Text('Edit')),
+              ),
+            ],
+          ),
           // Hapus cell
-          ElevatedButton(
-              onPressed: () {
-                if (onDeleted != null && editTypeMotorModel.isNotEmpty) {
-                  onDeleted!(editTypeMotorModel[startIndex + rowIndex]);
-                } else {
-                  return;
-                }
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-              child: const Text('Hapus')),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (onDeleted != null && editTypeMotorModel.isNotEmpty) {
+                        onDeleted!(editTypeMotorModel[startIndex + rowIndex]);
+                      } else {
+                        return;
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.error),
+                    child: const Text('Hapus')),
+              ),
+            ],
+          ),
         ]);
   }
 

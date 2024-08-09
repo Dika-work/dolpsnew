@@ -30,13 +30,13 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'Jenis': double.nan,
       'Status': double.nan,
       'Jumlah': double.nan,
-      'Lihat': double.nan,
-      'Action': 120,
-      'Batal': double.nan,
-      'Edit': double.nan,
-      'Type': double.nan,
-      'Hapus': double.nan,
+      'Lihat': 150,
+      'Action': 150,
+      'Batal': 150,
+      'Edit': 150,
+      'Hapus': 150,
     };
+
     const int rowsPerPage = 10;
     int currentPage = 0;
 
@@ -119,15 +119,28 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                       child: SfDataGrid(
                           source: dataSource,
                           columnWidthMode: ColumnWidthMode.auto,
-                          rowHeight: 65,
                           gridLinesVisibility: GridLinesVisibility.both,
                           headerGridLinesVisibility: GridLinesVisibility.both,
-                          allowColumnsResizing: true,
-                          onColumnResizeUpdate:
-                              (ColumnResizeUpdateDetails details) {
-                            columnWidths[details.column.columnName] =
-                                details.width;
-                            return true;
+                          rowHeight: 65,
+                          onQueryRowHeight: (RowHeightDetails details) {
+                            // Sesuaikan indeks dengan data yang sesuai
+                            int rowIndex = details.rowIndex -
+                                1; // Mengurangi 1 jika ada header
+
+                            var request =
+                                dataSource.doRealisasiModel.isNotEmpty &&
+                                        rowIndex >= 0 &&
+                                        rowIndex <
+                                            dataSource.doRealisasiModel.length
+                                    ? dataSource.doRealisasiModel[rowIndex]
+                                    : null;
+
+                            if (request != null &&
+                                (request.status == 3 || request.status == 4)) {
+                              return 150.0; // Tinggi row untuk status 4
+                            } else {
+                              return details.rowHeight; // Tinggi default
+                            }
                           },
                           columns: [
                             GridColumn(
@@ -362,23 +375,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                     ),
                                     child: Text(
                                       'Edit',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Type']!,
-                                columnName: 'Type',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Type',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium

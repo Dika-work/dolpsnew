@@ -91,8 +91,8 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
       'Type Motor': double.nan,
       'Daerah Tujuan': double.nan,
       'Jumlah': 120,
-      'Edit': 130,
-      'Hapus': 130,
+      'Edit': 150,
+      'Hapus': 150,
     };
 
     const int rowsPerPage = 5;
@@ -225,9 +225,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                             height: gridHeight,
                             child: SfDataGrid(
                                 source: dataSource,
-                                rowHeight: 55,
-                                columnWidthMode: ColumnWidthMode.auto,
-                                allowPullToRefresh: true,
+                                rowHeight: 65,
                                 gridLinesVisibility: GridLinesVisibility.both,
                                 headerGridLinesVisibility:
                                     GridLinesVisibility.both,

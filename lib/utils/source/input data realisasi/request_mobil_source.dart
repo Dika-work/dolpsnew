@@ -56,51 +56,81 @@ class RequestMobilSource extends DataGridSource {
         // Action cells (lihat and kirim)
         requestKendaraanController.rolesLihat.value == 0
             ? const SizedBox.shrink()
-            : ElevatedButton(
-                onPressed: () {
-                  if (onLihat != null && requestKendaraanModel.isNotEmpty) {
-                    onLihat!(request);
-                  } else {
-                    return;
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.success),
-                child: const Text('Lihat')),
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 60,
+                    width: 100,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (onLihat != null &&
+                              requestKendaraanModel.isNotEmpty) {
+                            onLihat!(request);
+                          } else {
+                            return;
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.success),
+                        child: const Text('Lihat')),
+                  ),
+                ],
+              ),
         requestKendaraanController.rolesKirim.value == 0
             ? const SizedBox.shrink()
             : request.statusReq == 0
-                ? ElevatedButton(
-                    onPressed: () {
-                      if (onKirim != null && requestKendaraanModel.isNotEmpty) {
-                        onKirim!(request);
-                      } else {
-                        return;
-                      }
-                    },
-                    child: const Text('Kirim'))
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 60,
+                        width: 100,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              if (onKirim != null &&
+                                  requestKendaraanModel.isNotEmpty) {
+                                onKirim!(request);
+                              } else {
+                                return;
+                              }
+                            },
+                            child: const Text('Kirim')),
+                      ),
+                    ],
+                  )
                 : const SizedBox.shrink(),
         // Action cells (edit & hapus)
         requestKendaraanController.rolesEdit.value == 0
             ? const SizedBox.shrink()
             : request.statusReq == 0
-                ? ElevatedButton(
-                    onPressed: () {
-                      if (onEdit != null && requestKendaraanModel.isNotEmpty) {
-                        onEdit!(request);
-                      } else {
-                        return;
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.yellow),
-                    child: Text(
-                      'Edit',
-                      style: Theme.of(Get.context!)
-                          .textTheme
-                          .bodyMedium
-                          ?.apply(color: AppColors.black),
-                    ))
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 60,
+                        width: 100,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              if (onEdit != null &&
+                                  requestKendaraanModel.isNotEmpty) {
+                                onEdit!(request);
+                              } else {
+                                return;
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.yellow),
+                            child: Text(
+                              'Edit',
+                              style: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.apply(color: AppColors.black),
+                            )),
+                      ),
+                    ],
+                  )
                 : const SizedBox.shrink(),
       ],
     );

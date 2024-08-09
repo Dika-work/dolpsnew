@@ -1,6 +1,5 @@
 import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../models/tampil seluruh data/do_harian_all_lps.dart';
@@ -47,20 +46,35 @@ class DataAllHarianLpsSource extends DataGridSource {
           );
         }),
         // Action cells (edit and delete)
-        IconButton(
-          icon: const Icon(Iconsax.edit),
-          onPressed: () {
-            if (onEdited != null && allGlobal.isNotEmpty) {
-              onEdited!(allGlobal[startIndex + rowIndex]);
-            } else {
-              return;
-            }
-          },
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (onEdited != null && allGlobal.isNotEmpty) {
+                      onEdited!(allGlobal[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  child: const Text('Edit')),
+            )
+          ],
         ),
-        IconButton(
-          icon: const Icon(Iconsax.trash),
-          onPressed: onDeleted,
-        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                  onPressed: onDeleted, child: const Text('Hapus')),
+            )
+          ],
+        )
       ],
     );
   }

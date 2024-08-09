@@ -48,7 +48,7 @@ class KirimKendaraanScreen extends StatelessWidget {
       'Jenis': 130,
       'Status': double.nan,
       'Supir': 130,
-      'Hapus': 50,
+      'Hapus': 150,
     };
 
     const int rowsPerPage = 10;
@@ -94,15 +94,9 @@ class KirimKendaraanScreen extends StatelessWidget {
                     SfDataGrid(
                       source: dataSource,
                       columnWidthMode: ColumnWidthMode.auto,
-                      allowPullToRefresh: true,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,
-                      allowColumnsResizing: true,
-                      onColumnResizeUpdate:
-                          (ColumnResizeUpdateDetails details) {
-                        columnWidths[details.column.columnName] = details.width;
-                        return true;
-                      },
+                      rowHeight: 65,
                       columns: [
                         GridColumn(
                           width: columnWidths['No']!,

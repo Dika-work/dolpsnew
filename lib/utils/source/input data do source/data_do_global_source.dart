@@ -3,7 +3,6 @@ import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../constant/custom_size.dart';
@@ -51,26 +50,43 @@ class DataDoGlobalSource extends DataGridSource {
           );
         }),
         // Action cells (edit and delete)
-        IconButton(
-          icon: const Icon(Iconsax.edit),
-          onPressed: () {
-            if (onEdited != null && doGlobal.isNotEmpty) {
-              onEdited!(doGlobal[startIndex + rowIndex]);
-            } else {
-              return;
-            }
-          },
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (onEdited != null && doGlobal.isNotEmpty) {
+                      onEdited!(doGlobal[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  child: const Text('Edit')),
+            )
+          ],
         ),
-        IconButton(
-          icon: const Icon(Iconsax.trash),
-          onPressed: () {
-            if (onDeleted != null && doGlobal.isNotEmpty) {
-              onDeleted!(doGlobal[startIndex + rowIndex]);
-            } else {
-              return;
-            }
-          },
-        ),
+        // Hapus
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (onDeleted != null && doGlobal.isNotEmpty) {
+                      onDeleted!(doGlobal[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  child: const Text('Hapus')),
+            )
+          ],
+        )
       ],
     );
   }
