@@ -147,7 +147,7 @@ class TypeMotorRepository {
         if (responseData['status'] == 'success') {
           SnackbarLoader.successSnackBar(
             title: 'Sukses 😃',
-            message: 'Data DO Harian berhasil dihapus',
+            message: 'Data type motor berhasil dihapus',
           );
         } else {
           CustomFullScreenLoader.stopLoading();
@@ -162,7 +162,7 @@ class TypeMotorRepository {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
-              'Gagal menghapus DO Harian, status code: ${response.statusCode}',
+              'Gagal menghapus type motor, status code: ${response.statusCode}',
         );
       }
     } catch (e) {

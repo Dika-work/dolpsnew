@@ -60,8 +60,10 @@ class TambahTypeMotorSource extends DataGridSource {
     index = startIndex;
 
     if (tambahTypeMotorModel.isEmpty) {
+      print('Model is empty, generating empty rows');
       _tambahTypeMotor = _generateEmptyRows(1);
     } else {
+      print('Model has data, generating rows based on model');
       _tambahTypeMotor =
           tambahTypeMotorModel.skip(startIndex).take(5).map<DataGridRow>(
         (e) {
@@ -77,6 +79,8 @@ class TambahTypeMotorSource extends DataGridSource {
         },
       ).toList();
     }
+    notifyListeners();
+    print('Data grid updated, listeners notified');
   }
 
   @override

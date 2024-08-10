@@ -25,6 +25,10 @@ class LihatRealisasi extends StatelessWidget {
     const double headerHeight = 32.0;
     const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchTambahTypeMotor(model.id);
+    });
+
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Type Motor': double.nan,
@@ -75,9 +79,10 @@ class LihatRealisasi extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: CustomSize.md, vertical: CustomSize.sm),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -103,7 +108,6 @@ class LihatRealisasi extends StatelessWidget {
                 model.type == 0 ? 'REGULER' : 'MUTASI',
                 model.jumlahUnit.toString()),
             const SizedBox(height: 16.0),
-            // Tambahkan SfDataGrid di sini
             Obx(
               () {
                 if (controller.isLoadingTambahType.value &&
@@ -118,7 +122,9 @@ class LihatRealisasi extends StatelessWidget {
                   return Column(
                     children: [
                       SizedBox(
-                        height: gridHeight,
+                        height: controller.tambahTypeMotorModel.isEmpty
+                            ? 110
+                            : gridHeight,
                         child: SfDataGrid(
                             source: dataSource,
                             columnWidthMode: ColumnWidthMode.auto,
@@ -231,22 +237,23 @@ class LihatRealisasi extends StatelessWidget {
                                       ))),
                             ]),
                       ),
-                      SfDataPager(
-                        delegate: dataSource,
-                        pageCount: controller.tambahTypeMotorModel.isEmpty
-                            ? 1
-                            : (controller.tambahTypeMotorModel.length /
-                                    rowsPerPage)
-                                .ceilToDouble(),
-                        direction: Axis.horizontal,
-                      ),
+                      controller.tambahTypeMotorModel.isEmpty
+                          ? const SizedBox.shrink()
+                          : SfDataPager(
+                              delegate: dataSource,
+                              pageCount: controller.tambahTypeMotorModel.isEmpty
+                                  ? 1
+                                  : (controller.tambahTypeMotorModel.length /
+                                          rowsPerPage)
+                                      .ceilToDouble(),
+                              direction: Axis.horizontal,
+                            ),
                     ],
                   );
                 }
               },
             ),
             const SizedBox(height: 16.0),
-            // Tambahkan Table statis jika masih diperlukan
             Scrollbar(
               scrollbarOrientation: ScrollbarOrientation.bottom,
               thickness: 10.0,
@@ -254,7 +261,7 @@ class LihatRealisasi extends StatelessWidget {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Container(
-                  width: 800.0, // Ensure the width is specified
+                  width: 800.0,
                   padding: const EdgeInsets.only(bottom: CustomSize.md),
                   child: Table(
                     border: TableBorder.all(),
@@ -271,8 +278,8 @@ class LihatRealisasi extends StatelessWidget {
                       9: FixedColumnWidth(60.0),
                     },
                     children: [
-                      TableRow(
-                        children: const [
+                      const TableRow(
+                        children: [
                           TableCell(child: Center(child: Text('HLM'))),
                           TableCell(child: Center(child: Text('AC'))),
                           TableCell(child: Center(child: Text('KS'))),
@@ -288,7 +295,7 @@ class LihatRealisasi extends StatelessWidget {
                       TableRow(
                         children: [
                           for (int i = 0; i < 10; i++)
-                            TableCell(child: Text('')),
+                            const TableCell(child: Text('')),
                         ],
                       ),
                     ],

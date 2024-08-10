@@ -550,7 +550,6 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                     print(
                                         '...INI BAKALAN KE CLASS NAME EDIT TYPE zzz...');
                                     Get.to(() => EditTypeKendaraan(
-                                        controller: doRegulerController,
                                         model: doRegulerController
                                             .doRealisasiModel.first));
                                   },

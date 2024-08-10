@@ -8,6 +8,7 @@ import '../../controllers/input data realisasi/tambah_type_motor_controller.dart
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/source/input data realisasi/do_reguler_source.dart';
+import '../../utils/theme/app_colors.dart';
 import 'component/aksesoris.dart';
 import 'component/edit_realisasi.dart';
 import 'component/edit_type.dart';
@@ -60,12 +61,14 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
           } else {
             final dataSource = DoRegulerSource(
               onLihat: (DoRealisasiModel model) {
-                CustomDialogs.defaultDialog(
+                showDialog(
                   context: context,
-                  contentWidget: LihatRealisasi(
-                    model: model,
-                  ),
-                  confirmText: 'Save',
+                  builder: (context) {
+                    return Dialog(
+                      backgroundColor: AppColors.white,
+                      child: LihatRealisasi(model: model)
+                    );
+                  },
                 );
               },
               onAction: (DoRealisasiModel model) {
@@ -108,7 +111,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                 Get.to(
                   () => EditTypeKendaraan(
                     model: model,
-                    controller: controller,
                   ),
                 );
               },

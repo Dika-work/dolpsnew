@@ -91,8 +91,7 @@ class EditTypeKendaraanSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Type Motor', value: '-'),
         DataGridCell<String>(columnName: 'Daerah Tujuan', value: '-'),
         DataGridCell<String>(columnName: 'Jumlah', value: '-'),
-        DataGridCell<String>(columnName: 'Edit', value: '-'),
-        DataGridCell<String>(columnName: 'Hapus', value: '-'),
+        DataGridCell<String>(columnName: 'Action', value: '-'),
       ]);
     });
   }
