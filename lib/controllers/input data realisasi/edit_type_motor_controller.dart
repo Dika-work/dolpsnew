@@ -49,4 +49,15 @@ class EditTypeMotorController extends GetxController {
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }
+
+  // func selesai di page EDIT TYPE KENDARAAN
+  Future<void> editdanHapusTypeKendaraan(int id) async {
+    CustomDialogs.loadingIndicator();
+
+    await editMotorRepo.editStatusTypeMotor(id);
+    await editMotorRepo.hapusDataHutang(id);
+
+    CustomFullScreenLoader.stopLoading();
+    Get.offAllNamed('/do-reguler');
+  }
 }

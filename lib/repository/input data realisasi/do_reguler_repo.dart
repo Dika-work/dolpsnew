@@ -65,4 +65,65 @@ class DoRegulerRepository {
       );
     }
   }
+
+  Future<void> editDoReguler(
+      int id,
+      String plant,
+      String tujuan,
+      int type,
+      String? plant2,
+      String? tujuan2,
+      String kendaraan,
+      String supir,
+      int jumlahUnit) async {
+    try {
+      final response = await http.put(
+        Uri.parse(
+            '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=Edit_Data'),
+        body: {
+          'id': id.toString(),
+          'plant': plant,
+          'tujuan': tujuan,
+          'type': type.toString(),
+          'plant_2': plant2 ?? '',
+          'tujuan_2': tujuan2 ?? '',
+          'kendaraan': kendaraan,
+          'supir': supir,
+          'jumlah_unit': jumlahUnit.toString()
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Do reguler berhasil diubah',
+          );
+        } else {
+          CustomFullScreenLoader.stopLoading();
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+          print('...ADA MASALAH DI EDIT DO REGULER REPO...');
+        }
+        return responseData;
+      } else {
+        CustomFullScreenLoader.stopLoading();
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal mengedit do reguler, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      print('Error edit di repository DO Reguler: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit do reguler',
+      );
+    }
+  }
 }

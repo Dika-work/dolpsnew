@@ -580,7 +580,6 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                 flex: 1,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    updateExceedingCapacity(); // Update status setelah menambah field
                                     widget.controller
                                         .addField(selectedDaerahTujuan.value);
                                   },
@@ -592,7 +591,6 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                 flex: 1,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    updateExceedingCapacity(); // Update status setelah mereset field
                                     widget.controller.resetFields(
                                         selectedDaerahTujuan.value);
                                   },

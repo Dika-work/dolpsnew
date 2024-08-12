@@ -6,7 +6,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
-import '../../utils/popups/dialogs.dart';
 import '../../utils/source/input data realisasi/do_reguler_source.dart';
 import '../../utils/theme/app_colors.dart';
 import 'component/aksesoris.dart';
@@ -36,7 +35,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'Action': 150,
       'Batal': 150,
       'Edit': 150,
-      'Hapus': 150,
     };
 
     const int rowsPerPage = 10;
@@ -50,7 +48,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.back(),
+          onPressed: () => Get.offNamed('/rootpage'),
         ),
       ),
       body: Obx(
@@ -65,9 +63,8 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                   context: context,
                   builder: (context) {
                     return Dialog(
-                      backgroundColor: AppColors.white,
-                      child: LihatRealisasi(model: model)
-                    );
+                        backgroundColor: AppColors.white,
+                        child: LihatRealisasi(model: model));
                   },
                 );
               },
@@ -97,15 +94,15 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
               },
               onBatal: (DoRealisasiModel model) {},
               onEdit: (DoRealisasiModel model) {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Edit DO Realisasi'),
-                    contentWidget: EditRealisasi(
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return EditRealisasi(
                       model: model,
-                    ),
-                    // onConfirm: controller.edit,
-                    cancelText: 'Close',
-                    confirmText: 'Edit');
+                      controller: controller,
+                    );
+                  },
+                );
               },
               onType: (DoRealisasiModel model) {
                 Get.to(
@@ -114,7 +111,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                   ),
                 );
               },
-              onHapus: (DoRealisasiModel model) {},
               doRealisasiModel: controller.doRealisasiModel,
               startIndex: currentPage * rowsPerPage,
             );
@@ -386,23 +382,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                     ),
                                     child: Text(
                                       'Edit',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Hapus']!,
-                                columnName: 'Hapus',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Hapus',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium

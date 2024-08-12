@@ -7,7 +7,6 @@ import '../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/source/input data realisasi/do_mutasi_source.dart';
-import 'component/edit_realisasi.dart';
 import 'component/jumlah_unit.dart';
 
 class DoMutasiScreen extends GetView<DoMutasiController> {
@@ -69,15 +68,17 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
               onBatal: (DoRealisasiModel model) {},
               onEdit: (DoRealisasiModel model) {
                 if (model.status == 0 || model.status == 1) {
-                  CustomDialogs.defaultDialog(
-                      context: context,
-                      titleWidget: const Text('Edit DO Realisasi'),
-                      contentWidget: EditRealisasi(
-                        model: model,
-                      ),
-                      // onConfirm: controller.edit,
-                      cancelText: 'Close',
-                      confirmText: 'Edit');
+                  // CustomDialogs.defaultDialog(
+                  //     context: context,
+                  //     titleWidget: const Text('Edit DO Realisasi'),
+                  //     contentWidget: EditRealisasi(
+                  //       model: model,
+                  //       controller: controller,
+                  //     ),
+                  //     // onConfirm: controller.edit,
+                  //     cancelText: 'Close',
+                  //     confirmText: 'Edit');
+                  print('..INI EDIT REALISASI MUTASI..');
                 } else {
                   print('..INI BTN EDIT STATUS 2..');
                 }

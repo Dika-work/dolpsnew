@@ -36,6 +36,14 @@ class AksesorisController extends GetxController {
     }
   }
 
+  void resetCheckboxes() {
+    checkboxStatus.value = List<bool>.filled(checkboxStatus.length, false);
+    for (var controller in controllers) {
+      controller.clear();
+    }
+    updateHutangValues(); // Untuk memastikan hutangValues juga di-reset
+  }
+
   Future<void> fetchAksesoris(int id) async {
     try {
       isLoadingAksesoris.value = true;
@@ -153,6 +161,7 @@ class AksesorisController extends GetxController {
       print('Marking as selesai:');
       await aksesorisRepo.accSelesai(id);
       await doRegulerController.fetchRegulerContent();
+      resetCheckboxes();
 
       CustomFullScreenLoader.stopLoading();
 

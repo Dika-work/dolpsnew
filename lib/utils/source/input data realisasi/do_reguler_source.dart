@@ -14,7 +14,6 @@ class DoRegulerSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onBatal;
   final void Function(DoRealisasiModel)? onEdit;
   final void Function(DoRealisasiModel)? onType;
-  final void Function(DoRealisasiModel)? onHapus;
   final List<DoRealisasiModel> doRealisasiModel;
   int startIndex = 0;
 
@@ -24,7 +23,6 @@ class DoRegulerSource extends DataGridSource {
     required this.onBatal,
     required this.onEdit,
     required this.onType,
-    required this.onHapus,
     required this.doRealisasiModel,
     int startIndex = 0,
   }) {
@@ -90,37 +88,11 @@ class DoRegulerSource extends DataGridSource {
                       ],
                     ),
           // Action
-          request.status == 4
+          request.status == 0 ||
+                  request.status == 1 ||
+                  request.status == 2 ||
+                  request.status == 3
               ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            print('..INI BAKALAN KE PLANT GABUNGAN..');
-                          },
-                          child: const Text(
-                            'Gabungan',
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-                    const SizedBox(height: CustomSize.sm),
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            print('..INI BAKALAN KE HUTANG ACC..');
-                          },
-                          child: const Text(
-                            'Hutang ACC',
-                          )),
-                    ),
-                  ],
-                )
-              : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
@@ -152,6 +124,37 @@ class DoRegulerSource extends DataGridSource {
                         ),
                       ),
                     ),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 60,
+                      width: 100,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            print('..INI BAKALAN KE PLANT GABUNGAN..');
+                          },
+                          child: const Text(
+                            'Gabungan',
+                            textAlign: TextAlign.center,
+                          )),
+                    ),
+                    const SizedBox(height: CustomSize.sm),
+                    doRealisasiModel.first.totalHutang == 0
+                        ? const SizedBox.shrink()
+                        : SizedBox(
+                            height: 60,
+                            width: 100,
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  print('..INI BAKALAN KE HUTANG ACC..');
+                                },
+                                child: const Text(
+                                  'Hutang ACC',
+                                )),
+                          ),
                   ],
                 ),
           // Batal
@@ -221,6 +224,7 @@ class DoRegulerSource extends DataGridSource {
                       ],
                     )
                   : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
                             onPressed: () {
@@ -242,26 +246,6 @@ class DoRegulerSource extends DataGridSource {
                             )),
                       ],
                     ),
-          controller.rolesHapus.value == 0
-              ? const SizedBox.shrink()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (onHapus != null) {
-                              onHapus!(request);
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.error),
-                          child: const Text('Hapus')),
-                    ),
-                  ],
-                ),
         ] else ...[
           // Placeholder for when no data is available
           const SizedBox.shrink(), // Lihat
@@ -331,6 +315,7 @@ class DoRegulerSource extends DataGridSource {
           ]);
         },
       ).toList();
+      notifyListeners();
     }
   }
 

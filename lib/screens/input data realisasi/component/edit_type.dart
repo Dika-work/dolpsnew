@@ -87,7 +87,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
 
     const int rowsPerPage = 5;
     int currentPage = 0;
-    const double rowHeight = 65.0;
+    const double rowHeight = 75.0;
     const double headerHeight = 32.0;
     const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
 
@@ -520,9 +520,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {
-                      print('...INI BAKALAN SIMPAN EDIT TYPE...');
-                    },
+                    onPressed: () => controller.editdanHapusTypeKendaraan(id),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           vertical: 20.0, horizontal: 25.0),

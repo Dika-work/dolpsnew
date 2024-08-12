@@ -113,4 +113,87 @@ class EditTypeMotorRepository {
       );
     }
   }
+
+  // Edit Status Untuk Selesai di page EDIT TYPE KENDARAAN
+  Future<void> editStatusTypeMotor(int id) async {
+    try {
+      final response = await http.put(
+        Uri.parse(
+            '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=Tipe_Selesai'),
+        body: {
+          'id': id.toString(),
+          'status': '2',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        if (responseData['status'] == 'success') {
+          SnackbarLoader.successSnackBar(
+            title: 'Sukses 😃',
+            message: 'Type motor berhasil diubah',
+          );
+        } else {
+          CustomFullScreenLoader.stopLoading();
+          SnackbarLoader.errorSnackBar(
+            title: 'Gagal😪',
+            message: responseData['message'] ?? 'Ada yang salah🤷',
+          );
+          print('...ADA MASALAH DI EDIT TYPE MOTOR REPO...');
+        }
+        return responseData;
+      } else {
+        CustomFullScreenLoader.stopLoading();
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal mengedit Type motor, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      print('Error edit di repository Edit Type Motor: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat mengedit Type motor',
+      );
+    }
+  }
+
+  // ini func hapus yg di jalankan bersamaan dengan func editStatusTypeMotor di page EDIT TYPE KENDARAAN
+  Future<void> hapusDataHutang(int id) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('${storageUtil.baseURL}/DO/api/api_AccMotor.php'),
+        body: {
+          'no_realisasi_hutang': id.toString(),
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        // if (responseData['status'] == 'success') {
+        //   SnackbarLoader.successSnackBar(
+        //     title: 'Sukses 😃',
+        //     message: 'Data type motor berhasil dihapus',
+        //   );
+        // }
+        return responseData;
+      } else {
+        CustomFullScreenLoader.stopLoading();
+        SnackbarLoader.errorSnackBar(
+          title: 'Gagal😪',
+          message:
+              'Gagal menghapus type motor, status code: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      CustomFullScreenLoader.stopLoading();
+      print('Error edit di repository Hapus Type Motor: $e');
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal😪',
+        message: 'Terjadi kesalahan saat menghapus Type motor',
+      );
+    }
+  }
 }
