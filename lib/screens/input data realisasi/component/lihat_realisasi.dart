@@ -254,55 +254,60 @@ class LihatRealisasi extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16.0),
-            Scrollbar(
-              scrollbarOrientation: ScrollbarOrientation.bottom,
-              thickness: 10.0,
-              radius: const Radius.circular(CustomSize.cardRadiusMd),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Container(
-                  width: 800.0,
-                  padding: const EdgeInsets.only(bottom: CustomSize.md),
-                  child: Table(
-                    border: TableBorder.all(),
-                    columnWidths: const {
-                      0: FixedColumnWidth(60.0),
-                      1: FixedColumnWidth(60.0),
-                      2: FixedColumnWidth(60.0),
-                      3: FixedColumnWidth(60.0),
-                      4: FixedColumnWidth(60.0),
-                      5: FixedColumnWidth(60.0),
-                      6: FixedColumnWidth(60.0),
-                      7: FixedColumnWidth(80.0),
-                      8: FixedColumnWidth(80.0),
-                      9: FixedColumnWidth(60.0),
-                    },
-                    children: [
-                      const TableRow(
-                        children: [
-                          TableCell(child: Center(child: Text('HLM'))),
-                          TableCell(child: Center(child: Text('AC'))),
-                          TableCell(child: Center(child: Text('KS'))),
-                          TableCell(child: Center(child: Text('TS'))),
-                          TableCell(child: Center(child: Text('BP'))),
-                          TableCell(child: Center(child: Text('BS'))),
-                          TableCell(child: Center(child: Text('PLT'))),
-                          TableCell(child: Center(child: Text('STAY L/R'))),
-                          TableCell(child: Center(child: Text('AC BESAR'))),
-                          TableCell(child: Center(child: Text('PLASTIK'))),
-                        ],
+            model.type == 0
+                ? Scrollbar(
+                    scrollbarOrientation: ScrollbarOrientation.bottom,
+                    thickness: 10.0,
+                    radius: const Radius.circular(CustomSize.cardRadiusMd),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        width: 800.0,
+                        padding: const EdgeInsets.only(bottom: CustomSize.md),
+                        child: Table(
+                          border: TableBorder.all(),
+                          columnWidths: const {
+                            0: FixedColumnWidth(60.0),
+                            1: FixedColumnWidth(60.0),
+                            2: FixedColumnWidth(60.0),
+                            3: FixedColumnWidth(60.0),
+                            4: FixedColumnWidth(60.0),
+                            5: FixedColumnWidth(60.0),
+                            6: FixedColumnWidth(60.0),
+                            7: FixedColumnWidth(80.0),
+                            8: FixedColumnWidth(80.0),
+                            9: FixedColumnWidth(60.0),
+                          },
+                          children: [
+                            const TableRow(
+                              children: [
+                                TableCell(child: Center(child: Text('HLM'))),
+                                TableCell(child: Center(child: Text('AC'))),
+                                TableCell(child: Center(child: Text('KS'))),
+                                TableCell(child: Center(child: Text('TS'))),
+                                TableCell(child: Center(child: Text('BP'))),
+                                TableCell(child: Center(child: Text('BS'))),
+                                TableCell(child: Center(child: Text('PLT'))),
+                                TableCell(
+                                    child: Center(child: Text('STAY L/R'))),
+                                TableCell(
+                                    child: Center(child: Text('AC BESAR'))),
+                                TableCell(
+                                    child: Center(child: Text('PLASTIK'))),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                for (int i = 0; i < 10; i++)
+                                  const TableCell(child: Text('')),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      TableRow(
-                        children: [
-                          for (int i = 0; i < 10; i++)
-                            const TableCell(child: Text('')),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+                    ),
+                  )
+                : const SizedBox.shrink()
           ],
         ),
       ),

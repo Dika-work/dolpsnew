@@ -252,7 +252,6 @@ class DoRegulerSource extends DataGridSource {
           const SizedBox.shrink(), // Action
           const SizedBox.shrink(), // Batal
           const SizedBox.shrink(), // Edit
-          const SizedBox.shrink(), // Hapus
         ]
       ],
     );

@@ -14,7 +14,6 @@ class DoMutasiSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onBatal;
   final void Function(DoRealisasiModel)? onEdit;
   final void Function(DoRealisasiModel)? onType;
-  final void Function(DoRealisasiModel)? onHapus;
   final List<DoRealisasiModel> doRealisasiModel;
   int startIndex = 0;
 
@@ -24,7 +23,6 @@ class DoMutasiSource extends DataGridSource {
     required this.onBatal,
     required this.onEdit,
     required this.onType,
-    required this.onHapus,
     required this.doRealisasiModel,
     int startIndex = 0,
   }) {
@@ -68,100 +66,155 @@ class DoMutasiSource extends DataGridSource {
           // Lihat
           controller.rolesLihat.value == 0
               ? const SizedBox.shrink()
-              : ElevatedButton(
-                  onPressed: () {
-                    if (onLihat != null) {
-                      onLihat!(request);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.success),
-                  child: const Text('Lihat')),
+              : request.status == 0
+                  ? const SizedBox.shrink()
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 60,
+                          width: 100,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                if (onLihat != null) {
+                                  onLihat!(request);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary),
+                              child: const Text('Lihat')),
+                        ),
+                      ],
+                    ),
           // Action
-          ElevatedButton(
-            onPressed: () {
-              if (onAction != null) {
-                onAction!(request);
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-            ),
-            child: const Text('Tambah Request'),
-          ),
+          request.status == 0 ||
+                  request.status == 1 ||
+                  request.status == 2 ||
+                  request.status == 3
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 60,
+                      width: 100,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (onAction != null) {
+                            onAction!(request);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: request.status == 0
+                              ? AppColors.primary
+                              : request.status == 1 || request.status == 2
+                                  ? AppColors.pink
+                                  : AppColors.success,
+                        ),
+                        child: Text(request.status == 0
+                            ? 'Jumlah Unit'
+                            : request.status == 1 || request.status == 2
+                                ? 'Type Motor'
+                                : 'Terima Motor'),
+                      ),
+                    ),
+                  ],
+                )
+              : const SizedBox.shrink(),
           // Batal
           controller.rolesBatal.value == 0
               ? const SizedBox.shrink()
               : request.status == 0
-                  ? ElevatedButton(
-                      onPressed: () {
-                        if (onBatal != null) {
-                          onBatal!(request);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.error),
-                      child: const Text('Batal'))
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 60,
+                          width: 100,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                if (onBatal != null) {
+                                  onBatal!(request);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.error),
+                              child: const Text('Batal')),
+                        ),
+                      ],
+                    )
                   : const SizedBox.shrink(),
           // Edit
           controller.rolesEdit.value == 0
               ? const SizedBox.shrink()
-              : ElevatedButton(
-                  onPressed: () {
-                    if (onEdit != null) {
-                      onEdit!(request);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          request.status == 0 || request.status == 1
-                              ? AppColors.yellow
-                              : AppColors.gold),
-                  child: Text(
-                    'Edit',
-                    style: Theme.of(Get.context!)
-                        .textTheme
-                        .bodyMedium
-                        ?.apply(color: AppColors.black),
-                  )),
-          // Type
-          request.status == 2
-              ? ElevatedButton(
-                  onPressed: () {
-                    if (onType != null) {
-                      onType!(request);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.success),
-                  child: Text(
-                    'Type',
-                    style: Theme.of(Get.context!)
-                        .textTheme
-                        .bodyMedium
-                        ?.apply(color: AppColors.black),
-                  ))
-              : const SizedBox.shrink(),
-          // Hapus
-          controller.rolesHapus.value == 0
-              ? const SizedBox.shrink()
-              : ElevatedButton(
-                  onPressed: () {
-                    if (onHapus != null) {
-                      onHapus!(request);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.error),
-                  child: const Text('Hapus')),
+              : request.status == 2 || request.status == 3
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              if (onEdit != null) {
+                                onEdit!(request);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    request.status == 0 || request.status == 1
+                                        ? AppColors.yellow
+                                        : AppColors.gold),
+                            child: Text(
+                              'Edit',
+                              style: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.apply(color: AppColors.black),
+                            )),
+                        const SizedBox(height: CustomSize.sm),
+                        ElevatedButton(
+                            onPressed: () {
+                              if (onType != null) {
+                                onType!(request);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.success),
+                            child: Text(
+                              'Type',
+                              style: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.apply(color: AppColors.black),
+                            )),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              if (onEdit != null) {
+                                onEdit!(request);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    request.status == 0 || request.status == 1
+                                        ? AppColors.yellow
+                                        : AppColors.gold),
+                            child: Text(
+                              'Edit',
+                              style: Theme.of(Get.context!)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.apply(color: AppColors.black),
+                            )),
+                      ],
+                    ),
         ] else ...[
           // Placeholder for when no data is available
           const SizedBox.shrink(), // Lihat
           const SizedBox.shrink(), // Action
           const SizedBox.shrink(), // Batal
           const SizedBox.shrink(), // Edit
-          const SizedBox.shrink(), // Type
-          const SizedBox.shrink(), // Hapus
         ]
       ],
     );
