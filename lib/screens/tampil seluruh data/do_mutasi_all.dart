@@ -1,4 +1,3 @@
-import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -6,15 +5,16 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/input data realisasi/do_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
-import 'component/edit_realisasi_mutasi.dart';
-import 'component/jumlah_unit.dart';
-import 'component/lihat_realisasi.dart';
-import 'component/tambah_type_motor_mutasi.dart';
+import '../input data realisasi/component/edit_realisasi_mutasi.dart';
+import '../input data realisasi/component/jumlah_unit.dart';
+import '../input data realisasi/component/lihat_realisasi.dart';
+import '../input data realisasi/component/tambah_type_motor_mutasi.dart';
 
-class DoMutasiScreen extends GetView<DoMutasiController> {
-  const DoMutasiScreen({super.key});
+class DoMutasiAll extends GetView<DoMutasiController> {
+  const DoMutasiAll({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,6 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(

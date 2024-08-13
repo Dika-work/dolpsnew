@@ -270,7 +270,6 @@ class DoRegulerSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
           DataGridCell<String>(columnName: 'Type', value: '-'),
           DataGridCell<String>(columnName: 'Jenis', value: '-'),
-          DataGridCell<String>(columnName: 'Status', value: '-'),
           DataGridCell<String>(columnName: 'Jumlah', value: '-'),
         ]);
       },
@@ -307,9 +306,6 @@ class DoRegulerSource extends DataGridSource {
             DataGridCell<String>(
                 columnName: 'Jenis',
                 value: '${data.inisialDepan}${data.inisialBelakang}'),
-            DataGridCell<String>(
-                columnName: 'Status',
-                value: data.statusAnalisa == 0 ? 'READY' : 'NOT'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
           ]);
         },

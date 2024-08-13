@@ -1,8 +1,8 @@
-import 'package:doplsnew/controllers/input%20data%20realisasi/lihat_kendaraan_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controllers/input data realisasi/lihat_kendaraan_controller.dart';
 import '../../../models/input data realisasi/lihat_kendaraan_model.dart';
 
 class LihatKendaraanSource extends DataGridSource {

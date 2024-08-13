@@ -28,6 +28,8 @@ import '../screens/rootpage.dart';
 import '../screens/tampil seluruh data/do_global_all.dart';
 import '../screens/tampil seluruh data/do_harian_lps.dart';
 import '../screens/tampil seluruh data/do_kurang_all.dart';
+import '../screens/tampil seluruh data/do_mutasi_all.dart';
+import '../screens/tampil seluruh data/do_reguler_all.dart';
 import '../screens/tampil seluruh data/do_tambah_all.dart';
 
 class AppRoutes {
@@ -102,6 +104,18 @@ class AppRoutes {
             binding: BindingsBuilder(() {
               Get.put(DataAllTambahController());
             })),
+        GetPage(
+            name: '/all-do-reguler',
+            page: () => const DoRegulerAll(),
+            binding: BindingsBuilder(() {
+              Get.put(DoRegulerController());
+            })),
+        GetPage(
+            name: '/all-do-mutasi',
+            page: () => const DoMutasiAll(),
+            binding: BindingsBuilder(() {
+              Get.put(DoMutasiController());
+            })),
         // Input data realisasi
         GetPage(
             name: '/request-mobil',
@@ -122,7 +136,7 @@ class AppRoutes {
               Get.put(DoMutasiController());
             })),
         // master data
-         GetPage(
+        GetPage(
             name: '/type-motor',
             page: () => const TypeMotorScreen(),
             binding: BindingsBuilder(() {

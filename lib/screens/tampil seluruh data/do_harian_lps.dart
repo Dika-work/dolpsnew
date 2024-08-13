@@ -54,7 +54,7 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
           return const CustomCircularLoader();
         } else {
           final dataSource = controller.doGlobalHarianModel.isEmpty
-              ? EmptyDataSource()
+              ? EmptyAllDataSource()
               : DataAllHarianLpsSource(
                   allGlobal: controller.doGlobalHarianModel,
                   startIndex: currentPage * rowsPerPage,

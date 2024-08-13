@@ -233,7 +233,6 @@ class DoMutasiSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Supir(Panggilan)', value: '-'),
           DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
           DataGridCell<String>(columnName: 'Jenis', value: '-'),
-          DataGridCell<String>(columnName: 'Status', value: '-'),
           DataGridCell<String>(columnName: 'Jumlah', value: '-'),
         ]);
       },
@@ -268,9 +267,6 @@ class DoMutasiSource extends DataGridSource {
             DataGridCell<String>(
                 columnName: 'Jenis',
                 value: '${data.inisialDepan}${data.inisialBelakang}'),
-            DataGridCell<String>(
-                columnName: 'Status',
-                value: data.status == 0 ? 'READY' : 'NOT'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
           ]);
         },

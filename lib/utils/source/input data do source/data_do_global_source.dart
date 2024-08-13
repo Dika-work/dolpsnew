@@ -1,10 +1,10 @@
-import 'package:doplsnew/controllers/input%20data%20do/do_global_controller.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/models/input%20data%20do/do_global_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controllers/input data do/do_global_controller.dart';
+import '../../../models/input data do/do_global_model.dart';
 import '../../constant/custom_size.dart';
 
 class DataDoGlobalSource extends DataGridSource {
