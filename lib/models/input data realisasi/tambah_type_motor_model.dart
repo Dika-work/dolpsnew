@@ -33,3 +33,17 @@ class FormFieldData {
   String? dropdownValue;
   String? textFieldValue;
 }
+
+class TambahTypeMotorMutasiModel {
+  String typeMotor;
+  String jumlahUnit;
+
+  TambahTypeMotorMutasiModel(
+      {required this.typeMotor, required this.jumlahUnit});
+
+  factory TambahTypeMotorMutasiModel.fromJson(Map<String, dynamic> json) {
+    return TambahTypeMotorMutasiModel(
+        typeMotor: json['type_motor'] ?? '',
+        jumlahUnit: json['Jumlah_M'] ?? '');
+  }
+}

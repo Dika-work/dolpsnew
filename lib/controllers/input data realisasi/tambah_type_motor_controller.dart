@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:doplsnew/controllers/input%20data%20realisasi/do_reguler_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -12,6 +11,7 @@ import '../../screens/input data realisasi/component/tambah_type_kendaraan.dart'
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
+import 'do_reguler_controller.dart';
 
 class TambahTypeMotorController extends GetxController {
   final isLoadingTambahType = Rx<bool>(false);

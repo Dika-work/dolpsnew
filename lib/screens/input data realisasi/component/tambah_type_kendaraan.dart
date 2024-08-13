@@ -105,7 +105,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
     final doRegulerController = Get.put(DoRegulerController());
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'Type Motor': double.nan,
+      'Type Motor': 150,
       'SRD': double.nan,
       'MKS': double.nan,
       'PTK': double.nan,
@@ -576,32 +576,59 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                               top: CustomSize.spaceBtwSections),
                           child: Row(
                             children: [
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    widget.controller
-                                        .addField(selectedDaerahTujuan.value);
-                                  },
-                                  child: const Icon(Iconsax.add),
+                              Obx(
+                                () => Visibility(
+                                  visible: !plotRealisasiController
+                                      .isJumlahPlotEqual.value,
+                                  child: Expanded(
+                                    flex: 1,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        widget.controller.addField(
+                                            selectedDaerahTujuan.value);
+                                      },
+                                      child: const Icon(Iconsax.add),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: CustomSize.sm),
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    widget.controller.resetFields(
-                                        selectedDaerahTujuan.value);
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.error),
-                                  child: const Icon(FontAwesomeIcons.trash),
+                              Obx(() {
+                                return Visibility(
+                                  visible: !plotRealisasiController
+                                      .isJumlahPlotEqual.value,
+                                  child: const SizedBox(width: CustomSize.sm),
+                                );
+                              }),
+                              Obx(
+                                () => Visibility(
+                                  visible: !plotRealisasiController
+                                      .isJumlahPlotEqual.value,
+                                  child: Expanded(
+                                    flex: 1,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        widget.controller.resetFields(
+                                            selectedDaerahTujuan.value);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: AppColors.error),
+                                      child: const Icon(FontAwesomeIcons.trash),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: CustomSize.sm),
+                              Obx(() {
+                                return Visibility(
+                                  visible: !plotRealisasiController
+                                      .isJumlahPlotEqual.value,
+                                  child: const SizedBox(width: CustomSize.sm),
+                                );
+                              }),
                               Obx(() => Expanded(
-                                    flex: 3,
+                                    flex: !plotRealisasiController
+                                            .isJumlahPlotEqual.value
+                                        ? 3
+                                        : 1,
                                     child: ElevatedButton(
                                       onPressed: () {
                                         if (plotRealisasiController
@@ -610,6 +637,19 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                               '...INI JUMLAH PLOT REALISASI DAN JUMLAH UNIT MOTOR SUDAH SAMA...');
                                           widget.controller
                                               .selesaiTypeMotor(id);
+                                        } else if (widget
+                                                .controller
+                                                .formFieldsPerTab[
+                                                    selectedDaerahTujuan.value]
+                                                ?.isEmpty ??
+                                            true) {
+                                          print(
+                                              '..TIDAK ADA DROPDOWN ATAU TEXTFORMFIELD DISNI..');
+                                          SnackbarLoader.errorSnackBar(
+                                            title: 'Peringatan ⚠️',
+                                            message:
+                                                'Tidak ada data untuk disimpan. Tambahkan data terlebih dahulu.',
+                                          );
                                         } else {
                                           print(
                                               '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');

@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_mutasi_controller.dart';
+import '../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/source/input data realisasi/do_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
 import 'component/edit_realisasi_mutasi.dart';
 import 'component/jumlah_unit.dart';
 import 'component/lihat_realisasi.dart';
+import 'component/tambah_type_motor_mutasi.dart';
 
 class DoMutasiScreen extends GetView<DoMutasiController> {
   const DoMutasiScreen({super.key});
@@ -65,8 +67,8 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                 print('..INI BAKALAN KE CLASS LIHAT REALISASI MUTASI..');
               },
               onAction: (DoRealisasiModel model) {
-                // final tambahTypeMotorController =
-                //     Get.put(TambahTypeMotorController());
+                final tambahTypeMotorController =
+                    Get.put(TambahTypeMotorMutasiController());
                 if (model.status == 0) {
                   showDialog(
                     context: context,
@@ -75,9 +77,9 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                     },
                   );
                 } else if (model.status == 1 || model.status == 2) {
-                  // tambahTypeMotorController.fetchTambahTypeMotor(model.id);
-                  // Get.to(() => TambahTypeKendaraan(
-                  //     model: model, controller: tambahTypeMotorController));
+                  tambahTypeMotorController.fetchTambahTypeMotorMutasi(model.id);
+                  Get.to(() => TambahTypeMotorMutasi(
+                      model: model, controller: tambahTypeMotorController));
                   print('...INI BAKALAN KE TYPE MOTOR MUTASI CLASS...');
                 } else if (model.status == 3) {
                   print('..INI BAKALAN KE TerimaMotorMutasi..');
@@ -136,7 +138,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                     : null;
 
                             if (request != null &&
-                                (request.status == 3 || request.status == 4)) {
+                                (request.status == 2 || request.status == 3)) {
                               return 150.0; // Tinggi row untuk status 4
                             } else {
                               return details.rowHeight; // Tinggi default
