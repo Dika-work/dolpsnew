@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
@@ -13,6 +14,7 @@ import '../../../utils/popups/snackbar.dart';
 import '../../../utils/source/input data realisasi/tambah_type_mutasi_source.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dynamic_formfield.dart';
+import 'edit_type.dart';
 
 class TambahTypeMotorMutasi extends StatefulWidget {
   const TambahTypeMotorMutasi(
@@ -70,6 +72,7 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
 
   @override
   Widget build(BuildContext context) {
+    final doMutasiController = Get.put(DoMutasiController());
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Type Motor': 150,
@@ -400,9 +403,9 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
                         onPressed: () {
                           print(
                               '...INI BAKALAN KE CLASS NAME EDIT TYPE zzz...');
-                          // Get.to(() => EditTypeKendaraan(
-                          //     model: doRegulerController
-                          //         .doRealisasiModel.first));
+                          Get.to(() => EditTypeKendaraan(
+                              model:
+                                  doMutasiController.doRealisasiModel.first));
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
@@ -488,6 +491,7 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
                                 .isJumlahPlotEqual.value) {
                               print(
                                   '...INI JUMLAH PLOT REALISASI DAN JUMLAH UNIT MOTOR MUTASI SUDAH SAMA...');
+                              widget.controller.selesaiTypeMotor(id);
                             } else if (widget.controller.formFields.isEmpty) {
                               print(
                                   '..TIDAK ADA DROPDOWN ATAU TEXTFORMFIELD DISNI..');

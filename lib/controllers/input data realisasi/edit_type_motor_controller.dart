@@ -58,6 +58,7 @@ class EditTypeMotorController extends GetxController {
     await editMotorRepo.hapusDataHutang(id);
 
     CustomFullScreenLoader.stopLoading();
-    Get.offAllNamed('/do-reguler');
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
   }
 }

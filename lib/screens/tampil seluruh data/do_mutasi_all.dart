@@ -6,18 +6,24 @@ import '../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/loader/circular_loader.dart';
-import '../../utils/source/input data realisasi/do_mutasi_source.dart';
+import '../../utils/source/tampil seluruh data source/all_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../input data realisasi/component/edit_realisasi_mutasi.dart';
+import '../input data realisasi/component/edit_type.dart';
 import '../input data realisasi/component/jumlah_unit.dart';
 import '../input data realisasi/component/lihat_realisasi.dart';
 import '../input data realisasi/component/tambah_type_motor_mutasi.dart';
+import '../input data realisasi/component/terima_motor_mutasi.dart';
 
 class DoMutasiAll extends GetView<DoMutasiController> {
   const DoMutasiAll({super.key});
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchMutasiAllContent();
+    });
+
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Tujuan': double.nan,
@@ -38,7 +44,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Data Mutasi DO LPS',
+          'Semua Data DO Mutasi LPS',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         leading: IconButton(
@@ -52,7 +58,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
               controller.doRealisasiModel.isEmpty) {
             return const CustomCircularLoader();
           } else {
-            final dataSource = DoMutasiSource(
+            final dataSource = DoMutasiAllSource(
               onLihat: (DoRealisasiModel model) {
                 showDialog(
                   context: context,
@@ -82,12 +88,14 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                   print('...INI BAKALAN KE TYPE MOTOR MUTASI CLASS...');
                 } else if (model.status == 3) {
                   print('..INI BAKALAN KE TerimaMotorMutasi..');
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (context) {
-                  //     return TerimaMotorMutasi();
-                  //   },
-                  // );
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return TerimaMotorMutasi(
+                        model: model,
+                      );
+                    },
+                  );
                 }
               },
               onBatal: (DoRealisasiModel model) {},
@@ -103,7 +111,11 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                 );
               },
               onType: (DoRealisasiModel model) {
-                print('..INI BTN ON TYPE..');
+                Get.to(
+                  () => EditTypeKendaraan(
+                    model: model,
+                  ),
+                );
               },
               doRealisasiModel: controller.doRealisasiModel,
               startIndex: currentPage * rowsPerPage,
@@ -115,7 +127,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
-                        await controller.fetchMutasiContent();
+                        await controller.fetchMutasiAllContent();
                       },
                       child: SfDataGrid(
                           source: dataSource,

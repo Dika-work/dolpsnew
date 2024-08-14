@@ -288,44 +288,52 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: CustomSize.spaceBtwItems),
-                              Row(
-                                children: [
-                                  const Expanded(
-                                      flex: 1, child: Text('Daerah\nTujuan')),
-                                  const SizedBox(width: CustomSize.md),
-                                  Expanded(
-                                    flex: 2,
-                                    child: DropdownButtonFormField<String>(
-                                      value: model.daerah,
-                                      items: [
-                                        'SAMARINDA',
-                                        'MAKASAR',
-                                        'PONTIANAK',
-                                        'BANJARMASIN'
-                                      ].map((String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (String? newValue) {
-                                        if (newValue != null) {
-                                          selectedDaerah = newValue;
-                                          setState(() {
-                                            model.daerah = newValue;
-                                          });
-                                        }
-                                      },
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: 10.0),
-                                      ),
+                              model.daerah == '-'
+                                  ? const SizedBox.shrink()
+                                  : const SizedBox(
+                                      height: CustomSize.spaceBtwItems),
+                              model.daerah == '-'
+                                  ? const SizedBox.shrink()
+                                  : Row(
+                                      children: [
+                                        const Expanded(
+                                            flex: 1,
+                                            child: Text('Daerah\nTujuan')),
+                                        const SizedBox(width: CustomSize.md),
+                                        Expanded(
+                                          flex: 2,
+                                          child:
+                                              DropdownButtonFormField<String>(
+                                            value: model.daerah,
+                                            items: [
+                                              'SAMARINDA',
+                                              'MAKASAR',
+                                              'PONTIANAK',
+                                              'BANJARMASIN'
+                                            ].map((String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                            onChanged: (String? newValue) {
+                                              if (newValue != null) {
+                                                selectedDaerah = newValue;
+                                                setState(() {
+                                                  model.daerah = newValue;
+                                                });
+                                              }
+                                            },
+                                            decoration: const InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                      horizontal: 10.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
                               const SizedBox(height: CustomSize.spaceBtwItems),
                               Row(
                                 children: [

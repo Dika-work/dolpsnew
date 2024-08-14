@@ -9,9 +9,11 @@ import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/source/input data realisasi/do_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
 import 'component/edit_realisasi_mutasi.dart';
+import 'component/edit_type.dart';
 import 'component/jumlah_unit.dart';
 import 'component/lihat_realisasi.dart';
 import 'component/tambah_type_motor_mutasi.dart';
+import 'component/terima_motor_mutasi.dart';
 
 class DoMutasiScreen extends GetView<DoMutasiController> {
   const DoMutasiScreen({super.key});
@@ -20,7 +22,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
   Widget build(BuildContext context) {
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'Tujuan': double.nan,
+      'Tujuan': 130,
       'Plant': double.nan,
       'Tipe': double.nan,
       'Tgl': double.nan,
@@ -83,12 +85,12 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                   print('...INI BAKALAN KE TYPE MOTOR MUTASI CLASS...');
                 } else if (model.status == 3) {
                   print('..INI BAKALAN KE TerimaMotorMutasi..');
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (context) {
-                  //     return TerimaMotorMutasi();
-                  //   },
-                  // );
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return TerimaMotorMutasi(model: model);
+                    },
+                  );
                 }
               },
               onBatal: (DoRealisasiModel model) {},
@@ -104,7 +106,11 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                 );
               },
               onType: (DoRealisasiModel model) {
-                print('..INI BTN ON TYPE..');
+                Get.to(
+                  () => EditTypeKendaraan(
+                    model: model,
+                  ),
+                );
               },
               doRealisasiModel: controller.doRealisasiModel,
               startIndex: currentPage * rowsPerPage,
@@ -125,9 +131,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                           headerGridLinesVisibility: GridLinesVisibility.both,
                           rowHeight: 65,
                           onQueryRowHeight: (RowHeightDetails details) {
-                            // Sesuaikan indeks dengan data yang sesuai
-                            int rowIndex = details.rowIndex -
-                                1; // Mengurangi 1 jika ada header
+                            int rowIndex = details.rowIndex - 1;
 
                             var request =
                                 dataSource.doRealisasiModel.isNotEmpty &&
@@ -139,9 +143,9 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
 
                             if (request != null &&
                                 (request.status == 2 || request.status == 3)) {
-                              return 150.0; // Tinggi row untuk status 4
+                              return 150.0;
                             } else {
-                              return details.rowHeight; // Tinggi default
+                              return details.rowHeight;
                             }
                           },
                           columns: [

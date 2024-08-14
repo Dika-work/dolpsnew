@@ -6,7 +6,7 @@ import '../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/loader/circular_loader.dart';
-import '../../utils/source/input data realisasi/do_reguler_source.dart';
+import '../../utils/source/tampil seluruh data source/all_reguler_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../input data realisasi/component/aksesoris.dart';
 import '../input data realisasi/component/edit_realisasi.dart';
@@ -20,6 +20,10 @@ class DoRegulerAll extends GetView<DoRegulerController> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchRegulerAllContent();
+    });
+
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'User': double.nan,
@@ -52,11 +56,11 @@ class DoRegulerAll extends GetView<DoRegulerController> {
       ),
       body: Obx(
         () {
-          if (controller.isLoadingReguler.value &&
+          if (controller.isLoadingRegulerAll.value &&
               controller.doRealisasiModel.isEmpty) {
             return const CustomCircularLoader();
           } else {
-            final dataSource = DoRegulerSource(
+            final dataSource = DoRegulerAllSource(
               onLihat: (DoRealisasiModel model) {
                 showDialog(
                   context: context,
@@ -118,7 +122,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      await controller.fetchRegulerContent();
+                      await controller.fetchRegulerAllContent();
                     },
                     child: SfDataGrid(
                         source: dataSource,

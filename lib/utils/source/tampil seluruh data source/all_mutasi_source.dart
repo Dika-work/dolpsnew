@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../controllers/input data realisasi/do_reguler_controller.dart';
+import '../../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../../helpers/helper_function.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../constant/custom_size.dart';
 import '../../theme/app_colors.dart';
 
-class DoRegulerSource extends DataGridSource {
+class DoMutasiAllSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onLihat;
   final void Function(DoRealisasiModel)? onAction;
   final void Function(DoRealisasiModel)? onBatal;
@@ -17,7 +17,7 @@ class DoRegulerSource extends DataGridSource {
   final List<DoRealisasiModel> doRealisasiModel;
   int startIndex = 0;
 
-  DoRegulerSource({
+  DoMutasiAllSource({
     required this.onLihat,
     required this.onAction,
     required this.onBatal,
@@ -29,16 +29,16 @@ class DoRegulerSource extends DataGridSource {
     _updateDataPager(doRealisasiModel, startIndex);
   }
 
-  List<DataGridRow> _doRegulerData = [];
-  final controller = Get.put(DoRegulerController());
+  List<DataGridRow> _doMutasiData = [];
+  final controller = Get.put(DoMutasiController());
   int index = 0;
 
   @override
-  List<DataGridRow> get rows => _doRegulerData;
+  List<DataGridRow> get rows => _doMutasiData;
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    int rowIndex = _doRegulerData.indexOf(row);
+    int rowIndex = _doMutasiData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
     var request = doRealisasiModel.isNotEmpty &&
             startIndex + rowIndex < doRealisasiModel.length
@@ -50,12 +50,14 @@ class DoRegulerSource extends DataGridSource {
       cells: [
         ...row.getCells().take(10).map<Widget>(
           (e) {
-            return Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-              child: Text(
-                e.value.toString(),
-                textAlign: TextAlign.center,
+            return Center(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+                child: Text(
+                  e.value.toString(),
+                  textAlign: TextAlign.center,
+                ),
               ),
             );
           },
@@ -79,11 +81,12 @@ class DoRegulerSource extends DataGridSource {
                                 }
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.success,
-                                padding: const EdgeInsets.all(
-                                    8.0), // Padding dalam tombol
-                              ),
-                              child: const Text('Lihat')),
+                                  backgroundColor: request.status == 5
+                                      ? AppColors.primary.withOpacity(.6)
+                                      : AppColors.primary),
+                              child: Text(request.status == 5
+                                  ? 'Lihat Ritase'
+                                  : 'Lihat')),
                         ),
                       ],
                     ),
@@ -109,54 +112,18 @@ class DoRegulerSource extends DataGridSource {
                               ? AppColors.primary
                               : request.status == 1 || request.status == 2
                                   ? AppColors.pink
-                                  : request.status == 3
-                                      ? AppColors.success
-                                      : Colors.transparent,
+                                  : AppColors.success,
                         ),
-                        child: Text(
-                          request.status == 0
-                              ? 'Jumlah Unit'
-                              : request.status == 1 || request.status == 2
-                                  ? 'Type Motor'
-                                  : request.status == 3
-                                      ? 'ACC'
-                                      : '',
-                        ),
+                        child: Text(request.status == 0
+                            ? 'Jumlah Unit'
+                            : request.status == 1 || request.status == 2
+                                ? 'Type Motor'
+                                : 'Terima Motor'),
                       ),
                     ),
                   ],
                 )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            print('..INI BAKALAN KE PLANT GABUNGAN..');
-                          },
-                          child: const Text(
-                            'Gabungan',
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-                    const SizedBox(height: CustomSize.sm),
-                    doRealisasiModel.first.totalHutang == 0
-                        ? const SizedBox.shrink()
-                        : SizedBox(
-                            height: 60,
-                            width: 100,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  print('..INI BAKALAN KE HUTANG ACC..');
-                                },
-                                child: const Text(
-                                  'Hutang ACC',
-                                )),
-                          ),
-                  ],
-                ),
+              : const SizedBox.shrink(),
           // Batal
           controller.rolesBatal.value == 0
               ? const SizedBox.shrink()
@@ -183,7 +150,7 @@ class DoRegulerSource extends DataGridSource {
           // Edit
           controller.rolesEdit.value == 0
               ? const SizedBox.shrink()
-              : request.status == 3 || request.status == 4
+              : request.status == 2 || request.status == 3
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -263,12 +230,12 @@ class DoRegulerSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
-          DataGridCell<String>(columnName: 'User', value: '-'),
+          DataGridCell<String>(columnName: 'Tujuan', value: '-'),
           DataGridCell<String>(columnName: 'Plant', value: '-'),
+          DataGridCell<String>(columnName: 'Type', value: '-'),
           DataGridCell<String>(columnName: 'Tgl', value: '-'),
           DataGridCell<String>(columnName: 'Supir(Panggilan)', value: '-'),
           DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
-          DataGridCell<String>(columnName: 'Tipe', value: '-'),
           DataGridCell<String>(columnName: 'Jenis', value: '-'),
           DataGridCell<String>(columnName: 'Jumlah', value: '-'),
         ]);
@@ -282,9 +249,9 @@ class DoRegulerSource extends DataGridSource {
     index = startIndex;
 
     if (doRealisasiModel.isEmpty) {
-      _doRegulerData = _generateEmptyRows(1);
+      _doMutasiData = _generateEmptyRows(1);
     } else {
-      _doRegulerData =
+      _doMutasiData =
           doRealisasiModel.skip(startIndex).take(10).map<DataGridRow>(
         (data) {
           index++;
@@ -292,10 +259,10 @@ class DoRegulerSource extends DataGridSource {
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
           return DataGridRow(cells: [
             DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(
-                columnName: 'User',
-                value: controller.roleUser.value == 'admin' ? data.user : ''),
+            DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
+            DataGridCell<String>(
+                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(
                 columnName: 'Supir(Panggilan)',
@@ -304,8 +271,6 @@ class DoRegulerSource extends DataGridSource {
                     : '${data.supir}\n(${data.namaPanggilan})'),
             DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
             DataGridCell<String>(
-                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
-            DataGridCell<String>(
                 columnName: 'Jenis',
                 value: '${data.inisialDepan}${data.inisialBelakang}'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
@@ -313,5 +278,13 @@ class DoRegulerSource extends DataGridSource {
         },
       ).toList();
     }
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    final int startIndex = newPageIndex * 10;
+    _updateDataPager(controller.doRealisasiModel, startIndex);
+    notifyListeners();
+    return true;
   }
 }

@@ -32,7 +32,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Tanggal': 130,
       'Jam': 100,
       'Plant': double.nan,
-      'Tujuan': double.nan,
+      'Tujuan': 130,
       'Type': double.nan,
       'Jenis': double.nan,
       'Jumlah': double.nan,

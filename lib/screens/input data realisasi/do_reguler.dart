@@ -29,7 +29,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'Kendaraan': 120,
       'Tipe': double.nan,
       'Jenis': double.nan,
-      'Status': double.nan,
       'Jumlah': double.nan,
       'Lihat': 150,
       'Action': 150,
@@ -280,23 +279,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                     ),
                                     child: Text(
                                       'Jenis',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Status']!,
-                                columnName: 'Status',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Status',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium

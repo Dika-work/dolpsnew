@@ -149,4 +149,21 @@ class TambahTypeMotorMutasiController extends GetxController {
       CustomFullScreenLoader.stopLoading();
     }
   }
+
+  // Selesaikan type motor
+  Future<void> selesaiTypeMotor(int idRealisasi) async {
+    CustomDialogs.loadingIndicator();
+    await tambahTypeMotorMutasiRepo.changeStatusTypeMotor(idRealisasi, 3);
+    await doMutasiController.fetchMutasiContent();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> simpanDataMutasi(int idRealisasi) async {
+    CustomDialogs.loadingIndicator();
+    await tambahTypeMotorMutasiRepo.changeStatusTypeMotor(idRealisasi, 5);
+    await doMutasiController.fetchMutasiContent();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
 }

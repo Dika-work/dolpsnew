@@ -48,6 +48,19 @@ class DoMutasiController extends GetxController {
     }
   }
 
+  Future<void> fetchMutasiAllContent() async {
+    try {
+      isLoadingMutasi.value = true;
+      final getRegulerDo = await doMutasiRepo.fetchAllMutasiData();
+      doRealisasiModel.assignAll(getRegulerDo);
+    } catch (e) {
+      print('Error while fetching data do mutasi zzzz: $e');
+      doRealisasiModel.assignAll([]);
+    } finally {
+      isLoadingMutasi.value = false;
+    }
+  }
+
   Future<void> editRealisasiReguler(
       int id,
       String plant,
@@ -60,8 +73,8 @@ class DoMutasiController extends GetxController {
       int jumlahUnit) async {
     CustomDialogs.loadingIndicator();
 
-    await doMutasiRepo.editDoMutasi(id, plant, tujuan, type, plant2, tujuan2,
-        kendaraan, supir, jumlahUnit);
+    await doMutasiRepo.editDoMutasi(
+        id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchMutasiContent();
 
     CustomFullScreenLoader.stopLoading();

@@ -36,16 +36,16 @@ class DoRealisasiModel {
   String inisialDepan;
   String inisialBelakang;
   String namaPanggilan;
-  String? hutangHelm;
-  String? hutangAc;
-  String? hutangKs;
-  String? hutangTs;
-  String? hutangBp;
-  String? hutangBs;
-  String? hutangPlt;
-  String? hutangStay;
-  String? hutangAcBesar;
-  String? hutangPlastik;
+  int hutangHelm;
+  int hutangAc;
+  int hutangKs;
+  int hutangTs;
+  int hutangBp;
+  int hutangBs;
+  int hutangPlt;
+  int hutangStay;
+  int hutangAcBesar;
+  int hutangPlastik;
   String? klasifikasi;
   int statusAnalisa;
   int statusKerusakan;
@@ -89,17 +89,17 @@ class DoRealisasiModel {
     required this.inisialDepan,
     required this.inisialBelakang,
     required this.namaPanggilan,
-    this.hutangHelm,
-    this.hutangAc,
-    this.hutangKs,
-    this.hutangTs,
-    this.hutangBp,
-    this.hutangBs,
-    this.hutangPlt,
-    this.hutangStay,
-    this.hutangAcBesar,
-    this.hutangPlastik,
-    this.klasifikasi,
+    required this.hutangHelm,
+    required this.hutangAc,
+    required this.hutangKs,
+    required this.hutangTs,
+    required this.hutangBp,
+    required this.hutangBs,
+    required this.hutangPlt,
+    required this.hutangStay,
+    required this.hutangAcBesar,
+    required this.hutangPlastik,
+    required this.klasifikasi,
     required this.statusAnalisa,
     required this.statusKerusakan,
     required this.totalHutang,
@@ -144,16 +144,16 @@ class DoRealisasiModel {
         inisialDepan: json['inisial_depan'] ?? '',
         inisialBelakang: json['inisial_belakang'] ?? '',
         namaPanggilan: json['nama_panggilan'] ?? '',
-        hutangHelm: json['hutang_hlm'],
-        hutangAc: json['hutang_ac'],
-        hutangKs: json['hutang_ks'],
-        hutangTs: json['hutang_ts'],
-        hutangBp: json['hutang_bp'],
-        hutangBs: json['hutang_bs'],
-        hutangPlt: json['hutang_plt'],
-        hutangStay: json['hutang_stay'],
-        hutangAcBesar: json['hutang_ac_besar'],
-        hutangPlastik: json['hutang_plastik'],
+        hutangHelm: json['hutang_hlm'] ?? 0,
+        hutangAc: json['hutang_ac'] ?? 0,
+        hutangKs: json['hutang_ks'] ?? 0,
+        hutangTs: json['hutang_ts'] ?? 0,
+        hutangBp: json['hutang_bp'] ?? 0,
+        hutangBs: json['hutang_bs'] ?? 0,
+        hutangPlt: json['hutang_plt'] ?? 0,
+        hutangStay: json['hutang_stay'] ?? 0,
+        hutangAcBesar: json['hutang_ac_besar'] ?? 0,
+        hutangPlastik: json['hutang_plastik'] ?? 0,
         klasifikasi: json['klasifikasi'],
         statusAnalisa: json['status_analisa'] ?? 0,
         statusKerusakan: json['status_kerusakan'] ?? 0,

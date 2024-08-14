@@ -8,7 +8,7 @@ import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../constant/custom_size.dart';
 import '../../theme/app_colors.dart';
 
-class DoRegulerSource extends DataGridSource {
+class DoRegulerAllSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onLihat;
   final void Function(DoRealisasiModel)? onAction;
   final void Function(DoRealisasiModel)? onBatal;
@@ -17,7 +17,7 @@ class DoRegulerSource extends DataGridSource {
   final List<DoRealisasiModel> doRealisasiModel;
   int startIndex = 0;
 
-  DoRegulerSource({
+  DoRegulerAllSource({
     required this.onLihat,
     required this.onAction,
     required this.onBatal,

@@ -262,7 +262,9 @@ class DoMutasiSource extends DataGridSource {
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(
                 columnName: 'Supir(Panggilan)',
-                value: '${data.supir}\n(${data.namaPanggilan})'),
+                value: data.namaPanggilan.isEmpty
+                    ? data.supir
+                    : '${data.supir}\n(${data.namaPanggilan})'),
             DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
             DataGridCell<String>(
                 columnName: 'Jenis',
@@ -272,6 +274,8 @@ class DoMutasiSource extends DataGridSource {
         },
       ).toList();
     }
+    print("Data pager updated and listeners notified type motor mutasi");
+    notifyListeners();
   }
 
   @override

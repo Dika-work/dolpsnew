@@ -21,6 +21,17 @@ class DoRegulerRepository {
     }
   }
 
+  Future<List<DoRealisasiModel>> fetchAllRegulerData() async {
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getDataRegulerAll'));
+    if (response.statusCode == 200) {
+      Iterable list = json.decode(response.body);
+      return list.map((e) => DoRealisasiModel.fromJson(e)).toList();
+    } else {
+      throw Exception('Gagal untuk mengambil data do reguler');
+    }
+  }
+
   Future<void> tambahJumlahUnit(int id, String user, int jumlahUnit) async {
     try {
       final response = await http.put(

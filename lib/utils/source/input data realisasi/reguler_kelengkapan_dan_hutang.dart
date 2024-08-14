@@ -1,37 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 
-class LihatRealisasiSource extends DataGridSource {
+class RegulerHutangSource extends DataGridSource {
   final List<DoRealisasiModel> doRealisasiModel;
 
-  LihatRealisasiSource({
-    required this.doRealisasiModel,
-  }) {
-    _updateDataPager(doRealisasiModel);
-  }
+  RegulerHutangSource({required this.doRealisasiModel});
 
-  List<DataGridRow> _lihatRealisasi = [];
+  List<DataGridRow> _kelengkapanHutang = [];
+  final controller = Get.put(DoRegulerController());
 
   @override
-  List<DataGridRow> get rows => _lihatRealisasi;
+  List<DataGridRow> get rows => _kelengkapanHutang;
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    int rowIndex = _lihatRealisasi.indexOf(row);
+    int rowIndex = _kelengkapanHutang.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
     return DataGridRowAdapter(
         color: isEvenRow ? Colors.white : Colors.grey[200],
         cells: row.getCells().map<Widget>(
           (e) {
-            return Center(
-              child: Text(
-                e.value.toString(),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+            return Text(
+              e.value.toString(),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             );
           },
         ).toList());
@@ -55,10 +52,10 @@ class LihatRealisasiSource extends DataGridSource {
   }
 
   void _updateDataPager(List<DoRealisasiModel> doRealisasiModel) {
-    if (doRealisasiModel.isEmpty) {
-      _lihatRealisasi = _generateEmptyRows(1);
+    if (doRealisasiModel.first.totalHutang == 0) {
+      _kelengkapanHutang = _generateEmptyRows(1);
     } else {
-      _lihatRealisasi = doRealisasiModel.take(5).map<DataGridRow>(
+      _kelengkapanHutang = doRealisasiModel.take(1).map<DataGridRow>(
         (e) {
           return DataGridRow(cells: [
             DataGridCell<int>(columnName: 'HLM', value: e.hutangHelm),
@@ -69,17 +66,19 @@ class LihatRealisasiSource extends DataGridSource {
             DataGridCell<int>(columnName: 'BS', value: e.hutangBs),
             DataGridCell<int>(columnName: 'PLT', value: e.hutangPlt),
             DataGridCell<int>(columnName: 'STAY L/R', value: e.hutangStay),
-            DataGridCell<int>(columnName: 'AC BESAR', value: e.hutangAcBesar),
+            DataGridCell<int>(
+                columnName: 'AC BESAR', value: e.hutangAcBesar),
             DataGridCell<int>(columnName: 'PLASTIK', value: e.hutangPlastik),
           ]);
         },
       ).toList();
     }
+    notifyListeners();
   }
-  
+
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    _updateDataPager(doRealisasiModel);
+    _updateDataPager(controller.doRealisasiModel);
     notifyListeners();
     return true;
   }

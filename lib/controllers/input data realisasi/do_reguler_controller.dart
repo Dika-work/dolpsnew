@@ -6,11 +6,14 @@ import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../models/user_model.dart';
 import '../../repository/input data realisasi/do_reguler_repo.dart';
 import '../../utils/constant/storage_util.dart';
+import 'do_mutasi_controller.dart';
 
 class DoRegulerController extends GetxController {
   final isLoadingReguler = Rx<bool>(false);
+  final isLoadingRegulerAll = Rx<bool>(false);
   RxList<DoRealisasiModel> doRealisasiModel = <DoRealisasiModel>[].obs;
   final doRegulerRepo = Get.put(DoRegulerRepository());
+  final doMutasiController = Get.put(DoMutasiController());
 
   RxString roleUser = ''.obs;
   final storageUtil = StorageUtil();
@@ -43,10 +46,23 @@ class DoRegulerController extends GetxController {
       final getRegulerDo = await doRegulerRepo.fetchDoRegulerData();
       doRealisasiModel.assignAll(getRegulerDo);
     } catch (e) {
-      print('Error while fetching data do reguler: $e');
+      print('Error while fetching data do reguler asad: $e');
       doRealisasiModel.assignAll([]);
     } finally {
       isLoadingReguler.value = false;
+    }
+  }
+
+  Future<void> fetchRegulerAllContent() async {
+    try {
+      isLoadingRegulerAll.value = true;
+      final getRegulerDo = await doRegulerRepo.fetchAllRegulerData();
+      doRealisasiModel.assignAll(getRegulerDo);
+    } catch (e) {
+      print('Error while fetching data do reguler zzzz: $e');
+      doRealisasiModel.assignAll([]);
+    } finally {
+      isLoadingRegulerAll.value = false;
     }
   }
 
@@ -62,8 +78,8 @@ class DoRegulerController extends GetxController {
       int jumlahUnit) async {
     CustomDialogs.loadingIndicator();
 
-    await doRegulerRepo.editDoReguler(id, plant, tujuan, type, plant2, tujuan2,
-        kendaraan, supir, jumlahUnit);
+    await doRegulerRepo.editDoReguler(
+        id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchRegulerContent();
 
     CustomFullScreenLoader.stopLoading();
@@ -75,6 +91,7 @@ class DoRegulerController extends GetxController {
 
     await doRegulerRepo.tambahJumlahUnit(id, user, jumlahUnit);
     await fetchRegulerContent();
+    await doMutasiController.fetchMutasiContent();
 
     CustomFullScreenLoader.stopLoading();
   }

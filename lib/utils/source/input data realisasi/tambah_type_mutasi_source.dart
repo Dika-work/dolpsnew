@@ -102,7 +102,6 @@ class TambahTypeMutasiSource extends DataGridSource {
       );
     }
     notifyListeners();
-    print('Data grid updated, listeners notified');
   }
 
   @override
