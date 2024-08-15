@@ -30,10 +30,10 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
       'Kendaraan': double.nan,
       'Jenis': double.nan,
       'Jumlah': double.nan,
-      'Lihat': 150,
-      'Action': 150,
-      'Batal': 150,
-      'Edit': 150,
+      if (controller.rolesLihat == 1) 'Lihat': 150,
+      if (controller.rolesJumlah == 1) 'Action': 150,
+      if (controller.rolesEdit == 1) 'Edit': 150,
+      if (controller.rolesBatal == 1) 'Batal': 150,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -116,192 +116,182 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
               startIndex: currentPage * rowsPerPage,
             );
 
-            return LayoutBuilder(builder: (_, __) {
-              return Column(
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () async {
-                        await controller.fetchMutasiContent();
-                      },
-                      child: SfDataGrid(
-                          source: dataSource,
-                          columnWidthMode: ColumnWidthMode.auto,
-                          gridLinesVisibility: GridLinesVisibility.both,
-                          headerGridLinesVisibility: GridLinesVisibility.both,
-                          rowHeight: 65,
-                          onQueryRowHeight: (RowHeightDetails details) {
-                            int rowIndex = details.rowIndex - 1;
+            return Column(
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await controller.fetchMutasiContent();
+                    },
+                    child: SfDataGrid(
+                        source: dataSource,
+                        columnWidthMode: ColumnWidthMode.auto,
+                        gridLinesVisibility: GridLinesVisibility.both,
+                        headerGridLinesVisibility: GridLinesVisibility.both,
+                        rowHeight: 65,
+                        onQueryRowHeight: (RowHeightDetails details) {
+                          int rowIndex = details.rowIndex - 1;
 
-                            var request =
-                                dataSource.doRealisasiModel.isNotEmpty &&
-                                        rowIndex >= 0 &&
-                                        rowIndex <
-                                            dataSource.doRealisasiModel.length
-                                    ? dataSource.doRealisasiModel[rowIndex]
-                                    : null;
+                          var request = dataSource
+                                      .doRealisasiModel.isNotEmpty &&
+                                  rowIndex >= 0 &&
+                                  rowIndex < dataSource.doRealisasiModel.length
+                              ? dataSource.doRealisasiModel[rowIndex]
+                              : null;
 
-                            if (request != null &&
-                                (request.status == 2 || request.status == 3)) {
-                              return 150.0;
-                            } else {
-                              return details.rowHeight;
-                            }
-                          },
-                          columns: [
-                            GridColumn(
-                                width: columnWidths['No']!,
-                                columnName: 'No',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'No',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Tujuan']!,
-                                columnName: 'Tujuan',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Tujuan',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Plant']!,
-                                columnName: 'Plant',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Plant',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Tipe']!,
-                                columnName: 'Tipe',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Tipe',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Tgl']!,
-                                columnName: 'Tgl',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Tgl',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Supir(Panggilan)']!,
-                                columnName: 'Supir(Panggilan)',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Supir(Panggilan)',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Kendaraan']!,
-                                columnName: 'Kendaraan',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Kendaraan',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Jenis']!,
-                                columnName: 'Jenis',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Jenis',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Jumlah']!,
-                                columnName: 'Jumlah',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Jumlah',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
+                          if (request != null &&
+                              (request.status == 2 || request.status == 3)) {
+                            return 150.0;
+                          } else {
+                            return details.rowHeight;
+                          }
+                        },
+                        columns: [
+                          GridColumn(
+                              width: columnWidths['No']!,
+                              columnName: 'No',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'No',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Tujuan']!,
+                              columnName: 'Tujuan',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Tujuan',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Plant']!,
+                              columnName: 'Plant',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Plant',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Tipe']!,
+                              columnName: 'Tipe',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Tipe',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Tgl']!,
+                              columnName: 'Tgl',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Tgl',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Supir(Panggilan)']!,
+                              columnName: 'Supir(Panggilan)',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Supir(Panggilan)',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Kendaraan']!,
+                              columnName: 'Kendaraan',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Kendaraan',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Jenis']!,
+                              columnName: 'Jenis',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Jenis',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          GridColumn(
+                              width: columnWidths['Jumlah']!,
+                              columnName: 'Jumlah',
+                              label: Container(
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey),
+                                    color: Colors.lightBlue.shade100,
+                                  ),
+                                  child: Text(
+                                    'Jumlah',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ))),
+                          if (controller.rolesLihat == 1)
                             GridColumn(
                                 width: columnWidths['Lihat']!,
                                 columnName: 'Lihat',
@@ -319,6 +309,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
+                          if (controller.rolesJumlah == 1)
                             GridColumn(
                                 width: columnWidths['Action']!,
                                 columnName: 'Action',
@@ -336,6 +327,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
+                          if (controller.rolesBatal == 1)
                             GridColumn(
                                 width: columnWidths['Batal']!,
                                 columnName: 'Batal',
@@ -353,6 +345,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
+                          if (controller.rolesEdit == 1)
                             GridColumn(
                                 width: columnWidths['Edit']!,
                                 columnName: 'Edit',
@@ -370,20 +363,19 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
-                          ]),
-                    ),
+                        ]),
                   ),
-                  SfDataPager(
-                    delegate: dataSource,
-                    pageCount: controller.doRealisasiModel.isEmpty
-                        ? 1
-                        : (controller.doRealisasiModel.length / rowsPerPage)
-                            .ceilToDouble(),
-                    direction: Axis.horizontal,
-                  ),
-                ],
-              );
-            });
+                ),
+                SfDataPager(
+                  delegate: dataSource,
+                  pageCount: controller.doRealisasiModel.isEmpty
+                      ? 1
+                      : (controller.doRealisasiModel.length / rowsPerPage)
+                          .ceilToDouble(),
+                  direction: Axis.horizontal,
+                ),
+              ],
+            );
           }
         },
       ),

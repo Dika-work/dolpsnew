@@ -36,9 +36,9 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'Type': double.nan,
       'Jenis': double.nan,
       'Jumlah': double.nan,
-      'Lihat': 150,
-      'Kirim': 150,
-      'Edit': 150,
+      if (controller.rolesLihat == 1) 'Lihat': 150,
+      if (controller.rolesKirim == 1) 'Kirim': 150,
+      if (controller.rolesEdit == 1) 'Edit': 150,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -333,118 +333,128 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                             .bodyMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ))),
-              GridColumn(
-                  width: columnWidths['Lihat']!,
-                  columnName: 'Lihat',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Lihat',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Kirim']!,
-                  columnName: 'Kirim',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Kirim',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Edit']!,
-                  columnName: 'Edit',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Edit',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
             ];
 
-            return LayoutBuilder(
-              builder: (_, __) {
-                return Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        CustomDialogs.defaultDialog(
-                            context: context,
-                            titleWidget: const Text('Tambah Request Kendaraan'),
-                            contentWidget: AddRequestKendaraan(
-                              controller: controller,
-                            ),
-                            onConfirm: () {
-                              if (controller.tgl.value.isEmpty) {
-                                SnackbarLoader.errorSnackBar(
-                                  title: 'Gagal😪',
-                                  message: 'Pastikan tanggal telah di isi 😁',
-                                );
-                              } else {
-                                controller.addRequestKendaraan();
-                              }
-                            },
-                            cancelText: 'Close',
-                            confirmText: 'Tambahkan');
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          const IconButton(
-                              onPressed: null, icon: Icon(Iconsax.add_circle)),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(right: CustomSize.sm),
-                            child: Text(
-                              'Tambah data',
-                              style: Theme.of(context).textTheme.headlineMedium,
-                            ),
-                          )
-                        ],
-                      ),
+            // Tambahkan kolom dinamis berdasarkan peran
+            if (controller.rolesLihat == 1) {
+              column.add(GridColumn(
+                width: columnWidths['Lihat']!,
+                columnName: 'Lihat',
+                label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
                     ),
-                    Expanded(
-                        child: SfDataGrid(
-                      source: dataSource,
-                      rowHeight: 65,
-                      columnWidthMode: ColumnWidthMode.auto,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      columns: column,
+                    child: Text(
+                      'Lihat',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     )),
-                    SfDataPager(
-                      delegate: dataSource,
-                      pageCount: controller.requestKendaraanModel.isEmpty
-                          ? 1
-                          : (controller.requestKendaraanModel.length /
-                                  rowsPerPage)
-                              .ceilToDouble(),
-                      direction: Axis.horizontal,
+              ));
+            }
+
+            if (controller.rolesKirim == 1) {
+              column.add(GridColumn(
+                width: columnWidths['Kirim']!,
+                columnName: 'Kirim',
+                label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
                     ),
-                  ],
-                );
-              },
+                    child: Text(
+                      'Kirim',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    )),
+              ));
+            }
+
+            if (controller.rolesEdit == 1) {
+              column.add(GridColumn(
+                width: columnWidths['Edit']!,
+                columnName: 'Edit',
+                label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'Edit',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    )),
+              ));
+            }
+
+            // Print jumlah kolom
+            print('Columns: ${column.length}');
+
+            return Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    CustomDialogs.defaultDialog(
+                        context: context,
+                        titleWidget: const Text('Tambah Request Kendaraan'),
+                        contentWidget: AddRequestKendaraan(
+                          controller: controller,
+                        ),
+                        onConfirm: () {
+                          if (controller.tgl.value.isEmpty) {
+                            SnackbarLoader.errorSnackBar(
+                              title: 'Gagal😪',
+                              message: 'Pastikan tanggal telah di isi 😁',
+                            );
+                          } else {
+                            controller.addRequestKendaraan();
+                          }
+                        },
+                        cancelText: 'Close',
+                        confirmText: 'Tambahkan');
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const IconButton(
+                          onPressed: null, icon: Icon(Iconsax.add_circle)),
+                      Padding(
+                        padding: const EdgeInsets.only(right: CustomSize.sm),
+                        child: Text(
+                          'Tambah data',
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                    child: SfDataGrid(
+                  source: dataSource,
+                  rowHeight: 65,
+                  columnWidthMode: ColumnWidthMode.auto,
+                  gridLinesVisibility: GridLinesVisibility.both,
+                  headerGridLinesVisibility: GridLinesVisibility.both,
+                  columns: column,
+                )),
+                SfDataPager(
+                  delegate: dataSource,
+                  pageCount: controller.requestKendaraanModel.isEmpty
+                      ? 1
+                      : (controller.requestKendaraanModel.length / rowsPerPage)
+                          .ceilToDouble(),
+                  direction: Axis.horizontal,
+                ),
+              ],
             );
           }
         },

@@ -62,7 +62,7 @@ class DoRegulerAllSource extends DataGridSource {
         ),
         if (request != null) ...[
           // Lihat
-          controller.rolesLihat.value == 0
+          controller.rolesLihat == 0
               ? const SizedBox.shrink()
               : request.status == 0
                   ? const SizedBox.shrink()
@@ -158,7 +158,7 @@ class DoRegulerAllSource extends DataGridSource {
                   ],
                 ),
           // Batal
-          controller.rolesBatal.value == 0
+          controller.rolesBatal == 0
               ? const SizedBox.shrink()
               : request.status == 0
                   ? Column(
@@ -181,7 +181,7 @@ class DoRegulerAllSource extends DataGridSource {
                     )
                   : const SizedBox.shrink(),
           // Edit
-          controller.rolesEdit.value == 0
+          controller.rolesEdit == 0
               ? const SizedBox.shrink()
               : request.status == 3 || request.status == 4
                   ? Column(
@@ -292,9 +292,7 @@ class DoRegulerAllSource extends DataGridSource {
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
           return DataGridRow(cells: [
             DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(
-                columnName: 'User',
-                value: controller.roleUser.value == 'admin' ? data.user : ''),
+            DataGridCell<String>(columnName: 'User', value: data.user),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(

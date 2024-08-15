@@ -30,7 +30,7 @@ class DoRegulerSource extends DataGridSource {
   }
 
   List<DataGridRow> _doRegulerData = [];
-  final controller = Get.put(DoRegulerController());
+  final DoRegulerController controller = Get.find<DoRegulerController>();
   int index = 0;
 
   @override
@@ -45,215 +45,257 @@ class DoRegulerSource extends DataGridSource {
         ? doRealisasiModel[startIndex + rowIndex]
         : null;
 
+    List<Widget> cells = [
+      ...row.getCells().take(8).map<Widget>(
+        (e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
+            ),
+          );
+        },
+      ),
+    ];
+
+    // Tambahkan kolom User jika perannya adalah admin
+    if (controller.roleUser == 'admin') {
+      cells.add(Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        child: Text(
+          row
+              .getCells()
+              .firstWhere((cell) => cell.columnName == 'User')
+              .value
+              .toString(),
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
+
+    // Add Lihat cell
+    if (controller.rolesLihat == 1 && request?.status != 0) {
+      cells.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (onLihat != null) {
+                    onLihat!(request!);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.success,
+                  padding: const EdgeInsets.all(8.0),
+                ),
+                child: const Text('Lihat'),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (controller.rolesLihat == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Lihat
+    }
+
+    // Add Action cell
+    if (controller.rolesJumlah == 1) {
+      if (request?.status == 0 ||
+          request?.status == 1 ||
+          request?.status == 2 ||
+          request?.status == 3) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onAction != null) {
+                      onAction!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: request!.status == 0
+                        ? AppColors.primary
+                        : request.status == 1 || request.status == 2
+                            ? AppColors.pink
+                            : request.status == 3
+                                ? AppColors.success
+                                : Colors.transparent,
+                  ),
+                  child: Text(
+                    request.status == 0
+                        ? 'Jumlah Unit'
+                        : request.status == 1 || request.status == 2
+                            ? 'Type Motor'
+                            : request.status == 3
+                                ? 'ACC'
+                                : '',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    print('..INI BAKALAN KE PLANT GABUNGAN');
+                  },
+                  child: const Text(
+                    'Gabungan',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              const SizedBox(height: CustomSize.sm),
+              if (doRealisasiModel.isNotEmpty &&
+                  doRealisasiModel.first.totalHutang != 0)
+                SizedBox(
+                  height: 60,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('..INI AKAN KE HUTANG ACC');
+                    },
+                    child: const Text('Hutang Acc'),
+                  ),
+                ),
+            ],
+          ),
+        );
+      }
+    } else if (controller.rolesJumlah == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Action
+    }
+
+    // Add Batal cell
+    if (controller.rolesBatal == 1 && request!.status == 0) {
+      cells.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (onBatal != null) {
+                    onBatal!(request);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                ),
+                child: const Text('Batal'),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (controller.rolesBatal == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Batal
+    }
+
+    // Add Edit cell
+    if (controller.rolesEdit == 1) {
+      if (request?.status == 3 || request?.status == 4) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(request!);
+                    }
+                  },
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  ),
+                ),
+              ),
+              const SizedBox(height: CustomSize.sm),
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onType != null) {
+                      onType!(request!);
+                    }
+                  },
+                  child: Text(
+                    'Type',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (onEdit != null) {
+                    onEdit!(request!);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: request?.status == 0 || request?.status == 1
+                      ? AppColors.yellow
+                      : AppColors.gold,
+                ),
+                child: Text(
+                  'Edit',
+                  style: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyMedium
+                      ?.apply(color: AppColors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    } else if (controller.rolesEdit == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Edit
+    }
+
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: [
-        ...row.getCells().take(10).map<Widget>(
-          (e) {
-            return Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-              child: Text(
-                e.value.toString(),
-                textAlign: TextAlign.center,
-              ),
-            );
-          },
-        ),
-        if (request != null) ...[
-          // Lihat
-          controller.rolesLihat.value == 0
-              ? const SizedBox.shrink()
-              : request.status == 0
-                  ? const SizedBox.shrink()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 100,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (onLihat != null) {
-                                  onLihat!(request);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.success,
-                                padding: const EdgeInsets.all(
-                                    8.0), // Padding dalam tombol
-                              ),
-                              child: const Text('Lihat')),
-                        ),
-                      ],
-                    ),
-          // Action
-          request.status == 0 ||
-                  request.status == 1 ||
-                  request.status == 2 ||
-                  request.status == 3
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (onAction != null) {
-                            onAction!(request);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: request.status == 0
-                              ? AppColors.primary
-                              : request.status == 1 || request.status == 2
-                                  ? AppColors.pink
-                                  : request.status == 3
-                                      ? AppColors.success
-                                      : Colors.transparent,
-                        ),
-                        child: Text(
-                          request.status == 0
-                              ? 'Jumlah Unit'
-                              : request.status == 1 || request.status == 2
-                                  ? 'Type Motor'
-                                  : request.status == 3
-                                      ? 'ACC'
-                                      : '',
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            print('..INI BAKALAN KE PLANT GABUNGAN..');
-                          },
-                          child: const Text(
-                            'Gabungan',
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-                    const SizedBox(height: CustomSize.sm),
-                    doRealisasiModel.first.totalHutang == 0
-                        ? const SizedBox.shrink()
-                        : SizedBox(
-                            height: 60,
-                            width: 100,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  print('..INI BAKALAN KE HUTANG ACC..');
-                                },
-                                child: const Text(
-                                  'Hutang ACC',
-                                )),
-                          ),
-                  ],
-                ),
-          // Batal
-          controller.rolesBatal.value == 0
-              ? const SizedBox.shrink()
-              : request.status == 0
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 100,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (onBatal != null) {
-                                  onBatal!(request);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.error),
-                              child: const Text('Batal')),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-          // Edit
-          controller.rolesEdit.value == 0
-              ? const SizedBox.shrink()
-              : request.status == 3 || request.status == 4
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null) {
-                                onEdit!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    request.status == 0 || request.status == 1
-                                        ? AppColors.yellow
-                                        : AppColors.gold),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                        const SizedBox(height: CustomSize.sm),
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onType != null) {
-                                onType!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.success),
-                            child: Text(
-                              'Type',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null) {
-                                onEdit!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    request.status == 0 || request.status == 1
-                                        ? AppColors.yellow
-                                        : AppColors.gold),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                      ],
-                    ),
-        ] else ...[
-          // Placeholder for when no data is available
-          const SizedBox.shrink(), // Lihat
-          const SizedBox.shrink(), // Action
-          const SizedBox.shrink(), // Batal
-          const SizedBox.shrink(), // Edit
-        ]
-      ],
+      cells: cells,
     );
   }
 
@@ -290,11 +332,10 @@ class DoRegulerSource extends DataGridSource {
           index++;
           final tglParsed =
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
-          return DataGridRow(cells: [
+          List<DataGridCell> cells = [
             DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(
-                columnName: 'User',
-                value: controller.roleUser.value == 'admin' ? data.user : ''),
+            if (controller.roleUser == 'admin')
+              DataGridCell<String>(columnName: 'User', value: data.user),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(
@@ -304,12 +345,31 @@ class DoRegulerSource extends DataGridSource {
                     : '${data.supir}\n(${data.namaPanggilan})'),
             DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
             DataGridCell<String>(
-                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
+                columnName: 'Tipe', value: data.type == 0 ? 'R' : 'M'),
             DataGridCell<String>(
                 columnName: 'Jenis',
                 value: '${data.inisialDepan}${data.inisialBelakang}'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
-          ]);
+          ];
+
+          if (controller.rolesLihat == 1 && data.status != 0) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Lihat', value: 'Lihat'));
+          }
+          if (controller.rolesJumlah == 1) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Action', value: 'Action'));
+          }
+          if (controller.rolesBatal == 1) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Batal', value: 'Batal'));
+          }
+          if (controller.rolesEdit == 1) {
+            cells.add(
+                const DataGridCell<String>(columnName: 'Edit', value: 'Edit'));
+          }
+
+          return DataGridRow(cells: cells);
         },
       ).toList();
     }

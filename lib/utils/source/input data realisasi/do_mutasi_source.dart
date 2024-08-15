@@ -30,7 +30,7 @@ class DoMutasiSource extends DataGridSource {
   }
 
   List<DataGridRow> _doMutasiData = [];
-  final controller = Get.put(DoMutasiController());
+  final DoMutasiController controller = Get.put(DoMutasiController());
   int index = 0;
 
   @override
@@ -45,178 +45,197 @@ class DoMutasiSource extends DataGridSource {
         ? doRealisasiModel[startIndex + rowIndex]
         : null;
 
-    return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: [
-        ...row.getCells().take(10).map<Widget>(
-          (e) {
-            return Center(
-              child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-                child: Text(
-                  e.value.toString(),
-                  textAlign: TextAlign.center,
+    List<Widget> cells = [
+      ...row.getCells().take(9).map<Widget>(
+        (e) {
+          return Center(
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+              child: Text(
+                e.value.toString(),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        },
+      ),
+    ];
+
+    // Add Lihat cell
+    if (controller.rolesLihat == 1 && request?.status != 0) {
+      cells.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (onLihat != null) {
+                    onLihat!(request!);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.success,
+                  padding: const EdgeInsets.all(8.0),
+                ),
+                child: const Text('Lihat'),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (controller.rolesLihat == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Lihat
+    }
+
+    if (controller.rolesJumlah == 1) {
+      if (request != null &&
+          (request.status == 0 ||
+              request.status == 1 ||
+              request.status == 2 ||
+              request.status == 3)) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onAction != null) {
+                      onAction!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: request.status == 0
+                        ? AppColors.primary
+                        : request.status == 1 || request.status == 2
+                            ? AppColors.pink
+                            : AppColors.success,
+                  ),
+                  child: Text(request.status == 0
+                      ? 'Jumlah Unit'
+                      : request.status == 1 || request.status == 2
+                          ? 'Type Motor'
+                          : 'Terima Motor'),
                 ),
               ),
-            );
-          },
-        ),
-        if (request != null) ...[
-          // Lihat
-          controller.rolesLihat.value == 0
-              ? const SizedBox.shrink()
-              : request.status == 0
-                  ? const SizedBox.shrink()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 100,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (onLihat != null) {
-                                  onLihat!(request);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary),
-                              child: const Text('Lihat')),
-                        ),
-                      ],
-                    ),
-          // Action
-          request.status == 0 ||
-                  request.status == 1 ||
-                  request.status == 2 ||
-                  request.status == 3
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (onAction != null) {
-                            onAction!(request);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: request.status == 0
-                              ? AppColors.primary
-                              : request.status == 1 || request.status == 2
-                                  ? AppColors.pink
-                                  : AppColors.success,
-                        ),
-                        child: Text(request.status == 0
-                            ? 'Jumlah Unit'
-                            : request.status == 1 || request.status == 2
-                                ? 'Type Motor'
-                                : 'Terima Motor'),
-                      ),
-                    ),
-                  ],
-                )
-              : const SizedBox.shrink(),
-          // Batal
-          controller.rolesBatal.value == 0
-              ? const SizedBox.shrink()
-              : request.status == 0
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 100,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (onBatal != null) {
-                                  onBatal!(request);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.error),
-                              child: const Text('Batal')),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-          // Edit
-          controller.rolesEdit.value == 0
-              ? const SizedBox.shrink()
-              : request.status == 2 || request.status == 3
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null) {
-                                onEdit!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    request.status == 0 || request.status == 1
-                                        ? AppColors.yellow
-                                        : AppColors.gold),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                        const SizedBox(height: CustomSize.sm),
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onType != null) {
-                                onType!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.success),
-                            child: Text(
-                              'Type',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null) {
-                                onEdit!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    request.status == 0 || request.status == 1
-                                        ? AppColors.yellow
-                                        : AppColors.gold),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                      ],
-                    ),
-        ] else ...[
-          // Placeholder for when no data is available
-          const SizedBox.shrink(), // Lihat
-          const SizedBox.shrink(), // Action
-          const SizedBox.shrink(), // Batal
-          const SizedBox.shrink(), // Edit
-        ]
-      ],
+            ],
+          ),
+        );
+      } else {
+        cells.add(const SizedBox.shrink());
+      }
+    }
+
+    if (controller.rolesBatal == 1) {
+      if (request != null && request.status == 0) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (onBatal != null) {
+                        onBatal!(request);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.error),
+                    child: const Text('Batal')),
+              ),
+            ],
+          ),
+        );
+      } else {
+        cells.add(const SizedBox.shrink());
+      }
+    }
+
+    if (controller.rolesEdit == 1) {
+      if (request != null && (request.status == 2 || request.status == 3)) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          request.status == 0 || request.status == 1
+                              ? AppColors.yellow
+                              : AppColors.gold),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  )),
+              const SizedBox(height: CustomSize.sm),
+              ElevatedButton(
+                  onPressed: () {
+                    if (onType != null) {
+                      onType!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
+                  child: Text(
+                    'Type',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  )),
+            ],
+          ),
+        );
+      } else if (request!.status == 0 || request.status == 1) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          request.status == 0 || request.status == 1
+                              ? AppColors.yellow
+                              : AppColors.gold),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  )),
+            ],
+          ),
+        );
+      } else {
+        cells.add(const SizedBox.shrink());
+      }
+    }
+
+    return DataGridRowAdapter(
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: cells,
     );
   }
 
@@ -253,7 +272,7 @@ class DoMutasiSource extends DataGridSource {
           index++;
           final tglParsed =
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
-          return DataGridRow(cells: [
+          List<DataGridCell> cells = [
             DataGridCell<int>(columnName: 'No', value: index),
             DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
@@ -270,12 +289,29 @@ class DoMutasiSource extends DataGridSource {
                 columnName: 'Jenis',
                 value: '${data.inisialDepan}${data.inisialBelakang}'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
-          ]);
+          ];
+
+          if (controller.rolesLihat == 1 && data.status != 0) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Lihat', value: 'Lihat'));
+          }
+          if (controller.rolesJumlah == 1) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Action', value: 'Action'));
+          }
+          if (controller.rolesBatal == 1 && data.status == 0) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Batal', value: 'Batal'));
+          }
+          if (controller.rolesEdit == 1) {
+            cells.add(
+                const DataGridCell<String>(columnName: 'Edit', value: 'Edit'));
+          }
+
+          return DataGridRow(cells: cells);
         },
       ).toList();
     }
-    print("Data pager updated and listeners notified type motor mutasi");
-    notifyListeners();
   }
 
   @override

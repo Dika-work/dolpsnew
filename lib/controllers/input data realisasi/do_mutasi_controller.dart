@@ -12,12 +12,11 @@ class DoMutasiController extends GetxController {
   RxList<DoRealisasiModel> doRealisasiModel = <DoRealisasiModel>[].obs;
   final doMutasiRepo = Get.put(DoMutasiRepository());
 
-  RxString roleUser = ''.obs;
   // roles users
-  RxInt rolesLihat = 0.obs;
-  RxInt rolesBatal = 0.obs;
-  RxInt rolesEdit = 0.obs;
-  RxInt rolesHapus = 0.obs;
+  int rolesLihat = 0;
+  int rolesBatal = 0;
+  int rolesEdit = 0;
+  int rolesJumlah = 0;
 
   final storageUtil = StorageUtil();
 
@@ -26,11 +25,10 @@ class DoMutasiController extends GetxController {
     super.onInit();
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
-      roleUser.value = user.tipe;
-      rolesLihat.value = user.lihat;
-      rolesBatal.value = user.batal;
-      rolesEdit.value = user.edit;
-      rolesHapus.value = user.hapus;
+      rolesLihat = user.lihat;
+      rolesBatal = user.batal;
+      rolesEdit = user.edit;
+      rolesJumlah = user.jumlah;
     }
     fetchMutasiContent();
   }

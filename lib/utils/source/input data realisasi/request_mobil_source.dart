@@ -37,102 +37,84 @@ class RequestMobilSource extends DataGridSource {
     int rowIndex = _requestMobilData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
     var request = requestKendaraanModel[startIndex + rowIndex];
+    var controller = requestKendaraanController;
+
+    List<Widget> cells = [
+      ...row.getCells().take(9).map<Widget>(
+        (e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
+            ),
+          );
+        },
+      ),
+    ];
+
+    // Tambahkan sel dinamis berdasarkan kolom yang ada
+    if (controller.rolesLihat == 1 && request.statusReq != 0) {
+      cells.add(
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              if (onLihat != null && requestKendaraanModel.isNotEmpty) {
+                onLihat!(request);
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
+            child: const Text('Lihat'),
+          ),
+        ),
+      );
+    } else if (controller.rolesLihat == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Lihat
+    }
+
+    if (controller.rolesKirim == 1 && request.statusReq == 0) {
+      cells.add(
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              if (onKirim != null && requestKendaraanModel.isNotEmpty) {
+                onKirim!(request);
+              }
+            },
+            child: const Text('Kirim'),
+          ),
+        ),
+      );
+    } else if (controller.rolesKirim == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Lihat
+    }
+
+    if (controller.rolesEdit == 1 && request.statusReq == 0) {
+      cells.add(
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              if (onEdit != null && requestKendaraanModel.isNotEmpty) {
+                onEdit!(request);
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.yellow),
+            child: Text('Edit',
+                style: Theme.of(Get.context!)
+                    .textTheme
+                    .bodyMedium
+                    ?.apply(color: AppColors.black)),
+          ),
+        ),
+      );
+    } else if (controller.rolesEdit == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Lihat
+    }
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: [
-        ...row.getCells().map<Widget>((e) {
-          return Center(
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-              child: Text(
-                e.value.toString(),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
-        }),
-        // Action cells (lihat and kirim)
-        requestKendaraanController.rolesLihat.value == 0
-            ? const SizedBox.shrink()
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 60,
-                    width: 100,
-                    child: ElevatedButton(
-                        onPressed: () {
-                          if (onLihat != null &&
-                              requestKendaraanModel.isNotEmpty) {
-                            onLihat!(request);
-                          } else {
-                            return;
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.success),
-                        child: const Text('Lihat')),
-                  ),
-                ],
-              ),
-        requestKendaraanController.rolesKirim.value == 0
-            ? const SizedBox.shrink()
-            : request.statusReq == 0
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 60,
-                        width: 100,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              if (onKirim != null &&
-                                  requestKendaraanModel.isNotEmpty) {
-                                onKirim!(request);
-                              } else {
-                                return;
-                              }
-                            },
-                            child: const Text('Kirim')),
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-        // Action cells (edit & hapus)
-        requestKendaraanController.rolesEdit.value == 0
-            ? const SizedBox.shrink()
-            : request.statusReq == 0
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 60,
-                        width: 100,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null &&
-                                  requestKendaraanModel.isNotEmpty) {
-                                onEdit!(request);
-                              } else {
-                                return;
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.yellow),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-      ],
+      cells: cells,
     );
   }
 

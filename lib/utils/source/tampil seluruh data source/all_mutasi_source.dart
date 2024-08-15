@@ -64,7 +64,7 @@ class DoMutasiAllSource extends DataGridSource {
         ),
         if (request != null) ...[
           // Lihat
-          controller.rolesLihat.value == 0
+          controller.rolesLihat == 0
               ? const SizedBox.shrink()
               : request.status == 0
                   ? const SizedBox.shrink()
@@ -125,7 +125,7 @@ class DoMutasiAllSource extends DataGridSource {
                 )
               : const SizedBox.shrink(),
           // Batal
-          controller.rolesBatal.value == 0
+          controller.rolesBatal == 0
               ? const SizedBox.shrink()
               : request.status == 0
                   ? Column(
@@ -148,7 +148,7 @@ class DoMutasiAllSource extends DataGridSource {
                     )
                   : const SizedBox.shrink(),
           // Edit
-          controller.rolesEdit.value == 0
+          controller.rolesEdit == 0
               ? const SizedBox.shrink()
               : request.status == 2 || request.status == 3
                   ? Column(

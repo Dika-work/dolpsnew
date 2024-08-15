@@ -15,15 +15,15 @@ class DoRegulerController extends GetxController {
   final doRegulerRepo = Get.put(DoRegulerRepository());
   final doMutasiController = Get.put(DoMutasiController());
 
-  RxString roleUser = ''.obs;
+  String roleUser = '';
   final storageUtil = StorageUtil();
   String namaUser = '';
 
   // roles users
-  RxInt rolesLihat = 0.obs;
-  RxInt rolesBatal = 0.obs;
-  RxInt rolesEdit = 0.obs;
-  RxInt rolesHapus = 0.obs;
+  int rolesLihat = 0;
+  int rolesBatal = 0;
+  int rolesEdit = 0;
+  int rolesJumlah = 0;
 
   @override
   void onInit() {
@@ -31,12 +31,19 @@ class DoRegulerController extends GetxController {
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       namaUser = user.nama;
-      roleUser.value = user.tipe;
-      rolesLihat.value = user.lihat;
-      rolesBatal.value = user.batal;
-      rolesEdit.value = user.edit;
-      rolesHapus.value = user.hapus;
+      roleUser = user.tipe;
+      rolesLihat = user.lihat;
+      rolesBatal = user.batal;
+      rolesEdit = user.edit;
+      rolesJumlah = user.jumlah;
     }
+
+    print("rolesLihat: $rolesLihat");
+    print("rolesBatal: $rolesBatal");
+    print("rolesEdit: $rolesEdit");
+    print("rolesJumlah: $rolesJumlah");
+    print("roleUser: $roleUser");
+
     fetchRegulerContent();
   }
 

@@ -27,9 +27,9 @@ class RequestKendaraanController extends GetxController {
   TextEditingController jumlahKendaraanController = TextEditingController();
 
   // roles users
-  RxInt rolesLihat = 0.obs;
-  RxInt rolesKirim = 0.obs;
-  RxInt rolesEdit = 0.obs;
+  int rolesLihat = 0;
+  int rolesKirim = 0;
+  int rolesEdit = 0;
 
   RxList<RequestKendaraanModel> requestKendaraanModel =
       <RequestKendaraanModel>[].obs;
@@ -104,9 +104,12 @@ class RequestKendaraanController extends GetxController {
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       namaUser = user.nama;
-      rolesLihat.value = user.lihat;
-      rolesKirim.value = user.kirim;
-      rolesEdit.value = user.edit;
+      rolesLihat = user.lihat;
+      rolesKirim = user.kirim;
+      rolesEdit = user.edit;
+      print('ini roles lihat ${rolesLihat}');
+      print('ini rolesKirim ${rolesKirim}');
+      print('ini rolesEdit ${rolesEdit}');
     }
 
     fetchRequestKendaraan();
