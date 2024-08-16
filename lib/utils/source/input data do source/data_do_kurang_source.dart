@@ -33,22 +33,24 @@ class DataDoKurangSource extends DataGridSource {
     int rowIndex = _doKurangData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
-    return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: [
-        ...row.getCells().map<Widget>((e) {
-          return Center(
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-              child: Text(
-                e.value.toString(),
-                textAlign: TextAlign.center,
-              ),
+    List<Widget> cells = [
+      ...row.getCells().take(8).map<Widget>(
+        (e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
             ),
           );
-        }),
-        // Action cells (edit and delete)
+        },
+      ),
+    ];
+
+    // Action cells (edit and delete)
+    if (controller.rolesEdit == 1) {
+      cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -67,7 +69,12 @@ class DataDoKurangSource extends DataGridSource {
             )
           ],
         ),
-        // Hapus
+      );
+    }
+
+    // Hapus
+    if (controller.rolesHapus == 1) {
+      cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -75,19 +82,23 @@ class DataDoKurangSource extends DataGridSource {
               height: 60,
               width: 100,
               child: ElevatedButton(
-                onPressed: () {
-                  if (onDeleted != null && doKurang.isNotEmpty) {
-                    onDeleted!(doKurang[startIndex + rowIndex]);
-                  } else {
-                    return;
-                  }
-                },
-                child: const Text('Hapus'),
-              ),
-            ),
+                  onPressed: () {
+                    if (onDeleted != null && doKurang.isNotEmpty) {
+                      onDeleted!(doKurang[startIndex + rowIndex]);
+                    } else {
+                      return;
+                    }
+                  },
+                  child: const Text('Hapus')),
+            )
           ],
-        )
-      ],
+        ),
+      );
+    }
+
+    return DataGridRowAdapter(
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: cells,
     );
   }
 

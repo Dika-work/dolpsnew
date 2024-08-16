@@ -34,22 +34,24 @@ class DataDoTambahSource extends DataGridSource {
     int rowIndex = _doTambahData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
-    return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: [
-        ...row.getCells().map<Widget>((e) {
-          return Center(
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-              child: Text(
-                e.value.toString(),
-                textAlign: TextAlign.center,
-              ),
+    List<Widget> cells = [
+      ...row.getCells().take(8).map<Widget>(
+        (e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
             ),
           );
-        }),
-        // Action cells (edit and delete)
+        },
+      ),
+    ];
+
+    // Action cells (edit and delete)
+    if (controller.rolesEdit == 1) {
+      cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -68,7 +70,11 @@ class DataDoTambahSource extends DataGridSource {
             )
           ],
         ),
-        // Hapus
+      );
+    }
+    // Hapus
+    if (controller.rolesHapus == 1) {
+      cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -87,7 +93,12 @@ class DataDoTambahSource extends DataGridSource {
             )
           ],
         ),
-      ],
+      );
+    }
+
+    return DataGridRowAdapter(
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: cells,
     );
   }
 

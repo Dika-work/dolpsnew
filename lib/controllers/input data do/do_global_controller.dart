@@ -26,6 +26,10 @@ class DataDOGlobalController extends GetxController {
   final idplant = '1'.obs;
   String namaUser = '';
 
+  // roles users
+  int rolesEdit = 0;
+  int rolesHapus = 0;
+
   final srdController = TextEditingController();
   final mksController = TextEditingController();
   final ptkController = TextEditingController();
@@ -63,6 +67,8 @@ class DataDOGlobalController extends GetxController {
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       namaUser = user.nama;
+      rolesEdit = user.edit;
+      rolesHapus = user.hapus;
     }
     // mengubah idPlant berdasarkan plant yg dipilih
     ever(plant, (_) {

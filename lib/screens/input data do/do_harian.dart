@@ -30,8 +30,8 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
-      'Edit': 150,
-      'Hapus': 150,
+      if (controller.rolesEdit == 1) 'Edit': 150,
+      if (controller.rolesHapus == 1) 'Hapus': 150,
     };
 
     // const double dataPagerHeight = 60.0;
@@ -297,43 +297,45 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                               ),
                             )),
                         // Edit column
-                        GridColumn(
-                          width: columnWidths['Edit']!,
-                          columnName: 'Edit',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                        if (controller.rolesEdit == 1)
+                          GridColumn(
+                            width: columnWidths['Edit']!,
+                            columnName: 'Edit',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'Edit',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
                         // Hapus
-                        GridColumn(
-                          width: columnWidths['Hapus']!,
-                          columnName: 'Hapus',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Hapus',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                        if (controller.rolesHapus == 1)
+                          GridColumn(
+                            width: columnWidths['Hapus']!,
+                            columnName: 'Hapus',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'Hapus',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),

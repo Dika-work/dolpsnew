@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controllers/input data do/do_harian_controller.dart';
 import '../../../helpers/helper_function.dart';
 import '../../../models/input data do/do_harian_model.dart';
 import '../../constant/custom_size.dart';
@@ -21,6 +23,7 @@ class DataDoHarianSource extends DataGridSource {
   }
 
   List<DataGridRow> _doHarianData = [];
+  final controller = Get.put(DataDoHarianController());
   int index = 0;
 
   @override
@@ -31,22 +34,24 @@ class DataDoHarianSource extends DataGridSource {
     int rowIndex = _doHarianData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
 
-    return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: [
-        ...row.getCells().map<Widget>((e) {
-          return Center(
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-              child: Text(
-                e.value.toString(),
-                textAlign: TextAlign.center,
-              ),
+    List<Widget> cells = [
+      ...row.getCells().take(8).map<Widget>(
+        (e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
             ),
           );
-        }),
-        // Action cells (edit and delete)
+        },
+      ),
+    ];
+
+    // Action cells (edit and delete)
+    if (controller.rolesEdit == 1) {
+      cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -65,7 +70,12 @@ class DataDoHarianSource extends DataGridSource {
             )
           ],
         ),
-        // Hapus
+      );
+    }
+
+    // Hapus
+    if (controller.rolesHapus == 1) {
+      cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -83,8 +93,13 @@ class DataDoHarianSource extends DataGridSource {
                   child: const Text('Hapus')),
             )
           ],
-        )
-      ],
+        ),
+      );
+    }
+
+    return DataGridRowAdapter(
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: cells,
     );
   }
 
@@ -119,7 +134,7 @@ class DataDoHarianSource extends DataGridSource {
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     final int startIndex = newPageIndex * 7;
-    _updateDataPager(doHarian, startIndex);
+    _updateDataPager(controller.doHarianModel, startIndex);
     notifyListeners();
     return true;
   }
