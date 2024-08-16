@@ -107,9 +107,9 @@ class RequestKendaraanController extends GetxController {
       rolesLihat = user.lihat;
       rolesKirim = user.kirim;
       rolesEdit = user.edit;
-      print('ini roles lihat ${rolesLihat}');
-      print('ini rolesKirim ${rolesKirim}');
-      print('ini rolesEdit ${rolesEdit}');
+      print('ini roles lihat $rolesLihat');
+      print('ini rolesKirim $rolesKirim');
+      print('ini rolesEdit $rolesEdit');
     }
 
     fetchRequestKendaraan();

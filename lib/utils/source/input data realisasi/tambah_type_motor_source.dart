@@ -13,7 +13,9 @@ class TambahTypeMotorSource extends DataGridSource {
   TambahTypeMotorSource({
     required this.tambahTypeMotorModel,
     int startIndex = 0,
-  });
+  }) {
+    _updateDataPager(tambahTypeMotorModel, startIndex);
+  }
 
   List<DataGridRow> _tambahTypeMotor = [];
   final controller = Get.put(TambahTypeMotorController());

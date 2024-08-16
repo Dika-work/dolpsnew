@@ -4,11 +4,15 @@ import 'package:get/get.dart';
 import '../../models/input data realisasi/edit_type_motor_model.dart';
 import '../../repository/input data realisasi/edit_type_motor_repo.dart';
 import '../../utils/popups/full_screen_loader.dart';
+import 'do_mutasi_controller.dart';
+import 'do_reguler_controller.dart';
 
 class EditTypeMotorController extends GetxController {
   final isLoadingType = Rx<bool>(false);
   RxList<EditTypeMotorModel> doRealisasiModel = <EditTypeMotorModel>[].obs;
   final editMotorRepo = Get.put(EditTypeMotorRepository());
+  final doRegulerController = Get.put(DoRegulerController());
+  final doMutasiController = Get.put(DoMutasiController());
 
   Future<void> fetchAllTypeMotorById(int id) async {
     try {
@@ -56,8 +60,9 @@ class EditTypeMotorController extends GetxController {
 
     await editMotorRepo.editStatusTypeMotor(id);
     await editMotorRepo.hapusDataHutang(id);
+    await doRegulerController.fetchRegulerContent();
+    await doMutasiController.fetchMutasiContent();
 
-    CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }

@@ -76,44 +76,35 @@ class _AksesorisState extends State<Aksesoris> {
                       fontWeight: FontWeight.bold, color: AppColors.success)),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            Obx(() {
-              if (controller.isLoadingAksesoris.value) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (controller.aksesorisModel.isEmpty) {
-                return const Text('Data tidak tersedia');
-              }
-              final aksesoris = controller.aksesorisModel.first;
-
-              // Initialize checkValues list if not already initialized
-              if (controller.checkboxStatus.isEmpty) {
-                controller.checkboxStatus = RxList.filled(10, false);
-              }
-
-              return Column(
-                children: [
-                  _buildKelengkapanAlaT('HLM', aksesoris.accHLM, 0),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('AC', aksesoris.accAC, 1),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('KS', aksesoris.accKS, 2),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('TS', aksesoris.accTS, 3),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('BP', aksesoris.accBP, 4),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('BS', aksesoris.accBS, 5),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('PLT', aksesoris.accPLT, 6),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('Stay L/R', aksesoris.accSTAY, 7),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('AC Besar', aksesoris.accAcBesar, 8),
-                  const SizedBox(height: CustomSize.spaceBtwItems),
-                  _buildKelengkapanAlaT('Plastik', aksesoris.accPlastik, 9),
-                ],
-              );
-            }),
+            _buildKelengkapanAlaT(
+                'HLM', controller.aksesorisModel.first.accHLM, 0),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'AC', controller.aksesorisModel.first.accAC, 1),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'KS', controller.aksesorisModel.first.accKS, 2),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'TS', controller.aksesorisModel.first.accTS, 3),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'BP', controller.aksesorisModel.first.accBP, 4),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'BS', controller.aksesorisModel.first.accBS, 5),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'PLT', controller.aksesorisModel.first.accPLT, 6),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'Stay L/R', controller.aksesorisModel.first.accSTAY, 7),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'AC Besar', controller.aksesorisModel.first.accAcBesar, 8),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            _buildKelengkapanAlaT(
+                'Plastik', controller.aksesorisModel.first.accPlastik, 9),
             const SizedBox(height: CustomSize.spaceBtwInputFields),
             Center(
               child: Text('HUTANG PABRIK',

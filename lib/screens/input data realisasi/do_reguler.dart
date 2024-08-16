@@ -32,8 +32,8 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
       'Jumlah': double.nan,
       if (controller.rolesLihat == 1) 'Lihat': 150,
       if (controller.rolesJumlah == 1) 'Action': 150,
-      if (controller.rolesEdit == 1) 'Edit': 150,
       if (controller.rolesBatal == 1) 'Batal': 150,
+      if (controller.rolesEdit == 1) 'Edit': 150,
     };
 
     const int rowsPerPage = 10;

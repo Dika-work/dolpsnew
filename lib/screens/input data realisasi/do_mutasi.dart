@@ -139,8 +139,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                               ? dataSource.doRealisasiModel[rowIndex]
                               : null;
 
-                          if (request != null &&
-                              (request.status == 2 || request.status == 3)) {
+                          if (request != null && request.status == 5) {
                             return 150.0;
                           } else {
                             return details.rowHeight;

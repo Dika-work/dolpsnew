@@ -63,7 +63,8 @@ class DoMutasiSource extends DataGridSource {
     ];
 
     // Add Lihat cell
-    if (controller.rolesLihat == 1 && request?.status != 0) {
+    if (controller.rolesLihat == 1 && request?.status == 1 ||
+        request?.status == 3) {
       cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -73,8 +74,8 @@ class DoMutasiSource extends DataGridSource {
               width: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  if (onLihat != null) {
-                    onLihat!(request!);
+                  if (onLihat != null && request != null) {
+                    onLihat!(request);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -160,7 +161,8 @@ class DoMutasiSource extends DataGridSource {
     }
 
     if (controller.rolesEdit == 1) {
-      if (request != null && (request.status == 2 || request.status == 3)) {
+      if (request != null &&
+          (request.status == 2 || request.status == 3 || request.status == 5)) {
         cells.add(
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -202,20 +204,20 @@ class DoMutasiSource extends DataGridSource {
             ],
           ),
         );
-      } else if (request!.status == 0 || request.status == 1) {
+      } else if (request?.status == 0 || request?.status == 1) {
         cells.add(
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
                   onPressed: () {
-                    if (onEdit != null) {
+                    if (onEdit != null && request != null) {
                       onEdit!(request);
                     }
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor:
-                          request.status == 0 || request.status == 1
+                          request?.status == 0 || request?.status == 1
                               ? AppColors.yellow
                               : AppColors.gold),
                   child: Text(
@@ -311,6 +313,7 @@ class DoMutasiSource extends DataGridSource {
           return DataGridRow(cells: cells);
         },
       ).toList();
+      notifyListeners();
     }
   }
 

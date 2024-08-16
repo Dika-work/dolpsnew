@@ -55,7 +55,8 @@ class RequestMobilSource extends DataGridSource {
     ];
 
     // Tambahkan sel dinamis berdasarkan kolom yang ada
-    if (controller.rolesLihat == 1 && request.statusReq != 0) {
+    if (controller.rolesLihat == 1 && request.statusReq == 0 ||
+        request.statusReq == 1) {
       cells.add(
         Center(
           child: ElevatedButton(
@@ -64,7 +65,8 @@ class RequestMobilSource extends DataGridSource {
                 onLihat!(request);
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.success),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary.withOpacity(.8)),
             child: const Text('Lihat'),
           ),
         ),

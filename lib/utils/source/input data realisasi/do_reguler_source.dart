@@ -77,7 +77,9 @@ class DoRegulerSource extends DataGridSource {
     }
 
     // Add Lihat cell
-    if (controller.rolesLihat == 1 && request?.status != 0) {
+    if (controller.rolesLihat == 1 && request?.status == 1 ||
+        request?.status == 3 ||
+        request?.status == 4) {
       cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -87,8 +89,8 @@ class DoRegulerSource extends DataGridSource {
               width: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  if (onLihat != null) {
-                    onLihat!(request!);
+                  if (onLihat != null && request != null) {
+                    onLihat!(request);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -147,7 +149,7 @@ class DoRegulerSource extends DataGridSource {
             ],
           ),
         );
-      } else {
+      } else if (request?.status == 4) {
         cells.add(
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -181,13 +183,15 @@ class DoRegulerSource extends DataGridSource {
             ],
           ),
         );
+      } else {
+        cells.add(const SizedBox.shrink());
       }
     } else if (controller.rolesJumlah == 1) {
       cells.add(const SizedBox.shrink()); // Placeholder for Action
     }
 
     // Add Batal cell
-    if (controller.rolesBatal == 1 && request!.status == 0) {
+    if (controller.rolesBatal == 1 && request?.status == 0) {
       cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -197,7 +201,7 @@ class DoRegulerSource extends DataGridSource {
               width: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  if (onBatal != null) {
+                  if (onBatal != null && request != null) {
                     onBatal!(request);
                   }
                 },
@@ -230,6 +234,8 @@ class DoRegulerSource extends DataGridSource {
                       onEdit!(request!);
                     }
                   },
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
                   child: Text(
                     'Edit',
                     style: Theme.of(Get.context!)
@@ -249,19 +255,23 @@ class DoRegulerSource extends DataGridSource {
                       onType!(request!);
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
                   child: Text(
                     'Type',
                     style: Theme.of(Get.context!)
                         .textTheme
                         .bodyMedium
-                        ?.apply(color: AppColors.black),
+                        ?.apply(color: AppColors.white),
                   ),
                 ),
               ),
             ],
           ),
         );
-      } else {
+      } else if (request?.status == 0 ||
+          request?.status == 1 ||
+          request?.status == 2) {
         cells.add(
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -288,6 +298,8 @@ class DoRegulerSource extends DataGridSource {
             ],
           ),
         );
+      } else {
+        cells.add(const SizedBox.shrink());
       }
     } else if (controller.rolesEdit == 1) {
       cells.add(const SizedBox.shrink()); // Placeholder for Edit
@@ -372,6 +384,14 @@ class DoRegulerSource extends DataGridSource {
           return DataGridRow(cells: cells);
         },
       ).toList();
+      notifyListeners();
     }
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    _updateDataPager(controller.doRealisasiModel, startIndex);
+    notifyListeners();
+    return true;
   }
 }
