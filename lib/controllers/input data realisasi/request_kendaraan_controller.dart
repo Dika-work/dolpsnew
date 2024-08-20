@@ -121,7 +121,7 @@ class RequestKendaraanController extends GetxController {
       jumlahHarian.value = 0;
     } else {
       final selectedPlant = plant.value;
-      final data = dataDOHarianHomeController.doGlobalHarianModel
+      final data = dataDOHarianHomeController.doHarianHomeModel
           .firstWhereOrNull((element) => element.plant == selectedPlant);
       jumlahHarian.value = data?.jumlah ?? 0;
     }

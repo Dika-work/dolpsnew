@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../controllers/home/do_global_harian_controller.dart';
+import '../../controllers/home/do_harian_home_bsk_controller.dart';
+import '../../controllers/home/do_harian_home_controller.dart';
 import '../../screens/homepage.dart';
 
 class StorageUtil {
@@ -23,6 +26,10 @@ class StorageUtil {
   }
 
   void logout() {
+    Get.delete<DataDOHarianHomeController>(); // Hapus instance lama
+    Get.delete<DoHarianHomeBskController>();
+    Get.delete<DataDOGlobalHarianController>();
+
     prefs.remove('user');
     Get.offAllNamed('/login');
     SnackbarLoader.successSnackBar(

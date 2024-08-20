@@ -9,7 +9,7 @@ class DoGlobalHarianRepository {
 
   Future<List<DoGlobalHarianModel>> fetchGlobalHarianContent() async {
     final response = await http.get(Uri.parse(
-        '${storageUtil.baseURL}/DO/api/api_do_global.php?action=getDataAll'));
+        '${storageUtil.baseURL}/DO/api/api_do_global.php?action=getData'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
       return list.map((model) => DoGlobalHarianModel.fromJson(model)).toList();

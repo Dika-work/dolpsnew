@@ -27,48 +27,56 @@ class DataDoHarianBskHomeSource extends DataGridSource {
 
   int index = 0;
 
-  DataDoHarianBskHomeSource(
-      {required List<DoHarianHomeBskModel> doGlobalHarian}) {
-    doGlobalHarianModel = validPlants.asMap().entries.map<DataGridRow>((entry) {
-      int i = entry.key;
-      int plant = entry.value;
+  DataDoHarianBskHomeSource({
+    required List<DoHarianHomeBskModel> doGlobalHarian,
+    required String userPlant,
+    required bool isAdmin,
+  }) {
+    final filteredPlants = isAdmin
+        ? validPlants // Jika admin, tampilkan semua plant
+        : validPlants.where((plant) => plant.toString() == userPlant).toList();
 
-      DoHarianHomeBskModel? dataGridRow = doGlobalHarian.firstWhere(
-          (item) => item.plant == plant.toString(),
-          orElse: () => DoHarianHomeBskModel(
-              idPlant: plant,
-              tujuan: validTujuans[i],
-              tgl: '',
-              jam: '',
-              jumlah: 0,
-              srd: 0,
-              mks: 0,
-              ptk: 0,
-              bjm: 0,
-              plant: plant.toString()));
+    doGlobalHarianModel = filteredPlants.map<DataGridRow>((plant) {
+      // Cari data untuk plant saat ini atau buat placeholder default
+      DoHarianHomeBskModel data = doGlobalHarian.firstWhere(
+        (item) => item.plant == plant.toString(),
+        orElse: () => DoHarianHomeBskModel(
+          idPlant: plant,
+          tujuan: validTujuans[validPlants.indexOf(plant)],
+          tgl: '',
+          jam: '',
+          jumlah: 0,
+          srd: 0,
+          mks: 0,
+          ptk: 0,
+          bjm: 0,
+          plant: plant.toString(),
+        ),
+      );
+
+      // Hitung jumlah total
+      final jumlah = data.srd + data.mks + data.ptk + data.bjm;
 
       index++;
-      final jumlah =
-          dataGridRow.srd + dataGridRow.mks + dataGridRow.ptk + dataGridRow.bjm;
-
+      print('..ini index di do home besok hari $index');
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
-        DataGridCell<String>(columnName: 'Plant', value: dataGridRow.plant),
-        DataGridCell<String>(columnName: 'Tujuan', value: dataGridRow.tujuan),
+        DataGridCell<String>(columnName: 'Plant', value: data.plant),
+        DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
             columnName: 'Jumlah', value: jumlah == 0 ? '-' : jumlah.toString()),
         DataGridCell<String>(
             columnName: 'HSO - SRD',
-            value: dataGridRow.srd == 0 ? '-' : dataGridRow.srd.toString()),
+            value: data.srd == 0 ? '-' : data.srd.toString()),
         DataGridCell<String>(
             columnName: 'HSO - MKS',
-            value: dataGridRow.mks == 0 ? '-' : dataGridRow.mks.toString()),
+            value: data.mks == 0 ? '-' : data.mks.toString()),
         DataGridCell<String>(
             columnName: 'HSO - PTK',
-            value: dataGridRow.ptk == 0 ? '-' : dataGridRow.ptk.toString()),
+            value: data.ptk == 0 ? '-' : data.ptk.toString()),
         DataGridCell<String>(
             columnName: 'BJM',
-            value: dataGridRow.bjm == 0 ? '-' : dataGridRow.bjm.toString()),
+            value: data.bjm == 0 ? '-' : data.bjm.toString()),
       ]);
     }).toList();
 

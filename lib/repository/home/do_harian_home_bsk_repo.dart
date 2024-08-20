@@ -13,6 +13,7 @@ class DoHarianHomeBskRepository {
         '${storageUtil.baseURL}/DO/api/api_do_harian.php?action=getDataBesok'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
+      print('..INI RESPONSE DARI DO HARIAN BESOK HOME.. ${list.toList()}');
       return list.map((model) => DoHarianHomeBskModel.fromJson(model)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data DO Home Harian☠️');

@@ -27,49 +27,67 @@ class DataDoHarianHomeSource extends DataGridSource {
 
   int index = 0;
 
-  DataDoHarianHomeSource({required List<DoHarianHomeModel> doGlobalHarian}) {
-    doGlobalHarianModel = validPlants.asMap().entries.map<DataGridRow>((entry) {
-      int i = entry.key;
-      int plant = entry.value;
+  DataDoHarianHomeSource({
+    required List<DoHarianHomeModel> doGlobalHarian,
+    required String userPlant,
+    required bool isAdmin,
+  }) {
+    // Filter plants berdasarkan role user
+    final filteredPlants = isAdmin
+        ? validPlants // Jika admin, tampilkan semua plant
+        : validPlants
+            .where((plant) => plant.toString() == userPlant)
+            .toList(); // Filter plant berdasarkan user
 
-      DoHarianHomeModel? dataGridRow = doGlobalHarian.firstWhere(
-          (item) => item.plant == plant.toString(),
-          orElse: () => DoHarianHomeModel(
-              idPlant: plant,
-              tujuan: validTujuans[i],
-              tgl: '',
-              jam: '',
-              jumlah: 0,
-              srd: 0,
-              mks: 0,
-              ptk: 0,
-              bjm: 0,
-              plant: plant.toString()));
+    print('Filtered Plants Hari ini: $filteredPlants');
+    print('User Plant Hari ini: $userPlant');
+
+    // Membuat model data dengan urutan validPlants
+    doGlobalHarianModel = filteredPlants.map<DataGridRow>((plant) {
+      // Cari data untuk plant saat ini atau buat placeholder default
+      DoHarianHomeModel data = doGlobalHarian.firstWhere(
+        (item) => item.plant == plant.toString(),
+        orElse: () => DoHarianHomeModel(
+          idPlant: plant,
+          tujuan: validTujuans[validPlants.indexOf(plant)],
+          tgl: '',
+          jam: '',
+          jumlah: 0,
+          srd: 0,
+          mks: 0,
+          ptk: 0,
+          bjm: 0,
+          plant: plant.toString(),
+        ),
+      );
+
+      // Hitung jumlah total
+      final jumlah = data.srd + data.mks + data.ptk + data.bjm;
 
       index++;
+      print('..ini index di do home hari ini $index');
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
-        DataGridCell<String>(columnName: 'Plant', value: dataGridRow.plant),
-        DataGridCell<String>(columnName: 'Tujuan', value: dataGridRow.tujuan),
+        DataGridCell<String>(columnName: 'Plant', value: data.plant),
+        DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
-            columnName: 'Jumlah',
-            value:
-                dataGridRow.jumlah == 0 ? '-' : dataGridRow.jumlah.toString()),
+            columnName: 'Jumlah', value: jumlah == 0 ? '-' : jumlah.toString()),
         DataGridCell<String>(
             columnName: 'HSO - SRD',
-            value: dataGridRow.srd == 0 ? '-' : dataGridRow.srd.toString()),
+            value: data.srd == 0 ? '-' : data.srd.toString()),
         DataGridCell<String>(
             columnName: 'HSO - MKS',
-            value: dataGridRow.mks == 0 ? '-' : dataGridRow.mks.toString()),
+            value: data.mks == 0 ? '-' : data.mks.toString()),
         DataGridCell<String>(
             columnName: 'HSO - PTK',
-            value: dataGridRow.ptk == 0 ? '-' : dataGridRow.ptk.toString()),
+            value: data.ptk == 0 ? '-' : data.ptk.toString()),
         DataGridCell<String>(
             columnName: 'BJM',
-            value: dataGridRow.bjm == 0 ? '-' : dataGridRow.bjm.toString()),
+            value: data.bjm == 0 ? '-' : data.bjm.toString()),
       ]);
     }).toList();
 
+    // Menghitung total hanya jika plant yang sesuai ada dalam data
     final totalJumlah = doGlobalHarian.fold(
         0, (sum, item) => sum + item.srd + item.mks + item.ptk + item.bjm);
     final totalSrd = doGlobalHarian.fold(0, (sum, item) => sum + item.srd);
@@ -77,7 +95,7 @@ class DataDoHarianHomeSource extends DataGridSource {
     final totalPtk = doGlobalHarian.fold(0, (sum, item) => sum + item.ptk);
     final totalBjm = doGlobalHarian.fold(0, (sum, item) => sum + item.bjm);
 
-    // Add total row
+    // Tambahkan baris total
     doGlobalHarianModel.add(DataGridRow(cells: [
       const DataGridCell<int>(columnName: 'No', value: null),
       const DataGridCell<String>(columnName: 'Plant', value: 'TOTAL'),
@@ -97,6 +115,8 @@ class DataDoHarianHomeSource extends DataGridSource {
       DataGridCell<String>(
           columnName: 'BJM', value: totalBjm == 0 ? '-' : totalBjm.toString()),
     ]));
+
+    print('Final DataGridRow hari ini count: ${doGlobalHarianModel.length}');
   }
 
   List<DataGridRow> doGlobalHarianModel = [];

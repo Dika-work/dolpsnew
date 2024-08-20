@@ -11,15 +11,11 @@ class LoginRepository {
 
   Future<UserModel?> fetchUserDetails(String username, String password) async {
     try {
-      print('Mengirim permintaan ke server...');
       final response = await http.get(
         Uri.parse(
           '${storageUtil.baseURL}/DO/api/api_user.php?action=Login&username=$username&password=$password',
         ),
       );
-
-      print('Respons diterima dari server: ${response.statusCode}');
-      print('Body respons: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -28,10 +24,7 @@ class LoginRepository {
         if (data['status'] == 'success' && data['data'] != null) {
           final user = UserModel.fromJson(data['data']);
           storageUtil.saveUserDetails(user);
-          print('ini gambarnya : ${user.gambar}');
-          Get.offNamed('/rootpage');
-          print(
-              'Berhasil menyimpan ke local storage: ${user.username} ${user.gambar}');
+          Get.offAllNamed('/rootpage');
           return user;
         } else {
           showErrorSnackbar('Gagal😪', 'Respon dari server tidak valid.');

@@ -27,53 +27,63 @@ class DataDoGlobalHarianSource extends DataGridSource {
 
   int index = 0;
 
-  DataDoGlobalHarianSource(
-      {required List<DoGlobalHarianModel> doGlobalHarian}) {
-    doGlobalHarianModel = validPlants.asMap().entries.map<DataGridRow>((entry) {
-      int i = entry.key;
-      int plant = entry.value;
+  DataDoGlobalHarianSource({
+    required List<DoGlobalHarianModel> doGlobalHarian,
+    required String userPlant,
+    required bool isAdmin,
+  }) {
+    final filteredPlants = isAdmin
+        ? validPlants // Jika admin, tampilkan semua plant
+        : validPlants
+            .where((plant) => plant.toString() == userPlant)
+            .toList(); // Filter plant berdasarkan user
 
-      DoGlobalHarianModel? dataGridRow = doGlobalHarian.firstWhere(
-          (item) => item.plant == plant.toString(),
-          orElse: () => DoGlobalHarianModel(
-              idPlant: plant,
-              tujuan: validTujuans[i],
-              tgl: '',
-              jam: '',
-              srd: 0,
-              mks: 0,
-              ptk: 0,
-              bjm: 0,
-              jumlah5: 0,
-              jumlah6: 0,
-              user: '',
-              plant: plant.toString()));
+    // Buat model data dengan urutan validPlants
+    doGlobalHarianModel = filteredPlants.map<DataGridRow>((plant) {
+      // Cari data untuk plant saat ini atau buat placeholder default
+      DoGlobalHarianModel data = doGlobalHarian.firstWhere(
+        (item) => item.plant == plant.toString(),
+        orElse: () => DoGlobalHarianModel(
+            idPlant: plant,
+            tujuan: validTujuans[validPlants.indexOf(plant)],
+            tgl: '',
+            jam: '',
+            srd: 0,
+            mks: 0,
+            ptk: 0,
+            bjm: 0,
+            jumlah5: 0,
+            jumlah6: 0,
+            user: '',
+            plant: plant.toString()),
+      );
+
+      // Hitung jumlah total
+      final jumlah = data.srd + data.mks + data.ptk + data.bjm;
 
       index++;
-      final jumlah =
-          dataGridRow.srd + dataGridRow.mks + dataGridRow.ptk + dataGridRow.bjm;
-
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
-        DataGridCell<String>(columnName: 'Plant', value: dataGridRow.plant),
-        DataGridCell<String>(columnName: 'Tujuan', value: dataGridRow.tujuan),
+        DataGridCell<String>(columnName: 'Plant', value: plant.toString()),
+        DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
             columnName: 'Jumlah', value: jumlah == 0 ? '-' : jumlah.toString()),
         DataGridCell<String>(
             columnName: 'HSO - SRD',
-            value: dataGridRow.srd == 0 ? '-' : dataGridRow.srd.toString()),
+            value: data.srd == 0 ? '-' : data.srd.toString()),
         DataGridCell<String>(
             columnName: 'HSO - MKS',
-            value: dataGridRow.mks == 0 ? '-' : dataGridRow.mks.toString()),
+            value: data.mks == 0 ? '-' : data.mks.toString()),
         DataGridCell<String>(
             columnName: 'HSO - PTK',
-            value: dataGridRow.ptk == 0 ? '-' : dataGridRow.ptk.toString()),
+            value: data.ptk == 0 ? '-' : data.ptk.toString()),
         DataGridCell<String>(
             columnName: 'BJM',
-            value: dataGridRow.bjm == 0 ? '-' : dataGridRow.bjm.toString()),
+            value: data.bjm == 0 ? '-' : data.bjm.toString()),
       ]);
     }).toList();
 
+    // Hitung total
     final totalJumlah = doGlobalHarian.fold(
         0, (sum, item) => sum + item.srd + item.mks + item.ptk + item.bjm);
     final totalSrd = doGlobalHarian.fold(0, (sum, item) => sum + item.srd);
@@ -81,7 +91,7 @@ class DataDoGlobalHarianSource extends DataGridSource {
     final totalPtk = doGlobalHarian.fold(0, (sum, item) => sum + item.ptk);
     final totalBjm = doGlobalHarian.fold(0, (sum, item) => sum + item.bjm);
 
-    // Add total row
+    // Tambahkan baris total
     doGlobalHarianModel.add(DataGridRow(cells: [
       const DataGridCell<int>(columnName: 'No', value: null),
       const DataGridCell<String>(columnName: 'Plant', value: 'TOTAL'),

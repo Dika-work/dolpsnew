@@ -16,13 +16,22 @@ class EmptyDataSource extends DataGridSource {
 
   List<Map<String, dynamic>> data = [];
 
-  EmptyDataSource() {
-    // Generate data based on validPlants and validTujuans
-    for (int i = 0; i < validPlants.length; i++) {
+  EmptyDataSource({
+    required bool isAdmin,
+    required String userPlant,
+  }) {
+    // Jika admin, tampilkan semua plant, jika tidak, filter berdasarkan plant user
+    final filteredPlants = isAdmin
+        ? validPlants
+        : validPlants.where((plant) => plant.toString() == userPlant).toList();
+
+    // Tambahkan data placeholder untuk admin
+    for (int i = 0; i < filteredPlants.length; i++) {
+      int plant = filteredPlants[i];
       data.add({
         'No': i + 1,
-        'Plant': validPlants[i],
-        'Tujuan': validTujuans[i],
+        'Plant': plant,
+        'Tujuan': validTujuans[validPlants.indexOf(plant)],
         'Jumlah': '-',
         'HSO - SRD': '-',
         'HSO - MKS': '-',
