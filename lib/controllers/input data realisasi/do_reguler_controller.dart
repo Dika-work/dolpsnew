@@ -16,6 +16,7 @@ class DoRegulerController extends GetxController {
   final doMutasiController = Get.put(DoMutasiController());
 
   String roleUser = '';
+  String rolePlant = '';
   final storageUtil = StorageUtil();
   String namaUser = '';
 
@@ -24,6 +25,8 @@ class DoRegulerController extends GetxController {
   int rolesBatal = 0;
   int rolesEdit = 0;
   int rolesJumlah = 0;
+
+  bool get isAdmin => roleUser == 'admin';
 
   @override
   void onInit() {
@@ -51,7 +54,17 @@ class DoRegulerController extends GetxController {
     try {
       isLoadingReguler.value = true;
       final getRegulerDo = await doRegulerRepo.fetchDoRegulerData();
-      doRealisasiModel.assignAll(getRegulerDo);
+
+      if (getRegulerDo.isNotEmpty) {
+        if (isAdmin) {
+          doRealisasiModel.assignAll(getRegulerDo);
+        } else {
+          doRealisasiModel.assignAll(
+              getRegulerDo.where((item) => item.plant == rolePlant).toList());
+        }
+      } else {
+        doRealisasiModel.assignAll([]);
+      }
     } catch (e) {
       print('Error while fetching data do reguler asad: $e');
       doRealisasiModel.assignAll([]);

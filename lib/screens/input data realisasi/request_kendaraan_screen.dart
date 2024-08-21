@@ -1,5 +1,3 @@
-import 'package:doplsnew/screens/input%20data%20realisasi/kirim_kendaraan.dart';
-import 'package:doplsnew/screens/input%20data%20realisasi/lihat_kendaraan.dart';
 import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,8 +6,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../controllers/input data realisasi/lihat_kendaraan_controller.dart';
-import '../../controllers/input data realisasi/plot_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/request_kendaraan_controller.dart';
 import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
@@ -20,6 +16,8 @@ import '../../utils/popups/snackbar.dart';
 import '../../utils/source/input data realisasi/request_mobil_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
+import 'kirim_kendaraan.dart';
+import 'lihat_kendaraan.dart';
 
 class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
   const RequestKendaraanScreen({super.key});
@@ -91,34 +89,13 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
           } else {
             final dataSource = RequestMobilSource(
               onLihat: (RequestKendaraanModel model) {
-                final lihatKendaraanController =
-                    Get.put(LihatKendaraanController());
-                final plotKendaraanController =
-                    Get.put(PlotKendaraanController());
-
                 showDialog(
                   context: context,
                   builder: (context) {
                     return LihatKendaraanScreen(
                       model: model,
-                      controller: lihatKendaraanController,
-                      plotKendaraanController: plotKendaraanController,
                     );
                   },
-                );
-
-                lihatKendaraanController.fetchLihatKendaraan(
-                  model.type,
-                  model.plant,
-                  model.idReq,
-                );
-
-                plotKendaraanController.fetchPlot(
-                  model.idReq,
-                  model.tgl,
-                  model.type,
-                  model.plant,
-                  model.jumlah,
                 );
               },
               onKirim: (RequestKendaraanModel model) =>
@@ -397,46 +374,53 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
             }
 
             // Print jumlah kolom
-            print('Columns: ${column.length}');
+            print('Columns kendaraan: ${column.length}');
 
             return Column(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    CustomDialogs.defaultDialog(
-                        context: context,
-                        titleWidget: const Text('Tambah Request Kendaraan'),
-                        contentWidget: AddRequestKendaraan(
-                          controller: controller,
-                        ),
-                        onConfirm: () {
-                          if (controller.tgl.value.isEmpty) {
-                            SnackbarLoader.errorSnackBar(
-                              title: 'Gagal😪',
-                              message: 'Pastikan tanggal telah di isi 😁',
-                            );
-                          } else {
-                            controller.addRequestKendaraan();
-                          }
+                controller.roleUser == 'admin' ||
+                        controller.roleUser == 'Pengurus Pabrik'
+                    ? GestureDetector(
+                        onTap: () {
+                          CustomDialogs.defaultDialog(
+                              context: context,
+                              titleWidget:
+                                  const Text('Tambah Request Kendaraan'),
+                              contentWidget: AddRequestKendaraan(
+                                controller: controller,
+                              ),
+                              onConfirm: () {
+                                if (controller.tgl.value.isEmpty) {
+                                  SnackbarLoader.errorSnackBar(
+                                    title: 'Gagal😪',
+                                    message: 'Pastikan tanggal telah di isi 😁',
+                                  );
+                                } else {
+                                  controller.addRequestKendaraan();
+                                }
+                              },
+                              cancelText: 'Close',
+                              confirmText: 'Tambahkan');
                         },
-                        cancelText: 'Close',
-                        confirmText: 'Tambahkan');
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const IconButton(
-                          onPressed: null, icon: Icon(Iconsax.add_circle)),
-                      Padding(
-                        padding: const EdgeInsets.only(right: CustomSize.sm),
-                        child: Text(
-                          'Tambah data',
-                          style: Theme.of(context).textTheme.headlineMedium,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const IconButton(
+                                onPressed: null,
+                                icon: Icon(Iconsax.add_circle)),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: CustomSize.sm),
+                              child: Text(
+                                'Tambah data',
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                              ),
+                            )
+                          ],
                         ),
                       )
-                    ],
-                  ),
-                ),
+                    : const SizedBox.shrink(),
                 Expanded(
                     child: SfDataGrid(
                   source: dataSource,

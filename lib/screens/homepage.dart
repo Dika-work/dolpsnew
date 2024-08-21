@@ -25,12 +25,12 @@ class Homepage extends StatelessWidget {
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'Plant': 100,
+      'Plant': 80,
       'Tujuan': double.nan,
-      'Jumlah': double.nan,
-      'HSO - SRD': double.nan,
-      'HSO - MKS': double.nan,
-      'HSO - PTK': double.nan,
+      'Jml': double.nan,
+      'SRD': double.nan,
+      'MKS': double.nan,
+      'PTK': double.nan,
       'BJM': double.nan,
     };
 
@@ -41,6 +41,7 @@ class Homepage extends StatelessWidget {
 
     // Total tinggi untuk 7 baris termasuk header
     const double gridHeight = headerHeight + (rowHeight * numberOfRows);
+    const double emptygridHeight = headerHeight + (rowHeight * 7);
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -90,11 +91,25 @@ class Homepage extends StatelessWidget {
                               isAdmin: controllerHarianHome.isAdmin,
                               userPlant: controllerHarianHome.rolePlant);
 
+                  final rowCount =
+                      controllerHarianHome.doHarianHomeModel.length + 1;
+                  final double tableHeight =
+                      controllerHarianHome.doHarianHomeModel.isEmpty &&
+                              controllerHarianHome.roleUser != 'admin'
+                          ? 110
+                          : headerHeight +
+                              (rowHeight * rowCount)
+                                  .clamp(0, gridHeight - headerHeight);
+
                   return SizedBox(
-                    height: controllerHarianHome.doHarianHomeModel.isEmpty &&
-                            controller.roleUser != 'admin'
-                        ? 110
-                        : gridHeight,
+                    height: controllerHarianHome.roleUser == 'admin' &&
+                            controllerHarianHome.doHarianHomeModel.isEmpty
+                        ? emptygridHeight
+                        : controllerHarianHome.roleUser == 'admin' &&
+                                controllerHarianHome
+                                    .doHarianHomeModel.isNotEmpty
+                            ? gridHeight
+                            : tableHeight,
                     child: SfDataGrid(
                       source: dataSource,
                       columnWidthMode: ColumnWidthMode.auto,
@@ -164,8 +179,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['Jumlah']!,
-                          columnName: 'Jumlah',
+                          width: columnWidths['Jml']!,
+                          columnName: 'Jml',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -173,7 +188,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'Jumlah',
+                              'Jml',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -182,8 +197,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - SRD']!,
-                          columnName: 'HSO - SRD',
+                          width: columnWidths['SRD']!,
+                          columnName: 'SRD',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -191,7 +206,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - SRD',
+                              'SRD',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -200,8 +215,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - MKS']!,
-                          columnName: 'HSO - MKS',
+                          width: columnWidths['MKS']!,
+                          columnName: 'MKS',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -209,7 +224,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - MKS',
+                              'MKS',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -218,8 +233,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - PTK']!,
-                          columnName: 'HSO - PTK',
+                          width: columnWidths['PTK']!,
+                          columnName: 'PTK',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -227,7 +242,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - PTK',
+                              'PTK',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -301,12 +316,25 @@ class Homepage extends StatelessWidget {
                               isAdmin: controllerHarianBskHome.isAdmin,
                               userPlant: controllerHarianBskHome.rolePlant);
 
+                  final rowCount =
+                      controllerHarianBskHome.doHarianHomeBskModel.length + 1;
+                  final double tableHeight =
+                      controllerHarianBskHome.doHarianHomeBskModel.isEmpty &&
+                              controllerHarianBskHome.roleUser != 'admin'
+                          ? 110
+                          : headerHeight +
+                              (rowHeight * rowCount)
+                                  .clamp(0, gridHeight - headerHeight);
+
                   return SizedBox(
-                    height:
-                        controllerHarianBskHome.doHarianHomeBskModel.isEmpty &&
-                                controller.roleUser != 'admin'
-                            ? 110
-                            : gridHeight,
+                    height: controllerHarianBskHome.roleUser == 'admin' &&
+                            controllerHarianBskHome.doHarianHomeBskModel.isEmpty
+                        ? emptygridHeight
+                        : controllerHarianBskHome.roleUser == 'admin' &&
+                                controllerHarianBskHome
+                                    .doHarianHomeBskModel.isNotEmpty
+                            ? gridHeight
+                            : tableHeight,
                     child: SfDataGrid(
                       source: dataSource,
                       columnWidthMode: ColumnWidthMode.auto,
@@ -376,8 +404,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['Jumlah']!,
-                          columnName: 'Jumlah',
+                          width: columnWidths['Jml']!,
+                          columnName: 'Jml',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -385,7 +413,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'Jumlah',
+                              'Jml',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -394,8 +422,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - SRD']!,
-                          columnName: 'HSO - SRD',
+                          width: columnWidths['SRD']!,
+                          columnName: 'SRD',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -403,7 +431,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - SRD',
+                              'SRD',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -412,8 +440,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - MKS']!,
-                          columnName: 'HSO - MKS',
+                          width: columnWidths['MKS']!,
+                          columnName: 'MKS',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -421,7 +449,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - MKS',
+                              'MKS',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -430,8 +458,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - PTK']!,
-                          columnName: 'HSO - PTK',
+                          width: columnWidths['PTK']!,
+                          columnName: 'PTK',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -439,7 +467,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - PTK',
+                              'PTK',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -510,11 +538,23 @@ class Homepage extends StatelessWidget {
                           isAdmin: controller.isAdmin,
                           userPlant: controller.rolePlant);
 
+                  final rowCount = controller.doGlobalHarianModel.length + 1;
+                  final double tableHeight =
+                      controller.doGlobalHarianModel.isEmpty &&
+                              controller.roleUser != 'admin'
+                          ? 110
+                          : headerHeight +
+                              (rowHeight * rowCount)
+                                  .clamp(0, gridHeight - headerHeight);
+
                   return SizedBox(
-                    height: controller.doGlobalHarianModel.isEmpty &&
-                            controller.roleUser != 'admin'
-                        ? 110
-                        : gridHeight,
+                    height: controller.roleUser == 'admin' &&
+                            controller.doGlobalHarianModel.isEmpty
+                        ? emptygridHeight
+                        : controller.roleUser == 'admin' &&
+                                controller.doGlobalHarianModel.isNotEmpty
+                            ? gridHeight
+                            : tableHeight,
                     child: SfDataGrid(
                       source: dataSource,
                       columnWidthMode: ColumnWidthMode.auto,
@@ -584,8 +624,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['Jumlah']!,
-                          columnName: 'Jumlah',
+                          width: columnWidths['Jml']!,
+                          columnName: 'Jml',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -593,7 +633,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'Jumlah',
+                              'Jml',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -602,8 +642,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - SRD']!,
-                          columnName: 'HSO - SRD',
+                          width: columnWidths['SRD']!,
+                          columnName: 'SRD',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -611,7 +651,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - SRD',
+                              'SRD',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -620,8 +660,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - MKS']!,
-                          columnName: 'HSO - MKS',
+                          width: columnWidths['MKS']!,
+                          columnName: 'MKS',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -629,7 +669,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - MKS',
+                              'MKS',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -638,8 +678,8 @@ class Homepage extends StatelessWidget {
                           ),
                         ),
                         GridColumn(
-                          width: columnWidths['HSO - PTK']!,
-                          columnName: 'HSO - PTK',
+                          width: columnWidths['PTK']!,
+                          columnName: 'PTK',
                           label: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -647,7 +687,7 @@ class Homepage extends StatelessWidget {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              'HSO - PTK',
+                              'PTK',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium

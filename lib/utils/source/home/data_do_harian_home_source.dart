@@ -71,15 +71,15 @@ class DataDoHarianHomeSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
-            columnName: 'Jumlah', value: jumlah == 0 ? '-' : jumlah.toString()),
+            columnName: 'Jml', value: jumlah == 0 ? '-' : jumlah.toString()),
         DataGridCell<String>(
-            columnName: 'HSO - SRD',
+            columnName: 'SRD',
             value: data.srd == 0 ? '-' : data.srd.toString()),
         DataGridCell<String>(
-            columnName: 'HSO - MKS',
+            columnName: 'MKS',
             value: data.mks == 0 ? '-' : data.mks.toString()),
         DataGridCell<String>(
-            columnName: 'HSO - PTK',
+            columnName: 'PTK',
             value: data.ptk == 0 ? '-' : data.ptk.toString()),
         DataGridCell<String>(
             columnName: 'BJM',
@@ -101,17 +101,14 @@ class DataDoHarianHomeSource extends DataGridSource {
       const DataGridCell<String>(columnName: 'Plant', value: 'TOTAL'),
       const DataGridCell<String>(columnName: 'Tujuan', value: null),
       DataGridCell<String>(
-          columnName: 'Jumlah',
+          columnName: 'Jml',
           value: totalJumlah == 0 ? '-' : totalJumlah.toString()),
       DataGridCell<String>(
-          columnName: 'HSO - SRD',
-          value: totalSrd == 0 ? '-' : totalSrd.toString()),
+          columnName: 'SRD', value: totalSrd == 0 ? '-' : totalSrd.toString()),
       DataGridCell<String>(
-          columnName: 'HSO - MKS',
-          value: totalMks == 0 ? '-' : totalMks.toString()),
+          columnName: 'MKS', value: totalMks == 0 ? '-' : totalMks.toString()),
       DataGridCell<String>(
-          columnName: 'HSO - PTK',
-          value: totalPtk == 0 ? '-' : totalPtk.toString()),
+          columnName: 'PTK', value: totalPtk == 0 ? '-' : totalPtk.toString()),
       DataGridCell<String>(
           columnName: 'BJM', value: totalBjm == 0 ? '-' : totalBjm.toString()),
     ]));
@@ -134,15 +131,15 @@ class DataDoHarianHomeSource extends DataGridSource {
       cells: row.getCells().map<Widget>((e) {
         Color cellColor = Colors.transparent;
 
-        if (isTotalRow && e.columnName == 'Jumlah') {
+        if (isTotalRow && e.columnName == 'Jml') {
           cellColor = Colors.blue;
         } else if (isTotalRow &&
-            (e.columnName == 'HSO - SRD' ||
-                e.columnName == 'HSO - MKS' ||
-                e.columnName == 'HSO - PTK' ||
+            (e.columnName == 'SRD' ||
+                e.columnName == 'MKS' ||
+                e.columnName == 'PTK' ||
                 e.columnName == 'BJM')) {
           cellColor = Colors.yellow;
-        } else if (e.columnName == 'Jumlah') {
+        } else if (e.columnName == 'Jml') {
           cellColor = AppColors.secondary;
         }
 

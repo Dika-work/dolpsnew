@@ -30,6 +30,10 @@ class RequestKendaraanController extends GetxController {
   int rolesLihat = 0;
   int rolesKirim = 0;
   int rolesEdit = 0;
+  String roleUser = '';
+  String rolePlant = '';
+
+  bool get isAdmin => roleUser == 'admin';
 
   RxList<RequestKendaraanModel> requestKendaraanModel =
       <RequestKendaraanModel>[].obs;
@@ -107,9 +111,11 @@ class RequestKendaraanController extends GetxController {
       rolesLihat = user.lihat;
       rolesKirim = user.kirim;
       rolesEdit = user.edit;
+      roleUser = user.tipe;
       print('ini roles lihat $rolesLihat');
       print('ini rolesKirim $rolesKirim');
       print('ini rolesEdit $rolesEdit');
+      print('ini roleUser $roleUser');
     }
 
     fetchRequestKendaraan();
@@ -135,7 +141,16 @@ class RequestKendaraanController extends GetxController {
     try {
       isRequestLoading.value = true;
       final requestKendaraan = await requestRepo.fetchTampilRequest();
-      requestKendaraanModel.assignAll(requestKendaraan);
+      if (requestKendaraan.isNotEmpty) {
+        if (isAdmin) {
+          requestKendaraanModel.assignAll(requestKendaraan);
+        } else {
+          requestKendaraanModel.assignAll(
+              requestKendaraan.where((e) => e.plant == rolePlant).toList());
+        }
+      } else {
+        requestKendaraanModel.assignAll([]);
+      }
     } catch (e) {
       print('Error fetching request tampil kendaraan : $e');
       throw Exception('Gagal saat mengambil data request kendaraan');

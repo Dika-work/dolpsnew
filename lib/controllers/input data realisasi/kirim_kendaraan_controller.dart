@@ -1,18 +1,21 @@
-import 'package:doplsnew/controllers/input%20data%20realisasi/fetch_kendaraan_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20realisasi/fetch_sopir_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20realisasi/plot_kendaraan_controller.dart';
-import 'package:doplsnew/controllers/input%20data%20realisasi/request_kendaraan_controller.dart';
 import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/kirim_kendaraan_model.dart';
+import '../../models/user_model.dart';
 import '../../repository/input data realisasi/kirim_kendaraan_repo.dart';
+import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/dialogs.dart';
+import 'fetch_kendaraan_controller.dart';
+import 'fetch_sopir_controller.dart';
+import 'plot_kendaraan_controller.dart';
+import 'request_kendaraan_controller.dart';
 
 class KirimKendaraanController extends GetxController {
   final isLoadingKendaraan = Rx<bool>(false);
+  final storageUtil = StorageUtil();
   RxList<KirimKendaraanModel> kirimKendaraanModel = <KirimKendaraanModel>[].obs;
   final kirimKendaraanRepo = Get.put(KirimKendaraanRepository());
   final jumlahPlotKendaraan = Get.put(PlotKendaraanController());
@@ -25,6 +28,7 @@ class KirimKendaraanController extends GetxController {
 
   RxString selectedPlant = '1300'.obs;
   RxString selectedTujuan = 'Cibitung'.obs;
+  String roleUser = '';
 
   final Map<String, String> tujuanMap = {
     '1100': 'Sunter',
@@ -35,6 +39,16 @@ class KirimKendaraanController extends GetxController {
     '1800': 'Dawuan',
     '1900': 'Bekasi'
   };
+
+  @override
+  void onInit() {
+    UserModel? user = storageUtil.getUserDetails();
+    if (user != null) {
+      roleUser = user.tipe;
+      print("User Role: $roleUser");
+    }
+    super.onInit();
+  }
 
   Future<void> fetchDataKirimKendaraan(
       int type, String plant, int idReq) async {

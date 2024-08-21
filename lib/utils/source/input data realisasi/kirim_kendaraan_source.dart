@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/kirim_kendaraan_controller.dart';
@@ -50,25 +51,39 @@ class KirimKendaraanSource extends DataGridSource {
             },
           ),
           // Action cells hapus
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (onDelete != null && kirimKendaraanModel.isNotEmpty) {
-                      onDelete!(kirimKendaraanModel[startIndex + rowIndex]);
-                    } else {
-                      return;
-                    }
-                  },
-                  child: const Text('Hapus'),
+          controller.kirimKendaraanModel.isNotEmpty
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 60,
+                      width: 100,
+                      child: InkWell(
+                        onTap: () {
+                          if (onDelete != null &&
+                              kirimKendaraanModel.isNotEmpty) {
+                            onDelete!(
+                                kirimKendaraanModel[startIndex + rowIndex]);
+                          } else {
+                            return;
+                          }
+                        },
+                        child: const Icon(Iconsax.trash),
+                      ),
+                    )
+                  ],
+                )
+              : Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: CustomSize.md),
+                    child: const Text(
+                      '-',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
-              )
-            ],
-          ),
         ]);
   }
 

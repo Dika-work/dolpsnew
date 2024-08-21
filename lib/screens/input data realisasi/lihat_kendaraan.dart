@@ -5,23 +5,25 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/lihat_kendaraan_controller.dart';
-import '../../controllers/input data realisasi/plot_kendaraan_controller.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../utils/source/input data realisasi/lihat_kendaraan_source.dart';
 
 class LihatKendaraanScreen extends StatelessWidget {
-  const LihatKendaraanScreen(
-      {super.key,
-      required this.model,
-      required this.controller,
-      required this.plotKendaraanController});
+  const LihatKendaraanScreen({super.key, required this.model});
 
   final RequestKendaraanModel model;
-  final LihatKendaraanController controller;
-  final PlotKendaraanController plotKendaraanController;
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LihatKendaraanController());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchLihatKendaraan(
+        model.type,
+        model.plant,
+        model.idReq,
+      );
+    });
+
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'No Kendaraan': 150,
@@ -150,20 +152,15 @@ class LihatKendaraanScreen extends StatelessWidget {
                       ],
                     )),
           actions: [
-            TextButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: const Text('Close'),
-            ),
-            if (plotKendaraanController.isJumlahKendaraanSama.value)
-              TextButton(
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
                 onPressed: () {
-                  print(
-                      '..INI SAVE LOGIC PADA LIHAT DETAIL REQUEST KENDARAAN..');
+                  Get.back();
                 },
-                child: const Text('Save'),
+                child: const Text('Close'),
               ),
+            ),
           ],
         );
       },
