@@ -28,8 +28,8 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
-      'Edit': 150,
-      'Hapus': 150,
+      if (controller.rolesEdit == 1) 'Edit': 150,
+      if (controller.rolesHapus == 1) 'Hapus': 150,
     };
 
     const int rowsPerPage = 7;
@@ -75,6 +75,196 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
                     print('ini deleted btn');
                   },
                 );
+
+          List<GridColumn> column = [
+            GridColumn(
+              width: columnWidths['No']!,
+              columnName: 'No',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'No',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            GridColumn(
+              width: columnWidths['Plant']!,
+              columnName: 'Plant',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'Plant',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            GridColumn(
+              width: columnWidths['Tujuan']!,
+              columnName: 'Tujuan',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'Tujuan',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            GridColumn(
+              width: columnWidths['Tanggal']!,
+              columnName: 'Tanggal',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'Tanggal',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            GridColumn(
+              width: columnWidths['HSO - SRD']!,
+              columnName: 'HSO - SRD',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'HSO - SRD',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            GridColumn(
+              width: columnWidths['HSO - MKS']!,
+              columnName: 'HSO - MKS',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'HSO - MKS',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            GridColumn(
+              width: columnWidths['HSO - PTK']!,
+              columnName: 'HSO - PTK',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'HSO - PTK',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            GridColumn(
+              width: columnWidths['BJM']!,
+              columnName: 'BJM',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'BJM',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ];
+
+          if (controller.rolesEdit == 1) {
+            column.add(GridColumn(
+              width: columnWidths['Edit']!,
+              columnName: 'Edit',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'Edit',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ));
+          }
+
+          if (controller.rolesHapus == 1) {
+            column.add(GridColumn(
+              width: columnWidths['Hapus']!,
+              columnName: 'Hapus',
+              label: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.lightBlue.shade100,
+                ),
+                child: Text(
+                  'Hapus',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ));
+          }
+
           return LayoutBuilder(
             builder: (context, constraint) {
               return Column(
@@ -86,188 +276,7 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
                     gridLinesVisibility: GridLinesVisibility.both,
                     headerGridLinesVisibility: GridLinesVisibility.both,
                     rowHeight: 65,
-                    columns: [
-                      GridColumn(
-                        width: columnWidths['No']!,
-                        columnName: 'No',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'No',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Plant']!,
-                        columnName: 'Plant',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Plant',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Tujuan']!,
-                        columnName: 'Tujuan',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Tujuan',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Tanggal']!,
-                        columnName: 'Tanggal',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Tanggal',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['HSO - SRD']!,
-                        columnName: 'HSO - SRD',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'HSO - SRD',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['HSO - MKS']!,
-                        columnName: 'HSO - MKS',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'HSO - MKS',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['HSO - PTK']!,
-                        columnName: 'HSO - PTK',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'HSO - PTK',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['BJM']!,
-                        columnName: 'BJM',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'BJM',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Edit']!,
-                        columnName: 'Edit',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Edit',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                      GridColumn(
-                        width: columnWidths['Hapus']!,
-                        columnName: 'Hapus',
-                        label: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            color: Colors.lightBlue.shade100,
-                          ),
-                          child: Text(
-                            'Hapus',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ],
+                    columns: column,
                   )),
                   SfDataPager(
                     delegate: dataSource,

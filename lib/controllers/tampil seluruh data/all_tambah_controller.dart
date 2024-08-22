@@ -1,14 +1,27 @@
-import 'package:doplsnew/models/tampil%20seluruh%20data/do_tambah_all.dart';
-import 'package:doplsnew/repository/tampil%20seluruh%20data/tambah_all_repo.dart';
 import 'package:get/get.dart';
+
+import '../../models/tampil seluruh data/do_tambah_all.dart';
+import '../../models/user_model.dart';
+import '../../repository/tampil seluruh data/tambah_all_repo.dart';
+import '../../utils/constant/storage_util.dart';
 
 class DataAllTambahController extends GetxController {
   final isLoadingGlobalHarian = Rx<bool>(false);
   RxList<DoTambahAllModel> doGlobalHarianModel = <DoTambahAllModel>[].obs;
   final dataGlobalHarianRepo = Get.put(TambahAllRepository());
+  final storageUtil = StorageUtil();
+
+  // roles users
+  int rolesEdit = 0;
+  int rolesHapus = 0;
 
   @override
   void onInit() {
+    UserModel? user = storageUtil.getUserDetails();
+    if (user != null) {
+      rolesEdit = user.edit;
+      rolesHapus = user.hapus;
+    }
     fetchDataDoGlobal();
     super.onInit();
   }
