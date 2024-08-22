@@ -112,10 +112,16 @@ class RequestKendaraanController extends GetxController {
       rolesKirim = user.kirim;
       rolesEdit = user.edit;
       roleUser = user.tipe;
+      rolePlant = user.plant;
+
+      if (!isAdmin) {
+        plant.value = rolePlant;
+      }
       print('ini roles lihat $rolesLihat');
       print('ini rolesKirim $rolesKirim');
       print('ini rolesEdit $rolesEdit');
       print('ini roleUser $roleUser');
+      print('ini plant user yg milih $plant');
     }
 
     fetchRequestKendaraan();

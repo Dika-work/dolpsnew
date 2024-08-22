@@ -419,9 +419,17 @@ class AddDOTambahan extends StatelessWidget {
             Obx(
               () => DropDownWidget(
                 value: controller.plant.value,
-                items: controller.tujuanMap.keys.toList(),
-                onChanged: (String? value) {
-                  controller.plant.value = value!;
+                items: controller.isAdmin
+                    ? controller.idPlantMap.keys
+                        .toList() // Menampilkan semua plant jika admin
+                    : [
+                        controller.plant.value
+                      ], // Menampilkan plant spesifik untuk non-admin
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    controller.plant.value = newValue;
+                    print('ini value dari plant ${controller.plant.value}');
+                  }
                 },
               ),
             ),

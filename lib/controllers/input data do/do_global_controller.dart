@@ -25,6 +25,10 @@ class DataDOGlobalController extends GetxController {
   final plant = '1100'.obs;
   final idplant = '1'.obs;
   String namaUser = '';
+  String roleUser = '';
+  String rolePlant = '';
+
+  bool get isAdmin => roleUser == 'admin';
 
   // roles users
   int rolesEdit = 0;
@@ -69,6 +73,17 @@ class DataDOGlobalController extends GetxController {
       namaUser = user.nama;
       rolesEdit = user.edit;
       rolesHapus = user.hapus;
+      roleUser = user.tipe;
+      rolePlant = user.plant;
+
+      // nyesuain plant dengan tipe admin atau bukan
+      if (!isAdmin) {
+        plant.value = rolePlant;
+        idplant.value = idPlantMap[rolePlant] ?? '1';
+        tujuan.value = idPlantMap[plant.value] ?? '1';
+      } else {
+        idplant.value = idPlantMap[plant.value] ?? '1';
+      }
     }
     // mengubah idPlant berdasarkan plant yg dipilih
     ever(plant, (_) {

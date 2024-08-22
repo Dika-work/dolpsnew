@@ -31,6 +31,7 @@ class UserModel {
   int menu9;
   int menu10;
   String gambar;
+  String dealer;
   int online;
 
   UserModel({
@@ -66,6 +67,7 @@ class UserModel {
     required this.menu9,
     required this.menu10,
     required this.gambar,
+    required this.dealer,
     required this.online,
   });
 
@@ -103,6 +105,7 @@ class UserModel {
       menu9: json['menu9'] ?? 0,
       menu10: json['menu10'] ?? 0,
       gambar: json['gambar'] ?? '',
+      dealer: json['dealer'] ?? '',
       online: json['online'] ?? 0,
     );
   }
@@ -141,6 +144,7 @@ class UserModel {
       'menu9': menu9,
       'menu10': menu10,
       'gambar': gambar,
+      'dealer': dealer,
       'online': online,
     };
   }

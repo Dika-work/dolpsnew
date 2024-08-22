@@ -278,75 +278,90 @@ class CustomDrawer extends StatelessWidget {
                         textTitle: 'Honda',
                         content: Column(
                           children: [
-                            ListTile(
-                              onTap: () => Get.toNamed('/data-do-global'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Global',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/data-do-harian'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Harian',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Mutasi',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/data-do-tambahan'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Tambahan',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/data-do-pengurangan'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Pengurangan',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
+                            user.tipe == 'Pengurus Pabrik' &&
+                                    user.dealer == 'honda'
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/data-do-global'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Global',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.tipe == 'admin'
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/data-do-harian'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Harian',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.tipe == 'admin'
+                                ? ListTile(
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Mutasi',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.tipe == 'Pengurus Pabrik' &&
+                                    user.dealer == 'honda'
+                                ? ListTile(
+                                    onTap: () =>
+                                        Get.toNamed('/data-do-tambahan'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Tambahan',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.tipe == 'Pengurus Pabrik' &&
+                                    user.dealer == 'honda'
+                                ? ListTile(
+                                    onTap: () =>
+                                        Get.toNamed('/data-do-pengurangan'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Pengurangan',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
                           ],
                         )),
                   )
@@ -374,34 +389,38 @@ class CustomDrawer extends StatelessWidget {
                                     ?.copyWith(color: AppColors.light),
                               ),
                             ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/do-reguler'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Reguler',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/do-mutasi'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Mutasi',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
+                            user.cekReguler == 1
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/do-reguler'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Reguler',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.cekMutasi == 1
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/do-mutasi'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Mutasi',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
                           ],
                         )),
                   )

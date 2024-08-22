@@ -33,6 +33,10 @@ class DataDoTambahanController extends GetxController {
   // roles users
   int rolesEdit = 0;
   int rolesHapus = 0;
+  String roleUser = '';
+  String rolePlant = '';
+
+  bool get isAdmin => roleUser == 'admin';
 
   final srdController = TextEditingController();
   final mksController = TextEditingController();
@@ -73,6 +77,16 @@ class DataDoTambahanController extends GetxController {
       namaUser = user.nama;
       rolesEdit = user.edit;
       rolesHapus = user.hapus;
+      roleUser = user.tipe;
+      rolePlant = user.plant;
+
+      if (!isAdmin) {
+        plant.value = rolePlant;
+        idplant.value = idPlantMap[rolePlant] ?? '1';
+        tujuan.value = idPlantMap[plant.value] ?? '1';
+      } else {
+        idplant.value = idPlantMap[plant.value] ?? '1';
+      }
     }
     // mengubah idPlant berdasarkan plant yg dipilih
     ever(plant, (_) {

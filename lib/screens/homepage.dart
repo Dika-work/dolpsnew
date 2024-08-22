@@ -26,7 +26,7 @@ class Homepage extends StatelessWidget {
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Plant': 80,
-      'Tujuan': double.nan,
+      'Tujuan': 120,
       'Jml': double.nan,
       'SRD': double.nan,
       'MKS': double.nan,

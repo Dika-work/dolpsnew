@@ -117,52 +117,60 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
             builder: (__, _) {
               return Column(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      CustomDialogs.defaultDialog(
-                          context: context,
-                          titleWidget: const Text('Input DO Global'),
-                          contentWidget: AddDOGlobal(
-                            controller: controller,
-                          ),
-                          onConfirm: () {
-                            if (controller.tgl.value.isEmpty) {
-                              SnackbarLoader.errorSnackBar(
-                                title: 'Gagal😪',
-                                message: 'Pastikan tanggal telah di isi 😁',
-                              );
-                            } else {
-                              controller.addDataDOGlobal();
-                            }
+                  controller.roleUser == 'admin' ||
+                          controller.roleUser == 'Pengurus Pabrik'
+                      ? GestureDetector(
+                          onTap: () {
+                            CustomDialogs.defaultDialog(
+                                context: context,
+                                titleWidget: const Text('Input DO Global'),
+                                contentWidget: AddDOGlobal(
+                                  controller: controller,
+                                ),
+                                onConfirm: () {
+                                  if (controller.tgl.value.isEmpty) {
+                                    SnackbarLoader.errorSnackBar(
+                                      title: 'Gagal😪',
+                                      message:
+                                          'Pastikan tanggal telah di isi 😁',
+                                    );
+                                  } else {
+                                    controller.addDataDOGlobal();
+                                  }
+                                },
+                                onCancel: () {
+                                  Get.back();
+                                  controller.tgl.value = '';
+                                  controller.plant.value = '1100';
+                                  controller.tujuan.value = '1';
+                                  controller.srdController.clear();
+                                  controller.mksController.clear();
+                                  controller.ptkController.clear();
+                                  controller.bjmController.clear();
+                                },
+                                cancelText: 'Close',
+                                confirmText: 'Tambahkan');
                           },
-                          onCancel: () {
-                            Get.back();
-                            controller.tgl.value = '';
-                            controller.plant.value = '1100';
-                            controller.tujuan.value = '1';
-                            controller.srdController.clear();
-                            controller.mksController.clear();
-                            controller.ptkController.clear();
-                            controller.bjmController.clear();
-                          },
-                          cancelText: 'Close',
-                          confirmText: 'Tambahkan');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const IconButton(
-                            onPressed: null, icon: Icon(Iconsax.add_circle)),
-                        Padding(
-                          padding: const EdgeInsets.only(right: CustomSize.sm),
-                          child: Text(
-                            'Tambah data',
-                            style: Theme.of(context).textTheme.headlineMedium,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const IconButton(
+                                  onPressed: null,
+                                  icon: Icon(Iconsax.add_circle)),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: CustomSize.sm),
+                                child: Text(
+                                  'Tambah data',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
+                                ),
+                              )
+                            ],
                           ),
                         )
-                      ],
-                    ),
-                  ),
+                      : const SizedBox.shrink(),
                   Expanded(
                     child: SfDataGrid(
                       source: dataSource,
@@ -422,10 +430,17 @@ class AddDOGlobal extends StatelessWidget {
             Obx(
               () => DropDownWidget(
                 value: controller.plant.value,
-                items: controller.tujuanMap.keys.toList(),
-                onChanged: (String? value) {
-                  print('Selected plant: $value');
-                  controller.plant.value = value!;
+                items: controller.isAdmin
+                    ? controller.idPlantMap.keys
+                        .toList() // Menampilkan semua plant jika admin
+                    : [
+                        controller.plant.value
+                      ], // Menampilkan plant spesifik untuk non-admin
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    controller.plant.value = newValue;
+                    print('ini value dari plant ${controller.plant.value}');
+                  }
                 },
               ),
             ),

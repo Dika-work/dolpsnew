@@ -503,13 +503,17 @@ class AddRequestKendaraan extends StatelessWidget {
             const Text('Type DO'),
             Obx(
               () => DropDownWidget(
-                value: controller.typeDO.value,
-                items: controller.typeDOMap.keys.toList(),
+                value: controller.plant.value,
+                items: controller.isAdmin
+                    ? controller
+                        .regulerPlants // Menampilkan semua plant jika admin
+                    : [
+                        controller.plant.value
+                      ], // Menampilkan plant spesifik untuk non-admin
                 onChanged: (String? newValue) {
                   if (newValue != null) {
-                    controller.typeDO.value = newValue;
-                    print(
-                        'ini value dari typeDO ${controller.typeDOValue.value}');
+                    controller.plant.value = newValue;
+                    print('ini value dari plant ${controller.plant.value}');
                   }
                 },
               ),
