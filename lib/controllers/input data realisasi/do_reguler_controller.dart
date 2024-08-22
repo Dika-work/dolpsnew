@@ -36,6 +36,7 @@ class DoRegulerController extends GetxController {
       namaUser = user.nama;
       roleUser = user.tipe;
       rolesLihat = user.lihat;
+      rolePlant = user.plant;
       rolesBatal = user.batal;
       rolesEdit = user.edit;
       rolesJumlah = user.jumlah;
@@ -46,6 +47,7 @@ class DoRegulerController extends GetxController {
     print("rolesEdit: $rolesEdit");
     print("rolesJumlah: $rolesJumlah");
     print("roleUser: $roleUser");
+    print("rolePlant reguler user: $rolePlant");
 
     fetchRegulerContent();
   }

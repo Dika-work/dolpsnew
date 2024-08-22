@@ -12,6 +12,9 @@ class DoMutasiController extends GetxController {
   RxList<DoRealisasiModel> doRealisasiModel = <DoRealisasiModel>[].obs;
   final doMutasiRepo = Get.put(DoMutasiRepository());
 
+  String rolePlant = '';
+  String roleUser = '';
+
   // roles users
   int rolesLihat = 0;
   int rolesBatal = 0;
@@ -19,6 +22,7 @@ class DoMutasiController extends GetxController {
   int rolesJumlah = 0;
 
   final storageUtil = StorageUtil();
+  bool get isAdmin => roleUser == 'admin';
 
   @override
   void onInit() {
@@ -29,6 +33,8 @@ class DoMutasiController extends GetxController {
       rolesBatal = user.batal;
       rolesEdit = user.edit;
       rolesJumlah = user.jumlah;
+      roleUser = user.tipe;
+      rolePlant = user.plant;
     }
     fetchMutasiContent();
   }
@@ -37,7 +43,16 @@ class DoMutasiController extends GetxController {
     try {
       isLoadingMutasi.value = true;
       final getMutasiDo = await doMutasiRepo.fetchDoMutasiData();
-      doRealisasiModel.assignAll(getMutasiDo);
+      if (getMutasiDo.isNotEmpty) {
+        if (isAdmin) {
+          doRealisasiModel.assignAll(getMutasiDo);
+        } else {
+          doRealisasiModel.assignAll(
+              getMutasiDo.where((item) => item.plant == rolePlant).toList());
+        }
+      } else {
+        doRealisasiModel.assignAll([]);
+      }
     } catch (e) {
       print('Error while fetching data do Mutasi: $e');
       doRealisasiModel.assignAll([]);

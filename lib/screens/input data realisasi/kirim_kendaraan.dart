@@ -90,7 +90,8 @@ class KirimKendaraanScreen extends StatelessWidget {
             final rowCount = controller.kirimKendaraanModel.length;
             final int rowsPerPage =
                 rowCount < numberOfRows ? rowCount : numberOfRows;
-            final double tableHeight = rowsPerPage * rowHeight + headerHeight;
+            final double tableHeight =
+                rowCount > 0 ? rowsPerPage * rowHeight + headerHeight : 130;
 
             return LayoutBuilder(
               builder: (context, constraints) {
@@ -252,13 +253,13 @@ class KirimKendaraanScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Center(
-                      child: SfDataPager(
-                        delegate: dataSource,
-                        pageCount: (rowCount / numberOfRows).ceilToDouble(),
-                        direction: Axis.horizontal,
-                      ),
-                    ),
+                    rowCount > 0
+                        ? SfDataPager(
+                            delegate: dataSource,
+                            pageCount: (rowCount / numberOfRows).ceilToDouble(),
+                            direction: Axis.horizontal,
+                          )
+                        : const SizedBox.shrink(),
                     const Divider(height: CustomSize.dividerHeight),
                     Padding(
                       padding: const EdgeInsets.symmetric(

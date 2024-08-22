@@ -26,7 +26,8 @@ class DoMutasiSource extends DataGridSource {
     required this.doRealisasiModel,
     int startIndex = 0,
   }) {
-    _updateDataPager(doRealisasiModel, startIndex);
+    _updateDataPager(
+        doRealisasiModel, startIndex, controller.rolePlant, controller.isAdmin);
   }
 
   List<DataGridRow> _doMutasiData = [];
@@ -261,15 +262,40 @@ class DoMutasiSource extends DataGridSource {
   }
 
   void _updateDataPager(
-      List<DoRealisasiModel> doRealisasiModel, int startIndex) {
+    List<DoRealisasiModel> doRealisasiModel,
+    int startIndex,
+    String userPlant,
+    bool isAdmin,
+  ) {
     this.startIndex = startIndex;
     index = startIndex;
+
+    final List<int> validPlants = [
+      1100,
+      1200,
+      1300,
+      1350,
+      1700,
+      1800,
+      1900,
+    ];
+
+    final filteredPlants = isAdmin
+        ? validPlants // Jika admin, tampilkan semua plant
+        : validPlants.where((plant) => plant.toString() == userPlant).toList();
+
+    print("doRealisasiModel mutasi: $doRealisasiModel");
+    print("filteredPlants mutasi: $filteredPlants");
 
     if (doRealisasiModel.isEmpty) {
       _doMutasiData = _generateEmptyRows(1);
     } else {
-      _doMutasiData =
-          doRealisasiModel.skip(startIndex).take(10).map<DataGridRow>(
+      _doMutasiData = doRealisasiModel
+          .where(
+              (item) => filteredPlants.contains(int.tryParse(item.plant) ?? 0))
+          .skip(startIndex)
+          .take(10)
+          .map<DataGridRow>(
         (data) {
           index++;
           final tglParsed =
@@ -309,7 +335,6 @@ class DoMutasiSource extends DataGridSource {
             cells.add(
                 const DataGridCell<String>(columnName: 'Edit', value: 'Edit'));
           }
-
           return DataGridRow(cells: cells);
         },
       ).toList();
@@ -319,8 +344,8 @@ class DoMutasiSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
-    _updateDataPager(controller.doRealisasiModel, startIndex);
+    _updateDataPager(controller.doRealisasiModel, newPageIndex,
+        controller.rolePlant, controller.isAdmin);
     notifyListeners();
     return true;
   }
