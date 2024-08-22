@@ -100,10 +100,19 @@ class DataDOKurangController extends GetxController {
     try {
       isLoadingKurang.value = true;
       final dataKurang = await dataKurangRepo.fetchDataKurangContent();
-      doKurangModel.assignAll(dataKurang);
+      if (dataKurang.isNotEmpty) {
+        if (isAdmin) {
+          doKurangModel.assignAll(dataKurang);
+        } else {
+          doKurangModel.assignAll(
+              dataKurang.where((e) => e.plant == rolePlant).toList());
+        }
+      } else {
+        doKurangModel.assignAll([]);
+      }
     } catch (e) {
-      print('Error fetching data do harian : $e');
-      doKurangModel.assignAll([]);
+      print('Error fetching data do kurang : $e');
+      throw Exception('Gagal saat mengambil data do kurang');
     } finally {
       isLoadingKurang.value = false;
     }

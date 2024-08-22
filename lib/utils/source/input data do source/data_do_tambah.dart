@@ -19,7 +19,8 @@ class DataDoTambahSource extends DataGridSource {
     required this.doTambah,
     int startIndex = 0,
   }) {
-    _updateDataPager(doTambah, startIndex);
+    _updateDataPager(
+        doTambah, startIndex, controller.rolePlant, controller.isAdmin);
   }
 
   List<DataGridRow> _doTambahData = [];
@@ -102,38 +103,60 @@ class DataDoTambahSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoTambahModel> doTambah, int startIndex) {
+  void _updateDataPager(List<DoTambahModel> doTambah, int startIndex,
+      String userPlant, bool isAdmin) {
     this.startIndex = startIndex;
     index = startIndex;
-    _doTambahData = doTambah.skip(startIndex).take(7).map<DataGridRow>((data) {
-      index++;
-      final tglParsed =
-          CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
-      return DataGridRow(cells: [
-        DataGridCell<int>(columnName: 'No', value: index),
-        DataGridCell<String>(columnName: 'Plant', value: data.plant),
-        DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
-        DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
-        DataGridCell<String>(
-            columnName: 'HSO - SRD',
-            value: data.srd == 0 ? '-' : data.srd.toString()),
-        DataGridCell<String>(
-            columnName: 'HSO - MKS',
-            value: data.mks == 0 ? '-' : data.mks.toString()),
-        DataGridCell<String>(
-            columnName: 'HSO - PTK',
-            value: data.ptk == 0 ? '-' : data.ptk.toString()),
-        DataGridCell<String>(
-            columnName: 'BJM',
-            value: data.bjm == 0 ? '-' : data.bjm.toString()),
-      ]);
-    }).toList();
+
+    final List<int> validPlants = [
+      1100,
+      1200,
+      1300,
+      1350,
+      1700,
+      1800,
+      1900,
+    ];
+
+    final filteredPlants = isAdmin
+        ? validPlants // Jika admin, tampilkan semua plant
+        : validPlants.where((plant) => plant.toString() == userPlant).toList();
+
+    _doTambahData = doTambah
+        .where((item) => filteredPlants.contains(int.tryParse(item.plant) ?? 0))
+        .skip(startIndex)
+        .take(7)
+        .map<DataGridRow>(
+      (data) {
+        index++;
+        final tglParsed =
+            CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
+        return DataGridRow(cells: [
+          DataGridCell<int>(columnName: 'No', value: index),
+          DataGridCell<String>(columnName: 'Plant', value: data.plant),
+          DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
+          DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
+          DataGridCell<String>(
+              columnName: 'HSO - SRD',
+              value: data.srd == 0 ? '-' : data.srd.toString()),
+          DataGridCell<String>(
+              columnName: 'HSO - MKS',
+              value: data.mks == 0 ? '-' : data.mks.toString()),
+          DataGridCell<String>(
+              columnName: 'HSO - PTK',
+              value: data.ptk == 0 ? '-' : data.ptk.toString()),
+          DataGridCell<String>(
+              columnName: 'BJM',
+              value: data.bjm == 0 ? '-' : data.bjm.toString()),
+        ]);
+      },
+    ).toList();
   }
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 7;
-    _updateDataPager(controller.doTambahModel, startIndex);
+    _updateDataPager(controller.doTambahModel, newPageIndex,
+        controller.rolePlant, controller.isAdmin);
     notifyListeners();
     return true;
   }

@@ -75,7 +75,6 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
                   },
                   onCancel: () {
                     Get.back();
-                    controller.tgl.value = '';
                     controller.plant.value = '1100';
                     controller.tujuan.value = '1';
                     controller.srdController.clear();
@@ -140,7 +139,6 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
                                 },
                                 onCancel: () {
                                   Get.back();
-                                  controller.tgl.value = '';
                                   controller.plant.value = '1100';
                                   controller.tujuan.value = '1';
                                   controller.srdController.clear();

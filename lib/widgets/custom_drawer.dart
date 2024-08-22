@@ -169,20 +169,22 @@ class CustomDrawer extends StatelessWidget {
                                     ?.copyWith(color: AppColors.light),
                               ),
                             ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/all-do-harian'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Harian LPS',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
+                            user.tipe == 'admin'
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/all-do-harian'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Harian LPS',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
                             ListTile(
                               onTap: () => Get.toNamed('/all-do-tambah'),
                               leading: const Icon(
@@ -237,34 +239,38 @@ class CustomDrawer extends StatelessWidget {
                                     ?.copyWith(color: AppColors.light),
                               ),
                             ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/all-do-reguler'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Reguler',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/all-do-mutasi'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Mutasi',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
+                            user.cekReguler == 1
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/all-do-reguler'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Reguler',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.cekReguler == 1
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/all-do-mutasi'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Mutasi',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
                           ],
                         )),
                   )

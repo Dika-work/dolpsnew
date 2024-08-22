@@ -96,10 +96,19 @@ class DataDOGlobalController extends GetxController {
     try {
       isLoadingGlobal.value = true;
       final dataGlobal = await dataGlobalRepo.fetchDataGlobalContent();
-      doGlobalModel.assignAll(dataGlobal);
+      if (dataGlobal.isNotEmpty) {
+        if (isAdmin) {
+          doGlobalModel.assignAll(dataGlobal);
+        } else {
+          doGlobalModel.assignAll(
+              dataGlobal.where((e) => e.plant == rolePlant).toList());
+        }
+      } else {
+        doGlobalModel.assignAll([]);
+      }
     } catch (e) {
       print('Error fetching data do Global : $e');
-      doGlobalModel.assignAll([]);
+      throw Exception('Gagal saat mengambil data do global');
     } finally {
       isLoadingGlobal.value = false;
     }

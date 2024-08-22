@@ -99,10 +99,19 @@ class DataDoTambahanController extends GetxController {
     try {
       isLoadingTambah.value = true;
       final dataTambah = await dataTambahRepo.fetchDataTambahContent();
-      doTambahModel.assignAll(dataTambah);
+      if (dataTambah.isNotEmpty) {
+        if (isAdmin) {
+          doTambahModel.assignAll(dataTambah);
+        } else {
+          doTambahModel.assignAll(
+              dataTambah.where((e) => e.plant == rolePlant).toList());
+        }
+      } else {
+        doTambahModel.assignAll([]);
+      }
     } catch (e) {
       print('Error fetching data do harian : $e');
-      doTambahModel.assignAll([]);
+      throw Exception('Gagal saat mengambil data do harian');
     } finally {
       isLoadingTambah.value = false;
     }
