@@ -1,10 +1,10 @@
-import 'package:doplsnew/utils/popups/dialogs.dart';
-import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/master data/type_motor_model.dart';
 import '../../repository/master data/type_motor_repo.dart';
+import '../../utils/popups/dialogs.dart';
+import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
 class TypeMotorController extends GetxController {

@@ -1,8 +1,8 @@
-import 'package:doplsnew/models/home/do_global_harian.dart';
-import 'package:doplsnew/repository/home/do_global_harian_repo.dart';
 import 'package:get/get.dart';
 
+import '../../models/home/do_global_harian.dart';
 import '../../models/user_model.dart';
+import '../../repository/home/do_global_harian_repo.dart';
 import '../../utils/constant/storage_util.dart';
 
 class DataDOGlobalHarianController extends GetxController {

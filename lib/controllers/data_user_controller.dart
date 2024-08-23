@@ -1,12 +1,12 @@
-import 'package:doplsnew/models/get_all_user_model.dart';
-import 'package:doplsnew/repository/data_user_repo.dart';
-import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/get_all_user_model.dart';
+import '../repository/data_user_repo.dart';
 import '../utils/popups/dialogs.dart';
+import '../utils/popups/full_screen_loader.dart';
 import '../utils/popups/snackbar.dart';
 
 class DataUserController extends GetxController {

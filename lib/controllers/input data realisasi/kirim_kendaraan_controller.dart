@@ -1,4 +1,3 @@
-import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +7,7 @@ import '../../models/user_model.dart';
 import '../../repository/input data realisasi/kirim_kendaraan_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/dialogs.dart';
+import '../../utils/popups/full_screen_loader.dart';
 import 'fetch_kendaraan_controller.dart';
 import 'fetch_sopir_controller.dart';
 import 'plot_kendaraan_controller.dart';

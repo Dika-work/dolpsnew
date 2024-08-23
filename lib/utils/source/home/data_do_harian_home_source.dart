@@ -1,7 +1,9 @@
 import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../controllers/home/do_harian_home_controller.dart';
 import '../../../models/home/do_harian_home.dart';
 import '../../theme/app_colors.dart';
 
@@ -32,6 +34,7 @@ class DataDoHarianHomeSource extends DataGridSource {
     required String userPlant,
     required bool isAdmin,
   }) {
+    final controller = Get.put(DataDOHarianHomeController());
     // Filter plants berdasarkan role user
     final filteredPlants = isAdmin
         ? validPlants // Jika admin, tampilkan semua plant
@@ -72,18 +75,22 @@ class DataDoHarianHomeSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
             columnName: 'Jml', value: jumlah == 0 ? '-' : jumlah.toString()),
-        DataGridCell<String>(
-            columnName: 'SRD',
-            value: data.srd == 0 ? '-' : data.srd.toString()),
-        DataGridCell<String>(
-            columnName: 'MKS',
-            value: data.mks == 0 ? '-' : data.mks.toString()),
-        DataGridCell<String>(
-            columnName: 'PTK',
-            value: data.ptk == 0 ? '-' : data.ptk.toString()),
-        DataGridCell<String>(
-            columnName: 'BJM',
-            value: data.bjm == 0 ? '-' : data.bjm.toString()),
+        if (controller.daerah == 1 || controller.daerah == 0)
+          DataGridCell<String>(
+              columnName: 'SRD',
+              value: data.srd == 0 ? '-' : data.srd.toString()),
+        if (controller.daerah == 2 || controller.daerah == 0)
+          DataGridCell<String>(
+              columnName: 'MKS',
+              value: data.mks == 0 ? '-' : data.mks.toString()),
+        if (controller.daerah == 3 || controller.daerah == 0)
+          DataGridCell<String>(
+              columnName: 'PTK',
+              value: data.ptk == 0 ? '-' : data.ptk.toString()),
+        if (controller.daerah == 4 || controller.daerah == 0)
+          DataGridCell<String>(
+              columnName: 'BJM',
+              value: data.bjm == 0 ? '-' : data.bjm.toString()),
       ]);
     }).toList();
 
@@ -125,36 +132,101 @@ class DataDoHarianHomeSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = doGlobalHarianModel.indexOf(row);
     bool isTotalRow = rowIndex == doGlobalHarianModel.length - 1;
+    final controller = Get.find<DataDOHarianHomeController>();
+
+    List<Widget> cells = [
+      ...row.getCells().take(8).map<Widget>(
+        (e) {
+          Color cellColor = Colors.transparent;
+
+          if (isTotalRow && e.columnName == 'Jml') {
+            cellColor = Colors.blue;
+          } else if (isTotalRow &&
+              (e.columnName == 'SRD' ||
+                  e.columnName == 'MKS' ||
+                  e.columnName == 'PTK' ||
+                  e.columnName == 'BJM')) {
+            cellColor = Colors.yellow;
+          } else if (e.columnName == 'Jml') {
+            cellColor = AppColors.secondary;
+          }
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            color: cellColor,
+            child: Text(
+              e.value?.toString() ?? '',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: isTotalRow ? FontWeight.bold : FontWeight.normal),
+            ),
+          );
+        },
+      ),
+    ];
+
+    if (controller.daerah == 1 || controller.daerah == 0) {
+      cells.add(Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        child: Text(
+          row
+              .getCells()
+              .firstWhere((cell) => cell.columnName == 'SRD')
+              .value
+              .toString(),
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
+
+    if (controller.daerah == 2 || controller.daerah == 0) {
+      cells.add(Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        child: Text(
+          row
+              .getCells()
+              .firstWhere((cell) => cell.columnName == 'MKS')
+              .value
+              .toString(),
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
+
+    if (controller.daerah == 3 || controller.daerah == 0) {
+      cells.add(Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        child: Text(
+          row
+              .getCells()
+              .firstWhere((cell) => cell.columnName == 'PTK')
+              .value
+              .toString(),
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
+
+    if (controller.daerah == 4 || controller.daerah == 0) {
+      cells.add(Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        child: Text(
+          row
+              .getCells()
+              .firstWhere((cell) => cell.columnName == 'BJM')
+              .value
+              .toString(),
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
 
     return DataGridRowAdapter(
-      color: rowIndex % 2 == 0 ? Colors.white : Colors.grey[200],
-      cells: row.getCells().map<Widget>((e) {
-        Color cellColor = Colors.transparent;
-
-        if (isTotalRow && e.columnName == 'Jml') {
-          cellColor = Colors.blue;
-        } else if (isTotalRow &&
-            (e.columnName == 'SRD' ||
-                e.columnName == 'MKS' ||
-                e.columnName == 'PTK' ||
-                e.columnName == 'BJM')) {
-          cellColor = Colors.yellow;
-        } else if (e.columnName == 'Jml') {
-          cellColor = AppColors.secondary;
-        }
-
-        return Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-          color: cellColor,
-          child: Text(
-            e.value?.toString() ?? '',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontWeight: isTotalRow ? FontWeight.bold : FontWeight.normal),
-          ),
-        );
-      }).toList(),
-    );
+        color: rowIndex % 2 == 0 ? Colors.white : Colors.grey[200],
+        cells: cells);
   }
 }

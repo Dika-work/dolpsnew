@@ -11,19 +11,18 @@ import 'package:iconsax/iconsax.dart';
 import 'expandable_container.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer(
-      {super.key,
-      required this.onItemTapped,
-      required this.selectedIndex,
-      required this.logout,
-      required this.closeDrawer,
-      this.user});
+  const CustomDrawer({
+    super.key,
+    required this.onItemTapped,
+    required this.selectedIndex,
+    required this.logout,
+    required this.closeDrawer,
+  });
 
   final Function(int) onItemTapped;
   final int selectedIndex;
   final Function logout;
   final void Function()? closeDrawer;
-  final dynamic user;
 
   @override
   Widget build(BuildContext context) {
@@ -185,60 +184,68 @@ class CustomDrawer extends StatelessWidget {
                                     ),
                                   )
                                 : const SizedBox.shrink(),
-                            ListTile(
-                              onTap: () => Get.toNamed('/all-do-tambah'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Tambahan',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              onTap: () => Get.toNamed('/all-do-kurang'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Pengurangan',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'DO Estimasi (Tentative)',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            ListTile(
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'Request Kendaraan',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
+                            user.tipe == 'admin'
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/all-do-tambah'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Tambahan',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.tipe == 'admin'
+                                ? ListTile(
+                                    onTap: () => Get.toNamed('/all-do-kurang'),
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Pengurangan',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.tipe == 'admin'
+                                ? ListTile(
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'DO Estimasi (Tentative)',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            user.tipe == 'admin'
+                                ? ListTile(
+                                    leading: const Icon(
+                                      Iconsax.record,
+                                      color: AppColors.darkExpandableContent,
+                                    ),
+                                    title: Text(
+                                      'Request Kendaraan',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(color: AppColors.light),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
                             user.cekReguler == 1
                                 ? ListTile(
                                     onTap: () => Get.toNamed('/all-do-reguler'),
@@ -376,74 +383,330 @@ class CustomDrawer extends StatelessWidget {
                 ? ExpandableContainer(
                     icon: Iconsax.add,
                     textTitle: 'Input Data Realisasi',
-                    content: ExpandableContainer(
-                        icon: FontAwesomeIcons.motorcycle,
-                        textTitle: 'Honda',
-                        content: Column(
-                          children: [
-                            ListTile(
-                              onTap: () => Get.toNamed('/request-mobil'),
-                              leading: const Icon(
-                                Iconsax.record,
-                                color: AppColors.darkExpandableContent,
-                              ),
-                              title: Text(
-                                'Request Mobil',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall
-                                    ?.copyWith(color: AppColors.light),
-                              ),
-                            ),
-                            user.cekReguler == 1
-                                ? ListTile(
-                                    onTap: () => Get.toNamed('/do-reguler'),
-                                    leading: const Icon(
-                                      Iconsax.record,
-                                      color: AppColors.darkExpandableContent,
-                                    ),
-                                    title: Text(
-                                      'DO Reguler',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(color: AppColors.light),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                            user.cekMutasi == 1
-                                ? ListTile(
-                                    onTap: () => Get.toNamed('/do-mutasi'),
-                                    leading: const Icon(
-                                      Iconsax.record,
-                                      color: AppColors.darkExpandableContent,
-                                    ),
-                                    title: Text(
-                                      'DO Mutasi',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(color: AppColors.light),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
-                          ],
-                        )),
+                    content: Column(
+                      children: [
+                        ExpandableContainer(
+                            icon: FontAwesomeIcons.motorcycle,
+                            textTitle: 'Honda',
+                            content: Column(
+                              children: [
+                                user.tipe == 'k.pool' || user.tipe == 'admin'
+                                    ? ListTile(
+                                        onTap: () =>
+                                            Get.toNamed('/request-mobil'),
+                                        leading: const Icon(
+                                          Iconsax.record,
+                                          color:
+                                              AppColors.darkExpandableContent,
+                                        ),
+                                        title: Text(
+                                          'Request Mobil',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.copyWith(
+                                                  color: AppColors.light),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                                user.cekReguler == 1
+                                    ? ListTile(
+                                        onTap: () => Get.toNamed('/do-reguler'),
+                                        leading: const Icon(
+                                          Iconsax.record,
+                                          color:
+                                              AppColors.darkExpandableContent,
+                                        ),
+                                        title: Text(
+                                          'DO Reguler',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.copyWith(
+                                                  color: AppColors.light),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                                user.cekMutasi == 1
+                                    ? ListTile(
+                                        onTap: () => Get.toNamed('/do-mutasi'),
+                                        leading: const Icon(
+                                          Iconsax.record,
+                                          color:
+                                              AppColors.darkExpandableContent,
+                                        ),
+                                        title: Text(
+                                          'DO Mutasi',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall
+                                              ?.copyWith(
+                                                  color: AppColors.light),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ],
+                            )),
+                        user.tipe == 'k.pool'
+                            ? ListTile(
+                                onTap: () => Get.toNamed(''),
+                                leading: const Icon(
+                                  Iconsax.record,
+                                  color: AppColors.darkExpandableContent,
+                                ),
+                                title: Text(
+                                  'Estimasi P M',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(color: AppColors.light),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        user.tipe == 'k.pool'
+                            ? ListTile(
+                                onTap: () => Get.toNamed(''),
+                                leading: const Icon(
+                                  Iconsax.record,
+                                  color: AppColors.darkExpandableContent,
+                                ),
+                                title: Text(
+                                  'Total Estimasi P M',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(color: AppColors.light),
+                                ),
+                              )
+                            : const SizedBox.shrink()
+                      ],
+                    ),
                   )
                 : const SizedBox.shrink(),
-            user.menu9 == 1
+            user.menu6 == 1 && user.tipe == 'admin' ||
+                    user.menu6 == 1 &&
+                        user.tipe == 'Pengurus Stuffing' &&
+                        user.dealer == '0'
                 ? ExpandableContainer(
                     icon: Iconsax.calendar,
                     textTitle: 'Laporan Honda',
                     content: Column(
                       children: [
-                        ExpandableContainer(
-                          icon: Iconsax.book,
-                          textTitle: 'DO Harian',
-                          onTap: () {},
-                        ),
-                        ExpandableContainer(
-                            icon: Iconsax.receipt,
+                        user.tipe == 'Pengurus Stuffing' || user.tipe == 'admin'
+                            ? ListTile(
+                                leading: const Icon(
+                                  Iconsax.record,
+                                  color: AppColors.darkExpandableContent,
+                                ),
+                                title: Text(
+                                  'DO Harian',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall
+                                      ?.copyWith(color: AppColors.light),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        user.tipe == 'admin'
+                            ? ExpandableContainer(
+                                icon: Iconsax.receipt,
+                                textTitle: 'DO Bulanan',
+                                content: Column(
+                                  children: [
+                                    ListTile(
+                                      leading: const Icon(
+                                        Iconsax.record,
+                                        color: AppColors.darkExpandableContent,
+                                      ),
+                                      title: Text(
+                                        'Samarinda',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(color: AppColors.light),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(
+                                        Iconsax.record,
+                                        color: AppColors.darkExpandableContent,
+                                      ),
+                                      title: Text(
+                                        'Jenis Motor',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(color: AppColors.light),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(
+                                        Iconsax.record,
+                                        color: AppColors.darkExpandableContent,
+                                      ),
+                                      title: Text(
+                                        'Realisasi',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(color: AppColors.light),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(
+                                        Iconsax.record,
+                                        color: AppColors.darkExpandableContent,
+                                      ),
+                                      title: Text(
+                                        'Mutasi',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(color: AppColors.light),
+                                      ),
+                                    ),
+                                    ExpandableContainer(
+                                        icon: Iconsax.box,
+                                        textTitle: 'Plant',
+                                        content: Column(
+                                          children: [
+                                            ListTile(
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                '',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                '',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                    ExpandableContainer(
+                                        icon: Iconsax.box,
+                                        textTitle: 'Total DO Harian',
+                                        content: Column(
+                                          children: [
+                                            ListTile(
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                '',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                '',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
+                                    ListTile(
+                                      leading: const Icon(
+                                        Iconsax.record,
+                                        color: AppColors.darkExpandableContent,
+                                      ),
+                                      title: Text(
+                                        'Dealer',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(color: AppColors.light),
+                                      ),
+                                    ),
+                                    ListTile(
+                                      leading: const Icon(
+                                        Iconsax.record,
+                                        color: AppColors.darkExpandableContent,
+                                      ),
+                                      title: Text(
+                                        'Estimasi',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(color: AppColors.light),
+                                      ),
+                                    ),
+                                  ],
+                                ))
+                            : const SizedBox.shrink(),
+                        user.tipe == 'admin'
+                            ? ExpandableContainer(
+                                icon: Iconsax.diagram,
+                                textTitle: 'Grafik',
+                                onTap: () {},
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                  )
+                : const SizedBox.shrink(),
+            user.menu9 == 1 && user.tipe == 'admin' ||
+                    user.menu9 == 1 && user.tipe == 'Pengurus Stuffing'
+                ? ExpandableContainer(
+                    icon: Iconsax.add,
+                    textTitle: 'Laporan YMH & Suzuki',
+                    content: ExpandableContainer(
+                      icon: Iconsax.record,
+                      textTitle: 'Yamaha & Suzuki',
+                      content: Column(
+                        children: [
+                          user.tipe == 'Pengurus Stuffing' ||
+                                  user.tipe == 'admin'
+                              ? ListTile(
+                                  leading: const Icon(
+                                    Iconsax.record,
+                                    color: AppColors.darkExpandableContent,
+                                  ),
+                                  title: Text(
+                                    'DO Harian',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(color: AppColors.light),
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                          ExpandableContainer(
+                            icon: Iconsax.record,
                             textTitle: 'DO Bulanan',
                             content: Column(
                               children: [
@@ -453,7 +716,7 @@ class CustomDrawer extends StatelessWidget {
                                     color: AppColors.darkExpandableContent,
                                   ),
                                   title: Text(
-                                    'Samarinda',
+                                    'Global',
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall
@@ -466,133 +729,7 @@ class CustomDrawer extends StatelessWidget {
                                     color: AppColors.darkExpandableContent,
                                   ),
                                   title: Text(
-                                    'Jenis Motor',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: AppColors.light),
-                                  ),
-                                ),
-                                ListTile(
-                                  leading: const Icon(
-                                    Iconsax.record,
-                                    color: AppColors.darkExpandableContent,
-                                  ),
-                                  title: Text(
-                                    'Realisasi',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: AppColors.light),
-                                  ),
-                                ),
-                                ListTile(
-                                  leading: const Icon(
-                                    Iconsax.record,
-                                    color: AppColors.darkExpandableContent,
-                                  ),
-                                  title: Text(
-                                    'Mutasi',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: AppColors.light),
-                                  ),
-                                ),
-                                ExpandableContainer(
-                                    icon: Iconsax.box,
-                                    textTitle: 'Plant',
-                                    content: Column(
-                                      children: [
-                                        ListTile(
-                                          leading: const Icon(
-                                            Iconsax.record,
-                                            color:
-                                                AppColors.darkExpandableContent,
-                                          ),
-                                          title: Text(
-                                            '',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall
-                                                ?.copyWith(
-                                                    color: AppColors.light),
-                                          ),
-                                        ),
-                                        ListTile(
-                                          leading: const Icon(
-                                            Iconsax.record,
-                                            color:
-                                                AppColors.darkExpandableContent,
-                                          ),
-                                          title: Text(
-                                            '',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall
-                                                ?.copyWith(
-                                                    color: AppColors.light),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                                ExpandableContainer(
-                                    icon: Iconsax.box,
-                                    textTitle: 'Total DO Harian',
-                                    content: Column(
-                                      children: [
-                                        ListTile(
-                                          leading: const Icon(
-                                            Iconsax.record,
-                                            color:
-                                                AppColors.darkExpandableContent,
-                                          ),
-                                          title: Text(
-                                            '',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall
-                                                ?.copyWith(
-                                                    color: AppColors.light),
-                                          ),
-                                        ),
-                                        ListTile(
-                                          leading: const Icon(
-                                            Iconsax.record,
-                                            color:
-                                                AppColors.darkExpandableContent,
-                                          ),
-                                          title: Text(
-                                            '',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleSmall
-                                                ?.copyWith(
-                                                    color: AppColors.light),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                                ListTile(
-                                  leading: const Icon(
-                                    Iconsax.record,
-                                    color: AppColors.darkExpandableContent,
-                                  ),
-                                  title: Text(
-                                    'Dealer',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: AppColors.light),
-                                  ),
-                                ),
-                                ListTile(
-                                  leading: const Icon(
-                                    Iconsax.record,
-                                    color: AppColors.darkExpandableContent,
-                                  ),
-                                  title: Text(
-                                    'Estimasi',
+                                    'Daerah',
                                     style: Theme.of(context)
                                         .textTheme
                                         .titleSmall
@@ -600,13 +737,23 @@ class CustomDrawer extends StatelessWidget {
                                   ),
                                 ),
                               ],
-                            )),
-                        ExpandableContainer(
-                          icon: Iconsax.diagram,
-                          textTitle: 'Grafik',
-                          onTap: () {},
-                        ),
-                      ],
+                            ),
+                          ),
+                          ListTile(
+                            leading: const Icon(
+                              Iconsax.record,
+                              color: AppColors.darkExpandableContent,
+                            ),
+                            title: Text(
+                              'DO Tahunan',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(color: AppColors.light),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   )
                 : const SizedBox.shrink(),

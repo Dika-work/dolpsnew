@@ -1,4 +1,3 @@
-import 'package:doplsnew/controllers/home/do_harian_home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -12,6 +11,7 @@ import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../home/do_harian_home_bsk_controller.dart';
+import '../home/do_harian_home_controller.dart';
 
 class DataDoTambahanController extends GetxController {
   final storageUtil = StorageUtil();

@@ -1,11 +1,11 @@
 import 'package:doplsnew/utils/popups/dialogs.dart';
-import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../models/user_model.dart';
 import '../../repository/input data realisasi/do_reguler_repo.dart';
 import '../../utils/constant/storage_util.dart';
+import '../../utils/popups/full_screen_loader.dart';
 import 'do_mutasi_controller.dart';
 
 class DoRegulerController extends GetxController {

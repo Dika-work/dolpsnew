@@ -2,7 +2,10 @@ import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../constant/storage_util.dart';
+
 class EmptyDataSource extends DataGridSource {
+  final storageUtil = StorageUtil();
   final List<int> validPlants = [1100, 1200, 1300, 1350, 1700, 1800, 1900];
   final List<String> validTujuans = [
     'Sunter',
@@ -15,11 +18,12 @@ class EmptyDataSource extends DataGridSource {
   ];
 
   List<Map<String, dynamic>> data = [];
+  final user;
 
   EmptyDataSource({
     required bool isAdmin,
     required String userPlant,
-  }) {
+  }) : user = StorageUtil().getUserDetails() {
     // Jika admin, tampilkan semua plant, jika tidak, filter berdasarkan plant user
     final filteredPlants = isAdmin
         ? validPlants
@@ -28,35 +32,53 @@ class EmptyDataSource extends DataGridSource {
     // Tambahkan data placeholder untuk admin
     for (int i = 0; i < filteredPlants.length; i++) {
       int plant = filteredPlants[i];
-      data.add({
+      Map<String, dynamic> rowData = {
         'No': i + 1,
         'Plant': plant,
         'Tujuan': validTujuans[validPlants.indexOf(plant)],
         'Jumlah': '-',
-        'HSO - SRD': '-',
-        'HSO - MKS': '-',
-        'HSO - PTK': '-',
-        'BJM': '-',
-      });
+      };
+
+      if (user.wilayah == 1 || user.wilayah == 0) rowData['HSO - SRD'] = '-';
+      if (user.wilayah == 2 || user.wilayah == 0) rowData['HSO - MKS'] = '-';
+      if (user.wilayah == 3 || user.wilayah == 0) rowData['HSO - PTK'] = '-';
+      if (user.wilayah == 4 || user.wilayah == 0) rowData['BJM'] = '-';
+
+      data.add(rowData);
     }
   }
 
   @override
-  List<DataGridRow> get rows => data
-      .map((data) => DataGridRow(cells: [
-            DataGridCell<int>(columnName: 'No', value: data['No']),
-            DataGridCell<int>(columnName: 'Plant', value: data['Plant']),
-            DataGridCell<String>(columnName: 'Tujuan', value: data['Tujuan']),
-            DataGridCell<String>(columnName: 'Jumlah', value: data['Jumlah']),
-            DataGridCell<String>(
-                columnName: 'HSO - SRD', value: data['HSO - SRD']),
-            DataGridCell<String>(
-                columnName: 'HSO - MKS', value: data['HSO - MKS']),
-            DataGridCell<String>(
-                columnName: 'HSO - PTK', value: data['HSO - PTK']),
-            DataGridCell<String>(columnName: 'BJM', value: data['BJM']),
-          ]))
-      .toList();
+  List<DataGridRow> get rows => data.map((data) {
+        List<DataGridCell> cells = [
+          DataGridCell<int>(columnName: 'No', value: data['No']),
+          DataGridCell<int>(columnName: 'Plant', value: data['Plant']),
+          DataGridCell<String>(columnName: 'Tujuan', value: data['Tujuan']),
+          DataGridCell<String>(columnName: 'Jumlah', value: data['Jumlah']),
+        ];
+
+        if (user.wilayah == 1 || user.wilayah == 0) {
+          cells.add(DataGridCell<String>(
+              columnName: 'HSO - SRD', value: data['HSO - SRD']));
+        }
+
+        if (user.wilayah == 2 || user.wilayah == 0) {
+          cells.add(DataGridCell<String>(
+              columnName: 'HSO - MKS', value: data['HSO - MKS']));
+        }
+
+        if (user.wilayah == 3 || user.wilayah == 0) {
+          cells.add(DataGridCell<String>(
+              columnName: 'HSO - PTK', value: data['HSO - PTK']));
+        }
+
+        if (user.wilayah == 4 || user.wilayah == 0) {
+          cells
+              .add(DataGridCell<String>(columnName: 'BJM', value: data['BJM']));
+        }
+
+        return DataGridRow(cells: cells);
+      }).toList();
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {

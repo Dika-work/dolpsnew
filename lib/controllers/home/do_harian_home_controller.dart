@@ -1,8 +1,8 @@
-import 'package:doplsnew/models/home/do_harian_home.dart';
-import 'package:doplsnew/repository/home/do_harian_home_repo.dart';
 import 'package:get/get.dart';
 
+import '../../models/home/do_harian_home.dart';
 import '../../models/user_model.dart';
+import '../../repository/home/do_harian_home_repo.dart';
 import '../../utils/constant/storage_util.dart';
 
 class DataDOHarianHomeController extends GetxController {
@@ -13,6 +13,7 @@ class DataDOHarianHomeController extends GetxController {
 
   String roleUser = '';
   String rolePlant = '';
+  int daerah = 0;
 
   @override
   void onInit() {
@@ -34,6 +35,7 @@ class DataDOHarianHomeController extends GetxController {
   }
 
   bool get isAdmin => roleUser == 'admin';
+  bool get isPengurusStaffing => roleUser == 'Pengurus Stuffing';
 
   Future<void> fetchDataDoGlobal() async {
     try {
@@ -45,7 +47,7 @@ class DataDOHarianHomeController extends GetxController {
       print("Data fetched: ${dataHarian.length} items");
 
       if (dataHarian.isNotEmpty) {
-        if (isAdmin) {
+        if (isAdmin || isPengurusStaffing) {
           doHarianHomeModel.assignAll(dataHarian);
         } else {
           doHarianHomeModel.assignAll(
@@ -69,7 +71,9 @@ class DataDOHarianHomeController extends GetxController {
     if (user != null) {
       roleUser = user.tipe;
       rolePlant = user.plant;
+      daerah = user.wilayah;
       print("User Role: $roleUser, Plant: $rolePlant");
+      print('..INI DAERAH USER YG LOGIN $daerah');
     }
   }
 

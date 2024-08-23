@@ -37,6 +37,12 @@ class DataUserScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.toNamed('/rootpage'),
         ),
+        actions: [
+          IconButton(
+              onPressed: () =>
+                  Get.to(() => AddUserData(controller: controller)),
+              icon: const Icon(Iconsax.add))
+        ],
       ),
       body: Obx(() {
         if (controller.isDataUserLoading.value &&
@@ -58,21 +64,6 @@ class DataUserScreen extends StatelessWidget {
               columnWidths[details.column.columnName] = details.width;
               return true;
             },
-            footer: Container(
-              color: AppColors.primary,
-              child: Center(
-                child: InkWell(
-                    onTap: () =>
-                        Get.to(() => AddUserData(controller: controller)),
-                    child: Text(
-                      'Tambahkan user baru',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium
-                          ?.apply(color: AppColors.light),
-                    )),
-              ),
-            ),
             allowEditing: true,
             editingGestureType: EditingGestureType.tap,
             selectionMode: SelectionMode.single,
