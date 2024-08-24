@@ -308,7 +308,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
-                          if (controller.rolesJumlah == 1)
+                          if (controller.rolesJumlah == 1 && controller.isAdmin)
                             GridColumn(
                                 width: columnWidths['Action']!,
                                 columnName: 'Action',

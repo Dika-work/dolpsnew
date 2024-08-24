@@ -305,6 +305,8 @@ class DoRegulerSource extends DataGridSource {
       cells.add(const SizedBox.shrink()); // Placeholder for Edit
     }
 
+    print('ini banyaknya cells: ${cells.length}');
+
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
       cells: cells,
