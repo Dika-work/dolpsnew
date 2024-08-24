@@ -483,10 +483,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   )
                 : const SizedBox.shrink(),
-            user.menu6 == 1 && user.tipe == 'admin' ||
-                    user.menu6 == 1 &&
-                        user.tipe == 'Pengurus Stuffing' &&
-                        user.dealer == '0'
+            user.menu6 == 1
                 ? ExpandableContainer(
                     icon: Iconsax.calendar,
                     textTitle: 'Laporan Honda',
@@ -679,8 +676,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   )
                 : const SizedBox.shrink(),
-            user.menu9 == 1 && user.tipe == 'admin' ||
-                    user.menu9 == 1 && user.tipe == 'Pengurus Stuffing'
+            user.menu9 == 1
                 ? ExpandableContainer(
                     icon: Iconsax.add,
                     textTitle: 'Laporan YMH & Suzuki',

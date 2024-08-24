@@ -347,7 +347,7 @@ class Homepage extends StatelessWidget {
               });
             },
           ),
-          user!.tipe == 'admin'
+          user!.tipe == 'admin' || user.tipe == 'KOL'
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: CustomSize.md),
                   child: Center(
@@ -371,7 +371,7 @@ class Homepage extends StatelessWidget {
                 )
               : const SizedBox.shrink(),
           // Tabel ketiga (menggunakan model dan controller yang berbeda)
-          user.tipe == 'admin'
+          user.tipe == 'admin' || user.tipe == 'KOL'
               ? LayoutBuilder(
                   builder: (context, constraints) {
                     return Obx(() {
@@ -579,7 +579,7 @@ class Homepage extends StatelessWidget {
                   },
                 )
               : const SizedBox.shrink(),
-          user.tipe == 'admin'
+          user.tipe == 'admin' || user.tipe == 'KOL'
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: CustomSize.md),
                   child: Center(
@@ -602,7 +602,7 @@ class Homepage extends StatelessWidget {
                   ),
                 )
               : const SizedBox.shrink(),
-          user.tipe == 'admin'
+          user.tipe == 'admin' || user.tipe == 'KOL'
               ? LayoutBuilder(
                   builder: (context, constraints) {
                     return Obx(() {
@@ -834,45 +834,7 @@ class Homepage extends StatelessWidget {
                         Text('asdasdasd'),
                       ],
                     ),
-                  )
-                  // child: Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  // RichText(
-                  //   text: TextSpan(
-                  //     text: 'ESTIMASI JENIS MOTOR\nSTUFFING ',
-                  //     style: Theme.of(context).textTheme.headlineSmall,
-                  //     children: [
-                  //       TextSpan(
-                  //         text: CustomHelperFunctions.getFormattedDate(
-                  //             DateTime.now()),
-                  //         style: Theme.of(context)
-                  //             .textTheme
-                  //             .headlineSmall
-                  //             ?.copyWith(
-                  //                 color: AppColors.error,
-                  //                 fontWeight: FontWeight.bold),
-                  //       )
-                  //     ],
-                  //   ),
-                  // ),
-                  //     Container(
-                  //       decoration: BoxDecoration(
-                  //           color: AppColors.primary,
-                  //           borderRadius:
-                  //               BorderRadius.circular(CustomSize.cardRadiusMd)),
-                  //       child: IconButton(
-                  //         onPressed: () => print(
-                  //             '..INI ESTIMASI JENIS MOTOR STUFFING UNTUK ROLE PAK ISMAIL..'),
-                  //         icon: const Icon(
-                  //           Iconsax.add,
-                  //           color: AppColors.white,
-                  //         ),
-                  //       ),
-                  //     )
-                  //   ],
-                  // ),
-                  )
+                  ))
               : const SizedBox.shrink(),
         ],
       ),
