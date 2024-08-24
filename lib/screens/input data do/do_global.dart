@@ -420,9 +420,6 @@ class AddDOGlobal extends StatelessWidget {
                 ),
               ),
             ),
-            Obx(
-              () => Text(controller.idplant.value),
-            ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plant'),
             Obx(
@@ -455,9 +452,6 @@ class AddDOGlobal extends StatelessWidget {
                     fillColor: AppColors.buttonDisabled),
               ),
             ),
-            Obx(() => Text('Tujuan ${controller.tujuanDisplayValue}')),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Obx(() => Text('Hari ini tgl : ${controller.tgl.value}')),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: controller.srdController,
@@ -539,42 +533,16 @@ class EditDataDOGlobal extends StatefulWidget {
 class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
   late int id;
   late String tgl;
-  late int idPlant;
-  late String? plant;
-  late String tujuan;
   late TextEditingController srd;
   late TextEditingController mks;
   late TextEditingController ptk;
   late TextEditingController bjm;
-
-  final Map<String, String> tujuanMap = {
-    '1100': 'Sunter', //1
-    '1200': 'Pegangsaan', //2
-    '1300': 'Cibitung', //3
-    '1350': 'Cibitung', //4
-    '1700': 'Dawuan', //5
-    '1800': 'Dawuan', //6
-    '1900': 'Bekasi', //9
-  };
-
-  final Map<String, String> idPlantMap = {
-    '1100': '1', //1
-    '1200': '2', //2
-    '1300': '3', //3
-    '1350': '4', //4
-    '1700': '5', //5
-    '1800': '6', //6
-    '1900': '9', //9
-  };
 
   @override
   void initState() {
     super.initState();
     id = widget.model.id;
     tgl = widget.model.tgl;
-    idPlant = widget.model.idPlant;
-    plant = widget.model.plant;
-    tujuan = widget.model.tujuan;
     srd = TextEditingController(text: widget.model.srd.toString());
     mks = TextEditingController(text: widget.model.mks.toString());
     ptk = TextEditingController(text: widget.model.ptk.toString());
@@ -593,7 +561,6 @@ class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ini id nya : $id'),
             TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,
@@ -628,35 +595,43 @@ class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
                     : 'Tanggal',
               ),
             ),
-            Text(idPlant.toString()),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plant'),
-            DropDownWidget(
-              value: plant,
-              items: tujuanMap.keys.toList(),
-              onChanged: (String? value) {
-                setState(() {
-                  print('Selected plant: $value');
-                  plant = value!;
-                  idPlant = int.parse(idPlantMap[value]!);
-                  tujuan = tujuanMap[value]!;
-                });
-              },
+            Obx(
+              () => DropDownWidget(
+                value: widget.controller.plant.value,
+                items: widget.controller.isAdmin
+                    ? widget.controller.idPlantMap.keys.toList()
+                    : [widget.controller.plant.value],
+                onChanged: widget.controller.isAdmin
+                    ? (String? newValue) {
+                        if (newValue != null) {
+                          widget.controller.plant.value = newValue;
+                          widget.controller.idplant.value =
+                              widget.controller.idPlantMap[newValue] ?? '1';
+                          widget.controller.tujuan.value = widget.controller
+                                  .idPlantMap[widget.controller.plant.value] ??
+                              '1';
+                          print(
+                              'ini value dari plant ${widget.controller.plant.value}');
+                        }
+                      }
+                    : null,
+              ),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Tujuan'),
-            TextFormField(
-              keyboardType: TextInputType.none,
-              readOnly: true,
-              decoration: InputDecoration(
-                  prefixIcon: const Icon(Iconsax.truck_fast),
-                  hintText: tujuan,
-                  filled: true,
-                  fillColor: AppColors.buttonDisabled),
+            Obx(
+              () => TextFormField(
+                keyboardType: TextInputType.none,
+                readOnly: true,
+                decoration: InputDecoration(
+                    prefixIcon: const Icon(Iconsax.truck_fast),
+                    hintText: widget.controller.tujuanDisplayValue,
+                    filled: true,
+                    fillColor: AppColors.buttonDisabled),
+              ),
             ),
-            Text('Tujuan $tujuan'),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Text('Hari ini tgl : $tgl'),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: srd,
@@ -729,8 +704,8 @@ class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
           onPressed: () => widget.controller.editDOGlobal(
             id,
             tgl,
-            idPlant,
-            tujuan,
+            int.parse(widget.controller.idplant.value),
+            widget.controller.tujuanDisplayValue,
             int.parse(srd.text),
             int.parse(mks.text),
             int.parse(ptk.text),

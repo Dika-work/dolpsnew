@@ -340,8 +340,6 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
 
   String get tujuanDisplayValue => tujuanMap[plant] ?? '';
 
-  String get idPlantValue => idPlantMap[idPlant.toString()] ?? '';
-
   @override
   void initState() {
     super.initState();

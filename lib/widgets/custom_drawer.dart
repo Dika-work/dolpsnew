@@ -292,7 +292,8 @@ class CustomDrawer extends StatelessWidget {
                         content: Column(
                           children: [
                             user.tipe == 'Pengurus Pabrik' &&
-                                    user.dealer == 'honda'
+                                        user.dealer == 'honda' ||
+                                    user.tipe == 'admin'
                                 ? ListTile(
                                     onTap: () => Get.toNamed('/data-do-global'),
                                     leading: const Icon(
@@ -340,7 +341,8 @@ class CustomDrawer extends StatelessWidget {
                                   )
                                 : const SizedBox.shrink(),
                             user.tipe == 'Pengurus Pabrik' &&
-                                    user.dealer == 'honda'
+                                        user.dealer == 'honda' ||
+                                    user.tipe == 'admin'
                                 ? ListTile(
                                     onTap: () =>
                                         Get.toNamed('/data-do-tambahan'),
@@ -358,7 +360,8 @@ class CustomDrawer extends StatelessWidget {
                                   )
                                 : const SizedBox.shrink(),
                             user.tipe == 'Pengurus Pabrik' &&
-                                    user.dealer == 'honda'
+                                        user.dealer == 'honda' ||
+                                    user.tipe == 'admin'
                                 ? ListTile(
                                     onTap: () =>
                                         Get.toNamed('/data-do-pengurangan'),
@@ -390,7 +393,9 @@ class CustomDrawer extends StatelessWidget {
                             textTitle: 'Honda',
                             content: Column(
                               children: [
-                                user.tipe == 'k.pool' || user.tipe == 'admin'
+                                user.tipe == 'k.pool' ||
+                                        user.tipe == 'admin' ||
+                                        user.tipe == 'Pengurus Pabrik'
                                     ? ListTile(
                                         onTap: () =>
                                             Get.toNamed('/request-mobil'),
@@ -449,7 +454,6 @@ class CustomDrawer extends StatelessWidget {
                             )),
                         user.tipe == 'k.pool'
                             ? ListTile(
-                                onTap: () => Get.toNamed(''),
                                 leading: const Icon(
                                   Iconsax.record,
                                   color: AppColors.darkExpandableContent,
@@ -465,7 +469,6 @@ class CustomDrawer extends StatelessWidget {
                             : const SizedBox.shrink(),
                         user.tipe == 'k.pool'
                             ? ListTile(
-                                onTap: () => Get.toNamed(''),
                                 leading: const Icon(
                                   Iconsax.record,
                                   color: AppColors.darkExpandableContent,

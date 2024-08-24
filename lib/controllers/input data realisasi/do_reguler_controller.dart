@@ -26,7 +26,7 @@ class DoRegulerController extends GetxController {
   int rolesEdit = 0;
   int rolesJumlah = 0;
 
-  bool get isAdmin => roleUser == 'admin';
+  bool get isAdmin => roleUser == 'admin' || roleUser == 'k.pool';
 
   @override
   void onInit() {

@@ -376,69 +376,77 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
             // Print jumlah kolom
             print('Columns kendaraan: ${column.length}');
 
-            return Column(
-              children: [
-                controller.roleUser == 'admin' ||
-                        controller.roleUser == 'Pengurus Pabrik'
-                    ? GestureDetector(
-                        onTap: () {
-                          CustomDialogs.defaultDialog(
-                              context: context,
-                              titleWidget:
-                                  const Text('Tambah Request Kendaraan'),
-                              contentWidget: AddRequestKendaraan(
-                                controller: controller,
-                              ),
-                              onConfirm: () {
-                                if (controller.tgl.value.isEmpty) {
-                                  SnackbarLoader.errorSnackBar(
-                                    title: 'Gagal😪',
-                                    message: 'Pastikan tanggal telah di isi 😁',
-                                  );
-                                } else {
-                                  controller.addRequestKendaraan();
-                                }
-                              },
-                              cancelText: 'Close',
-                              confirmText: 'Tambahkan');
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const IconButton(
-                                onPressed: null,
-                                icon: Icon(Iconsax.add_circle)),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: CustomSize.sm),
-                              child: Text(
-                                'Tambah data',
-                                style:
-                                    Theme.of(context).textTheme.headlineMedium,
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-                Expanded(
-                    child: SfDataGrid(
-                  source: dataSource,
-                  rowHeight: 65,
-                  columnWidthMode: ColumnWidthMode.auto,
-                  gridLinesVisibility: GridLinesVisibility.both,
-                  headerGridLinesVisibility: GridLinesVisibility.both,
-                  columns: column,
-                )),
-                SfDataPager(
-                  delegate: dataSource,
-                  pageCount: controller.requestKendaraanModel.isEmpty
-                      ? 1
-                      : (controller.requestKendaraanModel.length / rowsPerPage)
-                          .ceilToDouble(),
-                  direction: Axis.horizontal,
-                ),
-              ],
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.fetchRequestKendaraan();
+              },
+              child: Column(
+                children: [
+                  controller.roleUser == 'admin' ||
+                          controller.roleUser == 'Pengurus Pabrik'
+                      ? GestureDetector(
+                          onTap: () {
+                            CustomDialogs.defaultDialog(
+                                context: context,
+                                titleWidget:
+                                    const Text('Tambah Request Kendaraan'),
+                                contentWidget: AddRequestKendaraan(
+                                  controller: controller,
+                                ),
+                                onConfirm: () {
+                                  if (controller.tgl.value.isEmpty) {
+                                    SnackbarLoader.errorSnackBar(
+                                      title: 'Gagal😪',
+                                      message:
+                                          'Pastikan tanggal telah di isi 😁',
+                                    );
+                                  } else {
+                                    controller.addRequestKendaraan();
+                                  }
+                                },
+                                cancelText: 'Close',
+                                confirmText: 'Tambahkan');
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const IconButton(
+                                  onPressed: null,
+                                  icon: Icon(Iconsax.add_circle)),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: CustomSize.sm),
+                                child: Text(
+                                  'Tambah data',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium,
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  Expanded(
+                      child: SfDataGrid(
+                    source: dataSource,
+                    rowHeight: 65,
+                    columnWidthMode: ColumnWidthMode.auto,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    columns: column,
+                  )),
+                  SfDataPager(
+                    delegate: dataSource,
+                    pageCount: controller.requestKendaraanModel.isEmpty
+                        ? 1
+                        : (controller.requestKendaraanModel.length /
+                                rowsPerPage)
+                            .ceilToDouble(),
+                    direction: Axis.horizontal,
+                  ),
+                ],
+              ),
             );
           }
         },
@@ -499,8 +507,7 @@ class AddRequestKendaraan extends StatelessWidget {
               ),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            const Text('Type DO'),
+            const Text('Plant'),
             Obx(
               () => DropDownWidget(
                 value: controller.plant.value,
@@ -515,18 +522,6 @@ class AddRequestKendaraan extends StatelessWidget {
                     controller.plant.value = newValue;
                     print('ini value dari plant ${controller.plant.value}');
                   }
-                },
-              ),
-            ),
-            const SizedBox(height: CustomSize.spaceBtwItems),
-            const Text('Plant'),
-            Obx(
-              () => DropDownWidget(
-                value: controller.plant.value,
-                items: controller.tujuanMap.keys.toList(),
-                onChanged: (String? value) {
-                  print('Selected plant: $value');
-                  controller.plant.value = value!;
                 },
               ),
             ),
@@ -568,6 +563,7 @@ class AddRequestKendaraan extends StatelessWidget {
                 },
               ),
             ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: controller.jumlahKendaraanController,
@@ -648,9 +644,8 @@ class _EditRequestKendaraanState extends State<EditRequestKendaraan> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Tanggal Req',
-            style: Theme.of(context).textTheme.titleLarge,
           ),
           TextFormField(
             keyboardType: TextInputType.none,
@@ -685,41 +680,48 @@ class _EditRequestKendaraanState extends State<EditRequestKendaraan> {
                   : 'Tanggal',
             ),
           ),
-          const SizedBox(height: 8.0), // Add some spacing between rows
-          Text(
+          const SizedBox(height: CustomSize.spaceBtwItems),
+          const Text(
             'Plant',
-            style: Theme.of(context).textTheme.titleLarge,
           ),
-          DropDownWidget(
-            value: widget.model.plant,
-            items: widget.controller.tujuanMap.keys.toList(),
-            onChanged: (String? value) {
-              setState(() {
-                print('Selected plant: $value');
-                widget.model.plant = value!;
-                _updateValues();
-                print('ini plant baru yg di pilih : ${widget.model.plant}');
-              });
-            },
+          Obx(
+            () => DropDownWidget(
+              value: widget.controller.plant.value,
+              items: widget.controller.isAdmin
+                  ? widget.controller.idPlantMap.keys
+                      .toList() // Menampilkan semua plant jika admin
+                  : [
+                      widget.controller.plant.value
+                    ], // Menampilkan plant spesifik untuk non-admin
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  widget.controller.plant.value = newValue;
+                  print(
+                      'ini value dari plant ${widget.controller.plant.value}');
+                }
+              },
+            ),
           ),
-          const SizedBox(height: 8.0),
-          Text(
+          const SizedBox(height: CustomSize.spaceBtwItems),
+          const Text(
             'Tujuan',
-            style: Theme.of(context).textTheme.titleLarge,
           ),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
+          Obx(
+            () => TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
                 prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: tujuanDisplayValue,
+                hintText: widget.controller
+                    .tujuanDisplayValue, // Nilai tujuan yang diperbarui
                 filled: true,
-                fillColor: AppColors.buttonDisabled),
+                fillColor: AppColors.buttonDisabled,
+              ),
+            ),
           ),
-          const SizedBox(height: 8.0),
-          Text(
+          const SizedBox(height: CustomSize.spaceBtwItems),
+          const Text(
             'Type DO',
-            style: Theme.of(context).textTheme.titleLarge,
           ),
           DropDownWidget(
             value: typeDo,
@@ -734,10 +736,9 @@ class _EditRequestKendaraanState extends State<EditRequestKendaraan> {
               }
             },
           ),
-          const SizedBox(height: 8.0),
-          Text(
+          const SizedBox(height: CustomSize.spaceBtwItems),
+          const Text(
             'Jenis Ken',
-            style: Theme.of(context).textTheme.titleLarge,
           ),
           DropDownWidget(
             value: widget.model.jenis,
@@ -750,10 +751,9 @@ class _EditRequestKendaraanState extends State<EditRequestKendaraan> {
               });
             },
           ),
-          const SizedBox(height: 8.0),
-          Text(
+          const SizedBox(height: CustomSize.spaceBtwItems),
+          const Text(
             'Jumlah Ken',
-            style: Theme.of(context).textTheme.titleLarge,
           ),
           TextFormField(
             controller: jumlah,

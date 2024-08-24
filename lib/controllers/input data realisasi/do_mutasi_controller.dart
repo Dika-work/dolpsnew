@@ -22,7 +22,8 @@ class DoMutasiController extends GetxController {
   int rolesJumlah = 0;
 
   final storageUtil = StorageUtil();
-  bool get isAdmin => roleUser == 'admin';
+
+  bool get isAdmin => roleUser == 'admin' || roleUser == 'k.pool';
 
   @override
   void onInit() {

@@ -114,40 +114,4 @@ class RequestKendaraanRepository {
       );
     }
   }
-
-  // Future<void> deleteReqKendaraan(int id) async {
-  //   try {
-  //     final response = await http.delete(
-  //         Uri.parse('${storageUtil.baseURL}/DO/api/api_request_ken.php'),
-  //         body: {'id': id});
-
-  //     if (response.statusCode == 200) {
-  //       final responseData = json.decode(response.body);
-  //       if (responseData['status'] == 'success') {
-  //         SnackbarLoader.successSnackBar(
-  //           title: 'Sukses 😃',
-  //           message: 'Request kendaraan berhasil dihapus',
-  //         );
-  //       } else {
-  //         SnackbarLoader.errorSnackBar(
-  //           title: 'Gagal😪',
-  //           message: responseData['message'] ?? 'Ada yang salah🤷',
-  //         );
-  //       }
-  //       return responseData;
-  //     } else {
-  //       SnackbarLoader.errorSnackBar(
-  //         title: 'Gagal😪',
-  //         message:
-  //             'Gagal menghapus Request kendaraan, status code: ${response.statusCode}',
-  //       );
-  //     }
-  //   } catch (e) {
-  //     print('Error di catch di repository Delete Request Kendaraan: $e');
-  //     SnackbarLoader.errorSnackBar(
-  //       title: 'Gagal😪',
-  //       message: 'Terjadi kesalahan saat menghapus Request Kendaraan',
-  //     );
-  //   }
-  // }
 }

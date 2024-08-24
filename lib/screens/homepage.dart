@@ -299,10 +299,9 @@ class Homepage extends StatelessWidget {
 
                   // Cek kondisi untuk menempatkan tabel di tengah
                   bool shouldCenterTable = (controllerHarianHome.daerah == 1 ||
-                          controllerHarianHome.daerah == 2 ||
-                          controllerHarianHome.daerah == 3 ||
-                          controllerHarianHome.daerah == 4) &&
-                      controllerHarianHome.roleUser != 'admin';
+                      controllerHarianHome.daerah == 2 ||
+                      controllerHarianHome.daerah == 3 ||
+                      controllerHarianHome.daerah == 4);
 
                   Widget tableWidget = SfDataGrid(
                     source: dataSource,
@@ -325,7 +324,8 @@ class Homepage extends StatelessWidget {
                   return SizedBox(
                     height: (controllerHarianHome.roleUser == 'admin' ||
                                 controllerHarianHome.roleUser ==
-                                    'Pengurus Stuffing') &&
+                                    'Pengurus Stuffing' ||
+                                controllerHarianHome.roleUser == 'k.pool') &&
                             controllerHarianHome.doHarianHomeModel.isEmpty
                         ? emptygridHeight
                         : controllerHarianHome.roleUser == 'admin' &&
@@ -338,16 +338,16 @@ class Homepage extends StatelessWidget {
                             padding: const EdgeInsets.only(left: 12.0),
                             child: tableWidget,
                           )
-                        : SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: tableWidget,
-                          ),
+                        : tableWidget,
                   );
                 }
               });
             },
           ),
-          user!.tipe == 'admin' || user.tipe == 'KOL'
+          user!.tipe == 'admin' ||
+                  user.tipe == 'KOL' ||
+                  user.tipe == 'k.pool' ||
+                  user.tipe == 'Pengurus Pabrik'
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: CustomSize.md),
                   child: Center(
@@ -371,7 +371,10 @@ class Homepage extends StatelessWidget {
                 )
               : const SizedBox.shrink(),
           // Tabel ketiga (menggunakan model dan controller yang berbeda)
-          user.tipe == 'admin' || user.tipe == 'KOL'
+          user.tipe == 'admin' ||
+                  user.tipe == 'KOL' ||
+                  user.tipe == 'k.pool' ||
+                  user.tipe == 'Pengurus Pabrik'
               ? LayoutBuilder(
                   builder: (context, constraints) {
                     return Obx(() {
@@ -382,7 +385,9 @@ class Homepage extends StatelessWidget {
                                 .doHarianHomeBskModel.isEmpty
                             ? EmptyDataSource(
                                 isAdmin: controllerHarianBskHome.roleUser ==
-                                    'admin', // Berdasarkan respons JSON
+                                        'admin' ||
+                                    controllerHarianBskHome.roleUser ==
+                                        'k.pool', // Berdasarkan respons JSON
                                 userPlant: controllerHarianBskHome.rolePlant,
                               )
                             : DataDoHarianBskHomeSource(
@@ -395,21 +400,27 @@ class Homepage extends StatelessWidget {
                                 .doHarianHomeBskModel.length +
                             1;
                         final double tableHeight = controllerHarianBskHome
-                                    .doHarianHomeBskModel.isEmpty &&
-                                controllerHarianBskHome.roleUser != 'admin'
+                                        .doHarianHomeBskModel.isEmpty &&
+                                    controllerHarianBskHome.roleUser !=
+                                        'admin' ||
+                                controllerHarianBskHome.roleUser != 'k.pool'
                             ? 110
                             : headerHeight +
                                 (rowHeight * rowCount)
                                     .clamp(0, gridHeight - headerHeight);
 
                         return SizedBox(
-                          height: controllerHarianBskHome.roleUser == 'admin' &&
-                                  controllerHarianBskHome
-                                      .doHarianHomeBskModel.isEmpty
-                              ? emptygridHeight
-                              : controllerHarianBskHome.roleUser == 'admin' &&
+                          height: controllerHarianBskHome.roleUser == 'admin' ||
+                                  controllerHarianBskHome.roleUser ==
+                                          'k.pool' &&
                                       controllerHarianBskHome
-                                          .doHarianHomeBskModel.isNotEmpty
+                                          .doHarianHomeBskModel.isEmpty
+                              ? emptygridHeight
+                              : controllerHarianBskHome.roleUser == 'admin' ||
+                                      controllerHarianBskHome.roleUser ==
+                                              'k.pool' &&
+                                          controllerHarianBskHome
+                                              .doHarianHomeBskModel.isNotEmpty
                                   ? gridHeight
                                   : tableHeight,
                           child: SfDataGrid(
@@ -579,7 +590,9 @@ class Homepage extends StatelessWidget {
                   },
                 )
               : const SizedBox.shrink(),
-          user.tipe == 'admin' || user.tipe == 'KOL'
+          user.tipe == 'admin' ||
+                  user.tipe == 'KOL' ||
+                  user.tipe == 'Pengurus Pabrik'
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: CustomSize.md),
                   child: Center(
@@ -602,7 +615,9 @@ class Homepage extends StatelessWidget {
                   ),
                 )
               : const SizedBox.shrink(),
-          user.tipe == 'admin' || user.tipe == 'KOL'
+          user.tipe == 'admin' ||
+                  user.tipe == 'KOL' ||
+                  user.tipe == 'Pengurus Pabrik'
               ? LayoutBuilder(
                   builder: (context, constraints) {
                     return Obx(() {
@@ -806,10 +821,14 @@ class Homepage extends StatelessWidget {
                   },
                 )
               : const SizedBox.shrink(),
-          user.tipe == 'Pengurus Stuffing'
+          user.tipe == 'Pengurus Stuffing' || user.tipe == 'k.pool'
               ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: user.tipe == 'k.pool' ? 0 : 12.0),
                   child: ExpandableRichContainer(
+                    bgHeadColor: AppColors.white,
+                    bgTransitionColor: AppColors.white,
+                    borderHeadContent: Border.all(color: AppColors.grey),
                     headContent: RichText(
                       text: TextSpan(
                         text: 'ESTIMASI JENIS MOTOR\nSTUFFING ',
@@ -822,7 +841,7 @@ class Homepage extends StatelessWidget {
                                 .textTheme
                                 .headlineSmall
                                 ?.copyWith(
-                                    color: AppColors.error,
+                                    color: Colors.red,
                                     fontWeight: FontWeight.bold),
                           )
                         ],

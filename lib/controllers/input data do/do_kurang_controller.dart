@@ -67,8 +67,6 @@ class DataDOKurangController extends GetxController {
 
   String get tujuanDisplayValue => tujuanMap[plant.value] ?? '';
 
-  String get idPlantValue => idPlantMap[idplant.value] ?? '';
-
   @override
   void onInit() {
     fetchDataDoKurang();

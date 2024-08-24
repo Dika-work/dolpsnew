@@ -34,8 +34,9 @@ class DataDOHarianHomeController extends GetxController {
     super.onClose();
   }
 
-  bool get isAdmin => roleUser == 'admin';
+  bool get isAdmin => roleUser == 'admin' || roleUser == 'k.pool';
   bool get isPengurusStaffing => roleUser == 'Pengurus Stuffing';
+  bool get isKpool => roleUser == 'k.pool';
 
   Future<void> fetchDataDoGlobal() async {
     try {
@@ -47,7 +48,7 @@ class DataDOHarianHomeController extends GetxController {
       print("Data fetched: ${dataHarian.length} items");
 
       if (dataHarian.isNotEmpty) {
-        if (isAdmin || isPengurusStaffing) {
+        if (isAdmin || isPengurusStaffing || isKpool) {
           doHarianHomeModel.assignAll(dataHarian);
         } else {
           doHarianHomeModel.assignAll(

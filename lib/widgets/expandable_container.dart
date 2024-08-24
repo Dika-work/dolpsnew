@@ -93,11 +93,20 @@ class _ExpandableContainerState extends State<ExpandableContainer>
 
 class ExpandableRichContainer extends StatefulWidget {
   const ExpandableRichContainer(
-      {super.key, this.onTap, required this.headContent, this.content});
+      {super.key,
+      this.onTap,
+      required this.headContent,
+      this.content,
+      this.bgHeadColor,
+      this.bgTransitionColor,
+      this.borderHeadContent});
 
   final void Function()? onTap;
   final Widget? content;
   final Widget headContent;
+  final Color? bgHeadColor;
+  final Color? bgTransitionColor;
+  final BoxBorder? borderHeadContent;
 
   @override
   State<ExpandableRichContainer> createState() =>
@@ -145,7 +154,8 @@ class _ExpandableRichContainerState extends State<ExpandableRichContainer>
     return Column(
       children: [
         Container(
-          color: AppColors.lightExpandable,
+          decoration: BoxDecoration(
+              color: widget.bgHeadColor, border: widget.borderHeadContent),
           child: ListTile(
             onTap: widget.onTap ?? toggleExpansion,
             title: widget.headContent,
@@ -153,14 +163,14 @@ class _ExpandableRichContainerState extends State<ExpandableRichContainer>
                 ? null
                 : Icon(
                     _isExpanded ? Icons.expand_less : Icons.expand_more,
-                    color: AppColors.light,
+                    color: AppColors.black,
                   ),
           ),
         ),
         SizeTransition(
           sizeFactor: animation,
           child: Container(
-            color: AppColors.lightExpandableContent,
+            color: widget.bgTransitionColor,
             child: widget.content,
           ),
         ),

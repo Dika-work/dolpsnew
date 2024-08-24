@@ -31,7 +31,7 @@ class DoRegulerSource extends DataGridSource {
   }
 
   List<DataGridRow> _doRegulerData = [];
-  final DoRegulerController controller = Get.find<DoRegulerController>();
+  final DoRegulerController controller = Get.put(DoRegulerController());
   int index = 0;
 
   @override
@@ -108,7 +108,7 @@ class DoRegulerSource extends DataGridSource {
     }
 
     // Add Action cell
-    if (controller.rolesJumlah == 1) {
+    if (controller.rolesJumlah == 1 && controller.isAdmin) {
       if (request?.status == 0 ||
           request?.status == 1 ||
           request?.status == 2 ||
@@ -186,7 +186,7 @@ class DoRegulerSource extends DataGridSource {
       } else {
         cells.add(const SizedBox.shrink());
       }
-    } else if (controller.rolesJumlah == 1) {
+    } else if (controller.rolesJumlah == 1 && controller.isAdmin) {
       cells.add(const SizedBox.shrink()); // Placeholder for Action
     }
 

@@ -34,6 +34,7 @@ class RequestKendaraanController extends GetxController {
   String rolePlant = '';
 
   bool get isAdmin => roleUser == 'admin';
+  bool get isKpool => roleUser == 'k.pool';
 
   RxList<RequestKendaraanModel> requestKendaraanModel =
       <RequestKendaraanModel>[].obs;
@@ -91,7 +92,6 @@ class RequestKendaraanController extends GetxController {
   };
 
   String get tujuanDisplayValue => tujuanMap[plant.value] ?? '';
-  String get idPlantValue => idPlantMap[idplant.value] ?? '';
 
   @override
   void onInit() {
@@ -148,7 +148,7 @@ class RequestKendaraanController extends GetxController {
       isRequestLoading.value = true;
       final requestKendaraan = await requestRepo.fetchTampilRequest();
       if (requestKendaraan.isNotEmpty) {
-        if (isAdmin) {
+        if (isAdmin || isKpool) {
           requestKendaraanModel.assignAll(requestKendaraan);
         } else {
           requestKendaraanModel.assignAll(
@@ -183,7 +183,7 @@ class RequestKendaraanController extends GetxController {
         jumlahKendaraanController.text.trim(),
         0);
 
-    plant.value = '1100';
+    plant.value = rolePlant;
     jenisKendaraan.value = 'MOBIL MOTOR 16';
     jumlahKendaraanController.clear();
 
@@ -214,8 +214,4 @@ class RequestKendaraanController extends GetxController {
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }
-
-  // Future<void> hapusReqKendaraan(int id) async {
-  //   await requestRepo.deleteReqKendaraan(id);
-  // }
 }

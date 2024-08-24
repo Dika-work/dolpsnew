@@ -93,7 +93,7 @@ class DoMutasiSource extends DataGridSource {
       cells.add(const SizedBox.shrink()); // Placeholder for Lihat
     }
 
-    if (controller.rolesJumlah == 1) {
+    if (controller.rolesJumlah == 1 && controller.isAdmin) {
       if (request != null &&
           (request.status == 0 ||
               request.status == 1 ||

@@ -260,7 +260,7 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
               ),
             ));
           }
-          
+
           return LayoutBuilder(
             builder: (context, constraint) {
               return Column(
@@ -335,8 +335,6 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
   };
 
   String get tujuanDisplayValue => tujuanMap[plant] ?? '';
-
-  String get idPlantValue => idPlantMap[idPlant.toString()] ?? '';
 
   @override
   void initState() {
