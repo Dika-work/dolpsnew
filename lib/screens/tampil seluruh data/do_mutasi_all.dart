@@ -55,7 +55,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
       body: Obx(
         () {
           if (controller.isLoadingMutasi.value &&
-              controller.doRealisasiModel.isEmpty) {
+              controller.doRealisasiModelAll.isEmpty) {
             return const CustomCircularLoader();
           } else {
             final dataSource = DoMutasiAllSource(
@@ -117,7 +117,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                   ),
                 );
               },
-              doRealisasiModel: controller.doRealisasiModel,
+              doRealisasiModelAll: controller.doRealisasiModelAll,
               startIndex: currentPage * rowsPerPage,
             );
 
@@ -140,13 +140,13 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                             int rowIndex = details.rowIndex -
                                 1; // Mengurangi 1 jika ada header
 
-                            var request =
-                                dataSource.doRealisasiModel.isNotEmpty &&
-                                        rowIndex >= 0 &&
-                                        rowIndex <
-                                            dataSource.doRealisasiModel.length
-                                    ? dataSource.doRealisasiModel[rowIndex]
-                                    : null;
+                            var request = dataSource
+                                        .doRealisasiModelAll.isNotEmpty &&
+                                    rowIndex >= 0 &&
+                                    rowIndex <
+                                        dataSource.doRealisasiModelAll.length
+                                ? dataSource.doRealisasiModelAll[rowIndex]
+                                : null;
 
                             if (request != null &&
                                 (request.status == 2 || request.status == 3)) {
@@ -383,9 +383,10 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                   Center(
                     child: SfDataPager(
                       delegate: dataSource,
-                      pageCount: controller.doRealisasiModel.isEmpty
+                      pageCount: controller.doRealisasiModelAll.isEmpty
                           ? 1
-                          : (controller.doRealisasiModel.length / rowsPerPage)
+                          : (controller.doRealisasiModelAll.length /
+                                  rowsPerPage)
                               .ceilToDouble(),
                       direction: Axis.horizontal,
                     ),

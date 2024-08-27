@@ -155,6 +155,7 @@ class TambahTypeMotorMutasiController extends GetxController {
     CustomDialogs.loadingIndicator();
     await tambahTypeMotorMutasiRepo.changeStatusTypeMotor(idRealisasi, 3);
     await doMutasiController.fetchMutasiContent();
+    await doMutasiController.fetchMutasiAllContent();
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }

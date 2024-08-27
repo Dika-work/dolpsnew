@@ -14,7 +14,7 @@ class DoMutasiAllSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onBatal;
   final void Function(DoRealisasiModel)? onEdit;
   final void Function(DoRealisasiModel)? onType;
-  final List<DoRealisasiModel> doRealisasiModel;
+  final List<DoRealisasiModel> doRealisasiModelAll;
   int startIndex = 0;
 
   DoMutasiAllSource({
@@ -23,10 +23,10 @@ class DoMutasiAllSource extends DataGridSource {
     required this.onBatal,
     required this.onEdit,
     required this.onType,
-    required this.doRealisasiModel,
+    required this.doRealisasiModelAll,
     int startIndex = 0,
   }) {
-    _updateDataPager(doRealisasiModel, startIndex);
+    _updateDataPager(doRealisasiModelAll, startIndex);
   }
 
   List<DataGridRow> _doMutasiData = [];
@@ -40,9 +40,9 @@ class DoMutasiAllSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _doMutasiData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-    var request = doRealisasiModel.isNotEmpty &&
-            startIndex + rowIndex < doRealisasiModel.length
-        ? doRealisasiModel[startIndex + rowIndex]
+    var request = doRealisasiModelAll.isNotEmpty &&
+            startIndex + rowIndex < doRealisasiModelAll.length
+        ? doRealisasiModelAll[startIndex + rowIndex]
         : null;
 
     return DataGridRowAdapter(
@@ -244,15 +244,15 @@ class DoMutasiAllSource extends DataGridSource {
   }
 
   void _updateDataPager(
-      List<DoRealisasiModel> doRealisasiModel, int startIndex) {
+      List<DoRealisasiModel> doRealisasiModelAll, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
 
-    if (doRealisasiModel.isEmpty) {
+    if (doRealisasiModelAll.isEmpty) {
       _doMutasiData = _generateEmptyRows(1);
     } else {
       _doMutasiData =
-          doRealisasiModel.skip(startIndex).take(10).map<DataGridRow>(
+          doRealisasiModelAll.skip(startIndex).take(10).map<DataGridRow>(
         (data) {
           index++;
           final tglParsed =
@@ -277,13 +277,14 @@ class DoMutasiAllSource extends DataGridSource {
           ]);
         },
       ).toList();
+      notifyListeners();
     }
   }
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
     final int startIndex = newPageIndex * 10;
-    _updateDataPager(controller.doRealisasiModel, startIndex);
+    _updateDataPager(controller.doRealisasiModelAll, startIndex);
     notifyListeners();
     return true;
   }

@@ -10,6 +10,7 @@ import '../../utils/popups/full_screen_loader.dart';
 class DoMutasiController extends GetxController {
   final isLoadingMutasi = Rx<bool>(false);
   RxList<DoRealisasiModel> doRealisasiModel = <DoRealisasiModel>[].obs;
+  RxList<DoRealisasiModel> doRealisasiModelAll = <DoRealisasiModel>[].obs;
   final doMutasiRepo = Get.put(DoMutasiRepository());
 
   String rolePlant = '';
@@ -24,6 +25,7 @@ class DoMutasiController extends GetxController {
   final storageUtil = StorageUtil();
 
   bool get isAdmin => roleUser == 'admin' || roleUser == 'k.pool';
+  bool get isPengurusPabrik => roleUser == 'Pengurus Pabrik';
 
   @override
   void onInit() {
@@ -37,7 +39,6 @@ class DoMutasiController extends GetxController {
       roleUser = user.tipe;
       rolePlant = user.plant;
     }
-    fetchMutasiContent();
   }
 
   Future<void> fetchMutasiContent() async {
@@ -56,7 +57,7 @@ class DoMutasiController extends GetxController {
       }
     } catch (e) {
       print('Error while fetching data do Mutasi: $e');
-      doRealisasiModel.assignAll([]);
+      throw Exception('Gagal mengambil data do mutasi');
     } finally {
       isLoadingMutasi.value = false;
     }
@@ -66,10 +67,19 @@ class DoMutasiController extends GetxController {
     try {
       isLoadingMutasi.value = true;
       final getRegulerDo = await doMutasiRepo.fetchAllMutasiData();
-      doRealisasiModel.assignAll(getRegulerDo);
+      if (getRegulerDo.isNotEmpty) {
+        if (isPengurusPabrik) {
+          doRealisasiModelAll.assignAll(
+              getRegulerDo.where((item) => item.plant == rolePlant).toList());
+        } else {
+          doRealisasiModelAll.assignAll(getRegulerDo);
+        }
+      } else {
+        doRealisasiModelAll.assignAll([]);
+      }
     } catch (e) {
       print('Error while fetching data do mutasi zzzz: $e');
-      doRealisasiModel.assignAll([]);
+      throw Exception('Gagal mengambil data do mutasi');
     } finally {
       isLoadingMutasi.value = false;
     }
@@ -90,6 +100,7 @@ class DoMutasiController extends GetxController {
     await doMutasiRepo.editDoMutasi(
         id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchMutasiContent();
+    await fetchMutasiAllContent();
 
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
