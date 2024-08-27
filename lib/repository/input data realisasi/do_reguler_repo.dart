@@ -15,6 +15,7 @@ class DoRegulerRepository {
         '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getDataReguler'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
+      print('ini DO REGULER..');
       return list.map((e) => DoRealisasiModel.fromJson(e)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data do reguler');
@@ -26,6 +27,7 @@ class DoRegulerRepository {
         '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getDataRegulerAll'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
+      print('ini..ALL DO REGULER..');
       return list.map((e) => DoRealisasiModel.fromJson(e)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data do reguler');

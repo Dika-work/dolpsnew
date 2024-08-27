@@ -61,6 +61,7 @@ class EditTypeMotorController extends GetxController {
     await editMotorRepo.editStatusTypeMotor(id);
     await editMotorRepo.hapusDataHutang(id);
     await doRegulerController.fetchRegulerContent();
+    await doRegulerController.fetchRegulerAllContent();
     await doMutasiController.fetchMutasiContent();
 
     CustomFullScreenLoader.stopLoading();

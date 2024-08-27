@@ -151,9 +151,6 @@ class DataDOGlobalController extends GetxController {
     ptkController.clear();
     bjmController.clear();
 
-    plant.value = '1100';
-    tujuan.value = '1';
-
     await fetchDataDoGlobal();
     await doGlobalHarianController.fetchDataDoGlobal();
     CustomFullScreenLoader.stopLoading();

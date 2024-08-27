@@ -254,11 +254,13 @@ class KirimKendaraanScreen extends StatelessWidget {
                       ),
                     ),
                     rowCount > 0
-                        ? SfDataPager(
-                            delegate: dataSource,
-                            pageCount: (rowCount / numberOfRows).ceilToDouble(),
-                            direction: Axis.horizontal,
-                          )
+                        ? Center(
+                          child: SfDataPager(
+                              delegate: dataSource,
+                              pageCount: (rowCount / numberOfRows).ceilToDouble(),
+                              direction: Axis.horizontal,
+                            ),
+                        )
                         : const SizedBox.shrink(),
                     const Divider(height: CustomSize.dividerHeight),
                     Padding(

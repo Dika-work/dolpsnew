@@ -183,7 +183,6 @@ class RequestKendaraanController extends GetxController {
         jumlahKendaraanController.text.trim(),
         0);
 
-    plant.value = rolePlant;
     jenisKendaraan.value = 'MOBIL MOTOR 16';
     jumlahKendaraanController.clear();
 

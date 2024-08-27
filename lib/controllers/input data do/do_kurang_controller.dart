@@ -155,9 +155,6 @@ class DataDOKurangController extends GetxController {
     ptkController.clear();
     bjmController.clear();
 
-    plant.value = '1100';
-    tujuan.value = '1';
-
     await fetchDataDoKurang();
     await dataHarianHomeController.fetchDataDoGlobal();
     await dataHarianHomeBskController.fetchHarianBesok();

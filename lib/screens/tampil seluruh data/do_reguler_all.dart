@@ -20,6 +20,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
 
   @override
   Widget build(BuildContext context) {
+    final tambahTypeMotorController = Get.put(TambahTypeMotorController());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchRegulerAllContent();
     });
@@ -34,10 +35,10 @@ class DoRegulerAll extends GetView<DoRegulerController> {
       'Tipe': double.nan,
       'Jenis': double.nan,
       'Jumlah': double.nan,
-      'Lihat': 150,
+      if (controller.rolesLihat == 1) 'Lihat': 150,
       'Action': 150,
-      'Batal': 150,
-      'Edit': 150,
+      if (controller.rolesBatal == 1) 'Batal': 150,
+      if (controller.rolesEdit == 1) 'Edit': 150,
     };
 
     const int rowsPerPage = 10;
@@ -57,7 +58,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
       body: Obx(
         () {
           if (controller.isLoadingRegulerAll.value &&
-              controller.doRealisasiModel.isEmpty) {
+              controller.doRealisasiModelAll.isEmpty) {
             return const CustomCircularLoader();
           } else {
             final dataSource = DoRegulerAllSource(
@@ -72,8 +73,6 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                 );
               },
               onAction: (DoRealisasiModel model) {
-                final tambahTypeMotorController =
-                    Get.put(TambahTypeMotorController());
                 if (model.status == 0) {
                   showDialog(
                     context: context,
@@ -82,7 +81,6 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                     },
                   );
                 } else if (model.status == 1 || model.status == 2) {
-                  tambahTypeMotorController.fetchTambahTypeMotor(model.id);
                   Get.to(() => TambahTypeKendaraan(
                       model: model, controller: tambahTypeMotorController));
                 } else if (model.status == 3) {
@@ -114,9 +112,12 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                   ),
                 );
               },
-              doRealisasiModel: controller.doRealisasiModel,
+              doRealisasiModelAll: controller.doRealisasiModelAll,
               startIndex: currentPage * rowsPerPage,
             );
+
+            print(
+                'ini banyaknya columns all do reguler: ${columnWidths.length}');
             return Column(
               children: [
                 Expanded(
@@ -135,14 +136,16 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                           int rowIndex = details.rowIndex -
                               1; // Mengurangi 1 jika ada header
 
-                          var request = dataSource
-                                      .doRealisasiModel.isNotEmpty &&
-                                  rowIndex >= 0 &&
-                                  rowIndex < dataSource.doRealisasiModel.length
-                              ? dataSource.doRealisasiModel[rowIndex]
-                              : null;
+                          var request =
+                              dataSource.doRealisasiModelAll.isNotEmpty &&
+                                      rowIndex >= 0 &&
+                                      rowIndex <
+                                          dataSource.doRealisasiModelAll.length
+                                  ? dataSource.doRealisasiModelAll[rowIndex]
+                                  : null;
 
                           if (request != null &&
+                              controller.isAllRegulerAdmin &&
                               (request.status == 3 || request.status == 4)) {
                             return 150.0; // Tinggi row untuk status 4
                           } else {
@@ -294,22 +297,24 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                         .bodyMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
-                          GridColumn(
-                              width: columnWidths['Lihat']!,
-                              columnName: 'Lihat',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Lihat',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
+                          if (controller.rolesLihat == 1)
+                            GridColumn(
+                                width: columnWidths['Lihat']!,
+                                columnName: 'Lihat',
+                                label: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      color: Colors.lightBlue.shade100,
+                                    ),
+                                    child: Text(
+                                      'Lihat',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ))),
                           GridColumn(
                               width: columnWidths['Action']!,
                               columnName: 'Action',
@@ -326,46 +331,50 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                         .bodyMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
-                          GridColumn(
-                              width: columnWidths['Batal']!,
-                              columnName: 'Batal',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Batal',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
-                          GridColumn(
-                              width: columnWidths['Edit']!,
-                              columnName: 'Edit',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Edit',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
+                          if (controller.rolesBatal == 1)
+                            GridColumn(
+                                width: columnWidths['Batal']!,
+                                columnName: 'Batal',
+                                label: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      color: Colors.lightBlue.shade100,
+                                    ),
+                                    child: Text(
+                                      'Batal',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ))),
+                          if (controller.rolesEdit == 1)
+                            GridColumn(
+                                width: columnWidths['Edit']!,
+                                columnName: 'Edit',
+                                label: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      color: Colors.lightBlue.shade100,
+                                    ),
+                                    child: Text(
+                                      'Edit',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ))),
                         ]),
                   ),
                 ),
                 SfDataPager(
                   delegate: dataSource,
-                  pageCount: controller.doRealisasiModel.isEmpty
+                  pageCount: controller.doRealisasiModelAll.isEmpty
                       ? 1
-                      : (controller.doRealisasiModel.length / rowsPerPage)
+                      : (controller.doRealisasiModelAll.length / rowsPerPage)
                           .ceilToDouble(),
                   direction: Axis.horizontal,
                 ),

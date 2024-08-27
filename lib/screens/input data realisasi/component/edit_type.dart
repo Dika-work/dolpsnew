@@ -1,4 +1,3 @@
-import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +10,9 @@ import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../../models/input data realisasi/edit_type_motor_model.dart';
 import '../../../models/master data/type_motor_model.dart';
 import '../../../utils/constant/custom_size.dart';
+import '../../../utils/loader/circular_loader.dart';
 import '../../../utils/popups/dialogs.dart';
+import '../../../utils/popups/full_screen_loader.dart';
 import '../../../utils/source/input data realisasi/edit_type_kendaraan_source.dart';
 import '../../../utils/theme/app_colors.dart';
 
@@ -512,7 +513,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      Get.offAllNamed('/rootpage');
+                      CustomFullScreenLoader.stopLoading();
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(

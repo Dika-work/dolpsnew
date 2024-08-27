@@ -23,6 +23,7 @@ class DataAllGlobalSource extends DataGridSource {
   }
 
   List<DataGridRow> _allGlobalData = [];
+  int index = 0;
 
   @override
   List<DataGridRow> get rows => _allGlobalData;
@@ -93,12 +94,15 @@ class DataAllGlobalSource extends DataGridSource {
 
   void _updateDataPager(List<DoGlobalAllModel> allGlobal, int startIndex) {
     this.startIndex = startIndex;
+    index = startIndex;
+
     _allGlobalData =
         allGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
+      index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
       return DataGridRow(cells: [
-        DataGridCell<int>(columnName: 'No', value: data.id),
+        DataGridCell<int>(columnName: 'No', value: index),
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),

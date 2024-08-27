@@ -380,13 +380,15 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                           ]),
                     ),
                   ),
-                  SfDataPager(
-                    delegate: dataSource,
-                    pageCount: controller.doRealisasiModel.isEmpty
-                        ? 1
-                        : (controller.doRealisasiModel.length / rowsPerPage)
-                            .ceilToDouble(),
-                    direction: Axis.horizontal,
+                  Center(
+                    child: SfDataPager(
+                      delegate: dataSource,
+                      pageCount: controller.doRealisasiModel.isEmpty
+                          ? 1
+                          : (controller.doRealisasiModel.length / rowsPerPage)
+                              .ceilToDouble(),
+                      direction: Axis.horizontal,
+                    ),
                   ),
                 ],
               );

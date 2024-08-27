@@ -154,20 +154,28 @@ class DoRegulerSource extends DataGridSource {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    print('..INI BAKALAN KE PLANT GABUNGAN');
-                  },
-                  child: const Text(
-                    'Gabungan',
-                    textAlign: TextAlign.center,
+              // admin,plant 1300,1350,1700,1800
+              if (controller.roleUser == 'admin' ||
+                  controller.rolePlant == '1300' ||
+                  controller.rolePlant == '1350' ||
+                  controller.rolePlant == '1700' ||
+                  controller.rolePlant == '1800')
+                SizedBox(
+                  height: 60,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('..INI BAKALAN KE PLANT GABUNGAN');
+                    },
+                    child: const Text(
+                      'Gabungan',
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: CustomSize.sm),
+              if (doRealisasiModel.isNotEmpty &&
+                  doRealisasiModel.first.totalHutang != 0)
+                const SizedBox(height: CustomSize.sm),
               if (doRealisasiModel.isNotEmpty &&
                   doRealisasiModel.first.totalHutang != 0)
                 SizedBox(

@@ -76,8 +76,6 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                     Get.back();
                     controller.tgl.value =
                         CustomHelperFunctions.getFormattedDate(DateTime.now());
-                    controller.plant.value = '1100';
-                    controller.tujuan.value = '1';
                     controller.srdController.clear();
                     controller.mksController.clear();
                     controller.ptkController.clear();

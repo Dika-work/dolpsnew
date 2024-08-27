@@ -20,6 +20,12 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
 
   @override
   Widget build(BuildContext context) {
+    final tambahTypeMotorController = Get.put(TambahTypeMotorController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchRegulerContent();
+    });
+
     late Map<String, double> columnWidths = {
       'No': double.nan,
       if (controller.roleUser == 'admin') 'User': double.nan,
@@ -68,8 +74,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                 );
               },
               onAction: (DoRealisasiModel model) {
-                final tambahTypeMotorController =
-                    Get.put(TambahTypeMotorController());
                 if (model.status == 0) {
                   showDialog(
                     context: context,
@@ -140,6 +144,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
 
                           if (request != null &&
                               (request.status == 3 || request.status == 4)) {
+                            print('tinggi row nya 150');
                             return 150.0;
                           } else {
                             return details.rowHeight;

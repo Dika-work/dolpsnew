@@ -14,7 +14,7 @@ class DoRegulerAllSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onBatal;
   final void Function(DoRealisasiModel)? onEdit;
   final void Function(DoRealisasiModel)? onType;
-  final List<DoRealisasiModel> doRealisasiModel;
+  final List<DoRealisasiModel> doRealisasiModelAll;
   int startIndex = 0;
 
   DoRegulerAllSource({
@@ -23,10 +23,10 @@ class DoRegulerAllSource extends DataGridSource {
     required this.onBatal,
     required this.onEdit,
     required this.onType,
-    required this.doRealisasiModel,
+    required this.doRealisasiModelAll,
     int startIndex = 0,
   }) {
-    _updateDataPager(doRealisasiModel, startIndex);
+    _updateDataPager(doRealisasiModelAll, startIndex);
   }
 
   List<DataGridRow> _doRegulerData = [];
@@ -40,58 +40,102 @@ class DoRegulerAllSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _doRegulerData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-    var request = doRealisasiModel.isNotEmpty &&
-            startIndex + rowIndex < doRealisasiModel.length
-        ? doRealisasiModel[startIndex + rowIndex]
+    var request = doRealisasiModelAll.isNotEmpty &&
+            startIndex + rowIndex < doRealisasiModelAll.length
+        ? doRealisasiModelAll[startIndex + rowIndex]
         : null;
 
-    return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
-      cells: [
-        ...row.getCells().take(10).map<Widget>(
-          (e) {
-            return Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-              child: Text(
-                e.value.toString(),
-                textAlign: TextAlign.center,
+    List<Widget> cells = [
+      ...row.getCells().take(10).map<Widget>(
+        (e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
+            ),
+          );
+        },
+      ),
+    ];
+
+    // Add Lihat cell
+    if (controller.rolesLihat == 1 && request?.status == 1 ||
+        request?.status == 3 ||
+        request?.status == 4) {
+      cells.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (onLihat != null && request != null) {
+                    onLihat!(request);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.success,
+                  padding: const EdgeInsets.all(8.0),
+                ),
+                child: const Text('Lihat'),
               ),
-            );
-          },
+            ),
+          ],
         ),
-        if (request != null) ...[
-          // Lihat
-          controller.rolesLihat == 0
-              ? const SizedBox.shrink()
-              : request.status == 0
-                  ? const SizedBox.shrink()
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 100,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (onLihat != null) {
-                                  onLihat!(request);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.success,
-                                padding: const EdgeInsets.all(
-                                    8.0), // Padding dalam tombol
-                              ),
-                              child: const Text('Lihat')),
-                        ),
-                      ],
-                    ),
-          // Action
-          request.status == 0 ||
-                  request.status == 1 ||
-                  request.status == 2 ||
-                  request.status == 3
+      );
+    } else if (controller.rolesLihat == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Lihat
+    }
+
+    // Add Action cell
+    if (controller.rolesJumlah == 1) {
+      if (request?.status == 0 ||
+          request?.status == 1 ||
+          request?.status == 2 ||
+          request?.status == 3) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onAction != null) {
+                      onAction!(request);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: request!.status == 0
+                        ? AppColors.primary
+                        : request.status == 1 || request.status == 2
+                            ? AppColors.pink
+                            : request.status == 3
+                                ? AppColors.success
+                                : Colors.transparent,
+                  ),
+                  child: Text(
+                    request.status == 0
+                        ? 'Jumlah Unit'
+                        : request.status == 1 || request.status == 2
+                            ? 'Type Motor'
+                            : request.status == 3
+                                ? 'ACC'
+                                : '',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else if (request?.status == 4) {
+        cells.add(
+          request!.totalHutang != 0
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -100,160 +144,147 @@ class DoRegulerAllSource extends DataGridSource {
                       width: 100,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (onAction != null) {
-                            onAction!(request);
-                          }
+                          print('..INI BAKALAN KE PLANT GABUNGAN');
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: request.status == 0
-                              ? AppColors.primary
-                              : request.status == 1 || request.status == 2
-                                  ? AppColors.pink
-                                  : request.status == 3
-                                      ? AppColors.success
-                                      : Colors.transparent,
-                        ),
-                        child: Text(
-                          request.status == 0
-                              ? 'Jumlah Unit'
-                              : request.status == 1 || request.status == 2
-                                  ? 'Type Motor'
-                                  : request.status == 3
-                                      ? 'ACC'
-                                      : '',
+                            backgroundColor: AppColors.error),
+                        child: const Text(
+                          'Hutang ACC',
+                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                   ],
                 )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            print('..INI BAKALAN KE PLANT GABUNGAN..');
-                          },
-                          child: const Text(
-                            'Gabungan',
-                            textAlign: TextAlign.center,
-                          )),
-                    ),
-                    const SizedBox(height: CustomSize.sm),
-                    doRealisasiModel.first.totalHutang == 0
-                        ? const SizedBox.shrink()
-                        : SizedBox(
-                            height: 60,
-                            width: 100,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  print('..INI BAKALAN KE HUTANG ACC..');
-                                },
-                                child: const Text(
-                                  'Hutang ACC',
-                                )),
-                          ),
-                  ],
+              : const SizedBox.shrink(),
+        );
+      } else {
+        cells.add(const SizedBox.shrink());
+      }
+    } else if (controller.rolesJumlah == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Action
+    }
+
+    // Add Batal cell
+    if (controller.rolesBatal == 1 && request?.status == 0) {
+      cells.add(
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 60,
+              width: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (onBatal != null && request != null) {
+                    onBatal!(request);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
                 ),
-          // Batal
-          controller.rolesBatal == 0
-              ? const SizedBox.shrink()
-              : request.status == 0
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 100,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (onBatal != null) {
-                                  onBatal!(request);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.error),
-                              child: const Text('Batal')),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
-          // Edit
-          controller.rolesEdit == 0
-              ? const SizedBox.shrink()
-              : request.status == 3 || request.status == 4
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null) {
-                                onEdit!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    request.status == 0 || request.status == 1
-                                        ? AppColors.yellow
-                                        : AppColors.gold),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                        const SizedBox(height: CustomSize.sm),
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onType != null) {
-                                onType!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: AppColors.success),
-                            child: Text(
-                              'Type',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null) {
-                                onEdit!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    request.status == 0 || request.status == 1
-                                        ? AppColors.yellow
-                                        : AppColors.gold),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                      ],
+                child: const Text('Batal'),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (controller.rolesBatal == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Batal
+    }
+
+    // Add Edit cell
+    if (controller.rolesEdit == 1) {
+      if (request?.status == 3 || request?.status == 4) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (controller.isAllRegulerAdmin)
+                SizedBox(
+                  height: 60,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (onEdit != null) {
+                        onEdit!(request!);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.gold),
+                    child: Text(
+                      'Edit',
+                      style: Theme.of(Get.context!)
+                          .textTheme
+                          .bodyMedium
+                          ?.apply(color: AppColors.black),
                     ),
-        ] else ...[
-          // Placeholder for when no data is available
-          const SizedBox.shrink(), // Lihat
-          const SizedBox.shrink(), // Action
-          const SizedBox.shrink(), // Batal
-          const SizedBox.shrink(), // Edit
-        ]
-      ],
+                  ),
+                ),
+              if (controller.isAllRegulerAdmin)
+                const SizedBox(height: CustomSize.sm),
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onType != null) {
+                      onType!(request!);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
+                  child: Text(
+                    'Type',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else if (request?.status == 0 ||
+          request?.status == 1 ||
+          request?.status == 2) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (onEdit != null) {
+                    onEdit!(request!);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.yellow,
+                ),
+                child: Text(
+                  'Edit',
+                  style: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyMedium
+                      ?.apply(color: AppColors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        cells.add(const SizedBox.shrink());
+      }
+    } else if (controller.rolesEdit == 1) {
+      cells.add(const SizedBox.shrink()); // Placeholder for Edit
+    }
+
+    print('ini banyaknya cells di all do reguler: ${cells.length}');
+
+    return DataGridRowAdapter(
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: cells,
     );
   }
 
@@ -277,15 +308,15 @@ class DoRegulerAllSource extends DataGridSource {
   }
 
   void _updateDataPager(
-      List<DoRealisasiModel> doRealisasiModel, int startIndex) {
+      List<DoRealisasiModel> doRealisasiModelAll, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
 
-    if (doRealisasiModel.isEmpty) {
+    if (doRealisasiModelAll.isEmpty) {
       _doRegulerData = _generateEmptyRows(1);
     } else {
       _doRegulerData =
-          doRealisasiModel.skip(startIndex).take(10).map<DataGridRow>(
+          doRealisasiModelAll.skip(startIndex).take(10).map<DataGridRow>(
         (data) {
           index++;
           final tglParsed =
@@ -310,6 +341,15 @@ class DoRegulerAllSource extends DataGridSource {
           ]);
         },
       ).toList();
+      notifyListeners();
     }
+  }
+
+  @override
+  Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
+    final int startIndex = newPageIndex * 10;
+    _updateDataPager(controller.doRealisasiModelAll, startIndex);
+    notifyListeners();
+    return true;
   }
 }

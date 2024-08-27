@@ -153,9 +153,6 @@ class DataDoTambahanController extends GetxController {
     ptkController.clear();
     bjmController.clear();
 
-    plant.value = '1100';
-    tujuan.value = '1';
-
     await fetchDataDoTambah();
     await dataHarianHomeController.fetchDataDoGlobal();
     await dataHarianHomeBskController.fetchHarianBesok();

@@ -26,6 +26,8 @@ class _AksesorisState extends State<Aksesoris> {
   late String supir;
   late int jumlahUnit;
 
+  final controller = Get.put(AksesorisController());
+
   @override
   void initState() {
     super.initState();
@@ -38,14 +40,12 @@ class _AksesorisState extends State<Aksesoris> {
     supir = widget.model.supir;
     jumlahUnit = widget.model.jumlahUnit;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Get.find<AksesorisController>().fetchAksesoris(id);
+      controller.fetchAksesoris(id);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AksesorisController());
-
     return AlertDialog(
       title: Center(
           child: Text('Tambah Aksesoris',

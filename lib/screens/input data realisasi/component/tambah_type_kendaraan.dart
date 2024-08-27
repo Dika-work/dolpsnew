@@ -102,6 +102,12 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        widget.controller.fetchTambahTypeMotor(id);
+      },
+    );
+
     final doRegulerController = Get.put(DoRegulerController());
     late Map<String, double> columnWidths = {
       'No': double.nan,
