@@ -1,64 +1,55 @@
 import 'dart:convert';
 
-import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/input data do/do_global_model.dart';
+import '../../models/tampil seluruh data/do_estimasi_all.dart';
+import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
-class DataDoGlobalRepository {
+class EstimasiAllRepository {
   final storageUtil = StorageUtil();
 
-  Future<List<DoGlobalModel>> fetchDataGlobalContent() async {
+  Future<List<DoEstimasiAllModel>> fetchEstimasiContent() async {
     final response = await http.get(Uri.parse(
-        '${storageUtil.baseURL}/DO/api/api_do_global.php?action=getData'));
+        '${storageUtil.baseURL}/DO/api/api_do_estimasi.php?action=getData'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
-      return list.map((model) => DoGlobalModel.fromJson(model)).toList();
+      return list.map((e) => DoEstimasiAllModel.fromJson(e)).toList();
     } else {
-      throw Exception('Gagal untuk mengambil data DO Global☠️');
+      throw Exception('Gagal untuk mengambil seluruh data do estimasi');
     }
   }
 
-  Future<void> addDataGlobal(
-    String idPlant,
-    String tujuan,
+  Future<void> addEstimasi(
     String tgl,
     String jam,
-    String srd,
-    String mks,
-    String ptk,
-    String bjm,
-    String jumlah5,
-    String jumlah6,
+    int srd,
+    int mks,
+    int ptk,
     String user,
   ) async {
     try {
       final response = await http.post(
-          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php'),
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_estimasi.php'),
           body: {
-            'id_plant': idPlant,
-            'tujuan': tujuan,
             'tgl': tgl,
             'jam': jam,
-            'jumlah_1': srd,
-            'jumlah_2': mks,
-            'jumlah_3': ptk,
-            'jumlah_4': bjm,
-            'jumlah_5': jumlah5,
-            'jumlah_6': jumlah6,
+            'jumlah_1': srd.toString(),
+            'jumlah_2': mks.toString(),
+            'jumlah_3': ptk.toString(),
+            'jumlah_4': 0.toString(),
             'user': user,
           });
       if (response.statusCode != 200) {
         CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
-          message:
-              'Pastikan telah terkoneksi dengan wifi kantor : ${response.statusCode}😁',
+          message: 'Ada kesalahan, harap coba lagi : ${response.statusCode}😁',
         );
       }
     } catch (e) {
+      print('ini error nya di estimasi all : ${e.toString()}');
       CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
@@ -68,46 +59,37 @@ class DataDoGlobalRepository {
     }
   }
 
-  Future<void> editDOGlobalContent(
+  Future<void> editEstimasi(
     int id,
     String tgl,
-    int idPlant,
-    String tujuan,
     int srd,
     int mks,
     int ptk,
-    int bjm,
   ) async {
     try {
-      print('...PROSES AWALANAN DI REPOSITORY DO Global...');
       final response = await http.put(
-        Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php'),
-        body: {
-          'id': id.toString(),
-          'tgl': tgl,
-          'id_plant': idPlant.toString(),
-          'tujuan': tujuan,
-          'jumlah_1': srd.toString(),
-          'jumlah_2': mks.toString(),
-          'jumlah_3': ptk.toString(),
-          'jumlah_4': bjm.toString(),
-        },
-      );
-
-      print('...BERHASIL DI REPOSITORY...');
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_estimasi.php'),
+          body: {
+            'id': id.toString(),
+            'tgl': tgl,
+            'jumlah_1': srd.toString(),
+            'jumlah_2': mks.toString(),
+            'jumlah_3': ptk.toString(),
+          });
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         if (responseData['status'] == 'success') {
           SnackbarLoader.successSnackBar(
             title: 'Sukses 😃',
-            message: 'DO Global berhasil diubah',
+            message: 'DO Estimasi berhasil diubah',
           );
         } else {
           CustomFullScreenLoader.stopLoading();
           SnackbarLoader.errorSnackBar(
             title: 'Gagal😪',
-            message: responseData['message'] ?? 'Ada yang salah🤷',
+            message:
+                'Gagal mengedit DO estimasi, status code: ${response.statusCode}',
           );
         }
         return responseData;
@@ -116,26 +98,23 @@ class DataDoGlobalRepository {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
-              'Gagal mengedit DO Global, status code: ${response.statusCode}',
+              'Gagal mengedit DO Estimasi, status code: ${response.statusCode}',
         );
       }
     } catch (e) {
       CustomFullScreenLoader.stopLoading();
-      print('Error di catch di repository do Global: $e');
+      print('Error di catch di repository do estimasi: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat mengedit DO Global',
+        message: 'Terjadi kesalahan saat mengedit DO estimasi',
       );
     }
   }
 
-  Future<void> deleteDOGlobalContent(
-    int id,
-  ) async {
+  Future<void> deleteEstimasi(int id) async {
     try {
-      print('...PROSES AWALANAN DELETE DI REPOSITORY DO Global...');
       final response = await http.delete(
-          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_global.php'),
+          Uri.parse('${storageUtil.baseURL}/DO/api/api_do_estimasi.php'),
           body: {'id': id.toString()});
 
       print('...BERHASIL DI REPOSITORY...');
@@ -145,7 +124,7 @@ class DataDoGlobalRepository {
         if (responseData['status'] == 'success') {
           SnackbarLoader.successSnackBar(
             title: 'Sukses 😃',
-            message: 'Data DO Global berhasil dihapus',
+            message: 'Data DO Estimasi berhasil dihapus',
           );
         } else {
           CustomFullScreenLoader.stopLoading();
@@ -160,15 +139,15 @@ class DataDoGlobalRepository {
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message:
-              'Gagal menghapus DO Global, status code: ${response.statusCode}',
+              'Gagal menghapus DO Estimasi, status code: ${response.statusCode}',
         );
       }
     } catch (e) {
       CustomFullScreenLoader.stopLoading();
-      print('Error di catch di repository do Global: $e');
+      print('Error di catch di repository do Estimasi: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
-        message: 'Terjadi kesalahan saat menghapus DO Global',
+        message: 'Terjadi kesalahan saat menghapus DO Estimasi',
       );
     }
   }

@@ -8,6 +8,7 @@ import '../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../controllers/input data realisasi/do_reguler_controller.dart';
 import '../controllers/input data realisasi/request_kendaraan_controller.dart';
 import '../controllers/master data/type_motor_controller.dart';
+import '../controllers/tampil seluruh data/all_estimasi_controller.dart';
 import '../controllers/tampil seluruh data/all_global_controller.dart';
 import '../controllers/tampil seluruh data/all_harian_lps_controller.dart';
 import '../controllers/tampil seluruh data/all_kurang_controller.dart';
@@ -25,6 +26,7 @@ import '../screens/master data/type_motor_screen.dart';
 import '../screens/onboarding.dart';
 import '../screens/profile.dart';
 import '../screens/rootpage.dart';
+import '../screens/tampil seluruh data/do_estimasi_all.dart';
 import '../screens/tampil seluruh data/do_global_all.dart';
 import '../screens/tampil seluruh data/do_harian_lps.dart';
 import '../screens/tampil seluruh data/do_kurang_all.dart';
@@ -115,6 +117,12 @@ class AppRoutes {
             page: () => const DoMutasiAll(),
             binding: BindingsBuilder(() {
               Get.put(DoMutasiController());
+            })),
+        GetPage(
+            name: '/all-do-estimasi',
+            page: () => const AllDoEstimasi(),
+            binding: BindingsBuilder(() {
+              Get.put(AllEstimasiController());
             })),
         // Input data realisasi
         GetPage(

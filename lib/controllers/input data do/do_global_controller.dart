@@ -124,6 +124,7 @@ class DataDOGlobalController extends GetxController {
         data.idPlant.toString() == idplant.value && data.tgl == tgl.value);
 
     if (isDuplicate) {
+      CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Maaf tanggal dan plant sudah di masukkan sebelumnya 🙄',

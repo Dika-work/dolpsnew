@@ -218,6 +218,8 @@ class CustomDrawer extends StatelessWidget {
                                 : const SizedBox.shrink(),
                             user.tipe == 'admin'
                                 ? ListTile(
+                                    onTap: () =>
+                                        Get.toNamed('/all-do-estimasi'),
                                     leading: const Icon(
                                       Iconsax.record,
                                       color: AppColors.darkExpandableContent,

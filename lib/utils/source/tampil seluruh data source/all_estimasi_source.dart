@@ -84,32 +84,54 @@ class AllEstimasiSource extends DataGridSource {
         ]);
   }
 
+  List<DataGridRow> _generateEmptyRows(int count) {
+    return List.generate(
+      count,
+      (index) {
+        return const DataGridRow(cells: [
+          DataGridCell<String>(columnName: 'No', value: '-'),
+          DataGridCell<String>(columnName: 'Tanggal', value: '-'),
+          DataGridCell<String>(columnName: 'HSO - SRD', value: '-'),
+          DataGridCell<String>(columnName: 'HSO - MKS', value: '-'),
+          DataGridCell<String>(columnName: 'HSO - MKS', value: '-'),
+          DataGridCell<String>(columnName: 'HSO - PTK', value: '-'),
+          DataGridCell<String>(columnName: 'BJM', value: '-'),
+        ]);
+      },
+    );
+  }
+
   void _updateDataPager(List<DoEstimasiAllModel> allGlobal, int startIndex) {
     this.startIndex = startIndex;
     index = startIndex;
 
-    _doEstimasiData =
-        allGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
-      index++;
-      final tglParsed =
-          CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
-      return DataGridRow(cells: [
-        DataGridCell<int>(columnName: 'No', value: index),
-        DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
-        DataGridCell<String>(
-            columnName: 'HSO - SRD',
-            value: data.jumlah1 == 0 ? '-' : data.jumlah1.toString()),
-        DataGridCell<String>(
-            columnName: 'HSO - MKS',
-            value: data.jumlah2 == 0 ? '-' : data.jumlah2.toString()),
-        DataGridCell<String>(
-            columnName: 'HSO - PTK',
-            value: data.jumlah3 == 0 ? '-' : data.jumlah3.toString()),
-        DataGridCell<String>(
-            columnName: 'BJM',
-            value: data.jumlah4 == 0 ? '-' : data.jumlah4.toString()),
-      ]);
-    }).toList();
+    if (doEstimasi.isEmpty) {
+      _doEstimasiData = _generateEmptyRows(1);
+    } else {
+      _doEstimasiData =
+          allGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
+        index++;
+        final tglParsed =
+            CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
+        return DataGridRow(cells: [
+          DataGridCell<int>(columnName: 'No', value: index),
+          DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
+          DataGridCell<String>(
+              columnName: 'HSO - SRD',
+              value: data.jumlah1 == 0 ? '-' : data.jumlah1.toString()),
+          DataGridCell<String>(
+              columnName: 'HSO - MKS',
+              value: data.jumlah2 == 0 ? '-' : data.jumlah2.toString()),
+          DataGridCell<String>(
+              columnName: 'HSO - PTK',
+              value: data.jumlah3 == 0 ? '-' : data.jumlah3.toString()),
+          DataGridCell<String>(
+              columnName: 'BJM',
+              value: data.jumlah4 == 0 ? '-' : data.jumlah4.toString()),
+        ]);
+      }).toList();
+      notifyListeners();
+    }
   }
 
   @override
