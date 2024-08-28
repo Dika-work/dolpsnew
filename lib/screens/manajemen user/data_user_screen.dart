@@ -347,6 +347,8 @@ class AddUserData extends StatelessWidget {
                         items: const ['0', '1', '2', '3', '4'],
                         onChanged: (String? value) {
                           controller.wilayah.value = value!;
+                          print(
+                              'ini adlaah nilai baru daerah: ${controller.wilayah.value}');
                         },
                       ),
                     ),

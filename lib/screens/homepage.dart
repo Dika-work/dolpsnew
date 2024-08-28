@@ -33,13 +33,13 @@ class Homepage extends StatelessWidget {
       'Plant': 80,
       'Tujuan': 120,
       'Jml': double.nan,
-      if (controllerHarianHome.daerah == 1 || controllerHarianHome.daerah == 0)
-        'SRD': double.nan,
-      if (controllerHarianHome.daerah == 2 || controllerHarianHome.daerah == 0)
-        'MKS': double.nan,
       if (controllerHarianHome.daerah == 3 || controllerHarianHome.daerah == 0)
-        'PTK': double.nan,
+        'SRD': double.nan,
+      if (controllerHarianHome.daerah == 1 || controllerHarianHome.daerah == 0)
+        'MKS': double.nan,
       if (controllerHarianHome.daerah == 4 || controllerHarianHome.daerah == 0)
+        'PTK': double.nan,
+      if (controllerHarianHome.daerah == 2 || controllerHarianHome.daerah == 0)
         'BJM': double.nan,
     };
 
@@ -201,7 +201,7 @@ class Homepage extends StatelessWidget {
                   ];
 
                   // Tambahkan kolom dinamis SRD, MKS, PTK, BJM
-                  if (controllerHarianHome.daerah == 1 ||
+                  if (controllerHarianHome.daerah == 3 ||
                       controllerHarianHome.daerah == 0) {
                     columns.add(
                       GridColumn(
@@ -225,7 +225,7 @@ class Homepage extends StatelessWidget {
                     );
                   }
 
-                  if (controllerHarianHome.daerah == 2 ||
+                  if (controllerHarianHome.daerah == 1 ||
                       controllerHarianHome.daerah == 0) {
                     columns.add(
                       GridColumn(
@@ -249,7 +249,7 @@ class Homepage extends StatelessWidget {
                     );
                   }
 
-                  if (controllerHarianHome.daerah == 3 ||
+                  if (controllerHarianHome.daerah == 4 ||
                       controllerHarianHome.daerah == 0) {
                     columns.add(
                       GridColumn(
@@ -273,7 +273,7 @@ class Homepage extends StatelessWidget {
                     );
                   }
 
-                  if (controllerHarianHome.daerah == 4 ||
+                  if (controllerHarianHome.daerah == 2 ||
                       controllerHarianHome.daerah == 0) {
                     columns.add(
                       GridColumn(
@@ -296,6 +296,8 @@ class Homepage extends StatelessWidget {
                       ),
                     );
                   }
+
+                  print('ini banyaknya columns : ${columns.length}');
 
                   // Cek kondisi untuk menempatkan tabel di tengah
                   bool shouldCenterTable = (controllerHarianHome.daerah == 1 ||
@@ -847,7 +849,7 @@ class Homepage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    content: Column(
+                    content: const Column(
                       children: [
                         Text('asdasdasd'),
                         Text('asdasdasd'),

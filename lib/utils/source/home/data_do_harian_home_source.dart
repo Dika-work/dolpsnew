@@ -28,6 +28,7 @@ class DataDoHarianHomeSource extends DataGridSource {
   ];
 
   int index = 0;
+  List<DataGridRow> doGlobalHarianModel = [];
 
   DataDoHarianHomeSource({
     required List<DoHarianHomeModel> doGlobalHarian,
@@ -69,29 +70,39 @@ class DataDoHarianHomeSource extends DataGridSource {
 
       index++;
       print('..ini index di do home hari ini $index');
-      return DataGridRow(cells: [
+
+      // Buat list untuk menyimpan cells
+      List<DataGridCell> cells = [
         DataGridCell<int>(columnName: 'No', value: index),
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
-            columnName: 'Jml', value: jumlah == 0 ? '-' : jumlah.toString()),
-        if (controller.daerah == 1 || controller.daerah == 0)
-          DataGridCell<String>(
-              columnName: 'SRD',
-              value: data.srd == 0 ? '-' : data.srd.toString()),
-        if (controller.daerah == 2 || controller.daerah == 0)
-          DataGridCell<String>(
-              columnName: 'MKS',
-              value: data.mks == 0 ? '-' : data.mks.toString()),
-        if (controller.daerah == 3 || controller.daerah == 0)
-          DataGridCell<String>(
-              columnName: 'PTK',
-              value: data.ptk == 0 ? '-' : data.ptk.toString()),
-        if (controller.daerah == 4 || controller.daerah == 0)
-          DataGridCell<String>(
-              columnName: 'BJM',
-              value: data.bjm == 0 ? '-' : data.bjm.toString()),
-      ]);
+            columnName: 'Jml', value: jumlah == 0 ? '-' : jumlah.toString())
+      ];
+
+      // Tambahkan kolom berdasarkan nilai `daerah`
+      if (controller.daerah == 0 || controller.daerah == 3) {
+        cells.add(DataGridCell<String>(
+            columnName: 'SRD',
+            value: data.srd == 0 ? '-' : data.srd.toString()));
+      }
+      if (controller.daerah == 0 || controller.daerah == 1) {
+        cells.add(DataGridCell<String>(
+            columnName: 'MKS',
+            value: data.mks == 0 ? '-' : data.mks.toString()));
+      }
+      if (controller.daerah == 0 || controller.daerah == 4) {
+        cells.add(DataGridCell<String>(
+            columnName: 'PTK',
+            value: data.ptk == 0 ? '-' : data.ptk.toString()));
+      }
+      if (controller.daerah == 0 || controller.daerah == 2) {
+        cells.add(DataGridCell<String>(
+            columnName: 'BJM',
+            value: data.bjm == 0 ? '-' : data.bjm.toString()));
+      }
+
+      return DataGridRow(cells: cells);
     }).toList();
 
     // Menghitung total hanya jika plant yang sesuai ada dalam data
@@ -103,27 +114,36 @@ class DataDoHarianHomeSource extends DataGridSource {
     final totalBjm = doGlobalHarian.fold(0, (sum, item) => sum + item.bjm);
 
     // Tambahkan baris total
-    doGlobalHarianModel.add(DataGridRow(cells: [
+    List<DataGridCell> totalCells = [
       const DataGridCell<int>(columnName: 'No', value: null),
       const DataGridCell<String>(columnName: 'Plant', value: 'TOTAL'),
       const DataGridCell<String>(columnName: 'Tujuan', value: null),
       DataGridCell<String>(
           columnName: 'Jml',
           value: totalJumlah == 0 ? '-' : totalJumlah.toString()),
-      DataGridCell<String>(
-          columnName: 'SRD', value: totalSrd == 0 ? '-' : totalSrd.toString()),
-      DataGridCell<String>(
-          columnName: 'MKS', value: totalMks == 0 ? '-' : totalMks.toString()),
-      DataGridCell<String>(
-          columnName: 'PTK', value: totalPtk == 0 ? '-' : totalPtk.toString()),
-      DataGridCell<String>(
-          columnName: 'BJM', value: totalBjm == 0 ? '-' : totalBjm.toString()),
-    ]));
+    ];
+
+    if (controller.daerah == 0 || controller.daerah == 3) {
+      totalCells.add(DataGridCell<String>(
+          columnName: 'SRD', value: totalSrd == 0 ? '-' : totalSrd.toString()));
+    }
+    if (controller.daerah == 0 || controller.daerah == 1) {
+      totalCells.add(DataGridCell<String>(
+          columnName: 'MKS', value: totalMks == 0 ? '-' : totalMks.toString()));
+    }
+    if (controller.daerah == 0 || controller.daerah == 4) {
+      totalCells.add(DataGridCell<String>(
+          columnName: 'PTK', value: totalPtk == 0 ? '-' : totalPtk.toString()));
+    }
+    if (controller.daerah == 0 || controller.daerah == 2) {
+      totalCells.add(DataGridCell<String>(
+          columnName: 'BJM', value: totalBjm == 0 ? '-' : totalBjm.toString()));
+    }
+
+    doGlobalHarianModel.add(DataGridRow(cells: totalCells));
 
     print('Final DataGridRow hari ini count: ${doGlobalHarianModel.length}');
   }
-
-  List<DataGridRow> doGlobalHarianModel = [];
 
   @override
   List<DataGridRow> get rows => doGlobalHarianModel;
@@ -132,101 +152,41 @@ class DataDoHarianHomeSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = doGlobalHarianModel.indexOf(row);
     bool isTotalRow = rowIndex == doGlobalHarianModel.length - 1;
-    final controller = Get.find<DataDOHarianHomeController>();
 
-    List<Widget> cells = [
-      ...row.getCells().take(8).map<Widget>(
-        (e) {
-          Color cellColor = Colors.transparent;
+    List<Widget> cells = row.getCells().map<Widget>((e) {
+      Color cellColor = Colors.transparent;
 
-          if (isTotalRow && e.columnName == 'Jml') {
-            cellColor = Colors.blue;
-          } else if (isTotalRow &&
-              (e.columnName == 'SRD' ||
-                  e.columnName == 'MKS' ||
-                  e.columnName == 'PTK' ||
-                  e.columnName == 'BJM')) {
-            cellColor = Colors.yellow;
-          } else if (e.columnName == 'Jml') {
-            cellColor = AppColors.secondary;
-          }
-          return Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-            color: cellColor,
-            child: Text(
-              e.value?.toString() ?? '',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: isTotalRow ? FontWeight.bold : FontWeight.normal),
-            ),
-          );
-        },
-      ),
-    ];
+      if (isTotalRow && e.columnName == 'Jml') {
+        cellColor = Colors.blue;
+      } else if (isTotalRow &&
+          (e.columnName == 'SRD' ||
+              e.columnName == 'MKS' ||
+              e.columnName == 'PTK' ||
+              e.columnName == 'BJM')) {
+        cellColor = Colors.yellow;
+      } else if (e.columnName == 'Jml') {
+        cellColor = AppColors.secondary;
+      }
 
-    if (controller.daerah == 1 || controller.daerah == 0) {
-      cells.add(Container(
+      return Container(
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        color: cellColor,
         child: Text(
-          row
-              .getCells()
-              .firstWhere((cell) => cell.columnName == 'SRD')
-              .value
-              .toString(),
+          e.value?.toString() ?? '',
           textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: isTotalRow ? FontWeight.bold : FontWeight.normal,
+          ),
         ),
-      ));
-    }
+      );
+    }).toList();
 
-    if (controller.daerah == 2 || controller.daerah == 0) {
-      cells.add(Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-        child: Text(
-          row
-              .getCells()
-              .firstWhere((cell) => cell.columnName == 'MKS')
-              .value
-              .toString(),
-          textAlign: TextAlign.center,
-        ),
-      ));
-    }
-
-    if (controller.daerah == 3 || controller.daerah == 0) {
-      cells.add(Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-        child: Text(
-          row
-              .getCells()
-              .firstWhere((cell) => cell.columnName == 'PTK')
-              .value
-              .toString(),
-          textAlign: TextAlign.center,
-        ),
-      ));
-    }
-
-    if (controller.daerah == 4 || controller.daerah == 0) {
-      cells.add(Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-        child: Text(
-          row
-              .getCells()
-              .firstWhere((cell) => cell.columnName == 'BJM')
-              .value
-              .toString(),
-          textAlign: TextAlign.center,
-        ),
-      ));
-    }
+    print('Jumlah cells :${cells.length}');
 
     return DataGridRowAdapter(
-        color: rowIndex % 2 == 0 ? Colors.white : Colors.grey[200],
-        cells: cells);
+      color: rowIndex % 2 == 0 ? Colors.white : Colors.grey[200],
+      cells: cells,
+    );
   }
 }

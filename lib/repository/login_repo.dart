@@ -45,7 +45,6 @@ class LoginRepository {
 
   void handleError(dynamic e) {
     print('Terjadi kesalahan saat mencoba login: $e');
-    showErrorSnackbar(
-        'Error☠️', 'Pastikan sudah terhubung dengan wifi kantor 😁');
+    showErrorSnackbar('Error☠️', e.toString());
   }
 }

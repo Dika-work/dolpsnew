@@ -11,7 +11,8 @@ import '../../screens/homepage.dart';
 
 class StorageUtil {
   final prefs = GetStorage();
-  final baseURL = 'http://langgeng.dyndns.biz';
+  // final baseURL = 'http://langgeng.dyndns.biz';
+  final baseURL = 'https://4297-36-89-51-25.ngrok-free.app';
 
   UserModel? getUserDetails() {
     final data = prefs.read('user');

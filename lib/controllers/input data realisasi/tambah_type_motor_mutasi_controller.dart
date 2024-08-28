@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/tambah_type_motor_model.dart';
 import '../../repository/input data realisasi/tambah_type_motor_mutasi_repo.dart';
+import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
@@ -15,6 +16,7 @@ import 'do_mutasi_controller.dart';
 import 'tambah_type_motor_controller.dart';
 
 class TambahTypeMotorMutasiController extends GetxController {
+  final storageUtil = StorageUtil();
   final isLoadingMutasi = Rx<bool>(false);
   RxList<TambahTypeMotorMutasiModel> tambahTypeMotorMutasiModel =
       <TambahTypeMotorMutasiModel>[].obs;
@@ -119,7 +121,7 @@ class TambahTypeMotorMutasiController extends GetxController {
       // Send data to the API
       final response = await http.post(
         Uri.parse(
-            'http://langgeng.dyndns.biz/DO/api/api_packing_list_motor.php?action=Testing'),
+            '${storageUtil.baseURL}/DO/api/api_packing_list_motor.php?action=Testing'),
         headers: {"Content-Type": "application/json"},
         body: json.encode(dataToSend),
       );

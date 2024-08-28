@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ import '../../utils/popups/snackbar.dart';
 import 'do_reguler_controller.dart';
 
 class TambahTypeMotorController extends GetxController {
+  final storageUtil = StorageUtil();
   final isLoadingTambahType = Rx<bool>(false);
   RxList<TambahTypeMotorModel> tambahTypeMotorModel =
       <TambahTypeMotorModel>[].obs;
@@ -99,7 +101,7 @@ class TambahTypeMotorController extends GetxController {
       // Kirim data ke API
       final response = await http.post(
         Uri.parse(
-            'http://langgeng.dyndns.biz/DO/api/api_packing_list_motor.php?action=Testing'),
+            '${storageUtil.baseURL}/DO/api/api_packing_list_motor.php?action=Testing'),
         headers: {"Content-Type": "application/json"},
         body: json.encode(dataToSend),
       );
