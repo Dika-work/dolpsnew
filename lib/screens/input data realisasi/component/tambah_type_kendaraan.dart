@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/do_reguler_controller.dart';
+import '../../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../../helpers/helper_function.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
@@ -32,7 +33,8 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
   late String tgl;
   late int jumlahMotor;
   final isExceedingCapacity = false.obs;
-  final plotRealisasiController = Get.find<PlotRealisasiController>();
+  final plotRealisasiController = Get.put(PlotRealisasiController());
+  final editTypeMotorController = Get.put(EditTypeMotorController());
   final ValueNotifier<Set<TabDaerahTujuan>> highlightedTabs =
       ValueNotifier<Set<TabDaerahTujuan>>({});
 
@@ -47,6 +49,13 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
     plotRealisasiController.fetchPlotRealisasi(id, jumlahMotor).then((_) {
       updateExceedingCapacity();
     });
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        widget.controller.fetchTambahTypeMotor(id).then((_) {
+          updateExceedingCapacity();
+        });
+      },
+    );
   }
 
   void updateExceedingCapacity() {
@@ -102,12 +111,6 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) async {
-        widget.controller.fetchTambahTypeMotor(id);
-      },
-    );
-
     final doRegulerController = Get.put(DoRegulerController());
     late Map<String, double> columnWidths = {
       'No': double.nan,
@@ -123,7 +126,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
     const double rowHeight = 55.0;
     const double headerHeight = 32.0;
 
-    const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
+    const double gridHeight = headerHeight + ((rowHeight) * (rowsPerPage + 1));
 
     final selectedDaerahTujuan = ValueNotifier(TabDaerahTujuan.srd);
 
@@ -552,13 +555,14 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                   ),
                                 ),
                                 ElevatedButton(
-                                  onPressed: () {
-                                    print(
-                                        '...INI BAKALAN KE CLASS NAME EDIT TYPE zzz...');
-                                    Get.to(() => EditTypeKendaraan(
-                                        model: doRegulerController
-                                            .doRealisasiModel.first));
-                                  },
+                                  onPressed: () =>
+                                      Get.to(() => EditTypeKendaraan(
+                                            model: doRegulerController
+                                                .doRealisasiModel.first,
+                                            onConfirm: () => editTypeMotorController
+                                                .editDanHapusTambahTypeKendaraan(
+                                                    id),
+                                          )),
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20.0, horizontal: 25.0),
@@ -639,8 +643,6 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                       onPressed: () {
                                         if (plotRealisasiController
                                             .isJumlahPlotEqual.value) {
-                                          print(
-                                              '...INI JUMLAH PLOT REALISASI DAN JUMLAH UNIT MOTOR SUDAH SAMA...');
                                           widget.controller
                                               .selesaiTypeMotor(id);
                                         } else if (widget
@@ -649,17 +651,12 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                                     selectedDaerahTujuan.value]
                                                 ?.isEmpty ??
                                             true) {
-                                          print(
-                                              '..TIDAK ADA DROPDOWN ATAU TEXTFORMFIELD DISNI..');
                                           SnackbarLoader.errorSnackBar(
                                             title: 'Peringatan ⚠️',
                                             message:
                                                 'Tidak ada data untuk disimpan. Tambahkan data terlebih dahulu.',
                                           );
                                         } else {
-                                          print(
-                                              '...INI BTN SELESAI TAMBAH TYPE KENDARAAN...');
-
                                           bool hasData = false;
                                           bool hasValidData = true;
 

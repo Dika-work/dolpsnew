@@ -530,6 +530,8 @@ class EditDataDOGlobal extends StatefulWidget {
 class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
   late int id;
   late String tgl;
+  late int idPlant;
+  late String tujuan;
   late TextEditingController srd;
   late TextEditingController mks;
   late TextEditingController ptk;
@@ -540,6 +542,8 @@ class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
     super.initState();
     id = widget.model.id;
     tgl = widget.model.tgl;
+    idPlant = int.parse(widget.controller.idplant.value);
+    tujuan = widget.controller.tujuanDisplayValue;
     srd = TextEditingController(text: widget.model.srd.toString());
     mks = TextEditingController(text: widget.model.mks.toString());
     ptk = TextEditingController(text: widget.model.ptk.toString());
@@ -558,6 +562,7 @@ class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text('Tanggal'),
             TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,
@@ -701,8 +706,8 @@ class _EditDataDOGlobalState extends State<EditDataDOGlobal> {
           onPressed: () => widget.controller.editDOGlobal(
             id,
             tgl,
-            int.parse(widget.controller.idplant.value),
-            widget.controller.tujuanDisplayValue,
+            idPlant,
+            tujuan,
             int.parse(srd.text),
             int.parse(mks.text),
             int.parse(ptk.text),

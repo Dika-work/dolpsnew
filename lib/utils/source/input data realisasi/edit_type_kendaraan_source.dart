@@ -17,7 +17,9 @@ class EditTypeKendaraanSource extends DataGridSource {
     required this.onEdited,
     required this.onDeleted,
     int startIndex = 0,
-  });
+  }) {
+    _updateDataPager(editTypeMotorModel, startIndex);
+  }
 
   List<DataGridRow> _editTypeMotor = [];
   final controller = Get.put(EditTypeMotorController());
@@ -116,6 +118,7 @@ class EditTypeKendaraanSource extends DataGridSource {
           ]);
         },
       ).toList();
+      notifyListeners();
     }
   }
 

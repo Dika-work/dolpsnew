@@ -91,11 +91,8 @@ class KirimKendaraanSource extends DataGridSource {
     return List.generate(count, (index) {
       return const DataGridRow(cells: [
         DataGridCell<String>(columnName: 'No', value: '-'),
-        DataGridCell<String>(columnName: 'Plant', value: '-'),
-        DataGridCell<String>(columnName: 'Type', value: '-'),
         DataGridCell<String>(columnName: 'Supir', value: '-'),
-        DataGridCell<String>(columnName: 'Kendaraan', value: '-'),
-        DataGridCell<String>(columnName: 'Jenis', value: '-'),
+        DataGridCell<String>(columnName: 'No Polisi', value: '-'),
         DataGridCell<String>(columnName: 'Status', value: '-'),
       ]);
     });
@@ -115,14 +112,8 @@ class KirimKendaraanSource extends DataGridSource {
           index++;
           return DataGridRow(cells: [
             DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(columnName: 'Plant', value: data.plant),
-            DataGridCell<String>(
-                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
             DataGridCell<String>(columnName: 'Supir', value: data.supir),
-            DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
-            DataGridCell<String>(
-                columnName: 'Jenis',
-                value: '${data.inisialDepan}${data.inisialBelakang}'),
+            DataGridCell<String>(columnName: 'No Polisi', value: data.noPolisi),
             DataGridCell<String>(
                 columnName: 'Status',
                 value: data.status == 0 ? 'READY' : 'NOT'),

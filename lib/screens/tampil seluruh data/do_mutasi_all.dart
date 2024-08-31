@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_mutasi_controller.dart';
+import '../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/loader/circular_loader.dart';
@@ -20,6 +21,8 @@ class DoMutasiAll extends GetView<DoMutasiController> {
 
   @override
   Widget build(BuildContext context) {
+    final editTypeMotorController = Get.put(EditTypeMotorController());
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchMutasiAllContent();
     });
@@ -114,6 +117,8 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                 Get.to(
                   () => EditTypeKendaraan(
                     model: model,
+                    onConfirm: () => editTypeMotorController
+                        .editDanHapusTypeMotorAllMutasi(model.id),
                   ),
                 );
               },

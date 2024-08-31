@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../utils/constant/storage_util.dart';
+
 class CustomHelperFunctions {
+  final storageUtil = StorageUtil();
   static void navigateToScreen(BuildContext context, Widget screen) {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (_) => screen),
     );
   }
+
+  //  void Function? navigateToRootPage() {
+  //   Navigator.of(Get.overlayContext!).pop();
+  //   storageUtil.scaffoldKey.currentState!.closeDrawer();
+  // }
 
   // memotong teks yang terlalu panjang sehingga tidak melebihi panjang maksimum yang ditentukan
   static String truncateText(String text, int maxLength) {

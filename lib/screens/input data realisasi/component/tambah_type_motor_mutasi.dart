@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data realisasi/do_mutasi_controller.dart';
+import '../../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
@@ -31,6 +32,7 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
   late int id;
   late int jumlahMotor;
   final plotRealisasiController = Get.find<PlotRealisasiController>();
+  final editTypeMotorController = Get.put(EditTypeMotorController());
   final isExceedingCapacity = false.obs;
 
   @override
@@ -404,8 +406,11 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
                           print(
                               '...INI BAKALAN KE CLASS NAME EDIT TYPE zzz...');
                           Get.to(() => EditTypeKendaraan(
-                              model:
-                                  doMutasiController.doRealisasiModel.first));
+                                model:
+                                    doMutasiController.doRealisasiModel.first,
+                                onConfirm: () => editTypeMotorController
+                                    .editDanHapusTypeMotorMutasi(id),
+                              ));
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(

@@ -70,9 +70,9 @@ class DoKurangAll extends GetView<DataAllKurangController> {
                       },
                     );
                   },
-                  onDeleted: () {
-                    // Implementasi delete data di sini
-                    print('ini deleted btn');
+                  onDeleted: (DoKurangAllModel model) {
+                    controller.hapusDOKurang(model.id);
+                    print('ini deleted btn: ${model.id}');
                   },
                 );
 
@@ -336,7 +336,6 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
 
   String get tujuanDisplayValue => tujuanMap[plant] ?? '';
 
-
   @override
   void initState() {
     super.initState();
@@ -355,7 +354,7 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Edit data All Global',
+        'Edit Do Pengurangan Honda',
         style: Theme.of(context).textTheme.headlineMedium,
       ),
       content: SingleChildScrollView(
@@ -363,7 +362,7 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ini id nya : $id'),
+            const Text('Tanggal'),
             TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,
@@ -398,7 +397,6 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
                     : 'Tanggal',
               ),
             ),
-            Text(idPlant.toString()),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plant'),
             DropDownWidget(
@@ -424,9 +422,6 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
             ),
-            Text('Tujuan $tujuan'),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Text('Hari ini tgl : $tgl'),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: srd,
@@ -496,17 +491,16 @@ class _EditDoGlobalDataState extends State<EditDoGlobalData> {
           child: const Text('Close'),
         ),
         TextButton(
-          onPressed: () => print('...INI GLOBAL ALL DATA...'),
-          // onPressed: () => widget.controller.editDOHarian(
-          //   id,
-          //   tgl,
-          //   idPlant,
-          //   tujuan,
-          //   int.parse(srd.text),
-          //   int.parse(mks.text),
-          //   int.parse(ptk.text),
-          //   int.parse(bjm.text),
-          // ),
+          onPressed: () => widget.controller.editDOGlobal(
+            id,
+            tgl,
+            idPlant,
+            tujuan,
+            int.parse(srd.text),
+            int.parse(mks.text),
+            int.parse(ptk.text),
+            int.parse(bjm.text),
+          ),
           child: const Text('Simpan'),
         ),
       ],

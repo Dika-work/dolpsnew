@@ -228,58 +228,7 @@ class DoRegulerSource extends DataGridSource {
 
     // Add Edit cell
     if (controller.rolesEdit == 1) {
-      if (request?.status == 3 || request?.status == 4) {
-        cells.add(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (onEdit != null) {
-                      onEdit!(request!);
-                    }
-                  },
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
-                  child: Text(
-                    'Edit',
-                    style: Theme.of(Get.context!)
-                        .textTheme
-                        .bodyMedium
-                        ?.apply(color: AppColors.black),
-                  ),
-                ),
-              ),
-              const SizedBox(height: CustomSize.sm),
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (onType != null) {
-                      onType!(request!);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.success),
-                  child: Text(
-                    'Type',
-                    style: Theme.of(Get.context!)
-                        .textTheme
-                        .bodyMedium
-                        ?.apply(color: AppColors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      } else if (request?.status == 0 ||
-          request?.status == 1 ||
-          request?.status == 2) {
+      if (request?.status == 0 || request?.status == 1) {
         cells.add(
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -306,6 +255,49 @@ class DoRegulerSource extends DataGridSource {
             ],
           ),
         );
+      } else if (request?.status == 2 ||
+          request?.status == 3 ||
+          request?.status == 4) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (onEdit != null) {
+                    onEdit!(request!);
+                  }
+                },
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
+                child: Text(
+                  'Edit',
+                  style: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyMedium
+                      ?.apply(color: AppColors.black),
+                ),
+              ),
+              const SizedBox(height: CustomSize.sm),
+              ElevatedButton(
+                onPressed: () {
+                  if (onType != null) {
+                    onType!(request!);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success),
+                child: Text(
+                  'Type',
+                  style: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyMedium
+                      ?.apply(color: AppColors.white),
+                ),
+              ),
+            ],
+          ),
+        );
       } else {
         cells.add(const SizedBox.shrink());
       }
@@ -313,7 +305,7 @@ class DoRegulerSource extends DataGridSource {
       cells.add(const SizedBox.shrink()); // Placeholder for Edit
     }
 
-    print('ini banyaknya cells: ${cells.length}');
+    // print('ini banyaknya cells: ${cells.length}');
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
@@ -362,9 +354,6 @@ class DoRegulerSource extends DataGridSource {
     final filteredPlants = isAdmin
         ? validPlants // Jika admin, tampilkan semua plant
         : validPlants.where((plant) => plant.toString() == userPlant).toList();
-
-    print("doRealisasiModel reguler: $doRealisasiModel");
-    print("filteredPlants reguler: $filteredPlants");
 
     if (doRealisasiModel.isEmpty) {
       _doRegulerData = _generateEmptyRows(1);

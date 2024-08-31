@@ -17,9 +17,11 @@ import '../../../utils/source/input data realisasi/edit_type_kendaraan_source.da
 import '../../../utils/theme/app_colors.dart';
 
 class EditTypeKendaraan extends StatefulWidget {
-  const EditTypeKendaraan({super.key, required this.model});
+  const EditTypeKendaraan(
+      {super.key, required this.model, required this.onConfirm});
 
   final DoRealisasiModel model;
+  final void Function()? onConfirm;
 
   @override
   State<EditTypeKendaraan> createState() => _EditTypeKendaraanState();
@@ -38,6 +40,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
   int totalPlot = 0; // Inisialisasi dengan nilai default
   final plotController = Get.put(PlotRealisasiController());
   final typeMotorHondaController = Get.put(TypeMotorHondaController());
+  final controller = Get.put(EditTypeMotorController());
 
   @override
   void initState() {
@@ -55,6 +58,9 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
 
     // Fetch total plot
     fetchTotalPlot();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchAllTypeMotorById(id);
+    });
   }
 
   void fetchTotalPlot() async {
@@ -72,15 +78,9 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EditTypeMotorController());
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.fetchAllTypeMotorById(id);
-    });
-
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'Type Motor': double.nan,
+      'Type Motor': 120,
       'Daerah Tujuan': 120,
       'Jumlah': 120,
       'Action': 230,
@@ -88,8 +88,8 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
 
     const int rowsPerPage = 5;
     int currentPage = 0;
-    const double rowHeight = 75.0;
-    const double headerHeight = 32.0;
+    const double rowHeight = 80.0;
+    const double headerHeight = 50.0;
     const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
 
     return Scaffold(
@@ -371,12 +371,20 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                       },
                     );
 
+                    final bool isTableEmpty =
+                        controller.doRealisasiModel.isEmpty;
+                    final rowCount = controller.doRealisasiModel.length;
+                    final double tableHeight = isTableEmpty
+                        ? 110
+                        : headerHeight +
+                            (rowHeight * rowCount)
+                                .clamp(0, gridHeight - headerHeight);
                     return LayoutBuilder(
                       builder: (context, constraints) {
                         return Column(
                           children: [
                             SizedBox(
-                              height: gridHeight,
+                              height: tableHeight,
                               child: SfDataGrid(
                                   source: dataSource,
                                   rowHeight: 65,
@@ -529,7 +537,8 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () => controller.editdanHapusTypeKendaraan(id),
+                    onPressed: widget.onConfirm,
+                    // onPressed: () => controller.editdanHapusTypeKendaraan(id),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                           vertical: 20.0, horizontal: 25.0),

@@ -1,4 +1,3 @@
-import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -11,6 +10,7 @@ import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/input data realisasi/request_mobil_source.dart';
@@ -28,7 +28,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       'No': double.nan,
       'Pengurus': double.nan,
       'Tanggal': 130,
-      'Jam': 100,
       'Plant': double.nan,
       'Tujuan': 130,
       'Type': double.nan,
@@ -91,6 +90,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
               onLihat: (RequestKendaraanModel model) {
                 showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (context) {
                     return LihatKendaraanScreen(
                       model: model,
@@ -104,61 +104,15 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                         selectedIndex: model.idReq,
                       )),
               onEdit: (RequestKendaraanModel model) {
-                Map<String, dynamic> updatedValues = {};
-
-                CustomDialogs.defaultDialog(
+                showDialog(
                   context: context,
-                  titleWidget: Text(
-                    'Edit Request Kendaraan Honda',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  contentWidget: EditRequestKendaraan(
-                    controller: controller,
-                    model: model,
-                    onUpdated: ({
-                      required String tgl,
-                      required String plant,
-                      required String tujuan,
-                      required String typeDo,
-                      required String jenis,
-                      required int jumlah,
-                    }) {
-                      updatedValues = {
-                        'tgl': tgl,
-                        'plant': plant,
-                        'tujuan': tujuan,
-                        'typeDo': typeDo,
-                        'jenis': jenis,
-                        'jumlah': jumlah,
-                      };
-                    },
-                  ),
-                  onConfirm: () {
-                    print('Updated values: $updatedValues');
-                    // Simulasi untuk print data sebelum dikirim ke controller
-                    final typeDoValue =
-                        controller.typeDOMap[updatedValues['typeDo']] ?? 0;
-
-                    print('ID Req: ${model.idReq}');
-                    print('Tanggal: ${updatedValues['tgl']}');
-                    print('Plant: ${updatedValues['plant']}');
-                    print('Tujuan: ${updatedValues['tujuan']}');
-                    print('Type DO: $typeDoValue');
-                    print('Jenis: ${updatedValues['jenis']}');
-                    print('Jumlah: ${updatedValues['jumlah']}');
-
-                    controller.editReqKendaraan(
-                      model.idReq,
-                      updatedValues['tgl'],
-                      updatedValues['plant'],
-                      updatedValues['tujuan'],
-                      typeDoValue,
-                      updatedValues['jenis'],
-                      updatedValues['jumlah'],
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return EditRequestKendaraan(
+                      controller: controller,
+                      model: model,
                     );
                   },
-                  cancelText: 'Close',
-                  confirmText: 'Save',
                 );
               },
               requestKendaraanModel: controller.requestKendaraanModel,
@@ -209,22 +163,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                       ),
                       child: Text(
                         'Tanggal',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Jam']!,
-                  columnName: 'Jam',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Jam',
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
@@ -400,6 +338,13 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                                       message:
                                           'Pastikan tanggal telah di isi 😁',
                                     );
+                                  } else if (controller.plant.value ==
+                                      'Pilih plant..') {
+                                    SnackbarLoader.errorSnackBar(
+                                      title: 'Gagal😪',
+                                      message:
+                                          'Pastikan plant telah di pilih 😁',
+                                    );
                                   } else {
                                     controller.addRequestKendaraan();
                                   }
@@ -512,15 +457,15 @@ class AddRequestKendaraan extends StatelessWidget {
               () => DropDownWidget(
                 value: controller.plant.value,
                 items: controller.isAdmin
-                    ? controller
-                        .regulerPlants // Menampilkan semua plant jika admin
-                    : [
-                        controller.plant.value
-                      ], // Menampilkan plant spesifik untuk non-admin
+                    ? ['Pilih plant..'] + controller.regulerPlants
+                    : ['Pilih plant..', controller.plant.value],
                 onChanged: (String? newValue) {
-                  if (newValue != null) {
+                  if (newValue != null && newValue != 'Pilih plant..') {
                     controller.plant.value = newValue;
                     print('ini value dari plant ${controller.plant.value}');
+                  } else if (newValue == 'Pilih plant..') {
+                    controller.plant.value =
+                        'Pilih plant..'; // Reset ke nilai default
                   }
                 },
               ),
@@ -549,6 +494,26 @@ class AddRequestKendaraan extends StatelessWidget {
                     hintText: controller.jumlahHarian.toString(),
                     filled: true,
                     fillColor: AppColors.buttonDisabled),
+              ),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Type DO'),
+            Obx(
+              () => DropDownWidget(
+                value:
+                    controller.typeDO.value, // Menampilkan label yang dipilih
+                items: controller.typeDOMap.keys
+                    .toList(), // Menggunakan key dari map sebagai item dropdown
+                onChanged: (String? value) {
+                  if (value != null) {
+                    controller.typeDO.value = value; // Update label
+                    controller.typeDOValue.value =
+                        controller.typeDOMap[value] ??
+                            0; // Update nilai integer yang sesuai
+                    print(
+                        'Selected type DO: $value dengan nilai ${controller.typeDOValue.value}');
+                  }
+                },
               ),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
@@ -586,194 +551,225 @@ class AddRequestKendaraan extends StatelessWidget {
   }
 }
 
+// !Cek lagi baigan edit request kendaraan (belum di test)
+
 class EditRequestKendaraan extends StatefulWidget {
   const EditRequestKendaraan({
     super.key,
     required this.controller,
     required this.model,
-    required this.onUpdated,
   });
 
   final RequestKendaraanController controller;
   final RequestKendaraanModel model;
-  final void Function({
-    required String tgl,
-    required String plant,
-    required String tujuan,
-    required String typeDo,
-    required String jenis,
-    required int jumlah,
-  }) onUpdated;
 
   @override
   State<EditRequestKendaraan> createState() => _EditRequestKendaraanState();
 }
 
 class _EditRequestKendaraanState extends State<EditRequestKendaraan> {
+  late int id;
   late String tgl;
-  late String typeDo;
-  late TextEditingController jumlah;
+  late String plant;
+  late String tujuan;
+  late String type;
+  late String jenisReq;
+  late TextEditingController jumlahReq;
+
+  final Map<String, String> tujuanMap = {
+    '1100': 'Sunter',
+    '1200': 'Pegangsaan',
+    '1300': 'Cibitung',
+    '1350': 'Cibitung',
+    '1700': 'Dawuan',
+    '1800': 'Dawuan',
+    'DC (Pondok Ungu)': 'Bekasi',
+    'TB (Tambun Bekasi)': 'Bekasi',
+    '1900': 'Bekasi',
+  };
+
+  final Map<String, int> typeDOMap = {
+    'REGULER': 0,
+    'MUTASI': 1,
+  };
+
+  final List<String> jenisKendaraanList = [
+    'MOBIL MOTOR 16',
+    'MOBIL MOTOR 40',
+    'MOBIL MOTOR 64',
+    'MOBIL MOTOR 86',
+  ];
 
   @override
   void initState() {
     super.initState();
+    id = widget.model.idReq;
     tgl = widget.model.tgl;
-    typeDo = widget.model.type == 0 ? 'REGULER' : 'MUTASI';
-    jumlah = TextEditingController(text: widget.model.jumlah.toString());
-  }
-
-  String get tujuanDisplayValue =>
-      widget.controller.tujuanMap[widget.model.plant] ?? '';
-
-  void _updateValues() {
-    widget.onUpdated(
-      tgl: tgl,
-      plant: widget.model.plant,
-      tujuan: tujuanDisplayValue,
-      typeDo: typeDo,
-      jenis: widget.model.jenis,
-      jumlah: int.tryParse(jumlah.text) ?? 0,
-    );
+    plant = widget.model.plant;
+    tujuan = widget.model.tujuan;
+    type = widget.model.type == 0 ? 'REGULER' : 'MUTASI';
+    jenisReq = widget.model.jenis;
+    jumlahReq = TextEditingController(text: widget.model.jumlah.toString());
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Tanggal Req',
-          ),
-          TextFormField(
-            keyboardType: TextInputType.none,
-            readOnly: true,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                onPressed: () {
-                  DateTime? selectedDate = DateTime.tryParse(tgl);
-                  showDatePicker(
-                    context: context,
-                    locale: const Locale("id", "ID"),
-                    initialDate: selectedDate ?? DateTime.now(),
-                    firstDate: DateTime(1850),
-                    lastDate: DateTime(2040),
-                  ).then((newSelectedDate) {
-                    if (newSelectedDate != null) {
-                      setState(() {
-                        tgl = CustomHelperFunctions.getFormattedDateDatabase(
-                            newSelectedDate);
-                        _updateValues();
-                        print('Ini tanggal yang dipilih : $tgl');
-                      });
-                    }
-                  });
-                },
-                icon: const Icon(Icons.calendar_today),
-              ),
-              hintText: tgl.isNotEmpty
-                  ? DateFormat.yMMMMd('id_ID').format(
-                      DateTime.tryParse('$tgl 00:00:00') ?? DateTime.now(),
-                    )
-                  : 'Tanggal',
-            ),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text(
-            'Plant',
-          ),
-          Obx(
-            () => DropDownWidget(
-              value: widget.controller.plant.value,
-              items: widget.controller.isAdmin
-                  ? widget.controller.idPlantMap.keys
-                      .toList() // Menampilkan semua plant jika admin
-                  : [
-                      widget.controller.plant.value
-                    ], // Menampilkan plant spesifik untuk non-admin
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  widget.controller.plant.value = newValue;
-                  print(
-                      'ini value dari plant ${widget.controller.plant.value}');
-                }
-              },
-            ),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text(
-            'Tujuan',
-          ),
-          Obx(
-            () => TextFormField(
+    return AlertDialog(
+      title: Text(
+        'Edit Request Kendaraan',
+        style: Theme.of(context).textTheme.headlineMedium,
+      ),
+      content: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Tanggal Req'),
+            TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Iconsax.truck_fast),
-                hintText: widget.controller
-                    .tujuanDisplayValue, // Nilai tujuan yang diperbarui
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    DateTime? selectedDate = DateTime.tryParse(tgl);
+
+                    showDatePicker(
+                      context: context,
+                      locale: const Locale("id", "ID"),
+                      initialDate: selectedDate ?? DateTime.now(),
+                      firstDate: DateTime(1850),
+                      lastDate: DateTime(2040),
+                    ).then((newSelectedDate) {
+                      if (newSelectedDate != null) {
+                        // Menggunakan setState untuk memperbarui nilai dan UI
+                        setState(() {
+                          tgl = CustomHelperFunctions.getFormattedDateDatabase(
+                              newSelectedDate);
+                          print('Ini tanggal yang dipilih : $tgl');
+                        });
+                      }
+                    });
+                  },
+                  icon: const Icon(Icons.calendar_today),
+                ),
+                hintText: tgl.isNotEmpty
+                    ? DateFormat.yMMMMd('id_ID').format(
+                        DateTime.tryParse('$tgl 00:00:00') ?? DateTime.now(),
+                      )
+                    : 'Tanggal',
+              ),
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Plant'),
+            DropDownWidget(
+              value: plant,
+              items: widget.controller.isAdmin
+                  ? widget.controller.idPlantMap.keys.toList()
+                  : [plant],
+              onChanged: (String? newValue) {
+                if (newValue != null) {
+                  setState(() {
+                    plant = newValue;
+                    print('ini value dari plant $plant');
+                  });
+                }
+              },
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Tujuan'),
+            TextFormField(
+              keyboardType: TextInputType.none,
+              readOnly: true,
+              decoration: InputDecoration(
+                hintText: tujuanMap[plant] ?? '',
                 filled: true,
                 fillColor: AppColors.buttonDisabled,
               ),
             ),
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text(
-            'Type DO',
-          ),
-          DropDownWidget(
-            value: typeDo,
-            items: widget.controller.typeDOMap.keys.toList(),
-            onChanged: (String? newValue) {
-              if (newValue != null) {
-                setState(() {
-                  typeDo = newValue;
-                  _updateValues();
-                  print('ini value dari typeDO $typeDo');
-                });
-              }
-            },
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text(
-            'Jenis Ken',
-          ),
-          DropDownWidget(
-            value: widget.model.jenis,
-            items: widget.controller.jenisKendaraanList,
-            onChanged: (String? value) {
-              setState(() {
-                print('Selected plant: $value');
-                widget.model.jenis = value!;
-                _updateValues();
-              });
-            },
-          ),
-          const SizedBox(height: CustomSize.spaceBtwItems),
-          const Text(
-            'Jumlah Ken',
-          ),
-          TextFormField(
-            controller: jumlah,
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Jumlah kendaraan harus di isi';
-              }
-              return null;
-            },
-            decoration: const InputDecoration(
-              prefixIcon: Icon(FontAwesomeIcons.truck),
-              hintText: 'Jumlah Kendaraan',
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Type DO'),
+            DropDownWidget(
+              value: type,
+              items: typeDOMap.keys.toList(),
+              onChanged: (String? value) {
+                if (value != null) {
+                  setState(() {
+                    type = value;
+                    print('Selected type DO: $value');
+                  });
+                }
+              },
             ),
-            onChanged: (value) {
-              _updateValues();
-            },
-          ),
-        ],
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Jenis Kendaraan'),
+            DropDownWidget(
+              value: jenisReq,
+              items: jenisKendaraanList,
+              onChanged: (String? value) {
+                if (value != null) {
+                  setState(() {
+                    jenisReq = value;
+                    print('Jenis Kendaraan selected: $jenisReq');
+                  });
+                }
+              },
+            ),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            const Text('Jumlah Kendaraan'),
+            TextFormField(
+              controller: jumlahReq,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Jumlah kendaraan harus di isi';
+                }
+                return null;
+              },
+              decoration: const InputDecoration(
+                prefixIcon: Icon(FontAwesomeIcons.truck),
+                hintText: 'Jumlah Kendaraan',
+              ),
+            ),
+          ],
+        ),
       ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            setState(() {
+              tgl = widget.model.tgl;
+              plant = widget.model.plant;
+              type = widget.model.type == 0 ? 'REGULER' : 'MUTASI';
+              jenisReq = widget.model.jenis;
+              jumlahReq.text = widget.model.jumlah.toString();
+            });
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+        TextButton(
+          onPressed: () {
+            widget.controller.editReqKendaraan(
+              id,
+              tgl,
+              plant,
+              tujuanMap[plant] ?? '',
+              typeDOMap[type]!,
+              jenisReq,
+              int.parse(jumlahReq.text),
+            );
+            print('ini id nya: $id');
+            print('ini tgl nya: $tgl');
+            print('ini plant nya: $plant');
+            print('ini tujuan nya: ${tujuanMap[plant] ?? ''}');
+            print('ini type nya: ${typeDOMap[type]!}');
+            print('ini jenis kendaraan nya: $jenisReq');
+            print('ini jumlah nya: ${jumlahReq.text.trim()}');
+          },
+          child: const Text('Simpan'),
+        ),
+      ],
     );
   }
 }

@@ -4,6 +4,8 @@ import '../../models/tampil seluruh data/do_harian_all_lps.dart';
 import '../../models/user_model.dart';
 import '../../repository/tampil seluruh data/harian_all_lps_repo.dart';
 import '../../utils/constant/storage_util.dart';
+import '../../utils/popups/dialogs.dart';
+import '../../utils/popups/full_screen_loader.dart';
 
 class DataAllHarianLpsController extends GetxController {
   final isLoadingGlobalHarian = Rx<bool>(false);
@@ -37,5 +39,34 @@ class DataAllHarianLpsController extends GetxController {
     } finally {
       isLoadingGlobalHarian.value = false;
     }
+  }
+
+  Future<void> editDOHarian(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    CustomDialogs.loadingIndicator();
+    await dataGlobalHarianRepo.editDOHarianContent(
+        id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+    CustomFullScreenLoader.stopLoading();
+
+    await fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> hapusDOHarian(
+    int id,
+  ) async {
+    CustomDialogs.loadingIndicator();
+    await dataGlobalHarianRepo.deleteDOHarianContent(id);
+
+    await fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
   }
 }

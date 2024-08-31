@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_reguler_controller.dart';
+import '../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/loader/circular_loader.dart';
@@ -21,13 +22,15 @@ class DoRegulerAll extends GetView<DoRegulerController> {
   @override
   Widget build(BuildContext context) {
     final tambahTypeMotorController = Get.put(TambahTypeMotorController());
+    final editTypeMotorController = Get.put(EditTypeMotorController());
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchRegulerAllContent();
     });
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'User': double.nan,
+      if (controller.roleUser == 'admin') 'User': double.nan,
       'Plant': double.nan,
       'Tgl': 130,
       'Supir(Panggilan)': 200,
@@ -65,6 +68,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
               onLihat: (DoRealisasiModel model) {
                 showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (context) {
                     return Dialog(
                         backgroundColor: AppColors.white,
@@ -109,6 +113,8 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                 Get.to(
                   () => EditTypeKendaraan(
                     model: model,
+                    onConfirm: () => editTypeMotorController
+                        .editDanHapusTypeMotorAllReguler(model.id),
                   ),
                 );
               },
@@ -132,9 +138,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                         headerGridLinesVisibility: GridLinesVisibility.both,
                         rowHeight: 65,
                         onQueryRowHeight: (RowHeightDetails details) {
-                          // Sesuaikan indeks dengan data yang sesuai
-                          int rowIndex = details.rowIndex -
-                              1; // Mengurangi 1 jika ada header
+                          int rowIndex = details.rowIndex - 1;
 
                           var request =
                               dataSource.doRealisasiModelAll.isNotEmpty &&
@@ -145,11 +149,13 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                   : null;
 
                           if (request != null &&
-                              controller.isAllRegulerAdmin &&
-                              (request.status == 3 || request.status == 4)) {
-                            return 150.0; // Tinggi row untuk status 4
+                              (request.status == 2 ||
+                                  request.status == 3 ||
+                                  request.status == 4)) {
+                            print('tinggi row nya 150');
+                            return 150.0;
                           } else {
-                            return details.rowHeight; // Tinggi default
+                            return details.rowHeight;
                           }
                         },
                         columns: [
@@ -169,22 +175,24 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                         .bodyMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
-                          GridColumn(
-                              width: columnWidths['User']!,
-                              columnName: 'User',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'User',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
+                          if (controller.roleUser == 'admin')
+                            GridColumn(
+                                width: columnWidths['User']!,
+                                columnName: 'User',
+                                label: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      color: Colors.lightBlue.shade100,
+                                    ),
+                                    child: Text(
+                                      'User',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ))),
                           GridColumn(
                               width: columnWidths['Plant']!,
                               columnName: 'Plant',
@@ -297,7 +305,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                         .bodyMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
-                          if (controller.rolesLihat == 1)
+                          if (controller.rolesLihat == 1 && controller.isAdmin)
                             GridColumn(
                                 width: columnWidths['Lihat']!,
                                 columnName: 'Lihat',

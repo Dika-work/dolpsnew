@@ -1,11 +1,12 @@
-import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_mutasi_controller.dart';
+import '../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/input data realisasi/do_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
 import 'component/edit_realisasi_mutasi.dart';
@@ -20,6 +21,8 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
 
   @override
   Widget build(BuildContext context) {
+    final editTypeMotorController = Get.put(EditTypeMotorController());
+
     late Map<String, double> columnWidths = {
       'No': double.nan,
       'Tujuan': 130,
@@ -59,6 +62,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
               onLihat: (DoRealisasiModel model) {
                 showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (context) {
                     return Dialog(
                         backgroundColor: AppColors.white,
@@ -109,6 +113,8 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                 Get.to(
                   () => EditTypeKendaraan(
                     model: model,
+                    onConfirm: () => editTypeMotorController
+                        .editDanHapusTypeMotorMutasi(model.id),
                   ),
                 );
               },

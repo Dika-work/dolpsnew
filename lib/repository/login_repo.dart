@@ -27,10 +27,11 @@ class LoginRepository {
           Get.offAllNamed('/rootpage');
           return user;
         } else {
-          showErrorSnackbar('Gagal😪', 'Respon dari server tidak valid.');
+          showErrorSnackbar('Gagal😪', 'Username dan password salah..😒 ');
         }
       } else {
-        showErrorSnackbar('Gagal😪', 'Username dan password salah..😒');
+        showErrorSnackbar(
+            'Gagal😪', 'Respon dari server tidak valid.${response.statusCode}');
       }
     } catch (e) {
       handleError(e);

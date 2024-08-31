@@ -9,7 +9,7 @@ import '../../constant/custom_size.dart';
 
 class DataAllGlobalSource extends DataGridSource {
   final void Function(DoGlobalAllModel)? onEdited;
-  final void Function()? onDeleted;
+  final void Function(DoGlobalAllModel)? onDeleted;
   final List<DoGlobalAllModel> allGlobal;
   int startIndex = 0;
 
@@ -81,7 +81,15 @@ class DataAllGlobalSource extends DataGridSource {
               height: 60,
               width: 100,
               child: ElevatedButton(
-                  onPressed: onDeleted, child: const Text('Hapus')))
+                  onPressed: () {
+                    if (onDeleted != null && allGlobal.isNotEmpty) {
+                      onDeleted!(request);
+                    } else {
+                      return;
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                  child: const Text('Hapus')))
         ],
       ));
     }

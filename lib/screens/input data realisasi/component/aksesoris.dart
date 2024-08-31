@@ -26,6 +26,17 @@ class _AksesorisState extends State<Aksesoris> {
   late String supir;
   late int jumlahUnit;
 
+  late int kelengkapanHLM;
+  late int kelengkapanAC;
+  late int kelengkapanKS;
+  late int kelengkapanTS;
+  late int kelengkapanBP;
+  late int kelengkapanBS;
+  late int kelengkapanPLT;
+  late int kelengkapanSTAY;
+  late int kelengkapanAcBesar;
+  late int kelengkapanPlastik;
+
   final controller = Get.put(AksesorisController());
 
   @override
@@ -39,6 +50,32 @@ class _AksesorisState extends State<Aksesoris> {
     noPolisi = widget.model.noPolisi;
     supir = widget.model.supir;
     jumlahUnit = widget.model.jumlahUnit;
+
+    if (controller.aksesorisModel.isNotEmpty) {
+      kelengkapanHLM = controller.aksesorisModel.first.accHLM;
+      kelengkapanAC = controller.aksesorisModel.first.accAC;
+      kelengkapanKS = controller.aksesorisModel.first.accKS;
+      kelengkapanTS = controller.aksesorisModel.first.accTS;
+      kelengkapanBP = controller.aksesorisModel.first.accBP;
+      kelengkapanBS = controller.aksesorisModel.first.accBS;
+      kelengkapanPLT = controller.aksesorisModel.first.accPLT;
+      kelengkapanSTAY = controller.aksesorisModel.first.accSTAY;
+      kelengkapanAcBesar = controller.aksesorisModel.first.accAcBesar;
+      kelengkapanPlastik = controller.aksesorisModel.first.accPlastik;
+    } else {
+      // Handle the case when aksesorisModel is empty, e.g., set default values or show a message
+      kelengkapanHLM = 0; // Or any default value you prefer
+      kelengkapanAC = 0;
+      kelengkapanKS = 0;
+      kelengkapanTS = 0;
+      kelengkapanBP = 0;
+      kelengkapanBS = 0;
+      kelengkapanPLT = 0;
+      kelengkapanSTAY = 0;
+      kelengkapanAcBesar = 0;
+      kelengkapanPlastik = 0;
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchAksesoris(id);
     });
@@ -76,35 +113,25 @@ class _AksesorisState extends State<Aksesoris> {
                       fontWeight: FontWeight.bold, color: AppColors.success)),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'HLM', controller.aksesorisModel.first.accHLM, 0),
+            _buildKelengkapanAlaT('HLM', kelengkapanHLM, 0),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'AC', controller.aksesorisModel.first.accAC, 1),
+            _buildKelengkapanAlaT('AC', kelengkapanAC, 1),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'KS', controller.aksesorisModel.first.accKS, 2),
+            _buildKelengkapanAlaT('KS', kelengkapanKS, 2),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'TS', controller.aksesorisModel.first.accTS, 3),
+            _buildKelengkapanAlaT('TS', kelengkapanTS, 3),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'BP', controller.aksesorisModel.first.accBP, 4),
+            _buildKelengkapanAlaT('BP', kelengkapanBP, 4),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'BS', controller.aksesorisModel.first.accBS, 5),
+            _buildKelengkapanAlaT('BS', kelengkapanBS, 5),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'PLT', controller.aksesorisModel.first.accPLT, 6),
+            _buildKelengkapanAlaT('PLT', kelengkapanPLT, 6),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'Stay L/R', controller.aksesorisModel.first.accSTAY, 7),
+            _buildKelengkapanAlaT('Stay L/R', kelengkapanSTAY, 7),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'AC Besar', controller.aksesorisModel.first.accAcBesar, 8),
+            _buildKelengkapanAlaT('AC Besar', kelengkapanAcBesar, 8),
             const SizedBox(height: CustomSize.spaceBtwItems),
-            _buildKelengkapanAlaT(
-                'Plastik', controller.aksesorisModel.first.accPlastik, 9),
+            _buildKelengkapanAlaT('Plastik', kelengkapanPlastik, 9),
             const SizedBox(height: CustomSize.spaceBtwInputFields),
             Center(
               child: Text('HUTANG PABRIK',

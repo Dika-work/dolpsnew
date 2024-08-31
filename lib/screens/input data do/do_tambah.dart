@@ -58,7 +58,7 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
             onTap: () {
               CustomDialogs.defaultDialog(
                   context: context,
-                  titleWidget: const Text('Input DO Tambahan'),
+                  titleWidget: const Text('Tambah Data DO Tambahan'),
                   contentWidget: AddDOTambahan(
                     controller: controller,
                   ),
@@ -75,7 +75,8 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                   onCancel: () {
                     Get.back();
                     controller.tgl.value =
-                        CustomHelperFunctions.getFormattedDate(DateTime.now());
+                        CustomHelperFunctions.getFormattedDateDatabase(
+                            DateTime.now());
                     controller.srdController.clear();
                     controller.mksController.clear();
                     controller.ptkController.clear();
@@ -120,7 +121,7 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                     onTap: () {
                       CustomDialogs.defaultDialog(
                           context: context,
-                          titleWidget: const Text('Input DO Tambah'),
+                          titleWidget: const Text('Tambah Data DO Tambahan'),
                           contentWidget: AddDOTambahan(
                             controller: controller,
                           ),
@@ -374,6 +375,7 @@ class AddDOTambahan extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text('Tanggal'),
             Obx(
               () => TextFormField(
                 keyboardType: TextInputType.none,
@@ -552,7 +554,6 @@ class _EditDataDOTambahState extends State<EditDataDOTambah> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ini id nya : $id'),
             TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,

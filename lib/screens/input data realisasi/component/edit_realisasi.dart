@@ -52,8 +52,6 @@ class _EditRealisasiState extends State<EditRealisasi> {
     'MUTASI': 1,
   };
 
-  String get tujuanDisplayValue => tujuanMap[plant] ?? '';
-
   @override
   void initState() {
     super.initState();

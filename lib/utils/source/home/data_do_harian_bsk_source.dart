@@ -58,7 +58,6 @@ class DataDoHarianBskHomeSource extends DataGridSource {
       final jumlah = data.srd + data.mks + data.ptk + data.bjm;
 
       index++;
-      print('..ini index di do home besok hari $index');
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
         DataGridCell<String>(columnName: 'Plant', value: data.plant),

@@ -101,6 +101,7 @@ class TambahTypeMotorSource extends DataGridSource {
           ]);
         },
       ).toList();
+      notifyListeners();
 
       final totalSrd =
           tambahTypeMotorModel.fold(0, (sum, item) => sum + item.jumlahSRD);
@@ -128,8 +129,8 @@ class TambahTypeMotorSource extends DataGridSource {
             columnName: 'BJM',
             value: totalBjm == 0 ? '-' : totalBjm.toString()),
       ]));
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   @override

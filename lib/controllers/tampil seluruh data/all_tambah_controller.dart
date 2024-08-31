@@ -4,6 +4,8 @@ import '../../models/tampil seluruh data/do_tambah_all.dart';
 import '../../models/user_model.dart';
 import '../../repository/tampil seluruh data/tambah_all_repo.dart';
 import '../../utils/constant/storage_util.dart';
+import '../../utils/popups/dialogs.dart';
+import '../../utils/popups/full_screen_loader.dart';
 
 class DataAllTambahController extends GetxController {
   final isLoadingGlobalHarian = Rx<bool>(false);
@@ -37,5 +39,34 @@ class DataAllTambahController extends GetxController {
     } finally {
       isLoadingGlobalHarian.value = false;
     }
+  }
+
+  Future<void> editDOTambah(
+    int id,
+    String tgl,
+    int idPlant,
+    String tujuan,
+    int srd,
+    int mks,
+    int ptk,
+    int bjm,
+  ) async {
+    CustomDialogs.loadingIndicator();
+    await dataGlobalHarianRepo.editDOTambahContent(
+        id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
+    CustomFullScreenLoader.stopLoading();
+
+    await fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> hapusDOTambah(
+    int id,
+  ) async {
+    CustomDialogs.loadingIndicator();
+    await dataGlobalHarianRepo.deleteDOTambahContent(id);
+
+    await fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
   }
 }

@@ -118,7 +118,7 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
                     onTap: () {
                       CustomDialogs.defaultDialog(
                           context: context,
-                          titleWidget: const Text('Input DO Global'),
+                          titleWidget: const Text('Input Type Motor'),
                           contentWidget: AddTypeMotor(
                             controller: controller,
                           ),
@@ -163,7 +163,7 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
                       columnWidthMode: ColumnWidthMode.auto,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,
-                      rowHeight: 65,
+                      rowHeight: 150,
                       columns: [
                         GridColumn(
                             width: columnWidths['No']!,
@@ -463,29 +463,46 @@ class AddTypeMotor extends StatelessWidget {
                   return null;
                 },
               ),
+              const SizedBox(height: CustomSize.spaceBtwItems),
               const Text('HLM'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.hlm.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.hlm.value = value,
+                  GestureDetector(
+                    onTap: () => controller.hlm.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.hlm.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.hlm.value = value,
+                          ),
+                        ),
+                        const Text(
+                            'Yes'), // Teks yang ingin Anda perbesar area kliknya
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.hlm.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.hlm.value = value,
+                  GestureDetector(
+                    onTap: () =>
+                        controller.hlm.value = 0, // Mengubah nilai menjadi 0
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.hlm.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.hlm.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
                   const SizedBox(width: 10)
                 ],
               ),
@@ -493,25 +510,40 @@ class AddTypeMotor extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.ac.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.ac.value = value,
+                  GestureDetector(
+                    onTap: () => controller.ac.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.ac.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.ac.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.ac.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.ac.value = value,
+                  GestureDetector(
+                    onTap: () =>
+                        controller.ac.value = 0, // Mengubah nilai menjadi 0
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.ac.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.ac.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
                   const SizedBox(width: 10)
                 ],
               ),
@@ -519,25 +551,40 @@ class AddTypeMotor extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.ks.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.ks.value = value,
+                  GestureDetector(
+                    onTap: () => controller.ks.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.ks.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.ks.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.ks.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.ks.value = value,
+                  GestureDetector(
+                    onTap: () =>
+                        controller.ks.value = 0, // Mengubah nilai menjadi 0
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.ks.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.ks.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
                   const SizedBox(width: 10)
                 ],
               ),
@@ -545,25 +592,40 @@ class AddTypeMotor extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.ts.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.ts.value = value,
+                  GestureDetector(
+                    onTap: () => controller.ts.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.ts.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.ts.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.ts.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.ts.value = value,
+                  GestureDetector(
+                    onTap: () =>
+                        controller.ts.value = 0, // Mengubah nilai menjadi 0
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.ts.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.ts.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
                   const SizedBox(width: 10)
                 ],
               ),
@@ -571,25 +633,39 @@ class AddTypeMotor extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.bp.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.bp.value = value,
+                  GestureDetector(
+                    onTap: () => controller.bp.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.bp.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.bp.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.bp.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.bp.value = value,
+                  GestureDetector(
+                    onTap: () => controller.bp.value = 0,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.bp.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.bp.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
                   const SizedBox(width: 10)
                 ],
               ),
@@ -597,130 +673,204 @@ class AddTypeMotor extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.bs.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.bs.value = value,
+                  GestureDetector(
+                    onTap: () => controller.bs.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.bs.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.bs.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.bs.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.bs.value = value,
+                  GestureDetector(
+                    onTap: () => controller.bs.value = 0,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.bs.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.bs.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
-                  const SizedBox(width: 10)
+                  const SizedBox(width: 10),
                 ],
               ),
               const Text('PLT'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.plt.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.plt.value = value,
+                  GestureDetector(
+                    onTap: () => controller.plt.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.plt.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.plt.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.plt.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.plt.value = value,
+                  GestureDetector(
+                    onTap: () => controller.plt.value = 0,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.plt.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.plt.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
-                  const SizedBox(width: 10)
+                  const SizedBox(width: 10),
                 ],
               ),
               const Text('STAY L/R'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.stay.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.stay.value = value,
+                  GestureDetector(
+                    onTap: () => controller.stay.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.stay.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.stay.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.stay.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.stay.value = value,
+                  GestureDetector(
+                    onTap: () => controller.stay.value = 0,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.stay.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) => controller.stay.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
-                  const SizedBox(width: 10)
+                  const SizedBox(width: 10),
                 ],
               ),
               const Text('AC Besar'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.acBesar.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.acBesar.value = value,
+                  GestureDetector(
+                    onTap: () => controller.acBesar.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.acBesar.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) =>
+                                controller.acBesar.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.acBesar.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.acBesar.value = value,
+                  GestureDetector(
+                    onTap: () => controller.acBesar.value = 0,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.acBesar.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) =>
+                                controller.acBesar.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
-                  const SizedBox(width: 10)
+                  const SizedBox(width: 10),
                 ],
               ),
               const Text('Plastik'),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Obx(
-                    () => Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
-                      groupValue: controller.plastik.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.plastik.value = value,
+                  GestureDetector(
+                    onTap: () => controller.plastik.value = 1,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 1,
+                            groupValue: controller.plastik.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) =>
+                                controller.plastik.value = value,
+                          ),
+                        ),
+                        const Text('Yes'),
+                      ],
                     ),
                   ),
-                  const Text('Yes'),
                   const SizedBox(width: CustomSize.spaceBtwItems),
-                  Obx(
-                    () => Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: controller.plastik.value,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) => controller.plastik.value = value,
+                  GestureDetector(
+                    onTap: () => controller.plastik.value = 0,
+                    child: Row(
+                      children: [
+                        Obx(
+                          () => Radio<int?>(
+                            value: 0,
+                            groupValue: controller.plastik.value,
+                            activeColor: AppColors.primary,
+                            onChanged: (value) =>
+                                controller.plastik.value = value,
+                          ),
+                        ),
+                        const Text('No'),
+                      ],
                     ),
                   ),
-                  const Text('No'),
-                  const SizedBox(width: 10)
+                  const SizedBox(width: 10),
                 ],
               ),
             ],
@@ -788,7 +938,6 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('ini id type edit type motor: $idType'),
                 const Text('Merk'),
                 DropDownWidget(
                   value: merk,
@@ -819,7 +968,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: hlm,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -849,7 +998,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: ac,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -879,7 +1028,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: ks,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -909,7 +1058,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: ts,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -939,7 +1088,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: bp,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -969,7 +1118,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: bs,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -999,7 +1148,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: plt,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -1029,7 +1178,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: stay,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -1059,7 +1208,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: acBesar,
                       activeColor: AppColors.primary,
                       onChanged: (value) {
@@ -1089,7 +1238,7 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Radio<int?>(
-                      value: 1, // Value untuk Yes adalah 1
+                      value: 1,
                       groupValue: plastik,
                       activeColor: AppColors.primary,
                       onChanged: (value) {

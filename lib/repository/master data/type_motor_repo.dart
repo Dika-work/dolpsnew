@@ -184,7 +184,6 @@ class TypeMotorHondaRepository {
         '${storageUtil.baseURL}/DO/api/api_type_motor.php?action=honda'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
-      print('..INI RESPONSE TYPE MOTOR HONDA.. ${list.toList()}');
       return list.map((e) => TypeMotorHondaModel.fromJson(e)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data type motor honda☠️');

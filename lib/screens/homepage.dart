@@ -30,28 +30,28 @@ class Homepage extends StatelessWidget {
 
     late Map<String, double> columnWidthsHarianHome = {
       'No': double.nan,
-      'Plant': 80,
+      'Plant': double.nan,
       'Tujuan': 120,
-      'Jml': double.nan,
+      'Jml': 65,
       if (controllerHarianHome.daerah == 3 || controllerHarianHome.daerah == 0)
-        'SRD': double.nan,
+        'SRD': 75,
       if (controllerHarianHome.daerah == 1 || controllerHarianHome.daerah == 0)
-        'MKS': double.nan,
+        'MKS': 75,
       if (controllerHarianHome.daerah == 4 || controllerHarianHome.daerah == 0)
-        'PTK': double.nan,
+        'PTK': 75,
       if (controllerHarianHome.daerah == 2 || controllerHarianHome.daerah == 0)
-        'BJM': double.nan,
+        'BJM': 75,
     };
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'Plant': 80,
+      'Plant': double.nan,
       'Tujuan': 120,
-      'Jml': double.nan,
-      'SRD': double.nan,
-      'MKS': double.nan,
-      'PTK': double.nan,
-      'BJM': double.nan,
+      'Jml': 65,
+      'SRD': 75,
+      'MKS': 75,
+      'PTK': 75,
+      'BJM': 75,
     };
 
     // Tinggi per baris dan header
@@ -337,7 +337,8 @@ class Homepage extends StatelessWidget {
                             : tableHeight,
                     child: shouldCenterTable
                         ? Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 6.0),
                             child: tableWidget,
                           )
                         : tableWidget,
@@ -398,31 +399,46 @@ class Homepage extends StatelessWidget {
                                 isAdmin: controllerHarianBskHome.isAdmin,
                                 userPlant: controllerHarianBskHome.rolePlant);
 
-                        final rowCount = controllerHarianBskHome
-                                .doHarianHomeBskModel.length +
-                            1;
-                        final double tableHeight = controllerHarianBskHome
-                                        .doHarianHomeBskModel.isEmpty &&
-                                    controllerHarianBskHome.roleUser !=
-                                        'admin' ||
-                                controllerHarianBskHome.roleUser != 'k.pool'
-                            ? 110
-                            : headerHeight +
-                                (rowHeight * rowCount)
-                                    .clamp(0, gridHeight - headerHeight);
+                        // final rowCount = controllerHarianBskHome
+                        //         .doHarianHomeBskModel.length +
+                        //     1;
+                        // final double tableHeight = controllerHarianBskHome
+                        //                 .doHarianHomeBskModel.isEmpty &&
+                        //             controllerHarianBskHome.roleUser !=
+                        //                 'admin' ||
+                        //         controllerHarianBskHome.roleUser != 'k.pool'
+                        //     ? 110
+                        //     : headerHeight +
+                        //         (rowHeight * rowCount)
+                        //             .clamp(0, gridHeight - headerHeight);
+
+                        final bool isTableEmpty = controllerHarianBskHome
+                            .doHarianHomeBskModel.isEmpty;
+                        final bool isAdminOrKPool =
+                            controllerHarianBskHome.roleUser == 'admin' ||
+                                controllerHarianBskHome.roleUser == 'k.pool';
+
+                        final rowCount = isTableEmpty
+                            ? 0
+                            : controllerHarianBskHome
+                                    .doHarianHomeBskModel.length +
+                                1;
+
+                        final double tableHeight =
+                            (isTableEmpty && !isAdminOrKPool)
+                                ? 110
+                                : headerHeight +
+                                    (rowHeight * rowCount)
+                                        .clamp(0, gridHeight - headerHeight);
 
                         return SizedBox(
-                          height: controllerHarianBskHome.roleUser == 'admin' ||
-                                  controllerHarianBskHome.roleUser ==
-                                          'k.pool' &&
-                                      controllerHarianBskHome
-                                          .doHarianHomeBskModel.isEmpty
+                          height: isAdminOrKPool &&
+                                  controllerHarianBskHome
+                                      .doHarianHomeBskModel.isEmpty
                               ? emptygridHeight
-                              : controllerHarianBskHome.roleUser == 'admin' ||
-                                      controllerHarianBskHome.roleUser ==
-                                              'k.pool' &&
-                                          controllerHarianBskHome
-                                              .doHarianHomeBskModel.isNotEmpty
+                              : isAdminOrKPool &&
+                                      controllerHarianBskHome
+                                          .doHarianHomeBskModel.isNotEmpty
                                   ? gridHeight
                                   : tableHeight,
                           child: SfDataGrid(
@@ -826,7 +842,7 @@ class Homepage extends StatelessWidget {
           user.tipe == 'Pengurus Stuffing' || user.tipe == 'k.pool'
               ? Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: user.tipe == 'k.pool' ? 0 : 12.0),
+                      horizontal: user.tipe == 'k.pool' ? 0 : 6.0),
                   child: ExpandableRichContainer(
                     bgHeadColor: AppColors.white,
                     bgTransitionColor: AppColors.white,

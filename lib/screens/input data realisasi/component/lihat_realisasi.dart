@@ -28,8 +28,8 @@ class LihatRealisasi extends StatelessWidget {
 
     const int rowsPerPage = 5;
     int currentPage = 0;
-    const double rowHeight = 55.0;
-    const double headerHeight = 32.0;
+    const double rowHeight = 50.0;
+    const double headerHeight = 56.0;
     const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -127,7 +127,7 @@ class LihatRealisasi extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 8.0),
             buildHutangPabrik('Tgl', 'No\nPolisi',
                 DateFormat('dd MMM yyyy').format(parsedDate), model.noPolisi),
             const SizedBox(height: 8.0),
@@ -141,7 +141,7 @@ class LihatRealisasi extends StatelessWidget {
                 'Jml\nUnit Motor',
                 model.type == 0 ? 'REGULER' : 'MUTASI',
                 model.jumlahUnit.toString()),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 8.0),
             model.type == 0
                 ? Obx(
                     () {
@@ -154,12 +154,20 @@ class LihatRealisasi extends StatelessWidget {
                           startIndex: currentPage * rowsPerPage,
                         );
 
+                        final bool isTableEmpty =
+                            controller.tambahTypeMotorModel.isEmpty;
+                        final rowCount =
+                            controller.tambahTypeMotorModel.length + 1;
+                        final double tableHeight = isTableEmpty
+                            ? 110
+                            : headerHeight +
+                                (rowHeight * rowCount)
+                                    .clamp(0, gridHeight - headerHeight);
+
                         return Column(
                           children: [
                             SizedBox(
-                              height: controller.tambahTypeMotorModel.isEmpty
-                                  ? 110
-                                  : gridHeight,
+                              height: tableHeight,
                               child: SfDataGrid(
                                   source: dataSource,
                                   columnWidthMode: ColumnWidthMode.auto,
@@ -285,19 +293,14 @@ class LihatRealisasi extends StatelessWidget {
                                             ))),
                                   ]),
                             ),
-                            controller.tambahTypeMotorModel.isEmpty
-                                ? const SizedBox.shrink()
-                                : SfDataPager(
-                                    delegate: dataSource,
-                                    pageCount:
-                                        controller.tambahTypeMotorModel.isEmpty
-                                            ? 1
-                                            : (controller.tambahTypeMotorModel
-                                                        .length /
-                                                    rowsPerPage)
-                                                .ceilToDouble(),
-                                    direction: Axis.horizontal,
-                                  ),
+                            if (controller.tambahTypeMotorModel.isNotEmpty)
+                              SfDataPager(
+                                delegate: dataSource,
+                                pageCount: isTableEmpty
+                                    ? 1
+                                    : (rowCount / rowsPerPage).ceilToDouble(),
+                                direction: Axis.horizontal,
+                              ),
                           ],
                         );
                       }
@@ -409,10 +412,21 @@ class LihatRealisasi extends StatelessWidget {
                     },
                   )
                 : const SizedBox.shrink(),
-            model.totalHutang == 0
-                ? const SizedBox.shrink()
-                : const SizedBox(height: 16.0),
             // Kelengkapan
+            const Divider(
+                height: CustomSize.dividerHeight, color: AppColors.black),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: CustomSize.sm),
+                child: Text('ALAT-ALAT MOTOR DARI PABRIK',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.apply(color: AppColors.success)),
+              ),
+            ),
+            const SizedBox(height: CustomSize.sm),
             model.type == 0
                 ? Obx(() {
                     if (hutangController.isLoadingHutang.value &&
@@ -422,252 +436,249 @@ class LihatRealisasi extends StatelessWidget {
                       final dataSourceHutang = KelengkapanAlatSource(
                           alatModel: hutangController.doKelengkapan);
 
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: Column(
-                          children: [
-                            const Divider(
-                                height: CustomSize.dividerHeight,
-                                color: AppColors.black),
-                            hutangController.doHutang.isEmpty
-                                ? const SizedBox(height: CustomSize.sm)
-                                : Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: CustomSize.sm),
-                                      child: Text('ALAT-ALAT MOTOR DARI PABRIK',
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium),
-                                    ),
-                                  ),
-                            const SizedBox(height: CustomSize.sm),
-                            SizedBox(
-                              height: hutangController.doKelengkapan.isEmpty
-                                  ? 110
-                                  : gridHeight,
-                              child: SfDataGrid(
-                                  source: dataSourceHutang,
-                                  columnWidthMode: ColumnWidthMode.auto,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerGridLinesVisibility:
-                                      GridLinesVisibility.both,
-                                  verticalScrollPhysics:
-                                      const NeverScrollableScrollPhysics(),
-                                  columns: [
-                                    GridColumn(
-                                        width: columnWidthsHutang['HLM']!,
-                                        columnName: 'HLM',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'HLM',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['AC']!,
-                                        columnName: 'AC',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'AC',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['KS']!,
-                                        columnName: 'KS',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'KS',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['TS']!,
-                                        columnName: 'TS',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'TS',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['BP']!,
-                                        columnName: 'BP',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'BP',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['BS']!,
-                                        columnName: 'BS',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'BS',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['PLT']!,
-                                        columnName: 'PLT',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'PLT',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['STAY L/R']!,
-                                        columnName: 'STAY L/R',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'STAY L/R',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['AC BESAR']!,
-                                        columnName: 'AC BESAR',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'AC BESAR',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['PLASTIK']!,
-                                        columnName: 'PLASTIK',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'PLASTIK',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                  ]),
-                            ),
-                            hutangController.doKelengkapan.isEmpty
-                                ? const SizedBox.shrink()
-                                : SfDataPager(
-                                    delegate: dataSourceHutang,
-                                    pageCount:
-                                        hutangController.doKelengkapan.isEmpty
-                                            ? 1
-                                            : (hutangController
-                                                        .doKelengkapan.length /
-                                                    rowsPerPage)
-                                                .ceilToDouble(),
-                                    direction: Axis.horizontal,
-                                  ),
-                          ],
-                        ),
+                      final bool isTableEmpty =
+                          hutangController.doKelengkapan.isEmpty;
+                      final rowCount = hutangController.doKelengkapan.length;
+                      final double tableHeight = isTableEmpty
+                          ? 110
+                          : headerHeight +
+                              (rowHeight * rowCount)
+                                  .clamp(0, gridHeight - headerHeight);
+
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: tableHeight,
+                            child: SfDataGrid(
+                                source: dataSourceHutang,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                verticalScrollPhysics:
+                                    const NeverScrollableScrollPhysics(),
+                                columns: [
+                                  GridColumn(
+                                      width: columnWidthsHutang['HLM']!,
+                                      columnName: 'HLM',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'HLM',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['AC']!,
+                                      columnName: 'AC',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'AC',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['KS']!,
+                                      columnName: 'KS',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'KS',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['TS']!,
+                                      columnName: 'TS',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'TS',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['BP']!,
+                                      columnName: 'BP',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'BP',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['BS']!,
+                                      columnName: 'BS',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'BS',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['PLT']!,
+                                      columnName: 'PLT',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'PLT',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['STAY L/R']!,
+                                      columnName: 'STAY L/R',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'STAY L/R',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['AC BESAR']!,
+                                      columnName: 'AC BESAR',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'AC BESAR',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['PLASTIK']!,
+                                      columnName: 'PLASTIK',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'PLASTIK',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                ]),
+                          ),
+                          hutangController.doKelengkapan.isEmpty
+                              ? const SizedBox.shrink()
+                              : SfDataPager(
+                                  delegate: dataSourceHutang,
+                                  pageCount: isTableEmpty
+                                      ? 1
+                                      : (rowCount / rowsPerPage).ceilToDouble(),
+                                  direction: Axis.horizontal,
+                                ),
+                        ],
                       );
                     }
                   })
                 : const SizedBox.shrink(),
             // Hutang
+            const Divider(
+                height: CustomSize.dividerHeight, color: AppColors.black),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: CustomSize.sm),
+                child: Text('HUTANG ALAT-ALAT MOTOR DARI PABRIK',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.apply(color: AppColors.error)),
+              ),
+            ),
+            const SizedBox(height: CustomSize.sm),
             model.type == 0
                 ? Obx(() {
                     if (hutangController.isLoadingHutang.value &&
@@ -677,250 +688,238 @@ class LihatRealisasi extends StatelessWidget {
                       final dataSourceHutang = RegulerHutangSource(
                           doHutangModel: hutangController.doHutang);
 
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 16.0),
-                        child: Column(
-                          children: [
-                            const Divider(
-                                height: CustomSize.dividerHeight,
-                                color: AppColors.black),
-                            hutangController.doHutang.isEmpty
-                                ? const SizedBox(height: CustomSize.sm)
-                                : Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: CustomSize.sm),
-                                      child: Text(
-                                          'HUTANG ALAT-ALAT MOTOR DARI PABRIK',
-                                          textAlign: TextAlign.center,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headlineMedium),
-                                    ),
-                                  ),
-                            const SizedBox(height: CustomSize.sm),
-                            SizedBox(
-                              height: hutangController.doHutang.isEmpty
-                                  ? 110
-                                  : gridHeight,
-                              child: SfDataGrid(
-                                  source: dataSourceHutang,
-                                  columnWidthMode: ColumnWidthMode.auto,
-                                  gridLinesVisibility: GridLinesVisibility.both,
-                                  headerGridLinesVisibility:
-                                      GridLinesVisibility.both,
-                                  verticalScrollPhysics:
-                                      const NeverScrollableScrollPhysics(),
-                                  columns: [
-                                    GridColumn(
-                                        width: columnWidthsHutang['HLM']!,
-                                        columnName: 'HLM',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'HLM',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['AC']!,
-                                        columnName: 'AC',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'AC',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['KS']!,
-                                        columnName: 'KS',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'KS',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['TS']!,
-                                        columnName: 'TS',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'TS',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['BP']!,
-                                        columnName: 'BP',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'BP',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['BS']!,
-                                        columnName: 'BS',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'BS',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['PLT']!,
-                                        columnName: 'PLT',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'PLT',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['STAY L/R']!,
-                                        columnName: 'STAY L/R',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'STAY L/R',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['AC BESAR']!,
-                                        columnName: 'AC BESAR',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'AC BESAR',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
-                                        width: columnWidthsHutang['PLASTIK']!,
-                                        columnName: 'PLASTIK',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'PLASTIK',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                  ]),
+                      final bool isTableEmpty =
+                          hutangController.doHutang.isEmpty;
+                      final rowCount = hutangController.doHutang.length;
+                      final double tableHeight = isTableEmpty
+                          ? 110
+                          : headerHeight +
+                              (rowHeight * rowCount)
+                                  .clamp(0, gridHeight - headerHeight);
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: tableHeight,
+                            child: SfDataGrid(
+                                source: dataSourceHutang,
+                                columnWidthMode: ColumnWidthMode.auto,
+                                gridLinesVisibility: GridLinesVisibility.both,
+                                headerGridLinesVisibility:
+                                    GridLinesVisibility.both,
+                                verticalScrollPhysics:
+                                    const NeverScrollableScrollPhysics(),
+                                columns: [
+                                  GridColumn(
+                                      width: columnWidthsHutang['HLM']!,
+                                      columnName: 'HLM',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'HLM',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['AC']!,
+                                      columnName: 'AC',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'AC',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['KS']!,
+                                      columnName: 'KS',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'KS',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['TS']!,
+                                      columnName: 'TS',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'TS',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['BP']!,
+                                      columnName: 'BP',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'BP',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['BS']!,
+                                      columnName: 'BS',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'BS',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['PLT']!,
+                                      columnName: 'PLT',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'PLT',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['STAY L/R']!,
+                                      columnName: 'STAY L/R',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'STAY L/R',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['AC BESAR']!,
+                                      columnName: 'AC BESAR',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'AC BESAR',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                  GridColumn(
+                                      width: columnWidthsHutang['PLASTIK']!,
+                                      columnName: 'PLASTIK',
+                                      label: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: Colors.grey),
+                                            color: Colors.lightBlue.shade100,
+                                          ),
+                                          child: Text(
+                                            'PLASTIK',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                          ))),
+                                ]),
+                          ),
+                          if (hutangController.doHutang.isNotEmpty)
+                            SfDataPager(
+                              delegate: dataSourceHutang,
+                              pageCount: isTableEmpty
+                                  ? 1
+                                  : (rowCount / rowsPerPage).ceilToDouble(),
+                              direction: Axis.horizontal,
                             ),
-                            hutangController.doHutang.isEmpty
-                                ? const SizedBox.shrink()
-                                : SfDataPager(
-                                    delegate: dataSourceHutang,
-                                    pageCount: hutangController.doHutang.isEmpty
-                                        ? 1
-                                        : (hutangController.doHutang.length /
-                                                rowsPerPage)
-                                            .ceilToDouble(),
-                                    direction: Axis.horizontal,
-                                  ),
-                          ],
-                        ),
+                        ],
                       );
                     }
                   })
                 : const SizedBox.shrink(),
+            const SizedBox(height: CustomSize.spaceBtwItems),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                  onPressed: () => Get.back(), child: const Text('Kembali')),
+            )
           ],
         ),
       ),

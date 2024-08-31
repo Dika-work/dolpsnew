@@ -78,6 +78,8 @@ class AllEstimasiSource extends DataGridSource {
                           return;
                         }
                       },
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
                       child: const Text('Hapus')))
             ],
           )

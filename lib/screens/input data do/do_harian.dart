@@ -34,7 +34,6 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
       if (controller.rolesHapus == 1) 'Hapus': 150,
     };
 
-    // const double dataPagerHeight = 60.0;
     const int rowsPerPage = 7;
 
     int currentPage = 0;
@@ -42,7 +41,7 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Input DO Harian',
+          'Tambah Data DO Harian',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         leading: IconButton(
@@ -124,16 +123,15 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
                                 message: 'Pastikan tanggal telah di isi 😁',
                               );
                             } else {
-                              controller.addDataDOHarian();
+                              // controller.addDataDOHarian();
+                              print('ini tanggal nya: ${controller.tgl.value}');
                             }
                           },
                           onCancel: () {
                             Get.back();
                             controller.tgl.value =
-                                CustomHelperFunctions.getFormattedDate(
+                                CustomHelperFunctions.getFormattedDateDatabase(
                                     DateTime.now());
-                            controller.plant.value = '1100';
-                            controller.tujuan.value = '1';
                             controller.srdController.clear();
                             controller.mksController.clear();
                             controller.ptkController.clear();
@@ -369,6 +367,7 @@ class AddDOHarian extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text('Tanggal'),
             Obx(
               () => TextFormField(
                 keyboardType: TextInputType.none,
@@ -378,11 +377,10 @@ class AddDOHarian extends StatelessWidget {
                     onPressed: () {
                       DateTime? selectedDate =
                           DateTime.tryParse(controller.tgl.value);
-
                       showDatePicker(
                         context: context,
                         locale: const Locale("id", "ID"),
-                        initialDate: selectedDate ?? DateTime.now(),
+                        initialDate: selectedDate,
                         firstDate: DateTime(1850),
                         lastDate: DateTime(2040),
                       ).then((newSelectedDate) {
@@ -407,9 +405,6 @@ class AddDOHarian extends StatelessWidget {
                       : 'Tanggal',
                 ),
               ),
-            ),
-            Obx(
-              () => Text(controller.idplant.value),
             ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plant'),
@@ -436,9 +431,6 @@ class AddDOHarian extends StatelessWidget {
                     fillColor: AppColors.buttonDisabled),
               ),
             ),
-            Obx(() => Text('Tujuan ${controller.tujuanDisplayValue}')),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Obx(() => Text('Hari ini tgl : ${controller.tgl.value}')),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: controller.srdController,
@@ -574,7 +566,7 @@ class _EditDataDOHarianState extends State<EditDataDOHarian> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ini id nya : $id'),
+            const Text('Tanggal'),
             TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,
@@ -609,7 +601,6 @@ class _EditDataDOHarianState extends State<EditDataDOHarian> {
                     : 'Tanggal',
               ),
             ),
-            Text(idPlant.toString()),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plant'),
             DropDownWidget(
@@ -635,9 +626,6 @@ class _EditDataDOHarianState extends State<EditDataDOHarian> {
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
             ),
-            Text('Tujuan $tujuan'),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Text('Hari ini tgl : $tgl'),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: srd,

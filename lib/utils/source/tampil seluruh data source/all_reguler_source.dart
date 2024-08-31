@@ -26,11 +26,12 @@ class DoRegulerAllSource extends DataGridSource {
     required this.doRealisasiModelAll,
     int startIndex = 0,
   }) {
-    _updateDataPager(doRealisasiModelAll, startIndex);
+    _updateDataPager(doRealisasiModelAll, startIndex, controller.rolePlant,
+        controller.isAdmin);
   }
 
   List<DataGridRow> _doRegulerData = [];
-  final controller = Get.put(DoRegulerController());
+  final DoRegulerController controller = Get.put(DoRegulerController());
   int index = 0;
 
   @override
@@ -46,7 +47,7 @@ class DoRegulerAllSource extends DataGridSource {
         : null;
 
     List<Widget> cells = [
-      ...row.getCells().take(10).map<Widget>(
+      ...row.getCells().take(8).map<Widget>(
         (e) {
           return Container(
             alignment: Alignment.center,
@@ -59,6 +60,21 @@ class DoRegulerAllSource extends DataGridSource {
         },
       ),
     ];
+
+    if (controller.roleUser == 'admin') {
+      cells.add(Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        child: Text(
+          row
+              .getCells()
+              .firstWhere((cell) => cell.columnName == 'User')
+              .value
+              .toString(),
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
 
     // Add Lihat cell
     if (controller.rolesLihat == 1 && request?.status == 1 ||
@@ -135,33 +151,50 @@ class DoRegulerAllSource extends DataGridSource {
         );
       } else if (request?.status == 4) {
         cells.add(
-          request!.totalHutang != 0
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 60,
-                      width: 100,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          print('..INI BAKALAN KE PLANT GABUNGAN');
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.error),
-                        child: const Text(
-                          'Hutang ACC',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // admin,plant 1300,1350,1700,1800
+              if (controller.roleUser == 'admin' ||
+                  controller.rolePlant == '1300' ||
+                  controller.rolePlant == '1350' ||
+                  controller.rolePlant == '1700' ||
+                  controller.rolePlant == '1800')
+                SizedBox(
+                  height: 60,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('..INI BAKALAN KE PLANT GABUNGAN');
+                    },
+                    child: const Text(
+                      'Gabungan',
+                      textAlign: TextAlign.center,
                     ),
-                  ],
-                )
-              : const SizedBox.shrink(),
+                  ),
+                ),
+              if (doRealisasiModelAll.isNotEmpty &&
+                  doRealisasiModelAll.first.totalHutang != 0)
+                const SizedBox(height: CustomSize.sm),
+              if (doRealisasiModelAll.isNotEmpty &&
+                  doRealisasiModelAll.first.totalHutang != 0)
+                SizedBox(
+                  height: 60,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      print('..INI AKAN KE HUTANG ACC');
+                    },
+                    child: const Text('Hutang Acc'),
+                  ),
+                ),
+            ],
+          ),
         );
       } else {
         cells.add(const SizedBox.shrink());
       }
-    } else if (controller.rolesJumlah == 1) {
+    } else if (controller.rolesJumlah == 1 && controller.isAdmin) {
       cells.add(const SizedBox.shrink()); // Placeholder for Action
     }
 
@@ -195,60 +228,7 @@ class DoRegulerAllSource extends DataGridSource {
 
     // Add Edit cell
     if (controller.rolesEdit == 1) {
-      if (request?.status == 3 || request?.status == 4) {
-        cells.add(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (controller.isAllRegulerAdmin)
-                SizedBox(
-                  height: 60,
-                  width: 100,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (onEdit != null) {
-                        onEdit!(request!);
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.gold),
-                    child: Text(
-                      'Edit',
-                      style: Theme.of(Get.context!)
-                          .textTheme
-                          .bodyMedium
-                          ?.apply(color: AppColors.black),
-                    ),
-                  ),
-                ),
-              if (controller.isAllRegulerAdmin)
-                const SizedBox(height: CustomSize.sm),
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (onType != null) {
-                      onType!(request!);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.success),
-                  child: Text(
-                    'Type',
-                    style: Theme.of(Get.context!)
-                        .textTheme
-                        .bodyMedium
-                        ?.apply(color: AppColors.white),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      } else if (request?.status == 0 ||
-          request?.status == 1 ||
-          request?.status == 2) {
+      if (request?.status == 0 || request?.status == 1) {
         cells.add(
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -260,7 +240,9 @@ class DoRegulerAllSource extends DataGridSource {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.yellow,
+                  backgroundColor: request?.status == 0 || request?.status == 1
+                      ? AppColors.yellow
+                      : AppColors.gold,
                 ),
                 child: Text(
                   'Edit',
@@ -273,6 +255,49 @@ class DoRegulerAllSource extends DataGridSource {
             ],
           ),
         );
+      } else if (request?.status == 2 ||
+          request?.status == 3 ||
+          request?.status == 4) {
+        cells.add(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  if (onEdit != null) {
+                    onEdit!(request!);
+                  }
+                },
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
+                child: Text(
+                  'Edit',
+                  style: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyMedium
+                      ?.apply(color: AppColors.black),
+                ),
+              ),
+              const SizedBox(height: CustomSize.sm),
+              ElevatedButton(
+                onPressed: () {
+                  if (onType != null) {
+                    onType!(request!);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.success),
+                child: Text(
+                  'Type',
+                  style: Theme.of(Get.context!)
+                      .textTheme
+                      .bodyMedium
+                      ?.apply(color: AppColors.white),
+                ),
+              ),
+            ],
+          ),
+        );
       } else {
         cells.add(const SizedBox.shrink());
       }
@@ -280,7 +305,7 @@ class DoRegulerAllSource extends DataGridSource {
       cells.add(const SizedBox.shrink()); // Placeholder for Edit
     }
 
-    print('ini banyaknya cells di all do reguler: ${cells.length}');
+    print('ini banyaknya cells: ${cells.length}');
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],
@@ -308,22 +333,45 @@ class DoRegulerAllSource extends DataGridSource {
   }
 
   void _updateDataPager(
-      List<DoRealisasiModel> doRealisasiModelAll, int startIndex) {
+    List<DoRealisasiModel> doRealisasiModelAll,
+    int startIndex,
+    String userPlant,
+    bool isAdmin,
+  ) {
     this.startIndex = startIndex;
     index = startIndex;
+
+    final List<int> validPlants = [
+      1100,
+      1200,
+      1300,
+      1350,
+      1700,
+      1800,
+      1900,
+    ];
+
+    final filteredPlants = isAdmin
+        ? validPlants // Jika admin, tampilkan semua plant
+        : validPlants.where((plant) => plant.toString() == userPlant).toList();
 
     if (doRealisasiModelAll.isEmpty) {
       _doRegulerData = _generateEmptyRows(1);
     } else {
-      _doRegulerData =
-          doRealisasiModelAll.skip(startIndex).take(10).map<DataGridRow>(
+      _doRegulerData = doRealisasiModelAll
+          .where(
+              (item) => filteredPlants.contains(int.tryParse(item.plant) ?? 0))
+          .skip(startIndex)
+          .take(10)
+          .map<DataGridRow>(
         (data) {
           index++;
           final tglParsed =
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
-          return DataGridRow(cells: [
+          List<DataGridCell> cells = [
             DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(columnName: 'User', value: data.user),
+            if (controller.roleUser == 'admin')
+              DataGridCell<String>(columnName: 'User', value: data.user),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(
@@ -333,12 +381,30 @@ class DoRegulerAllSource extends DataGridSource {
                     : '${data.supir}\n(${data.namaPanggilan})'),
             DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
             DataGridCell<String>(
-                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
+                columnName: 'Tipe', value: data.type == 0 ? 'R' : 'M'),
             DataGridCell<String>(
                 columnName: 'Jenis',
                 value: '${data.inisialDepan}${data.inisialBelakang}'),
             DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
-          ]);
+          ];
+
+          if (controller.rolesLihat == 1 && data.status != 0) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Lihat', value: 'Lihat'));
+          }
+          if (controller.rolesJumlah == 1) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Action', value: 'Action'));
+          }
+          if (controller.rolesBatal == 1) {
+            cells.add(const DataGridCell<String>(
+                columnName: 'Batal', value: 'Batal'));
+          }
+          if (controller.rolesEdit == 1) {
+            cells.add(
+                const DataGridCell<String>(columnName: 'Edit', value: 'Edit'));
+          }
+          return DataGridRow(cells: cells);
         },
       ).toList();
       notifyListeners();
@@ -347,8 +413,8 @@ class DoRegulerAllSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
-    _updateDataPager(controller.doRealisasiModelAll, startIndex);
+    _updateDataPager(controller.doRealisasiModelAll, newPageIndex,
+        controller.rolePlant, controller.isAdmin);
     notifyListeners();
     return true;
   }

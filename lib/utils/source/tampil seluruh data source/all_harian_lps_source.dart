@@ -9,7 +9,7 @@ import '../../constant/custom_size.dart';
 
 class DataAllHarianLpsSource extends DataGridSource {
   final void Function(DoHarianAllLpsModel)? onEdited;
-  final void Function()? onDeleted;
+  final void Function(DoHarianAllLpsModel)? onDeleted;
   final List<DoHarianAllLpsModel> allGlobal;
   int startIndex = 0;
 
@@ -80,7 +80,15 @@ class DataAllHarianLpsSource extends DataGridSource {
             height: 60,
             width: 100,
             child: ElevatedButton(
-                onPressed: onDeleted, child: const Text('Hapus')),
+                onPressed: () {
+                  if (onDeleted != null && allGlobal.isNotEmpty) {
+                    onDeleted!(allGlobal[startIndex + rowIndex]);
+                  } else {
+                    return;
+                  }
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Hapus')),
           )
         ],
       ));

@@ -18,7 +18,7 @@ class EmptyDataSource extends DataGridSource {
   ];
 
   List<Map<String, dynamic>> data = [];
-  final user;
+  final dynamic user;
 
   EmptyDataSource({
     required bool isAdmin,
@@ -84,9 +84,7 @@ class EmptyDataSource extends DataGridSource {
   DataGridRowAdapter buildRow(DataGridRow row) {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((cell) {
-        return Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+        return Center(
           child: Text(
             cell.value.toString(),
           ),

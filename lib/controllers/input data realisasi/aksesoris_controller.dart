@@ -160,10 +160,12 @@ class AksesorisController extends GetxController {
 
       print('Marking as selesai:');
       await aksesorisRepo.accSelesai(id);
-      await doRegulerController.fetchRegulerContent();
       resetCheckboxes();
 
       CustomFullScreenLoader.stopLoading();
+
+      await doRegulerController.fetchRegulerContent();
+      await doRegulerController.fetchRegulerAllContent();
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',

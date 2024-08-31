@@ -58,7 +58,7 @@ class InputDataDoPengurangan extends GetView<DataDOKurangController> {
               onTap: () {
                 CustomDialogs.defaultDialog(
                     context: context,
-                    titleWidget: const Text('Input DO Harian'),
+                    titleWidget: const Text('Tambah Data Do Pengurangan'),
                     contentWidget: AddDOPengurangan(
                       controller: controller,
                     ),
@@ -74,6 +74,9 @@ class InputDataDoPengurangan extends GetView<DataDOKurangController> {
                     },
                     onCancel: () {
                       Get.back();
+                      controller.tgl.value =
+                          CustomHelperFunctions.getFormattedDateDatabase(
+                              DateTime.now());
                       controller.srdController.clear();
                       controller.mksController.clear();
                       controller.ptkController.clear();
@@ -118,7 +121,8 @@ class InputDataDoPengurangan extends GetView<DataDOKurangController> {
                       onTap: () {
                         CustomDialogs.defaultDialog(
                             context: context,
-                            titleWidget: const Text('Input DO Kurang'),
+                            titleWidget:
+                                const Text('Tambah Data Do Pengurangan'),
                             contentWidget: AddDOPengurangan(
                               controller: controller,
                             ),
@@ -135,11 +139,8 @@ class InputDataDoPengurangan extends GetView<DataDOKurangController> {
                             },
                             onCancel: () {
                               Get.back();
-                              controller.tgl.value =
-                                  CustomHelperFunctions.getFormattedDate(
-                                      DateTime.now());
-                              controller.plant.value = '1100';
-                              controller.tujuan.value = '1';
+                              controller.tgl.value = CustomHelperFunctions
+                                  .getFormattedDateDatabase(DateTime.now());
                               controller.srdController.clear();
                               controller.mksController.clear();
                               controller.ptkController.clear();
@@ -375,6 +376,7 @@ class AddDOPengurangan extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text('Tanggal'),
             Obx(
               () => TextFormField(
                 keyboardType: TextInputType.none,
@@ -414,9 +416,6 @@ class AddDOPengurangan extends StatelessWidget {
                 ),
               ),
             ),
-            Obx(
-              () => Text(controller.idplant.value),
-            ),
             const SizedBox(height: CustomSize.spaceBtwItems),
             const Text('Plant'),
             Obx(
@@ -449,9 +448,6 @@ class AddDOPengurangan extends StatelessWidget {
                     fillColor: AppColors.buttonDisabled),
               ),
             ),
-            Obx(() => Text('Tujuan ${controller.tujuanDisplayValue}')),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Obx(() => Text('Hari ini tgl : ${controller.tgl.value}')),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: controller.srdController,
@@ -561,7 +557,6 @@ class _EditDataDOKurangState extends State<EditDataDOKurang> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ini id nya : $id'),
             TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,
@@ -633,8 +628,6 @@ class _EditDataDOKurangState extends State<EditDataDOKurang> {
                     fillColor: AppColors.buttonDisabled),
               ),
             ),
-            Text('Hari ini jam : ${CustomHelperFunctions.formattedTime}'),
-            Text('Hari ini tgl : $tgl'),
             const SizedBox(height: CustomSize.spaceBtwItems),
             TextFormField(
               controller: srd,

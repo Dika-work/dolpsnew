@@ -106,44 +106,26 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
             ExpandableContainer(
-                icon: Iconsax.book,
-                textTitle: 'Home',
-                onTap: () => onItemTapped),
+                icon: Iconsax.book, textTitle: 'Home', onTap: closeDrawer),
             user.menu1 == 1
                 ? ExpandableContainer(
                     icon: Iconsax.folder_2,
                     textTitle: 'Master Data',
-                    content: Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Iconsax.record,
-                            color: AppColors.darkExpandableContent,
-                          ),
-                          title: Text(
-                            'Dealer',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(color: AppColors.light),
-                          ),
-                        ),
-                        ListTile(
-                          onTap: () => Get.toNamed('/type-motor'),
-                          leading: const Icon(
-                            Iconsax.record,
-                            color: AppColors.darkExpandableContent,
-                          ),
-                          title: Text(
-                            'Type Motor',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.copyWith(color: AppColors.light),
-                          ),
-                        ),
-                      ],
-                    ))
+                    content: ListTile(
+                      onTap: () => Get.toNamed('/type-motor'),
+                      leading: const Icon(
+                        Iconsax.record,
+                        color: AppColors.darkExpandableContent,
+                      ),
+                      title: Text(
+                        'Type Motor',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleSmall
+                            ?.copyWith(color: AppColors.light),
+                      ),
+                    ),
+                  )
                 : const SizedBox.shrink(),
             user.menu2 == 1
                 ? ExpandableContainer(

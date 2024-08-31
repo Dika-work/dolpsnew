@@ -29,8 +29,7 @@ class DoRegulerController extends GetxController {
   int rolesJumlah = 0;
 
   bool get isAdmin => roleUser == 'admin' || roleUser == 'k.pool';
-  bool get isAllRegulerAdmin => roleUser == 'admin';
-  bool get isPengurusPabrik => roleUser == 'Pengurus Pabrik';
+  // bool get isPengurusPabrik => roleUser == 'Pengurus Pabrik';
 
   @override
   void onInit() {
@@ -75,11 +74,11 @@ class DoRegulerController extends GetxController {
       isLoadingRegulerAll.value = true;
       final getRegulerDo = await doRegulerRepo.fetchAllRegulerData();
       if (getRegulerDo.isNotEmpty) {
-        if (isPengurusPabrik) {
+        if (isAdmin) {
+          doRealisasiModelAll.assignAll(getRegulerDo);
+        } else {
           doRealisasiModelAll.assignAll(
               getRegulerDo.where((item) => item.plant == rolePlant).toList());
-        } else {
-          doRealisasiModelAll.assignAll(getRegulerDo);
           print('INI YG LOGIN ADMIN DI DO REGULER..');
         }
       } else {
@@ -108,6 +107,7 @@ class DoRegulerController extends GetxController {
     await doRegulerRepo.editDoReguler(
         id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchRegulerContent();
+    await fetchRegulerAllContent();
 
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();

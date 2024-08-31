@@ -35,14 +35,8 @@ class DataUserScreen extends StatelessWidget {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.toNamed('/rootpage'),
+          onPressed: () => Get.back(),
         ),
-        actions: [
-          IconButton(
-              onPressed: () =>
-                  Get.to(() => AddUserData(controller: controller)),
-              icon: const Icon(Iconsax.add))
-        ],
       ),
       body: Obx(() {
         if (controller.isDataUserLoading.value &&
@@ -53,102 +47,126 @@ class DataUserScreen extends StatelessWidget {
               child: Text('Data User Tidak Tersedia',
                   style: Theme.of(context).textTheme.bodyMedium));
         } else {
-          return SfDataGrid(
-            source: DataUserDataSource(dataUser: controller.dataUserModel),
-            columnWidthMode: ColumnWidthMode.auto,
-            allowPullToRefresh: true,
-            gridLinesVisibility: GridLinesVisibility.both,
-            headerGridLinesVisibility: GridLinesVisibility.both,
-            allowColumnsResizing: true,
-            onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
-              columnWidths[details.column.columnName] = details.width;
-              return true;
-            },
-            allowEditing: true,
-            editingGestureType: EditingGestureType.tap,
-            selectionMode: SelectionMode.single,
-            navigationMode: GridNavigationMode.cell,
-            columns: [
-              GridColumn(
-                  width: columnWidths['No']!,
-                  columnName: 'No',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
+          return Column(
+            children: [
+              GestureDetector(
+                onTap: () => Get.to(() => AddUserData(controller: controller)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const IconButton(
+                        onPressed: null, icon: Icon(Iconsax.add_circle)),
+                    Padding(
+                      padding: const EdgeInsets.only(right: CustomSize.sm),
                       child: Text(
-                        'No',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Username']!,
-                  columnName: 'Username',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
+                        'Tambah data',
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                      child: Text(
-                        'Username',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Nama']!,
-                  columnName: 'Nama',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Nama',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Tipe']!,
-                  columnName: 'Tipe',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Tipe',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Gambar']!,
-                  columnName: 'Gambar',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Gambar',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SfDataGrid(
+                  source:
+                      DataUserDataSource(dataUser: controller.dataUserModel),
+                  columnWidthMode: ColumnWidthMode.auto,
+                  allowPullToRefresh: true,
+                  gridLinesVisibility: GridLinesVisibility.both,
+                  headerGridLinesVisibility: GridLinesVisibility.both,
+                  allowColumnsResizing: true,
+                  onColumnResizeUpdate: (ColumnResizeUpdateDetails details) {
+                    columnWidths[details.column.columnName] = details.width;
+                    return true;
+                  },
+                  allowEditing: true,
+                  editingGestureType: EditingGestureType.tap,
+                  selectionMode: SelectionMode.single,
+                  navigationMode: GridNavigationMode.cell,
+                  columns: [
+                    GridColumn(
+                        width: columnWidths['No']!,
+                        columnName: 'No',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'No',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Username']!,
+                        columnName: 'Username',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Username',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Nama']!,
+                        columnName: 'Nama',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Nama',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Tipe']!,
+                        columnName: 'Tipe',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Tipe',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                    GridColumn(
+                        width: columnWidths['Gambar']!,
+                        columnName: 'Gambar',
+                        label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Gambar',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ))),
+                  ],
+                ),
+              ),
             ],
           );
         }

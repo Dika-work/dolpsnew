@@ -1,11 +1,12 @@
-import 'package:doplsnew/utils/loader/circular_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_reguler_controller.dart';
+import '../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/input data realisasi/do_reguler_source.dart';
 import '../../utils/theme/app_colors.dart';
 import 'component/aksesoris.dart';
@@ -21,6 +22,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
   @override
   Widget build(BuildContext context) {
     final tambahTypeMotorController = Get.put(TambahTypeMotorController());
+    final editTypeMotorController = Get.put(EditTypeMotorController());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchRegulerContent();
@@ -66,6 +68,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
               onLihat: (DoRealisasiModel model) {
                 showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (context) {
                     return Dialog(
                         backgroundColor: AppColors.white,
@@ -82,7 +85,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                     },
                   );
                 } else if (model.status == 1 || model.status == 2) {
-                  tambahTypeMotorController.fetchTambahTypeMotor(model.id);
                   Get.to(() => TambahTypeKendaraan(
                       model: model, controller: tambahTypeMotorController));
                 } else if (model.status == 3) {
@@ -110,6 +112,8 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                 Get.to(
                   () => EditTypeKendaraan(
                     model: model,
+                    onConfirm: () => editTypeMotorController
+                        .editDanHapusTypeMotorReguler(model.id),
                   ),
                 );
               },
@@ -117,7 +121,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
               startIndex: currentPage * rowsPerPage,
             );
 
-            print('ini banyaknya columns : ${columnWidths.length}');
+            // print('ini banyaknya columns : ${columnWidths.length}');
 
             return Column(
               children: [
@@ -143,7 +147,9 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                               : null;
 
                           if (request != null &&
-                              (request.status == 3 || request.status == 4)) {
+                              (request.status == 2 ||
+                                  request.status == 3 ||
+                                  request.status == 4)) {
                             print('tinggi row nya 150');
                             return 150.0;
                           } else {

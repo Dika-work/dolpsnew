@@ -1,4 +1,3 @@
-import 'package:doplsnew/utils/constant/custom_size.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -69,8 +68,6 @@ class DataDoHarianHomeSource extends DataGridSource {
       final jumlah = data.srd + data.mks + data.ptk + data.bjm;
 
       index++;
-      print('..ini index di do home hari ini $index');
-
       // Buat list untuk menyimpan cells
       List<DataGridCell> cells = [
         DataGridCell<int>(columnName: 'No', value: index),
@@ -170,7 +167,6 @@ class DataDoHarianHomeSource extends DataGridSource {
 
       return Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
         color: cellColor,
         child: Text(
           e.value?.toString() ?? '',

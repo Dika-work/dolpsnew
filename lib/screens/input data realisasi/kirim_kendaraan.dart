@@ -1,6 +1,3 @@
-import 'package:doplsnew/helpers/helper_function.dart';
-import 'package:doplsnew/utils/loader/circular_loader.dart';
-import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,13 +9,16 @@ import '../../controllers/input data realisasi/fetch_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/fetch_sopir_controller.dart';
 import '../../controllers/input data realisasi/kirim_kendaraan_controller.dart';
 import '../../controllers/input data realisasi/plot_kendaraan_controller.dart';
+import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/kendaraan_model.dart';
 import '../../models/input data realisasi/kirim_kendaraan_model.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../models/input data realisasi/sopir_model.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/input data realisasi/kirim_kendaraan_source.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
 class KirimKendaraanScreen extends StatelessWidget {
@@ -42,10 +42,7 @@ class KirimKendaraanScreen extends StatelessWidget {
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'Plant': double.nan,
-      'Type': double.nan,
-      'Kendaraan': 120,
-      'Jenis': 130,
+      'No Polisi': 120,
       'Status': double.nan,
       'Supir': 130,
       'Hapus': 150,
@@ -127,8 +124,8 @@ class KirimKendaraanScreen extends StatelessWidget {
                             ),
                           ),
                           GridColumn(
-                            width: columnWidths['Plant']!,
-                            columnName: 'Plant',
+                            width: columnWidths['No Polisi']!,
+                            columnName: 'No Polisi',
                             label: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -136,25 +133,7 @@ class KirimKendaraanScreen extends StatelessWidget {
                                 color: Colors.lightBlue.shade100,
                               ),
                               child: Text(
-                                'Plant',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['Type']!,
-                            columnName: 'Type',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Type',
+                                'No Polisi',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -173,42 +152,6 @@ class KirimKendaraanScreen extends StatelessWidget {
                               ),
                               child: Text(
                                 'Supir',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['Kendaraan']!,
-                            columnName: 'Kendaraan',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Kendaraan',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['Jenis']!,
-                            columnName: 'Jenis',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Jenis',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -255,12 +198,13 @@ class KirimKendaraanScreen extends StatelessWidget {
                     ),
                     rowCount > 0
                         ? Center(
-                          child: SfDataPager(
+                            child: SfDataPager(
                               delegate: dataSource,
-                              pageCount: (rowCount / numberOfRows).ceilToDouble(),
+                              pageCount:
+                                  (rowCount / numberOfRows).ceilToDouble(),
                               direction: Axis.horizontal,
                             ),
-                        )
+                          )
                         : const SizedBox.shrink(),
                     const Divider(height: CustomSize.dividerHeight),
                     Padding(

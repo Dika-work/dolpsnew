@@ -36,7 +36,7 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
           leading: IconButton(
               onPressed: () => Get.back(),
               icon: const Icon(Icons.arrow_back_ios_new)),
-          title: Text('Data DO Estimasi',
+          title: Text('Data DO Estimasi (Tentative)',
               style: Theme.of(context).textTheme.headlineMedium),
         ),
         body: Obx(
@@ -414,16 +414,17 @@ class _EditEstimasiState extends State<EditEstimasi> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        'Edit DO Estimasi (Tentative)',
-        style: Theme.of(context).textTheme.headlineMedium,
+      title: Center(
+        child: Text(
+          'Edit DO Estimasi (Tentative)',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ini id nya : $id'),
             TextFormField(
               keyboardType: TextInputType.none,
               readOnly: true,

@@ -19,7 +19,7 @@ class RequestKendaraanController extends GetxController {
   final tgl =
       CustomHelperFunctions.getFormattedDateDatabase(DateTime.now()).obs;
   String namaUser = '';
-  final plant = '1100'.obs;
+  final plant = 'Pilih plant..'.obs;
   final typeDO = 'REGULER'.obs;
   final idplant = '1'.obs;
   final typeDOValue = 0.obs;
@@ -91,7 +91,7 @@ class RequestKendaraanController extends GetxController {
     'MUTASI': 1,
   };
 
-  String get tujuanDisplayValue => tujuanMap[plant.value] ?? '';
+  String get tujuanDisplayValue => tujuanMap[plant.value] ?? 'Pilih plant..';
 
   @override
   void onInit() {
@@ -139,10 +139,6 @@ class RequestKendaraanController extends GetxController {
     }
   }
 
-  int getTypeDOValue() {
-    return typeDOMap[typeDO.value] ?? 0;
-  }
-
   Future<void> fetchRequestKendaraan() async {
     try {
       isRequestLoading.value = true;
@@ -169,6 +165,7 @@ class RequestKendaraanController extends GetxController {
     CustomDialogs.loadingIndicator();
 
     if (!requestKendaraanKey.currentState!.validate()) {
+      CustomFullScreenLoader.stopLoading();
       return;
     }
 
@@ -185,6 +182,16 @@ class RequestKendaraanController extends GetxController {
 
     jenisKendaraan.value = 'MOBIL MOTOR 16';
     jumlahKendaraanController.clear();
+
+    print('ini jam nya: ${CustomHelperFunctions.formattedTime}');
+    print('ini tgl nya: ${tgl.value}');
+    print('ini nama pengurus nya: ${tgl.value}');
+    print('ini plant nya: ${plant.value}');
+    print('ini tujuan nya: $tujuanDisplayValue');
+    print('ini type nya: ${typeDOValue.value}');
+    print('ini jenis kendaraan nya: ${jenisKendaraan.value}');
+    print('ini jumlah nya: ${jumlahKendaraanController.text.trim()}');
+    print('ini status nya: 0');
 
     await fetchRequestKendaraan();
     CustomFullScreenLoader.stopLoading();

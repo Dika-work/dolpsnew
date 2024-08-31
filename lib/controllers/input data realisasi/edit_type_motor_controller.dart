@@ -37,9 +37,9 @@ class EditTypeMotorController extends GetxController {
     CustomFullScreenLoader.stopLoading();
 
     await fetchAllTypeMotorById(id);
+
     fetchTotalPlot(); // Panggil fetchTotalPlot setelah edit selesai
     CustomFullScreenLoader.stopLoading();
-
     Get.back(result: true);
   }
 
@@ -55,15 +55,57 @@ class EditTypeMotorController extends GetxController {
   }
 
   // func selesai di page EDIT TYPE KENDARAAN
-  Future<void> editdanHapusTypeKendaraan(int id) async {
+  Future<void> editDanHapusTambahTypeKendaraan(int id) async {
     CustomDialogs.loadingIndicator();
 
     await editMotorRepo.editStatusTypeMotor(id);
     await editMotorRepo.hapusDataHutang(id);
-    await doRegulerController.fetchRegulerContent();
-    await doRegulerController.fetchRegulerAllContent();
-    await doMutasiController.fetchMutasiContent();
 
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> editDanHapusTypeMotorMutasi(int id) async {
+    CustomDialogs.loadingIndicator();
+
+    await editMotorRepo.editStatusTypeMotor(id);
+    await editMotorRepo.hapusDataHutang(id);
+
+    await doMutasiController.fetchMutasiContent();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> editDanHapusTypeMotorReguler(int id) async {
+    CustomDialogs.loadingIndicator();
+
+    await editMotorRepo.editStatusTypeMotor(id);
+    await editMotorRepo.hapusDataHutang(id);
+
+    await doRegulerController.fetchRegulerContent();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> editDanHapusTypeMotorAllReguler(int id) async {
+    CustomDialogs.loadingIndicator();
+
+    await editMotorRepo.editStatusTypeMotor(id);
+    await editMotorRepo.hapusDataHutang(id);
+
+    await doRegulerController.fetchRegulerAllContent();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> editDanHapusTypeMotorAllMutasi(int id) async {
+    CustomDialogs.loadingIndicator();
+
+    await editMotorRepo.editStatusTypeMotor(id);
+    await editMotorRepo.hapusDataHutang(id);
+
+    await doMutasiController.fetchMutasiAllContent();
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }
