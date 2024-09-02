@@ -297,7 +297,7 @@ class Homepage extends StatelessWidget {
                     );
                   }
 
-                  print('ini banyaknya columns : ${columns.length}');
+                  // print('ini banyaknya columns : ${columns.length}');
 
                   // Cek kondisi untuk menempatkan tabel di tengah
                   bool shouldCenterTable = (controllerHarianHome.daerah == 1 ||

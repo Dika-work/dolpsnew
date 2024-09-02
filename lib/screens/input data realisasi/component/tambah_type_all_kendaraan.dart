@@ -15,19 +15,20 @@ import '../../../utils/source/input data realisasi/tambah_type_motor_source.dart
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dynamic_formfield.dart';
 import 'edit_type.dart';
+import 'tambah_type_kendaraan.dart';
 
-class TambahTypeKendaraan extends StatefulWidget {
-  const TambahTypeKendaraan(
+class TambahTypeAllKendaraan extends StatefulWidget {
+  const TambahTypeAllKendaraan(
       {super.key, required this.model, required this.controller});
 
   final DoRealisasiModel model;
   final TambahTypeMotorController controller;
 
   @override
-  State<TambahTypeKendaraan> createState() => _TambahTypeKendaraanState();
+  State<TambahTypeAllKendaraan> createState() => _TambahTypeAllKendaraanState();
 }
 
-class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
+class _TambahTypeAllKendaraanState extends State<TambahTypeAllKendaraan> {
   late int id;
   late String tgl;
   late int jumlahMotor;
@@ -641,7 +642,7 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
                                         if (plotRealisasiController
                                             .isJumlahPlotEqual.value) {
                                           widget.controller
-                                              .selesaiTypeMotor(id);
+                                              .selesaiAllTypeMotor(id);
                                         } else if (widget
                                                 .controller
                                                 .formFieldsPerTab[
@@ -753,21 +754,4 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
       ),
     );
   }
-
-  String getNamaDaerah(TabDaerahTujuan tab) {
-    switch (tab) {
-      case TabDaerahTujuan.srd:
-        return "SAMARINDA";
-      case TabDaerahTujuan.mks:
-        return "MAKASAR";
-      case TabDaerahTujuan.ptk:
-        return "PONTIANAK";
-      case TabDaerahTujuan.bjm:
-        return "BANJARMASIN";
-      default:
-        return "";
-    }
-  }
 }
-
-enum TabDaerahTujuan { srd, mks, ptk, bjm }

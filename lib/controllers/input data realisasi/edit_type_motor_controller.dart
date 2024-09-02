@@ -97,6 +97,7 @@ class EditTypeMotorController extends GetxController {
     await doRegulerController.fetchRegulerAllContent();
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
   }
 
   Future<void> editDanHapusTypeMotorAllMutasi(int id) async {
@@ -106,6 +107,7 @@ class EditTypeMotorController extends GetxController {
     await editMotorRepo.hapusDataHutang(id);
 
     await doMutasiController.fetchMutasiAllContent();
+    CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }

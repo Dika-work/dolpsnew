@@ -77,9 +77,10 @@ class DoRegulerAllSource extends DataGridSource {
     }
 
     // Add Lihat cell
-    if (controller.rolesLihat == 1 && request?.status == 1 ||
-        request?.status == 3 ||
-        request?.status == 4) {
+    if (controller.rolesLihat == 1 &&
+        (request?.status == 1 ||
+            request?.status == 3 ||
+            request?.status == 4)) {
       cells.add(
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -154,7 +155,6 @@ class DoRegulerAllSource extends DataGridSource {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // admin,plant 1300,1350,1700,1800
               if (controller.roleUser == 'admin' ||
                   controller.rolePlant == '1300' ||
                   controller.rolePlant == '1350' ||
@@ -173,8 +173,11 @@ class DoRegulerAllSource extends DataGridSource {
                     ),
                   ),
                 ),
-              if (doRealisasiModelAll.isNotEmpty &&
-                  doRealisasiModelAll.first.totalHutang != 0)
+              if (controller.roleUser == 'admin' ||
+                  controller.rolePlant == '1300' ||
+                  controller.rolePlant == '1350' ||
+                  controller.rolePlant == '1700' ||
+                  controller.rolePlant == '1800')
                 const SizedBox(height: CustomSize.sm),
               if (doRealisasiModelAll.isNotEmpty &&
                   doRealisasiModelAll.first.totalHutang != 0)
@@ -194,7 +197,7 @@ class DoRegulerAllSource extends DataGridSource {
       } else {
         cells.add(const SizedBox.shrink());
       }
-    } else if (controller.rolesJumlah == 1 && controller.isAdmin) {
+    } else if (controller.rolesJumlah == 1) {
       cells.add(const SizedBox.shrink()); // Placeholder for Action
     }
 
@@ -255,6 +258,7 @@ class DoRegulerAllSource extends DataGridSource {
             ],
           ),
         );
+        print("Added Edit cell");
       } else if (request?.status == 2 ||
           request?.status == 3 ||
           request?.status == 4) {
@@ -262,23 +266,25 @@ class DoRegulerAllSource extends DataGridSource {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (onEdit != null) {
-                    onEdit!(request!);
-                  }
-                },
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
-                child: Text(
-                  'Edit',
-                  style: Theme.of(Get.context!)
-                      .textTheme
-                      .bodyMedium
-                      ?.apply(color: AppColors.black),
+              if (controller.roleUser == 'admin')
+                ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(request!);
+                    }
+                  },
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  ),
                 ),
-              ),
-              const SizedBox(height: CustomSize.sm),
+              if (controller.roleUser == 'admin')
+                const SizedBox(height: CustomSize.sm),
               ElevatedButton(
                 onPressed: () {
                   if (onType != null) {
@@ -298,14 +304,15 @@ class DoRegulerAllSource extends DataGridSource {
             ],
           ),
         );
+        print("Added Edit/Type cell");
       } else {
         cells.add(const SizedBox.shrink());
+        print("Added Edit placeholder");
       }
     } else if (controller.rolesEdit == 1) {
       cells.add(const SizedBox.shrink()); // Placeholder for Edit
+      print("Added Edit placeholder for role edit");
     }
-
-    print('ini banyaknya cells: ${cells.length}');
 
     return DataGridRowAdapter(
       color: isEvenRow ? Colors.white : Colors.grey[200],

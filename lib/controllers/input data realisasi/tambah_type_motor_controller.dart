@@ -136,8 +136,15 @@ class TambahTypeMotorController extends GetxController {
   Future<void> selesaiTypeMotor(int idRealisasi) async {
     CustomDialogs.loadingIndicator();
     await tambahTypeMotorRepo.changeStatusTypeMotor(idRealisasi, 3);
-    await doRegulerController.fetchRegulerAllContent();
     await doRegulerController.fetchRegulerContent();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> selesaiAllTypeMotor(int idRealisasi) async {
+    CustomDialogs.loadingIndicator();
+    await tambahTypeMotorRepo.changeStatusTypeMotor(idRealisasi, 3);
+    await doRegulerController.fetchRegulerAllContent();
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }

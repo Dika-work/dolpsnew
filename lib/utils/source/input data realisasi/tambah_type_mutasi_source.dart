@@ -13,7 +13,9 @@ class TambahTypeMutasiSource extends DataGridSource {
   TambahTypeMutasiSource({
     required this.tambahTypeMotorMutasiModel,
     int startIndex = 0,
-  });
+  }) {
+    _updateDataPager(tambahTypeMotorMutasiModel, startIndex);
+  }
 
   List<DataGridRow> _tambahTypeMotor = [];
   final controller = Get.put(TambahTypeMotorMutasiController());
@@ -100,8 +102,8 @@ class TambahTypeMutasiSource extends DataGridSource {
               columnName: 'Jumlah Unit', value: totalJumlahUnit.toString()),
         ]),
       );
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   @override

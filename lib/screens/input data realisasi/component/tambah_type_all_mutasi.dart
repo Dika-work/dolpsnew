@@ -16,18 +16,19 @@ import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dynamic_formfield.dart';
 import 'edit_type.dart';
 
-class TambahTypeMotorMutasi extends StatefulWidget {
-  const TambahTypeMotorMutasi(
+class TambahTypeAllMotorMutasi extends StatefulWidget {
+  const TambahTypeAllMotorMutasi(
       {super.key, required this.model, required this.controller});
 
   final DoRealisasiModel model;
   final TambahTypeMotorMutasiController controller;
 
   @override
-  State<TambahTypeMotorMutasi> createState() => _TambahTypeMotorMutasiState();
+  State<TambahTypeAllMotorMutasi> createState() =>
+      _TambahTypeAllMotorMutasiState();
 }
 
-class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
+class _TambahTypeAllMotorMutasiState extends State<TambahTypeAllMotorMutasi> {
   late int id;
   late int jumlahMotor;
   final plotRealisasiController = Get.find<PlotRealisasiController>();
@@ -413,7 +414,7 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
                           Get.to(() => EditTypeKendaraan(
                                 model: widget.model,
                                 onConfirm: () => editTypeMotorController
-                                    .editDanHapusTypeMotorMutasi(id),
+                                    .editDanHapusTypeMotorAllMutasi(id),
                               ));
                         },
                         style: ElevatedButton.styleFrom(
@@ -500,8 +501,7 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
                                 .isJumlahPlotEqual.value) {
                               print(
                                   '...INI JUMLAH PLOT REALISASI DAN JUMLAH UNIT MOTOR MUTASI SUDAH SAMA...');
-                              // disini ke 2 func itu harusnya, tapi saya maunya itu ketika user sedang di all mutasi ya ngambil func hanya selesaiAllTypeMotor dan jika sedang di mutasi func yg di ambil hanya selesaiTypeMotor
-                              widget.controller.selesaiTypeMotor(id);
+                              widget.controller.selesaiAllTypeMotor(id);
                             } else if (widget.controller.formFields.isEmpty) {
                               print(
                                   '..TIDAK ADA DROPDOWN ATAU TEXTFORMFIELD DISNI..');

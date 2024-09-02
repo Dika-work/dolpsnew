@@ -50,8 +50,6 @@ class RequestKendaraanController extends GetxController {
     '1350',
     '1700',
     '1800',
-    'DC (Pondok Ungu)',
-    'TB (Tambun Bekasi)',
     '1900'
   ];
 
@@ -69,8 +67,6 @@ class RequestKendaraanController extends GetxController {
     '1350': 'Cibitung',
     '1700': 'Dawuan',
     '1800': 'Dawuan',
-    'DC (Pondok Ungu)': 'Bekasi',
-    'TB (Tambun Bekasi)': 'Bekasi',
     '1900': 'Bekasi',
   };
 
@@ -81,8 +77,6 @@ class RequestKendaraanController extends GetxController {
     '1350': '4',
     '1700': '5',
     '1800': '6',
-    'DC (Pondok Ungu)': '7',
-    'TB (Tambun Bekasi)': '8',
     '1900': '9',
   };
 

@@ -22,6 +22,12 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
   @override
   Widget build(BuildContext context) {
     final editTypeMotorController = Get.put(EditTypeMotorController());
+    final tambahTypeMotorController =
+        Get.put(TambahTypeMotorMutasiController());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchMutasiContent();
+    });
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
@@ -72,8 +78,6 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                 print('..INI BAKALAN KE CLASS LIHAT REALISASI MUTASI..');
               },
               onAction: (DoRealisasiModel model) {
-                final tambahTypeMotorController =
-                    Get.put(TambahTypeMotorMutasiController());
                 if (model.status == 0) {
                   showDialog(
                     context: context,
@@ -82,10 +86,10 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                     },
                   );
                 } else if (model.status == 1 || model.status == 2) {
-                  tambahTypeMotorController
-                      .fetchTambahTypeMotorMutasi(model.id);
                   Get.to(() => TambahTypeMotorMutasi(
-                      model: model, controller: tambahTypeMotorController));
+                        model: model,
+                        controller: tambahTypeMotorController,
+                      ));
                   print('...INI BAKALAN KE TYPE MOTOR MUTASI CLASS...');
                 } else if (model.status == 3) {
                   print('..INI BAKALAN KE TerimaMotorMutasi..');
@@ -145,7 +149,11 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                               ? dataSource.doRealisasiModel[rowIndex]
                               : null;
 
-                          if (request != null && request.status == 5) {
+                          if (request != null &&
+                              controller.roleUser == 'admin' &&
+                              (request.status == 2 ||
+                                  request.status == 3 ||
+                                  request.status == 5)) {
                             return 150.0;
                           } else {
                             return details.rowHeight;

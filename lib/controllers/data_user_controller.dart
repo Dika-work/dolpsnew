@@ -44,7 +44,7 @@ class DataUserController extends GetxController {
       final dataUser = await dataUserRepo.fetchDataUserContent();
       dataUserModel.assignAll(dataUser);
     } catch (e) {
-      print('Error fetching user data: $e');
+      // print('Error fetching user data: $e');
       dataUserModel.assignAll([]);
     } finally {
       isDataUserLoading.value = false;
@@ -56,7 +56,7 @@ class DataUserController extends GetxController {
 
     if (!addUserKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
-      print('Form validation failed');
+      // print('Form validation failed');
       return;
     }
 
@@ -84,11 +84,11 @@ class DataUserController extends GetxController {
     plant.value = '0';
     dealer.value = '0';
 
-    print('Controllers and variables reset');
+    // print('Controllers and variables reset');
     await fetchUserData();
     CustomFullScreenLoader.stopLoading();
-    print('User data fetched');
-    print('Navigated back');
+    // print('User data fetched');
+    // print('Navigated back');
   }
 
   Future<void> editUserData(

@@ -15,6 +15,7 @@ class DoMutasiRepository {
         '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getDataMutasi'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
+      print('ini DO MUTASI.. : ${list.toList()}');
       return list.map((e) => DoRealisasiModel.fromJson(e)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data do Mutasi');
@@ -51,9 +52,9 @@ class DoMutasiRepository {
             title: 'Gagal😢',
             message: responseData['message'] ?? 'Ada yang salah😒',
           );
-          print(responseData['message']);
+          // print(responseData['message']);
         } else {
-          print('..INI DATA DARI RESPONSE DO REGULER NYA :$responseData');
+          // print('..INI DATA DARI RESPONSE DO REGULER NYA :$responseData');
           CustomFullScreenLoader.stopLoading();
           SnackbarLoader.successSnackBar(
             title: 'Sukses🎉',
@@ -117,7 +118,7 @@ class DoMutasiRepository {
             title: 'Gagal😪',
             message: responseData['message'] ?? 'Ada yang salah🤷',
           );
-          print('...ADA MASALAH DI EDIT DO REGULER REPO...');
+          // print('...ADA MASALAH DI EDIT DO REGULER REPO...');
         }
         return responseData;
       } else {
@@ -130,7 +131,7 @@ class DoMutasiRepository {
       }
     } catch (e) {
       CustomFullScreenLoader.stopLoading();
-      print('Error edit di repository DO Reguler: $e');
+      // print('Error edit di repository DO Reguler: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Gagal😪',
         message: 'Terjadi kesalahan saat mengedit do reguler',

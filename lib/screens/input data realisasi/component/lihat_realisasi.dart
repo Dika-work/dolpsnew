@@ -319,16 +319,26 @@ class LihatRealisasi extends StatelessWidget {
                                 controllerMutasi.tambahTypeMotorMutasiModel,
                             startIndex: currentPage * rowsPerPage);
 
+                        final bool isTableEmpty =
+                            controllerMutasi.tambahTypeMotorMutasiModel.isEmpty;
+                        final rowCount =
+                            controllerMutasi.tambahTypeMotorMutasiModel.length +
+                                1;
+                        final double tableHeight = isTableEmpty
+                            ? 110
+                            : headerHeight +
+                                (rowHeight * rowCount)
+                                    .clamp(0, gridHeight - headerHeight);
+
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Flexible(
-                              fit: FlexFit.loose,
+                            SizedBox(
+                              height: tableHeight,
                               child: SfDataGrid(
                                 source: dataSource,
                                 columnWidthMode: ColumnWidthMode.fill,
-                                allowPullToRefresh: true,
                                 gridLinesVisibility: GridLinesVisibility.both,
                                 headerGridLinesVisibility:
                                     GridLinesVisibility.both,
@@ -395,17 +405,15 @@ class LihatRealisasi extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            SfDataPager(
-                              delegate: dataSource,
-                              pageCount: controllerMutasi
-                                      .tambahTypeMotorMutasiModel.isEmpty
-                                  ? 1
-                                  : (controllerMutasi.tambahTypeMotorMutasiModel
-                                              .length /
-                                          rowsPerPage)
-                                      .ceilToDouble(),
-                              direction: Axis.horizontal,
-                            ),
+                            if (controllerMutasi
+                                .tambahTypeMotorMutasiModel.isNotEmpty)
+                              SfDataPager(
+                                delegate: dataSource,
+                                pageCount: isTableEmpty
+                                    ? 1
+                                    : (rowCount / rowsPerPage).ceilToDouble(),
+                                direction: Axis.horizontal,
+                              ),
                           ],
                         );
                       }
@@ -413,20 +421,22 @@ class LihatRealisasi extends StatelessWidget {
                   )
                 : const SizedBox.shrink(),
             // Kelengkapan
-            const Divider(
-                height: CustomSize.dividerHeight, color: AppColors.black),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: CustomSize.sm),
-                child: Text('ALAT-ALAT MOTOR DARI PABRIK',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.apply(color: AppColors.success)),
+            if (model.type == 0)
+              const Divider(
+                  height: CustomSize.dividerHeight, color: AppColors.black),
+            if (model.type == 0)
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: CustomSize.sm),
+                  child: Text('ALAT-ALAT MOTOR DARI PABRIK',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.apply(color: AppColors.success)),
+                ),
               ),
-            ),
-            const SizedBox(height: CustomSize.sm),
+            if (model.type == 0) const SizedBox(height: CustomSize.sm),
             model.type == 0
                 ? Obx(() {
                     if (hutangController.isLoadingHutang.value &&
@@ -665,20 +675,22 @@ class LihatRealisasi extends StatelessWidget {
                   })
                 : const SizedBox.shrink(),
             // Hutang
-            const Divider(
-                height: CustomSize.dividerHeight, color: AppColors.black),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: CustomSize.sm),
-                child: Text('HUTANG ALAT-ALAT MOTOR DARI PABRIK',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.apply(color: AppColors.error)),
+            if (model.type == 0)
+              const Divider(
+                  height: CustomSize.dividerHeight, color: AppColors.black),
+            if (model.type == 0)
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: CustomSize.sm),
+                  child: Text('HUTANG ALAT-ALAT MOTOR DARI PABRIK',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.apply(color: AppColors.error)),
+                ),
               ),
-            ),
-            const SizedBox(height: CustomSize.sm),
+            if (model.type == 0) const SizedBox(height: CustomSize.sm),
             model.type == 0
                 ? Obx(() {
                     if (hutangController.isLoadingHutang.value &&

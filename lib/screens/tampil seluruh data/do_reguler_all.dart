@@ -14,7 +14,7 @@ import '../input data realisasi/component/edit_realisasi.dart';
 import '../input data realisasi/component/edit_type.dart';
 import '../input data realisasi/component/jumlah_unit.dart';
 import '../input data realisasi/component/lihat_realisasi.dart';
-import '../input data realisasi/component/tambah_type_kendaraan.dart';
+import '../input data realisasi/component/tambah_type_all_kendaraan.dart';
 
 class DoRegulerAll extends GetView<DoRegulerController> {
   const DoRegulerAll({super.key});
@@ -39,7 +39,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
       'Jenis': double.nan,
       'Jumlah': double.nan,
       if (controller.rolesLihat == 1) 'Lihat': 150,
-      'Action': 150,
+      if (controller.rolesJumlah == 1) 'Action': 150,
       if (controller.rolesBatal == 1) 'Batal': 150,
       if (controller.rolesEdit == 1) 'Edit': 150,
     };
@@ -50,7 +50,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Semua Data DO Reguler LPS',
+          'Data Reguler DO LPS',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         leading: IconButton(
@@ -60,7 +60,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
       ),
       body: Obx(
         () {
-          if (controller.isLoadingRegulerAll.value &&
+          if (controller.isLoadingReguler.value &&
               controller.doRealisasiModelAll.isEmpty) {
             return const CustomCircularLoader();
           } else {
@@ -85,10 +85,9 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                     },
                   );
                 } else if (model.status == 1 || model.status == 2) {
-                  Get.to(() => TambahTypeKendaraan(
+                  Get.to(() => TambahTypeAllKendaraan(
                       model: model, controller: tambahTypeMotorController));
                 } else if (model.status == 3) {
-                  print('..INI BAKALAN KE AKSESORIS..');
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -122,14 +121,17 @@ class DoRegulerAll extends GetView<DoRegulerController> {
               startIndex: currentPage * rowsPerPage,
             );
 
-            print(
-                'ini banyaknya columns all do reguler: ${columnWidths.length}');
+            print('ini banyaknya columns : ${columnWidths.length}');
+            for (var i = 0; i < columnWidths.length; i++) {
+              print("Column ${i + 1}: ${columnWidths.keys.elementAt(i)}");
+            }
+
             return Column(
               children: [
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      await controller.fetchRegulerAllContent();
+                      await controller.fetchRegulerContent();
                     },
                     child: SfDataGrid(
                         source: dataSource,
@@ -149,6 +151,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                   : null;
 
                           if (request != null &&
+                              controller.isAdmin &&
                               (request.status == 2 ||
                                   request.status == 3 ||
                                   request.status == 4)) {
@@ -305,7 +308,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                         .bodyMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
-                          if (controller.rolesLihat == 1 && controller.isAdmin)
+                          if (controller.rolesLihat == 1)
                             GridColumn(
                                 width: columnWidths['Lihat']!,
                                 columnName: 'Lihat',
@@ -323,22 +326,24 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
-                          GridColumn(
-                              width: columnWidths['Action']!,
-                              columnName: 'Action',
-                              label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Action',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
+                          if (controller.rolesJumlah == 1)
+                            GridColumn(
+                                width: columnWidths['Action']!,
+                                columnName: 'Action',
+                                label: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      color: Colors.lightBlue.shade100,
+                                    ),
+                                    child: Text(
+                                      'Action',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ))),
                           if (controller.rolesBatal == 1)
                             GridColumn(
                                 width: columnWidths['Batal']!,

@@ -45,6 +45,7 @@ class DoMutasiController extends GetxController {
     try {
       isLoadingMutasi.value = true;
       final getMutasiDo = await doMutasiRepo.fetchDoMutasiData();
+
       if (getMutasiDo.isNotEmpty) {
         if (isAdmin) {
           doRealisasiModel.assignAll(getMutasiDo);

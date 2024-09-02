@@ -55,7 +55,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.offNamed('/rootpage'),
+          onPressed: () => Get.back(),
         ),
       ),
       body: Obx(
@@ -147,6 +147,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                               : null;
 
                           if (request != null &&
+                              controller.isAdmin &&
                               (request.status == 2 ||
                                   request.status == 3 ||
                                   request.status == 4)) {
@@ -321,7 +322,7 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
-                          if (controller.rolesJumlah == 1 && controller.isAdmin)
+                          if (controller.rolesJumlah == 1)
                             GridColumn(
                                 width: columnWidths['Action']!,
                                 columnName: 'Action',

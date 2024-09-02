@@ -125,28 +125,26 @@ class DoMutasiAllSource extends DataGridSource {
                 )
               : const SizedBox.shrink(),
           // Batal
-          controller.rolesBatal == 0
-              ? const SizedBox.shrink()
-              : request.status == 0
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 60,
-                          width: 100,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                if (onBatal != null) {
-                                  onBatal!(request);
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.error),
-                              child: const Text('Batal')),
-                        ),
-                      ],
-                    )
-                  : const SizedBox.shrink(),
+          controller.rolesBatal == 1 && request.status == 0
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 60,
+                      width: 100,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            if (onBatal != null) {
+                              onBatal!(request);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.error),
+                          child: const Text('Batal')),
+                    ),
+                  ],
+                )
+              : const SizedBox.shrink(),
           // Edit
           controller.rolesEdit == 0
               ? const SizedBox.shrink()
@@ -154,25 +152,27 @@ class DoMutasiAllSource extends DataGridSource {
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              if (onEdit != null) {
-                                onEdit!(request);
-                              }
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    request.status == 0 || request.status == 1
-                                        ? AppColors.yellow
-                                        : AppColors.gold),
-                            child: Text(
-                              'Edit',
-                              style: Theme.of(Get.context!)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.apply(color: AppColors.black),
-                            )),
-                        const SizedBox(height: CustomSize.sm),
+                        if (controller.roleUser == 'admin')
+                          ElevatedButton(
+                              onPressed: () {
+                                if (onEdit != null) {
+                                  onEdit!(request);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      request.status == 0 || request.status == 1
+                                          ? AppColors.yellow
+                                          : AppColors.gold),
+                              child: Text(
+                                'Edit',
+                                style: Theme.of(Get.context!)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.apply(color: AppColors.black),
+                              )),
+                        if (controller.roleUser == 'admin')
+                          const SizedBox(height: CustomSize.sm),
                         ElevatedButton(
                             onPressed: () {
                               if (onType != null) {

@@ -13,7 +13,7 @@ class AksesorisRepository {
         '${storageUtil.baseURL}/DO/api/api_AccMotor.php?action=JumlahAcc&id=$id'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
-      print('..INI RESPONSE KENDARAAN.. : ${list.toList()}');
+      // print('..INI RESPONSE KENDARAAN.. : ${list.toList()}');
       return list.map((model) => AksesorisModel.fromJson(model)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data DO Global Harian zzz☠️');
@@ -56,14 +56,14 @@ class AksesorisRepository {
             'plastik_1': plastik.toString(),
           });
       if (response.statusCode != 200) {
-        print('Failed to send motor data: ${response.body}');
+        // print('Failed to send motor data: ${response.body}');
         throw Exception('Failed to send motor data');
       } else {
-        print('Motor data sent successfully: ${response.body}');
+        // print('Motor data sent successfully: ${response.body}');
       }
     } catch (e) {
-      print('Error in accMotor: $e');
-      throw e;
+      // print('Error in accMotor: $e');
+      rethrow;
     }
   }
 
@@ -104,14 +104,14 @@ class AksesorisRepository {
             'hutang_plastik': plastik.toString(),
           });
       if (response.statusCode != 200) {
-        print('Failed to send hutang data: ${response.body}');
+        // print('Failed to send hutang data: ${response.body}');
         throw Exception('Failed to send hutang data');
       } else {
-        print('Hutang data sent successfully: ${response.body}');
+        // print('Hutang data sent successfully: ${response.body}');
       }
     } catch (e) {
-      print('Error in accHutang: $e');
-      throw e;
+      // print('Error in accHutang: $e');
+      rethrow;
     }
   }
 
@@ -132,7 +132,7 @@ class AksesorisRepository {
       }
     } catch (e) {
       print('Error in accSelesai: $e');
-      throw e;
+      throw Exception('Something went wrong, please contact developer');
     }
   }
 }

@@ -108,7 +108,7 @@ class DoRegulerSource extends DataGridSource {
     }
 
     // Add Action cell
-    if (controller.rolesJumlah == 1 && controller.isAdmin) {
+    if (controller.rolesJumlah == 1) {
       if (request?.status == 0 ||
           request?.status == 1 ||
           request?.status == 2 ||
@@ -173,8 +173,11 @@ class DoRegulerSource extends DataGridSource {
                     ),
                   ),
                 ),
-              if (doRealisasiModel.isNotEmpty &&
-                  doRealisasiModel.first.totalHutang != 0)
+              if (controller.roleUser == 'admin' ||
+                  controller.rolePlant == '1300' ||
+                  controller.rolePlant == '1350' ||
+                  controller.rolePlant == '1700' ||
+                  controller.rolePlant == '1800')
                 const SizedBox(height: CustomSize.sm),
               if (doRealisasiModel.isNotEmpty &&
                   doRealisasiModel.first.totalHutang != 0)
@@ -194,7 +197,7 @@ class DoRegulerSource extends DataGridSource {
       } else {
         cells.add(const SizedBox.shrink());
       }
-    } else if (controller.rolesJumlah == 1 && controller.isAdmin) {
+    } else if (controller.rolesJumlah == 1) {
       cells.add(const SizedBox.shrink()); // Placeholder for Action
     }
 
@@ -262,23 +265,25 @@ class DoRegulerSource extends DataGridSource {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (onEdit != null) {
-                    onEdit!(request!);
-                  }
-                },
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
-                child: Text(
-                  'Edit',
-                  style: Theme.of(Get.context!)
-                      .textTheme
-                      .bodyMedium
-                      ?.apply(color: AppColors.black),
+              if (controller.roleUser == 'admin')
+                ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(request!);
+                    }
+                  },
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  ),
                 ),
-              ),
-              const SizedBox(height: CustomSize.sm),
+              if (controller.roleUser == 'admin')
+                const SizedBox(height: CustomSize.sm),
               ElevatedButton(
                 onPressed: () {
                   if (onType != null) {

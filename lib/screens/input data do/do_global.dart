@@ -400,8 +400,8 @@ class AddDOGlobal extends StatelessWidget {
                           controller.tgl.value =
                               CustomHelperFunctions.getFormattedDateDatabase(
                                   newSelectedDate);
-                          print(
-                              'Ini tanggal yang dipilih : ${controller.tgl.value}');
+                          // print(
+                          //     'Ini tanggal yang dipilih : ${controller.tgl.value}');
                         }
                       });
                     },

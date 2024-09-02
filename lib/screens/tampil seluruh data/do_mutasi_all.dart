@@ -13,8 +13,8 @@ import '../input data realisasi/component/edit_realisasi_mutasi.dart';
 import '../input data realisasi/component/edit_type.dart';
 import '../input data realisasi/component/jumlah_unit.dart';
 import '../input data realisasi/component/lihat_realisasi.dart';
-import '../input data realisasi/component/tambah_type_motor_mutasi.dart';
-import '../input data realisasi/component/terima_motor_mutasi.dart';
+import '../input data realisasi/component/tambah_type_all_mutasi.dart';
+import '../input data realisasi/component/terima_motor_all_mutasi.dart';
 
 class DoMutasiAll extends GetView<DoMutasiController> {
   const DoMutasiAll({super.key});
@@ -22,6 +22,8 @@ class DoMutasiAll extends GetView<DoMutasiController> {
   @override
   Widget build(BuildContext context) {
     final editTypeMotorController = Get.put(EditTypeMotorController());
+    final tambahTypeMotorController =
+        Get.put(TambahTypeMotorMutasiController());
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchMutasiAllContent();
@@ -74,8 +76,6 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                 print('..INI BAKALAN KE CLASS LIHAT REALISASI MUTASI..');
               },
               onAction: (DoRealisasiModel model) {
-                final tambahTypeMotorController =
-                    Get.put(TambahTypeMotorMutasiController());
                 if (model.status == 0) {
                   showDialog(
                     context: context,
@@ -84,17 +84,17 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                     },
                   );
                 } else if (model.status == 1 || model.status == 2) {
-                  tambahTypeMotorController
-                      .fetchTambahTypeMotorMutasi(model.id);
-                  Get.to(() => TambahTypeMotorMutasi(
-                      model: model, controller: tambahTypeMotorController));
+                  Get.to(() => TambahTypeAllMotorMutasi(
+                        model: model,
+                        controller: tambahTypeMotorController,
+                      ));
                   print('...INI BAKALAN KE TYPE MOTOR MUTASI CLASS...');
                 } else if (model.status == 3) {
                   print('..INI BAKALAN KE TerimaMotorMutasi..');
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return TerimaMotorMutasi(
+                      return TerimaMotorAllMutasi(
                         model: model,
                       );
                     },
@@ -154,6 +154,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                                 : null;
 
                             if (request != null &&
+                                controller.roleUser == 'admin' &&
                                 (request.status == 2 || request.status == 3)) {
                               return 150.0; // Tinggi row untuk status 4
                             } else {
