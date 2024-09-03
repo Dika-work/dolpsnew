@@ -176,36 +176,36 @@ class _AksesorisState extends State<Aksesoris> {
               return controller.areAllCheckboxesChecked
                   ? ElevatedButton(
                       onPressed: () {
-                        print('..INI MERUBAH STATUS JADI 4 TYPE MOTOR...');
-                        print('id: $id');
-                        print('user: ${controller.aksesorisModel.first.user}');
-                        print('jam: ${controller.aksesorisModel.first.jam}');
-                        print(
-                            'tanggal: ${CustomHelperFunctions.getFormattedDateDatabase(DateTime.now())}');
-                        print('ini hlm acc: ${controller.newValues[0]}');
-                        print('ini ac acc: ${controller.newValues[1]}');
-                        print('ini ks acc: ${controller.newValues[2]}');
-                        print('ini ts acc: ${controller.newValues[3]}');
-                        print('ini bp acc: ${controller.newValues[4]}');
-                        print('ini bs acc: ${controller.newValues[5]}');
-                        print('ini plt acc: ${controller.newValues[6]}');
-                        print('ini stay acc: ${controller.newValues[7]}');
-                        print('ini acBesar acc: ${controller.newValues[8]}');
-                        print('ini plastik acc: ${controller.newValues[9]}');
-                        print('..INI BAGIAN HUTANG PABRIK..');
-                        print('ini hutangHlm: ${controller.hutangValues[0]}');
-                        print('ini hutangAc: ${controller.hutangValues[1]}');
-                        print('ini hutangKs: ${controller.hutangValues[2]}');
-                        print('ini hutangTs: ${controller.hutangValues[3]}');
-                        print('ini hutangBp: ${controller.hutangValues[4]}');
-                        print('ini hutangBs: ${controller.hutangValues[5]}');
-                        print('ini hutangPlt: ${controller.hutangValues[6]}');
-                        print('ini hutangStay: ${controller.hutangValues[7]}');
-                        print(
-                            'ini hutangAcBesar: ${controller.hutangValues[8]}');
-                        print(
-                            'ini hutangPlastik: ${controller.hutangValues[9]}');
-                        print('..SELESAII..');
+                        // print('..INI MERUBAH STATUS JADI 4 TYPE MOTOR...');
+                        // print('id: $id');
+                        // print('user: ${controller.aksesorisModel.first.user}');
+                        // print('jam: ${controller.aksesorisModel.first.jam}');
+                        // print(
+                        //     'tanggal: ${CustomHelperFunctions.getFormattedDateDatabase(DateTime.now())}');
+                        // print('ini hlm acc: ${controller.newValues[0]}');
+                        // print('ini ac acc: ${controller.newValues[1]}');
+                        // print('ini ks acc: ${controller.newValues[2]}');
+                        // print('ini ts acc: ${controller.newValues[3]}');
+                        // print('ini bp acc: ${controller.newValues[4]}');
+                        // print('ini bs acc: ${controller.newValues[5]}');
+                        // print('ini plt acc: ${controller.newValues[6]}');
+                        // print('ini stay acc: ${controller.newValues[7]}');
+                        // print('ini acBesar acc: ${controller.newValues[8]}');
+                        // print('ini plastik acc: ${controller.newValues[9]}');
+                        // print('..INI BAGIAN HUTANG PABRIK..');
+                        // print('ini hutangHlm: ${controller.hutangValues[0]}');
+                        // print('ini hutangAc: ${controller.hutangValues[1]}');
+                        // print('ini hutangKs: ${controller.hutangValues[2]}');
+                        // print('ini hutangTs: ${controller.hutangValues[3]}');
+                        // print('ini hutangBp: ${controller.hutangValues[4]}');
+                        // print('ini hutangBs: ${controller.hutangValues[5]}');
+                        // print('ini hutangPlt: ${controller.hutangValues[6]}');
+                        // print('ini hutangStay: ${controller.hutangValues[7]}');
+                        // print(
+                        //     'ini hutangAcBesar: ${controller.hutangValues[8]}');
+                        // print(
+                        //     'ini hutangPlastik: ${controller.hutangValues[9]}');
+                        // print('..SELESAII..');
                         controller.accSelesai(
                           id,
                           controller.aksesorisModel.first.user,

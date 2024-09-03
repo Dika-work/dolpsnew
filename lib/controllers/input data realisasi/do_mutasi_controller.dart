@@ -86,7 +86,7 @@ class DoMutasiController extends GetxController {
     }
   }
 
-  Future<void> editRealisasiReguler(
+  Future<void> editRealisasiMutasi(
       int id,
       String plant,
       String tujuan,
@@ -101,6 +101,25 @@ class DoMutasiController extends GetxController {
     await doMutasiRepo.editDoMutasi(
         id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchMutasiContent();
+
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> editRealisasiAllMutasi(
+      int id,
+      String plant,
+      String tujuan,
+      int type,
+      String plant2,
+      String tujuan2,
+      String kendaraan,
+      String supir,
+      int jumlahUnit) async {
+    CustomDialogs.loadingIndicator();
+
+    await doMutasiRepo.editDoMutasi(
+        id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchMutasiAllContent();
 
     CustomFullScreenLoader.stopLoading();

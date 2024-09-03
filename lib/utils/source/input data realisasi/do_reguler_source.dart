@@ -61,21 +61,6 @@ class DoRegulerSource extends DataGridSource {
       ),
     ];
 
-    if (controller.roleUser == 'admin') {
-      cells.add(Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-        child: Text(
-          row
-              .getCells()
-              .firstWhere((cell) => cell.columnName == 'User')
-              .value
-              .toString(),
-          textAlign: TextAlign.center,
-        ),
-      ));
-    }
-
     // Add Lihat cell
     if (controller.rolesLihat == 1 && request?.status == 1 ||
         request?.status == 3 ||
@@ -324,7 +309,6 @@ class DoRegulerSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
-          DataGridCell<String>(columnName: 'User', value: '-'),
           DataGridCell<String>(columnName: 'Plant', value: '-'),
           DataGridCell<String>(columnName: 'Tgl', value: '-'),
           DataGridCell<String>(columnName: 'Supir(Panggilan)', value: '-'),
@@ -376,8 +360,7 @@ class DoRegulerSource extends DataGridSource {
           List<DataGridCell> cells = [
             DataGridCell<int>(columnName: 'No', value: index),
             if (controller.roleUser == 'admin')
-              DataGridCell<String>(columnName: 'User', value: data.user),
-            DataGridCell<String>(columnName: 'Plant', value: data.plant),
+              DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(
                 columnName: 'Supir(Panggilan)',

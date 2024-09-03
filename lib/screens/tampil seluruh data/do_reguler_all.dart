@@ -10,7 +10,7 @@ import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/tampil seluruh data source/all_reguler_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../input data realisasi/component/aksesoris.dart';
-import '../input data realisasi/component/edit_realisasi.dart';
+import '../input data realisasi/component/edit_realisasi_all.dart';
 import '../input data realisasi/component/edit_type.dart';
 import '../input data realisasi/component/jumlah_unit.dart';
 import '../input data realisasi/component/lihat_realisasi.dart';
@@ -30,7 +30,6 @@ class DoRegulerAll extends GetView<DoRegulerController> {
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      if (controller.roleUser == 'admin') 'User': double.nan,
       'Plant': double.nan,
       'Tgl': 130,
       'Supir(Panggilan)': 200,
@@ -40,7 +39,6 @@ class DoRegulerAll extends GetView<DoRegulerController> {
       'Jumlah': double.nan,
       if (controller.rolesLihat == 1) 'Lihat': 150,
       if (controller.rolesJumlah == 1) 'Action': 150,
-      if (controller.rolesBatal == 1) 'Batal': 150,
       if (controller.rolesEdit == 1) 'Edit': 150,
     };
 
@@ -101,7 +99,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return EditRealisasi(
+                    return EditAllRealisasi(
                       model: model,
                       controller: controller,
                     );
@@ -121,17 +119,17 @@ class DoRegulerAll extends GetView<DoRegulerController> {
               startIndex: currentPage * rowsPerPage,
             );
 
-            print('ini banyaknya columns : ${columnWidths.length}');
-            for (var i = 0; i < columnWidths.length; i++) {
-              print("Column ${i + 1}: ${columnWidths.keys.elementAt(i)}");
-            }
+            // print('ini banyaknya columns : ${columnWidths.length}');
+            // for (var i = 0; i < columnWidths.length; i++) {
+            //   print("Column ${i + 1}: ${columnWidths.keys.elementAt(i)}");
+            // }
 
             return Column(
               children: [
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      await controller.fetchRegulerContent();
+                      await controller.fetchRegulerAllContent();
                     },
                     child: SfDataGrid(
                         source: dataSource,
@@ -142,21 +140,28 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                         onQueryRowHeight: (RowHeightDetails details) {
                           int rowIndex = details.rowIndex - 1;
 
+                          if (rowIndex < 0 ||
+                              rowIndex >= dataSource.rows.length) {
+                            return details.rowHeight;
+                          }
+
                           var request =
                               dataSource.doRealisasiModelAll.isNotEmpty &&
-                                      rowIndex >= 0 &&
-                                      rowIndex <
+                                      (rowIndex + dataSource.startIndex) <
                                           dataSource.doRealisasiModelAll.length
-                                  ? dataSource.doRealisasiModelAll[rowIndex]
+                                  ? dataSource.doRealisasiModelAll[
+                                      rowIndex + dataSource.startIndex]
                                   : null;
 
-                          if (request != null &&
-                              controller.isAdmin &&
-                              (request.status == 2 ||
-                                  request.status == 3 ||
-                                  request.status == 4)) {
-                            print('tinggi row nya 150');
-                            return 150.0;
+                          if (request != null) {
+                            if (controller.isAdmin &&
+                                (request.status == 2 ||
+                                    request.status == 3 ||
+                                    request.status == 4)) {
+                              return 150.0;
+                            } else {
+                              return 65.0;
+                            }
                           } else {
                             return details.rowHeight;
                           }
@@ -178,24 +183,6 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                         .bodyMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
-                          if (controller.roleUser == 'admin')
-                            GridColumn(
-                                width: columnWidths['User']!,
-                                columnName: 'User',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'User',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
                           GridColumn(
                               width: columnWidths['Plant']!,
                               columnName: 'Plant',
@@ -338,24 +325,6 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                     ),
                                     child: Text(
                                       'Action',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                          if (controller.rolesBatal == 1)
-                            GridColumn(
-                                width: columnWidths['Batal']!,
-                                columnName: 'Batal',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Batal',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium

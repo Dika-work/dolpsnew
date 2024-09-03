@@ -1,6 +1,7 @@
 import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/input data do/do_kurang_controller.dart';
@@ -55,19 +56,15 @@ class DataDoKurangSource extends DataGridSource {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 60,
-              width: 100,
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (onEdited != null && doKurang.isNotEmpty) {
-                      onEdited!(doKurang[startIndex + rowIndex]);
-                    } else {
-                      return;
-                    }
-                  },
-                  child: const Text('Edit')),
-            )
+            IconButton(
+                onPressed: () {
+                  if (onEdited != null && doKurang.isNotEmpty) {
+                    onEdited!(doKurang[startIndex + rowIndex]);
+                  } else {
+                    return;
+                  }
+                },
+                icon: const Icon(Iconsax.grid_edit))
           ],
         ),
       );
@@ -79,19 +76,18 @@ class DataDoKurangSource extends DataGridSource {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 60,
-              width: 100,
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (onDeleted != null && doKurang.isNotEmpty) {
-                      onDeleted!(doKurang[startIndex + rowIndex]);
-                    } else {
-                      return;
-                    }
-                  },
-                  child: const Text('Hapus')),
-            )
+            IconButton(
+                onPressed: () {
+                  if (onDeleted != null && doKurang.isNotEmpty) {
+                    onDeleted!(doKurang[startIndex + rowIndex]);
+                  } else {
+                    return;
+                  }
+                },
+                icon: const Icon(
+                  Iconsax.trash,
+                  color: Colors.red,
+                ))
           ],
         ),
       );

@@ -131,10 +131,8 @@ class RequestMobilSource extends DataGridSource {
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
-        DataGridCell<String>(columnName: 'Pengurus', value: data.pengurus),
         DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
-        DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(
             columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
         DataGridCell<String>(

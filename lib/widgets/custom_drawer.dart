@@ -309,21 +309,6 @@ class CustomDrawer extends StatelessWidget {
                                     ),
                                   )
                                 : const SizedBox.shrink(),
-                            user.tipe == 'admin'
-                                ? ListTile(
-                                    leading: const Icon(
-                                      Iconsax.record,
-                                      color: AppColors.darkExpandableContent,
-                                    ),
-                                    title: Text(
-                                      'DO Mutasi',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleSmall
-                                          ?.copyWith(color: AppColors.light),
-                                    ),
-                                  )
-                                : const SizedBox.shrink(),
                             user.tipe == 'Pengurus Pabrik' &&
                                         user.dealer == 'honda' ||
                                     user.tipe == 'admin'

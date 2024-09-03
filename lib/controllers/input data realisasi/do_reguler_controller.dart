@@ -107,6 +107,25 @@ class DoRegulerController extends GetxController {
     await doRegulerRepo.editDoReguler(
         id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchRegulerContent();
+
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> editRealisasiAllReguler(
+      int id,
+      String plant,
+      String tujuan,
+      int type,
+      String plant2,
+      String tujuan2,
+      String kendaraan,
+      String supir,
+      int jumlahUnit) async {
+    CustomDialogs.loadingIndicator();
+
+    await doRegulerRepo.editDoReguler(
+        id, plant, tujuan, type, plant2, tujuan2, kendaraan, supir, jumlahUnit);
     await fetchRegulerAllContent();
 
     CustomFullScreenLoader.stopLoading();

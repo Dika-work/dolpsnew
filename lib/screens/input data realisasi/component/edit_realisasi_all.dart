@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../controllers/input data realisasi/do_mutasi_controller.dart';
+import '../../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../../controllers/input data realisasi/fetch_kendaraan_controller.dart';
 import '../../../controllers/input data realisasi/fetch_sopir_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
@@ -13,18 +13,18 @@ import '../../../utils/constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dropdown.dart';
 
-class EditRealisasiMutasi extends StatefulWidget {
-  const EditRealisasiMutasi(
+class EditAllRealisasi extends StatefulWidget {
+  const EditAllRealisasi(
       {super.key, required this.model, required this.controller});
 
   final DoRealisasiModel model;
-  final DoMutasiController controller;
+  final DoRegulerController controller;
 
   @override
-  State<EditRealisasiMutasi> createState() => _EditRealisasiMutasiState();
+  State<EditAllRealisasi> createState() => _EditAllRealisasiState();
 }
 
-class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
+class _EditAllRealisasiState extends State<EditAllRealisasi> {
   late int idReq;
   late int id;
   late String tujuan;
@@ -51,8 +51,6 @@ class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
     'REGULER': 0,
     'MUTASI': 1,
   };
-
-  String get tujuanDisplayValue => tujuanMap[plant] ?? '';
 
   @override
   void initState() {
@@ -284,7 +282,7 @@ class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
             print('...EDIT REALISASI REGULER SELESAI...');
             // Konversi type dari String ke int menggunakan typeDOMap
             typeValue == 0
-                ? widget.controller.editRealisasiMutasi(
+                ? widget.controller.editRealisasiAllReguler(
                     id,
                     plant,
                     tujuan,
@@ -295,7 +293,7 @@ class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
                         .toString(),
                     supir,
                     int.parse(jumlahUnit.text))
-                : widget.controller.editRealisasiMutasi(
+                : widget.controller.editRealisasiAllReguler(
                     id,
                     plant,
                     tujuan,

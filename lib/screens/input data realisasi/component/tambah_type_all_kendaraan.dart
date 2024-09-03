@@ -123,9 +123,9 @@ class _TambahTypeAllKendaraanState extends State<TambahTypeAllKendaraan> {
     const int rowsPerPage = 5;
     int currentPage = 0;
     const double rowHeight = 55.0;
-    const double headerHeight = 32.0;
+    const double headerHeight = 50.0;
 
-    const double gridHeight = headerHeight + ((rowHeight) * (rowsPerPage + 1));
+    const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
 
     final selectedDaerahTujuan = ValueNotifier(TabDaerahTujuan.srd);
 
@@ -294,10 +294,20 @@ class _TambahTypeAllKendaraanState extends State<TambahTypeAllKendaraan> {
                   startIndex: currentPage * rowsPerPage,
                 );
 
+                final bool isTableEmpty =
+                    widget.controller.tambahTypeMotorModel.isEmpty;
+                final rowCount =
+                    widget.controller.tambahTypeMotorModel.length + 1;
+                final double tableHeight = isTableEmpty
+                    ? 110
+                    : headerHeight +
+                        (rowHeight * rowCount)
+                            .clamp(0, gridHeight - headerHeight);
+
                 return Column(
                   children: [
                     SizedBox(
-                      height: gridHeight,
+                      height: tableHeight,
                       child: SfDataGrid(
                           source: dataSource,
                           columnWidthMode: ColumnWidthMode.auto,
@@ -411,15 +421,17 @@ class _TambahTypeAllKendaraanState extends State<TambahTypeAllKendaraan> {
                                     ))),
                           ]),
                     ),
-                    SfDataPager(
-                      delegate: dataSource,
-                      pageCount: widget.controller.tambahTypeMotorModel.isEmpty
-                          ? 1
-                          : (widget.controller.tambahTypeMotorModel.length /
-                                  rowsPerPage)
-                              .ceilToDouble(),
-                      direction: Axis.horizontal,
-                    ),
+                    if (widget.controller.tambahTypeMotorModel.isNotEmpty)
+                      SfDataPager(
+                        delegate: dataSource,
+                        pageCount: widget
+                                .controller.tambahTypeMotorModel.isEmpty
+                            ? 1
+                            : (widget.controller.tambahTypeMotorModel.length /
+                                    rowsPerPage)
+                                .ceilToDouble(),
+                        direction: Axis.horizontal,
+                      ),
                   ],
                 );
               }

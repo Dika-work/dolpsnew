@@ -62,6 +62,9 @@ class _JumlahUnitState extends State<JumlahUnit> {
   Widget build(BuildContext context) {
     final controller = Get.put(DoRegulerController());
     return AlertDialog(
+      title: Center(
+          child: Text('Tambah Jumlah Kendaraan',
+              style: Theme.of(context).textTheme.headlineMedium)),
       content: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(

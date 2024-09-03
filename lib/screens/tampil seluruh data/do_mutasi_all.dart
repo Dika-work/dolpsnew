@@ -9,7 +9,7 @@ import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/tampil seluruh data source/all_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
-import '../input data realisasi/component/edit_realisasi_mutasi.dart';
+import '../input data realisasi/component/edit_realisasi_mutasi_all.dart';
 import '../input data realisasi/component/edit_type.dart';
 import '../input data realisasi/component/jumlah_unit.dart';
 import '../input data realisasi/component/lihat_realisasi.dart';
@@ -39,10 +39,9 @@ class DoMutasiAll extends GetView<DoMutasiController> {
       'Kendaraan': double.nan,
       'Jenis': double.nan,
       'Jumlah': double.nan,
-      'Lihat': 150,
+      if (controller.rolesLihat == 1) 'Lihat': 150,
       'Action': 150,
-      'Batal': 150,
-      'Edit': 150,
+      if (controller.rolesEdit == 1) 'Edit': 150,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -106,7 +105,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return EditRealisasiMutasi(
+                    return EditRealisasiAllMutasi(
                       model: model,
                       controller: controller,
                     );
@@ -141,24 +140,31 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                           headerGridLinesVisibility: GridLinesVisibility.both,
                           rowHeight: 65,
                           onQueryRowHeight: (RowHeightDetails details) {
-                            // Sesuaikan indeks dengan data yang sesuai
-                            int rowIndex = details.rowIndex -
-                                1; // Mengurangi 1 jika ada header
+                            int rowIndex = details.rowIndex - 1;
+
+                            if (rowIndex < 0 ||
+                                rowIndex >= dataSource.rows.length) {
+                              return details.rowHeight;
+                            }
 
                             var request = dataSource
                                         .doRealisasiModelAll.isNotEmpty &&
-                                    rowIndex >= 0 &&
-                                    rowIndex <
+                                    (dataSource.startIndex + rowIndex) <
                                         dataSource.doRealisasiModelAll.length
-                                ? dataSource.doRealisasiModelAll[rowIndex]
+                                ? dataSource.doRealisasiModelAll[
+                                    dataSource.startIndex + rowIndex]
                                 : null;
 
-                            if (request != null &&
-                                controller.roleUser == 'admin' &&
-                                (request.status == 2 || request.status == 3)) {
-                              return 150.0; // Tinggi row untuk status 4
+                            if (request != null) {
+                              if (controller.roleUser == 'admin' &&
+                                  (request.status == 2 ||
+                                      request.status == 3)) {
+                                return 150.0;
+                              } else {
+                                return 65.0;
+                              }
                             } else {
-                              return details.rowHeight; // Tinggi default
+                              return details.rowHeight;
                             }
                           },
                           columns: [
@@ -315,23 +321,24 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
-                            GridColumn(
-                                width: columnWidths['Lihat']!,
-                                columnName: 'Lihat',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Lihat',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
+                            if (controller.rolesLihat == 1)
+                              GridColumn(
+                                  width: columnWidths['Lihat']!,
+                                  columnName: 'Lihat',
+                                  label: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        color: Colors.lightBlue.shade100,
+                                      ),
+                                      child: Text(
+                                        'Lihat',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ))),
                             GridColumn(
                                 width: columnWidths['Action']!,
                                 columnName: 'Action',
@@ -349,53 +356,34 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                                           ?.copyWith(
                                               fontWeight: FontWeight.bold),
                                     ))),
-                            GridColumn(
-                                width: columnWidths['Batal']!,
-                                columnName: 'Batal',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Batal',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Edit']!,
-                                columnName: 'Edit',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Edit',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
+                            if (controller.rolesEdit == 1)
+                              GridColumn(
+                                  width: columnWidths['Edit']!,
+                                  columnName: 'Edit',
+                                  label: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        color: Colors.lightBlue.shade100,
+                                      ),
+                                      child: Text(
+                                        'Edit',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ))),
                           ]),
                     ),
                   ),
-                  Center(
-                    child: SfDataPager(
-                      delegate: dataSource,
-                      pageCount: controller.doRealisasiModelAll.isEmpty
-                          ? 1
-                          : (controller.doRealisasiModelAll.length /
-                                  rowsPerPage)
-                              .ceilToDouble(),
-                      direction: Axis.horizontal,
-                    ),
+                  SfDataPager(
+                    delegate: dataSource,
+                    pageCount: controller.doRealisasiModelAll.isEmpty
+                        ? 1
+                        : (controller.doRealisasiModelAll.length / rowsPerPage)
+                            .ceilToDouble(),
+                    direction: Axis.horizontal,
                   ),
                 ],
               );

@@ -61,21 +61,6 @@ class DoRegulerAllSource extends DataGridSource {
       ),
     ];
 
-    if (controller.roleUser == 'admin') {
-      cells.add(Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-        child: Text(
-          row
-              .getCells()
-              .firstWhere((cell) => cell.columnName == 'User')
-              .value
-              .toString(),
-          textAlign: TextAlign.center,
-        ),
-      ));
-    }
-
     // Add Lihat cell
     if (controller.rolesLihat == 1 &&
         (request?.status == 1 ||
@@ -201,34 +186,6 @@ class DoRegulerAllSource extends DataGridSource {
       cells.add(const SizedBox.shrink()); // Placeholder for Action
     }
 
-    // Add Batal cell
-    if (controller.rolesBatal == 1 && request?.status == 0) {
-      cells.add(
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 60,
-              width: 100,
-              child: ElevatedButton(
-                onPressed: () {
-                  if (onBatal != null && request != null) {
-                    onBatal!(request);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.error,
-                ),
-                child: const Text('Batal'),
-              ),
-            ),
-          ],
-        ),
-      );
-    } else if (controller.rolesBatal == 1) {
-      cells.add(const SizedBox.shrink()); // Placeholder for Batal
-    }
-
     // Add Edit cell
     if (controller.rolesEdit == 1) {
       if (request?.status == 0 || request?.status == 1) {
@@ -236,23 +193,28 @@ class DoRegulerAllSource extends DataGridSource {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  if (onEdit != null) {
-                    onEdit!(request!);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: request?.status == 0 || request?.status == 1
-                      ? AppColors.yellow
-                      : AppColors.gold,
-                ),
-                child: Text(
-                  'Edit',
-                  style: Theme.of(Get.context!)
-                      .textTheme
-                      .bodyMedium
-                      ?.apply(color: AppColors.black),
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onEdit != null) {
+                      onEdit!(request!);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        request?.status == 0 || request?.status == 1
+                            ? AppColors.yellow
+                            : AppColors.gold,
+                  ),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.black),
+                  ),
                 ),
               ),
             ],
@@ -267,38 +229,46 @@ class DoRegulerAllSource extends DataGridSource {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (controller.roleUser == 'admin')
-                ElevatedButton(
-                  onPressed: () {
-                    if (onEdit != null) {
-                      onEdit!(request!);
-                    }
-                  },
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: AppColors.gold),
-                  child: Text(
-                    'Edit',
-                    style: Theme.of(Get.context!)
-                        .textTheme
-                        .bodyMedium
-                        ?.apply(color: AppColors.black),
+                SizedBox(
+                  height: 60,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (onEdit != null) {
+                        onEdit!(request!);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.gold),
+                    child: Text(
+                      'Edit',
+                      style: Theme.of(Get.context!)
+                          .textTheme
+                          .bodyMedium
+                          ?.apply(color: AppColors.black),
+                    ),
                   ),
                 ),
               if (controller.roleUser == 'admin')
                 const SizedBox(height: CustomSize.sm),
-              ElevatedButton(
-                onPressed: () {
-                  if (onType != null) {
-                    onType!(request!);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.success),
-                child: Text(
-                  'Type',
-                  style: Theme.of(Get.context!)
-                      .textTheme
-                      .bodyMedium
-                      ?.apply(color: AppColors.white),
+              SizedBox(
+                height: 60,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (onType != null) {
+                      onType!(request!);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success),
+                  child: Text(
+                    'Type',
+                    style: Theme.of(Get.context!)
+                        .textTheme
+                        .bodyMedium
+                        ?.apply(color: AppColors.white),
+                  ),
                 ),
               ),
             ],
@@ -326,7 +296,6 @@ class DoRegulerAllSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
-          DataGridCell<String>(columnName: 'User', value: '-'),
           DataGridCell<String>(columnName: 'Plant', value: '-'),
           DataGridCell<String>(columnName: 'Tgl', value: '-'),
           DataGridCell<String>(columnName: 'Supir(Panggilan)', value: '-'),
@@ -377,8 +346,6 @@ class DoRegulerAllSource extends DataGridSource {
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
           List<DataGridCell> cells = [
             DataGridCell<int>(columnName: 'No', value: index),
-            if (controller.roleUser == 'admin')
-              DataGridCell<String>(columnName: 'User', value: data.user),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(
@@ -403,10 +370,7 @@ class DoRegulerAllSource extends DataGridSource {
             cells.add(const DataGridCell<String>(
                 columnName: 'Action', value: 'Action'));
           }
-          if (controller.rolesBatal == 1) {
-            cells.add(const DataGridCell<String>(
-                columnName: 'Batal', value: 'Batal'));
-          }
+
           if (controller.rolesEdit == 1) {
             cells.add(
                 const DataGridCell<String>(columnName: 'Edit', value: 'Edit'));

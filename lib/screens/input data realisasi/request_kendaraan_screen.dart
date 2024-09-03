@@ -26,10 +26,8 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
   Widget build(BuildContext context) {
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      'Pengurus': double.nan,
       'Tanggal': 130,
       'Plant': double.nan,
-      'Tujuan': 130,
       'Type': double.nan,
       'Jenis': double.nan,
       'Jumlah': double.nan,
@@ -137,22 +135,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ))),
               GridColumn(
-                  width: columnWidths['Pengurus']!,
-                  columnName: 'Pengurus',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Pengurus',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
                   width: columnWidths['Tanggal']!,
                   columnName: 'Tanggal',
                   label: Container(
@@ -179,22 +161,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                       ),
                       child: Text(
                         'Plant',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Tujuan']!,
-                  columnName: 'Tujuan',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Tujuan',
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium

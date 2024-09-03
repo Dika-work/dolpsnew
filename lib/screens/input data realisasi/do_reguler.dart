@@ -30,7 +30,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
 
     late Map<String, double> columnWidths = {
       'No': double.nan,
-      if (controller.roleUser == 'admin') 'User': double.nan,
       'Plant': double.nan,
       'Tgl': 130,
       'Supir(Panggilan)': 200,
@@ -174,24 +173,6 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                                         .bodyMedium
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
-                          if (controller.roleUser == 'admin')
-                            GridColumn(
-                                width: columnWidths['User']!,
-                                columnName: 'User',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'User',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
                           GridColumn(
                               width: columnWidths['Plant']!,
                               columnName: 'Plant',

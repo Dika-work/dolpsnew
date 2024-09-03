@@ -13,18 +13,18 @@ import '../../../utils/constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/dropdown.dart';
 
-class EditRealisasiMutasi extends StatefulWidget {
-  const EditRealisasiMutasi(
+class EditRealisasiAllMutasi extends StatefulWidget {
+  const EditRealisasiAllMutasi(
       {super.key, required this.model, required this.controller});
 
   final DoRealisasiModel model;
   final DoMutasiController controller;
 
   @override
-  State<EditRealisasiMutasi> createState() => _EditRealisasiMutasiState();
+  State<EditRealisasiAllMutasi> createState() => _EditRealisasiAllMutasiState();
 }
 
-class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
+class _EditRealisasiAllMutasiState extends State<EditRealisasiAllMutasi> {
   late int idReq;
   late int id;
   late String tujuan;
@@ -284,7 +284,7 @@ class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
             print('...EDIT REALISASI REGULER SELESAI...');
             // Konversi type dari String ke int menggunakan typeDOMap
             typeValue == 0
-                ? widget.controller.editRealisasiMutasi(
+                ? widget.controller.editRealisasiAllMutasi(
                     id,
                     plant,
                     tujuan,
@@ -295,7 +295,7 @@ class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
                         .toString(),
                     supir,
                     int.parse(jumlahUnit.text))
-                : widget.controller.editRealisasiMutasi(
+                : widget.controller.editRealisasiAllMutasi(
                     id,
                     plant,
                     tujuan,
