@@ -77,6 +77,16 @@ class AksesorisController extends GetxController {
     }
   }
 
+  void resetValues() {
+    checkboxStatus.value = List<bool>.filled(10, false);
+    newValues.value = List<int>.filled(10, 0);
+    hutangValues.value = List<int>.filled(10, 0);
+
+    for (var controller in controllers) {
+      controller.clear();
+    }
+  }
+
   Future<void> accSelesai(
     int id,
     String user,

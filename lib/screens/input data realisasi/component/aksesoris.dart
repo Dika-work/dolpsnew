@@ -157,7 +157,8 @@ class _AksesorisState extends State<Aksesoris> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Get.back(); // Kembali ke layar sebelumnya
+                controller.resetValues();
+                Get.back();
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(

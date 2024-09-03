@@ -88,6 +88,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                 } else if (model.status == 3) {
                   showDialog(
                     context: context,
+                    barrierDismissible: false,
                     builder: (context) {
                       return Aksesoris(model: model);
                     },

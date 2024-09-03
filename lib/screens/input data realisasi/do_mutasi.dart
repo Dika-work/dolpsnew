@@ -9,6 +9,7 @@ import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/input data realisasi/do_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
+import 'component/batal_jalan.dart';
 import 'component/edit_realisasi_mutasi.dart';
 import 'component/edit_type.dart';
 import 'component/jumlah_unit.dart';
@@ -101,7 +102,12 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                   );
                 }
               },
-              onBatal: (DoRealisasiModel model) {},
+              onBatal: (DoRealisasiModel model) {
+                showDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    builder: (context) => BatalJalan(model: model));
+              },
               onEdit: (DoRealisasiModel model) {
                 showDialog(
                   context: context,
