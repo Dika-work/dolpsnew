@@ -130,7 +130,6 @@ class TambahTypeMotorSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
     _updateDataPager(controller.tambahTypeMotorModel, startIndex);
     notifyListeners();
     return true;

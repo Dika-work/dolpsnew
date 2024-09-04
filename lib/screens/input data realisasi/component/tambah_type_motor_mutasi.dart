@@ -272,70 +272,67 @@ class _TambahTypeMotorMutasiState extends State<TambahTypeMotorMutasi> {
 
                 return SizedBox(
                   height: tableHeight,
-                  child: Flexible(
-                    fit: FlexFit.loose,
-                    child: SfDataGrid(
-                      source: dataSource,
-                      columnWidthMode: ColumnWidthMode.fill,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      columns: [
-                        GridColumn(
-                          width: columnWidths['No']!,
-                          columnName: 'No',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'No',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                  child: SfDataGrid(
+                    source: dataSource,
+                    columnWidthMode: ColumnWidthMode.fill,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    columns: [
+                      GridColumn(
+                        width: columnWidths['No']!,
+                        columnName: 'No',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'No',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GridColumn(
-                          width: columnWidths['Type Motor']!,
-                          columnName: 'Type Motor',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Type Motor',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                      ),
+                      GridColumn(
+                        width: columnWidths['Type Motor']!,
+                        columnName: 'Type Motor',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'Type Motor',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GridColumn(
-                          width: columnWidths['Jumlah Unit']!,
-                          columnName: 'Jumlah Unit',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Jumlah Unit',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                      ),
+                      GridColumn(
+                        width: columnWidths['Jumlah Unit']!,
+                        columnName: 'Jumlah Unit',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'Jumlah Unit',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               }

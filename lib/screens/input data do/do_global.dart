@@ -34,7 +34,6 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
       if (controller.rolesHapus == 1) 'Hapus': double.nan,
     };
 
-    // const double dataPagerHeight = 60.0;
     const int rowsPerPage = 7;
 
     int currentPage = 0;

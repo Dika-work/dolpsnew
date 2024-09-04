@@ -273,70 +273,67 @@ class _TambahTypeAllMotorMutasiState extends State<TambahTypeAllMotorMutasi> {
 
                 return SizedBox(
                   height: tableHeight,
-                  child: Flexible(
-                    fit: FlexFit.loose,
-                    child: SfDataGrid(
-                      source: dataSource,
-                      columnWidthMode: ColumnWidthMode.fill,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      columns: [
-                        GridColumn(
-                          width: columnWidths['No']!,
-                          columnName: 'No',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'No',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                  child: SfDataGrid(
+                    source: dataSource,
+                    columnWidthMode: ColumnWidthMode.fill,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    columns: [
+                      GridColumn(
+                        width: columnWidths['No']!,
+                        columnName: 'No',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'No',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GridColumn(
-                          width: columnWidths['Type Motor']!,
-                          columnName: 'Type Motor',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Type Motor',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                      ),
+                      GridColumn(
+                        width: columnWidths['Type Motor']!,
+                        columnName: 'Type Motor',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'Type Motor',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GridColumn(
-                          width: columnWidths['Jumlah Unit']!,
-                          columnName: 'Jumlah Unit',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Jumlah Unit',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                      ),
+                      GridColumn(
+                        width: columnWidths['Jumlah Unit']!,
+                        columnName: 'Jumlah Unit',
+                        label: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            color: Colors.lightBlue.shade100,
+                          ),
+                          child: Text(
+                            'Jumlah Unit',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               }
@@ -375,61 +372,64 @@ class _TambahTypeAllMotorMutasiState extends State<TambahTypeAllMotorMutasi> {
 
           Obx(() {
             if (isExceedingCapacity.value) {
-              return Column(
-                children: [
-                  Text(
-                    'JUMLAH MOTOR\nLEBIH DARI\nKAPASITAS KENDARAAN',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Colors.red, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: CustomSize.spaceBtwSections),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Get.back(); // Kembali ke layar sebelumnya
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 25.0),
-                          backgroundColor: AppColors.yellow,
+              return Padding(
+                padding: const EdgeInsets.only(top: CustomSize.spaceBtwItems),
+                child: Column(
+                  children: [
+                    Text(
+                      'JUMLAH MOTOR\nLEBIH DARI\nKAPASITAS KENDARAAN',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Colors.red, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: CustomSize.spaceBtwSections),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.back(); // Kembali ke layar sebelumnya
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 25.0),
+                            backgroundColor: AppColors.yellow,
+                          ),
+                          child: Text(
+                            'Kembali',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.apply(color: AppColors.black),
+                          ),
                         ),
-                        child: Text(
-                          'Kembali',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.apply(color: AppColors.black),
+                        ElevatedButton(
+                          onPressed: () {
+                            print(
+                                '...INI BAKALAN KE CLASS NAME EDIT TYPE zzz...');
+                            Get.to(() => EditTypeKendaraan(
+                                  model: widget.model,
+                                  onConfirm: () => editTypeMotorController
+                                      .editDanHapusTypeMotorAllMutasi(id),
+                                ));
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 25.0),
+                            backgroundColor: AppColors.error,
+                          ),
+                          child: Text(
+                            'Edit Type',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.apply(color: AppColors.white),
+                          ),
                         ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          print(
-                              '...INI BAKALAN KE CLASS NAME EDIT TYPE zzz...');
-                          Get.to(() => EditTypeKendaraan(
-                                model: widget.model,
-                                onConfirm: () => editTypeMotorController
-                                    .editDanHapusTypeMotorAllMutasi(id),
-                              ));
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 20.0, horizontal: 25.0),
-                          backgroundColor: AppColors.error,
-                        ),
-                        child: Text(
-                          'Edit Type',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.apply(color: AppColors.white),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               );
             } else {
               return Padding(

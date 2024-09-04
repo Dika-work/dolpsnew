@@ -156,6 +156,7 @@ class TambahTypeMotorController extends GetxController {
     await doRegulerController.fetchRegulerContent();
     CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
   }
 
   void addField(TabDaerahTujuan tab) {

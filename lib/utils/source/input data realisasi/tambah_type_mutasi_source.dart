@@ -27,16 +27,19 @@ class TambahTypeMutasiSource extends DataGridSource {
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _tambahTypeMotor.indexOf(row);
-    bool isTotalRow = rowIndex == _tambahTypeMotor.length - 1;
+    bool isTotalRow = row.getCells().any(
+        (cell) => cell.columnName == 'Type Motor' && cell.value == 'Total');
 
     return DataGridRowAdapter(
-      color: rowIndex % 2 == 0 ? Colors.white : Colors.grey[200],
+      color: isTotalRow
+          ? Colors.yellow
+          : (rowIndex % 2 == 0 ? Colors.white : Colors.grey[200]),
       cells: row.getCells().map<Widget>(
         (e) {
           return Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-            color: isTotalRow && (e.columnName == 'Jumlah Unit')
+            color: isTotalRow && (e.columnName == '')
                 ? Colors.yellow
                 : Colors.transparent,
             child: Text(
@@ -74,8 +77,7 @@ class TambahTypeMutasiSource extends DataGridSource {
       _tambahTypeMotor = _generateEmptyRows(1);
     } else {
       print('Model has data, generating rows based on model');
-      _tambahTypeMotor =
-          tambahTypeMotorMutasiModel.skip(startIndex).take(10).map<DataGridRow>(
+      _tambahTypeMotor = tambahTypeMotorMutasiModel.map<DataGridRow>(
         (e) {
           index++;
           return DataGridRow(cells: [
@@ -108,7 +110,6 @@ class TambahTypeMutasiSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
     _updateDataPager(controller.tambahTypeMotorMutasiModel, startIndex);
     notifyListeners();
     return true;

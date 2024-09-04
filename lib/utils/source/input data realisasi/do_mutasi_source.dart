@@ -239,7 +239,11 @@ class DoMutasiSource extends DataGridSource {
     }
 
     return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
+      color: request?.status == 9
+          ? AppColors.batalJalan
+          : isEvenRow
+              ? Colors.white
+              : Colors.grey[200],
       cells: cells,
     );
   }

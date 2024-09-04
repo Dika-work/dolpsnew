@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../../utils/constant/custom_size.dart';
+import '../../../utils/popups/dialogs.dart';
 import '../../../utils/theme/app_colors.dart';
 
 class BatalJalan extends StatefulWidget {
@@ -107,7 +108,21 @@ class _BatalJalanState extends State<BatalJalan> {
           child: const Text('Close'),
         ),
         TextButton(
-          onPressed: () => controller.batalJalan(id),
+          onPressed: () {
+            CustomDialogs.defaultDialog(
+              context: context,
+              titleWidget: Text(
+                'Konfirmasi Pembatalan',
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              contentWidget: Text(
+                'Apakah anda yakin ingin melakukan pembatalan pada data yang terkait?',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              confirmText: 'Ya',
+              onConfirm: () => controller.batalJalan(id),
+            );
+          },
           // onPressed: () => controller.tambahJumlahUnit(
           //     id, controller.namaUser, int.parse(jumlahUnit.text)),
           child: const Text('Simpan Data'),
