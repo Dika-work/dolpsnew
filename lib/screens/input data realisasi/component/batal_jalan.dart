@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../controllers/input data realisasi/tambah_type_motor_controller.dart';
 import '../../../models/input data realisasi/do_realisasi_model.dart';
 import '../../../utils/constant/custom_size.dart';
 import '../../../utils/theme/app_colors.dart';
@@ -21,7 +22,6 @@ class _BatalJalanState extends State<BatalJalan> {
   late int type;
   late String noPolisi;
   late String supir;
-  late TextEditingController alasan;
 
   @override
   void initState() {
@@ -36,6 +36,7 @@ class _BatalJalanState extends State<BatalJalan> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(TambahTypeMotorController());
     return AlertDialog(
       title: Center(
           child: Text('Pembatalan Realisasi DO',
@@ -95,18 +96,6 @@ class _BatalJalanState extends State<BatalJalan> {
                   filled: true,
                   fillColor: AppColors.buttonDisabled),
             ),
-            const SizedBox(height: CustomSize.spaceBtwItems),
-            const Text('Alasan Pembatalan'),
-            TextFormField(
-              controller: alasan,
-              keyboardType: TextInputType.text,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Harap mengisi Alasan Pembatalan!';
-                }
-                return null;
-              },
-            ),
           ],
         ),
       ),
@@ -118,7 +107,7 @@ class _BatalJalanState extends State<BatalJalan> {
           child: const Text('Close'),
         ),
         TextButton(
-          onPressed: () => print('..INI EVENT PEMBATALAN REALISASI DO'),
+          onPressed: () => controller.batalJalan(id),
           // onPressed: () => controller.tambahJumlahUnit(
           //     id, controller.namaUser, int.parse(jumlahUnit.text)),
           child: const Text('Simpan Data'),

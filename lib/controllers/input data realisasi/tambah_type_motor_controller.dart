@@ -149,6 +149,15 @@ class TambahTypeMotorController extends GetxController {
     CustomFullScreenLoader.stopLoading();
   }
 
+  // Batal Jalan
+  Future<void> batalJalan(int idRealisasi) async {
+    CustomDialogs.loadingIndicator();
+    await tambahTypeMotorRepo.changeStatusTypeMotor(idRealisasi, 9);
+    await doRegulerController.fetchRegulerContent();
+    CustomFullScreenLoader.stopLoading();
+    CustomFullScreenLoader.stopLoading();
+  }
+
   void addField(TabDaerahTujuan tab) {
     // Add form field data...
     final fields = formFieldsPerTab[tab] ?? [];

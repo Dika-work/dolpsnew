@@ -87,8 +87,12 @@ class _TambahTypeAllMotorMutasiState extends State<TambahTypeAllMotorMutasi> {
       'Jumlah Unit': double.nan,
     };
 
-    const int rowsPerPage = 5;
     int currentPage = 0;
+    const int rowsPerPage = 5;
+    const double rowHeight = 55.0;
+    const double headerHeight = 50.0;
+
+    const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
 
     return Scaffold(
       appBar: AppBar(
@@ -257,90 +261,83 @@ class _TambahTypeAllMotorMutasiState extends State<TambahTypeAllMotorMutasi> {
                         widget.controller.tambahTypeMotorMutasiModel,
                     startIndex: currentPage * rowsPerPage);
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: SfDataGrid(
-                        source: dataSource,
-                        columnWidthMode: ColumnWidthMode.fill,
-                        allowPullToRefresh: true,
-                        gridLinesVisibility: GridLinesVisibility.both,
-                        headerGridLinesVisibility: GridLinesVisibility.both,
-                        verticalScrollPhysics:
-                            const NeverScrollableScrollPhysics(),
-                        columns: [
-                          GridColumn(
-                            width: columnWidths['No']!,
-                            columnName: 'No',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'No',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
+                final bool isTableEmpty =
+                    widget.controller.tambahTypeMotorMutasiModel.isEmpty;
+                final rowCount =
+                    widget.controller.tambahTypeMotorMutasiModel.length + 1;
+                final double tableHeight = isTableEmpty
+                    ? 110
+                    : headerHeight +
+                        (rowHeight * rowCount)
+                            .clamp(0, gridHeight - headerHeight);
+
+                return SizedBox(
+                  height: tableHeight,
+                  child: Flexible(
+                    fit: FlexFit.loose,
+                    child: SfDataGrid(
+                      source: dataSource,
+                      columnWidthMode: ColumnWidthMode.fill,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      headerGridLinesVisibility: GridLinesVisibility.both,
+                      columns: [
+                        GridColumn(
+                          width: columnWidths['No']!,
+                          columnName: 'No',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'No',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GridColumn(
-                            width: columnWidths['Type Motor']!,
-                            columnName: 'Type Motor',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Type Motor',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Type Motor']!,
+                          columnName: 'Type Motor',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Type Motor',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
-                          GridColumn(
-                            width: columnWidths['Jumlah Unit']!,
-                            columnName: 'Jumlah Unit',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Jumlah Unit',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
+                        ),
+                        GridColumn(
+                          width: columnWidths['Jumlah Unit']!,
+                          columnName: 'Jumlah Unit',
+                          label: Container(
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              color: Colors.lightBlue.shade100,
+                            ),
+                            child: Text(
+                              'Jumlah Unit',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SfDataPager(
-                      delegate: dataSource,
-                      pageCount:
-                          widget.controller.tambahTypeMotorMutasiModel.isEmpty
-                              ? 1
-                              : (widget.controller.tambahTypeMotorMutasiModel
-                                          .length /
-                                      rowsPerPage)
-                                  .ceilToDouble(),
-                      direction: Axis.horizontal,
-                    ),
-                  ],
+                  ),
                 );
               }
             },

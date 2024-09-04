@@ -127,21 +127,21 @@ class LihatRealisasi extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: CustomSize.xs),
             buildHutangPabrik('Tgl', 'No\nPolisi',
                 DateFormat('dd MMM yyyy').format(parsedDate), model.noPolisi),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: CustomSize.xs),
             buildHutangPabrik('Plant', 'Supir', model.plant, model.supir),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: CustomSize.xs),
             buildHutangPabrik('Tujuan', 'Jenis', model.tujuan,
                 '${model.inisialDepan}${model.inisialBelakang}'),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: CustomSize.xs),
             buildHutangPabrik(
                 'Type',
                 'Jml\nUnit Motor',
                 model.type == 0 ? 'REGULER' : 'MUTASI',
                 model.jumlahUnit.toString()),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: CustomSize.sm),
             model.type == 0
                 ? Obx(
                     () {
@@ -151,7 +151,6 @@ class LihatRealisasi extends StatelessWidget {
                       } else {
                         final dataSource = TambahTypeMotorSource(
                           tambahTypeMotorModel: controller.tambahTypeMotorModel,
-                          startIndex: currentPage * rowsPerPage,
                         );
 
                         final bool isTableEmpty =

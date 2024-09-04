@@ -29,7 +29,7 @@ class AksesorisController extends GetxController {
     for (int i = 0; i < 10; i++) {
       controllers[i].addListener(() {
         if (checkboxStatus[i]) {
-          newValues[i] = int.tryParse(controllers[i].text) ?? 0;
+          newValues[i] = int.tryParse(controllers[i].text) ?? newValues[i];
           updateHutangValues();
         }
       });
@@ -179,7 +179,7 @@ class AksesorisController extends GetxController {
 
       SnackbarLoader.successSnackBar(
         title: 'Berhasil✨',
-        message: 'Menambahkan data do harian baru..',
+        message: 'Menambahkan data aksesoris..',
       );
 
       CustomFullScreenLoader.stopLoading();

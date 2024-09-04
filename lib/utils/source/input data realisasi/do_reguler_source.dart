@@ -298,7 +298,11 @@ class DoRegulerSource extends DataGridSource {
     // print('ini banyaknya cells: ${cells.length}');
 
     return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
+      color: request?.status == 9
+          ? AppColors.batalJalan
+          : isEvenRow
+              ? Colors.white
+              : Colors.grey[200],
       cells: cells,
     );
   }

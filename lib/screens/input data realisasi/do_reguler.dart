@@ -145,20 +145,28 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                         onQueryRowHeight: (RowHeightDetails details) {
                           int rowIndex = details.rowIndex - 1;
 
-                          var request = dataSource
-                                      .doRealisasiModel.isNotEmpty &&
-                                  rowIndex >= 0 &&
-                                  rowIndex < dataSource.doRealisasiModel.length
-                              ? dataSource.doRealisasiModel[rowIndex]
-                              : null;
+                          if (rowIndex < 0 ||
+                              rowIndex >= dataSource.rows.length) {
+                            return details.rowHeight;
+                          }
 
-                          if (request != null &&
-                              controller.isAdmin &&
-                              (request.status == 2 ||
-                                  request.status == 3 ||
-                                  request.status == 4)) {
-                            print('tinggi row nya 150');
-                            return 150.0;
+                          var request =
+                              dataSource.doRealisasiModel.isNotEmpty &&
+                                      (rowIndex + dataSource.startIndex) <
+                                          dataSource.doRealisasiModel.length
+                                  ? dataSource.doRealisasiModel[
+                                      rowIndex + dataSource.startIndex]
+                                  : null;
+
+                          if (request != null) {
+                            if (controller.isAdmin &&
+                                (request.status == 2 ||
+                                    request.status == 3 ||
+                                    request.status == 4)) {
+                              return 150.0;
+                            } else {
+                              return 65.0;
+                            }
                           } else {
                             return details.rowHeight;
                           }

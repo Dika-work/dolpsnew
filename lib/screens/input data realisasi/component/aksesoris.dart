@@ -51,30 +51,16 @@ class _AksesorisState extends State<Aksesoris> {
     supir = widget.model.supir;
     jumlahUnit = widget.model.jumlahUnit;
 
-    if (controller.aksesorisModel.isNotEmpty) {
-      kelengkapanHLM = controller.aksesorisModel.first.accHLM;
-      kelengkapanAC = controller.aksesorisModel.first.accAC;
-      kelengkapanKS = controller.aksesorisModel.first.accKS;
-      kelengkapanTS = controller.aksesorisModel.first.accTS;
-      kelengkapanBP = controller.aksesorisModel.first.accBP;
-      kelengkapanBS = controller.aksesorisModel.first.accBS;
-      kelengkapanPLT = controller.aksesorisModel.first.accPLT;
-      kelengkapanSTAY = controller.aksesorisModel.first.accSTAY;
-      kelengkapanAcBesar = controller.aksesorisModel.first.accAcBesar;
-      kelengkapanPlastik = controller.aksesorisModel.first.accPlastik;
-    } else {
-      // Handle the case when aksesorisModel is empty, e.g., set default values or show a message
-      kelengkapanHLM = 0; // Or any default value you prefer
-      kelengkapanAC = 0;
-      kelengkapanKS = 0;
-      kelengkapanTS = 0;
-      kelengkapanBP = 0;
-      kelengkapanBS = 0;
-      kelengkapanPLT = 0;
-      kelengkapanSTAY = 0;
-      kelengkapanAcBesar = 0;
-      kelengkapanPlastik = 0;
-    }
+    kelengkapanHLM = widget.model.hutangHelm;
+    kelengkapanAC = widget.model.hutangAc;
+    kelengkapanKS = widget.model.hutangKs;
+    kelengkapanTS = widget.model.hutangTs;
+    kelengkapanBP = widget.model.hutangBp;
+    kelengkapanBS = widget.model.hutangBs;
+    kelengkapanPLT = widget.model.hutangPlt;
+    kelengkapanSTAY = widget.model.hutangStay;
+    kelengkapanAcBesar = widget.model.hutangAcBesar;
+    kelengkapanPlastik = widget.model.hutangPlastik;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchAksesoris(id);
@@ -319,13 +305,16 @@ class _AksesorisState extends State<Aksesoris> {
               value: controller.checkboxStatus[index],
               onChanged: (value) {
                 controller.checkboxStatus[index] = value!;
+
                 if (!value) {
-                  controller.newValues[index] = valueTextForm;
-                  controller.updateHutangValues();
+                  controller.controllers[index].text =
+                      controller.accValues[index].toString();
                 } else {
                   controller.controllers[index].text =
                       controller.newValues[index].toString();
                 }
+
+                controller.updateHutangValues(); // Memperbarui nilai hutang
               },
             );
           }),

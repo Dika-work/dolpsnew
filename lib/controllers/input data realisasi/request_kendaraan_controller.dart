@@ -192,7 +192,7 @@ class RequestKendaraanController extends GetxController {
 
     SnackbarLoader.successSnackBar(
       title: 'Berhasil✨',
-      message: 'Menambahkan data do global baru..',
+      message: 'Menambahkan data request kendaraan..',
     );
     CustomFullScreenLoader.stopLoading();
   }

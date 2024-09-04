@@ -119,10 +119,10 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
       'BJM': double.nan,
     };
 
-    const int rowsPerPage = 10;
     int currentPage = 0;
-    const double rowHeight = 110.0;
-    const double headerHeight = 112.0;
+    const int rowsPerPage = 5;
+    const double rowHeight = 55.0;
+    const double headerHeight = 50.0;
 
     const double gridHeight = headerHeight + (rowHeight * rowsPerPage);
 
@@ -295,145 +295,119 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
 
                 final bool isTableEmpty =
                     widget.controller.tambahTypeMotorModel.isEmpty;
-
                 final rowCount =
                     widget.controller.tambahTypeMotorModel.length + 1;
-
                 final double tableHeight = isTableEmpty
                     ? 110
                     : headerHeight +
                         (rowHeight * rowCount)
                             .clamp(0, gridHeight - headerHeight);
 
-                return Column(
-                  children: [
-                    SizedBox(
-                      height: tableHeight,
-                      child: SfDataGrid(
-                          source: dataSource,
-                          columnWidthMode: ColumnWidthMode.auto,
-                          allowPullToRefresh: true,
-                          gridLinesVisibility: GridLinesVisibility.both,
-                          headerGridLinesVisibility: GridLinesVisibility.both,
-                          verticalScrollPhysics:
-                              const NeverScrollableScrollPhysics(),
-                          columns: [
-                            GridColumn(
-                                width: columnWidths['No']!,
-                                columnName: 'No',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'No',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['Type Motor']!,
-                                columnName: 'Type Motor',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'Type Motor',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['SRD']!,
-                                columnName: 'SRD',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'SRD',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['MKS']!,
-                                columnName: 'MKS',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'MKS',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['PTK']!,
-                                columnName: 'PTK',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'PTK',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                            GridColumn(
-                                width: columnWidths['BJM']!,
-                                columnName: 'BJM',
-                                label: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey),
-                                      color: Colors.lightBlue.shade100,
-                                    ),
-                                    child: Text(
-                                      'BJM',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ))),
-                          ]),
-                    ),
-                    if (widget.controller.tambahTypeMotorModel.isNotEmpty)
-                      SfDataPager(
-                        delegate: dataSource,
-                        pageCount: widget
-                                .controller.tambahTypeMotorModel.isEmpty
-                            ? 1
-                            : (widget.controller.tambahTypeMotorModel.length /
-                                    rowsPerPage)
-                                .ceilToDouble(),
-                        direction: Axis.horizontal,
-                      ),
-                  ],
+                return SizedBox(
+                  height: tableHeight,
+                  child: SfDataGrid(
+                      source: dataSource,
+                      columnWidthMode: ColumnWidthMode.auto,
+                      gridLinesVisibility: GridLinesVisibility.both,
+                      headerGridLinesVisibility: GridLinesVisibility.both,
+                      columns: [
+                        GridColumn(
+                            width: columnWidths['No']!,
+                            columnName: 'No',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['Type Motor']!,
+                            columnName: 'Type Motor',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Type Motor',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['SRD']!,
+                            columnName: 'SRD',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'SRD',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['MKS']!,
+                            columnName: 'MKS',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'MKS',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['PTK']!,
+                            columnName: 'PTK',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'PTK',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                        GridColumn(
+                            width: columnWidths['BJM']!,
+                            columnName: 'BJM',
+                            label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'BJM',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ))),
+                      ]),
                 );
               }
             },

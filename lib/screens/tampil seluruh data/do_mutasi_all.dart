@@ -158,7 +158,8 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                             if (request != null) {
                               if (controller.roleUser == 'admin' &&
                                   (request.status == 2 ||
-                                      request.status == 3)) {
+                                      request.status == 3 ||
+                                      request.status == 5)) {
                                 return 150.0;
                               } else {
                                 return 65.0;

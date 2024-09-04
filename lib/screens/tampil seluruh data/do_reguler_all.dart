@@ -58,7 +58,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
       ),
       body: Obx(
         () {
-          if (controller.isLoadingReguler.value &&
+          if (controller.isLoadingRegulerAll.value &&
               controller.doRealisasiModelAll.isEmpty) {
             return const CustomCircularLoader();
           } else {

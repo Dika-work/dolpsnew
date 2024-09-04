@@ -148,19 +148,28 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                         onQueryRowHeight: (RowHeightDetails details) {
                           int rowIndex = details.rowIndex - 1;
 
-                          var request = dataSource
-                                      .doRealisasiModel.isNotEmpty &&
-                                  rowIndex >= 0 &&
-                                  rowIndex < dataSource.doRealisasiModel.length
-                              ? dataSource.doRealisasiModel[rowIndex]
-                              : null;
+                          if (rowIndex < 0 ||
+                              rowIndex >= dataSource.rows.length) {
+                            return details.rowHeight;
+                          }
 
-                          if (request != null &&
-                              controller.roleUser == 'admin' &&
-                              (request.status == 2 ||
-                                  request.status == 3 ||
-                                  request.status == 5)) {
-                            return 150.0;
+                          var request =
+                              dataSource.doRealisasiModel.isNotEmpty &&
+                                      (dataSource.startIndex + rowIndex) <
+                                          dataSource.doRealisasiModel.length
+                                  ? dataSource.doRealisasiModel[
+                                      dataSource.startIndex + rowIndex]
+                                  : null;
+
+                          if (request != null) {
+                            if (controller.roleUser == 'admin' &&
+                                (request.status == 2 ||
+                                    request.status == 3 ||
+                                    request.status == 5)) {
+                              return 150.0;
+                            } else {
+                              return 65.0;
+                            }
                           } else {
                             return details.rowHeight;
                           }

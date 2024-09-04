@@ -75,7 +75,7 @@ class TambahTypeMutasiSource extends DataGridSource {
     } else {
       print('Model has data, generating rows based on model');
       _tambahTypeMotor =
-          tambahTypeMotorMutasiModel.skip(startIndex).take(5).map<DataGridRow>(
+          tambahTypeMotorMutasiModel.skip(startIndex).take(10).map<DataGridRow>(
         (e) {
           index++;
           return DataGridRow(cells: [
@@ -108,7 +108,7 @@ class TambahTypeMutasiSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 5;
+    final int startIndex = newPageIndex * 10;
     _updateDataPager(controller.tambahTypeMotorMutasiModel, startIndex);
     notifyListeners();
     return true;

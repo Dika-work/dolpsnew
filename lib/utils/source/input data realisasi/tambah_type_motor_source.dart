@@ -28,21 +28,17 @@ class TambahTypeMotorSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _tambahTypeMotor.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-    bool isTotalRow = rowIndex == _tambahTypeMotor.length - 1;
+    bool isTotalRow = row.getCells().any(
+        (cell) => cell.columnName == 'Type Motor' && cell.value == 'TOTAL');
 
     return DataGridRowAdapter(
-      color: isEvenRow ? Colors.white : Colors.grey[200],
+      color: isTotalRow
+          ? Colors.yellow
+          : (isEvenRow ? Colors.white : Colors.grey[200]),
       cells: row.getCells().map<Widget>((e) {
         return Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-          color: isTotalRow &&
-                  (e.columnName == 'SRD' ||
-                      e.columnName == 'MKS' ||
-                      e.columnName == 'PTK' ||
-                      e.columnName == 'BJM')
-              ? Colors.yellow
-              : Colors.transparent,
           child: Text(
             e.value.toString(),
             maxLines: 1,
@@ -79,8 +75,7 @@ class TambahTypeMotorSource extends DataGridSource {
       _tambahTypeMotor = _generateEmptyRows(1);
     } else {
       print('Model has data, generating rows based on model');
-      _tambahTypeMotor =
-          tambahTypeMotorModel.skip(startIndex).take(10).map<DataGridRow>(
+      _tambahTypeMotor = tambahTypeMotorModel.map<DataGridRow>(
         (e) {
           index++;
           return DataGridRow(cells: [
