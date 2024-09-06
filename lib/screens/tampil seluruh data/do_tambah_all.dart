@@ -28,8 +28,8 @@ class DoTambahAll extends GetView<DataAllTambahController> {
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
-      if (controller.rolesEdit == 1) 'Edit': 150,
-      if (controller.rolesHapus == 1) 'Hapus': 150,
+      if (controller.rolesEdit == 1) 'Edit': double.nan,
+      if (controller.rolesHapus == 1) 'Hapus': double.nan,
     };
 
     const int rowsPerPage = 7;

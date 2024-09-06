@@ -1,6 +1,6 @@
-import 'package:doplsnew/utils/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/master data/type_motor_controller.dart';
@@ -49,10 +49,7 @@ class TypeMotorSource extends DataGridSource {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
+              IconButton(
                   onPressed: () {
                     if (onEdit != null && typeMotorModel.isNotEmpty) {
                       onEdit!(typeMotorModel[startIndex + rowIndex]);
@@ -60,16 +57,9 @@ class TypeMotorSource extends DataGridSource {
                       return;
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.success),
-                  child: const Text('Edit'),
-                ),
-              ),
+                  icon: const Icon(Iconsax.grid_edit)),
               const SizedBox(height: CustomSize.sm),
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
+              IconButton(
                   onPressed: () {
                     if (onHapus != null && typeMotorModel.isNotEmpty) {
                       onHapus!(typeMotorModel[startIndex + rowIndex]);
@@ -77,11 +67,7 @@ class TypeMotorSource extends DataGridSource {
                       return;
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.error),
-                  child: const Text('Hapus'),
-                ),
-              )
+                  icon: const Icon(Iconsax.trash, color: Colors.red))
             ],
           )
         ]);

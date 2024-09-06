@@ -25,8 +25,8 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
       'BJM': double.nan,
-      'Edit': 150,
-      'Hapus': 150,
+      'Edit': double.nan,
+      'Hapus': double.nan,
     };
 
     const int rowsPerPage = 7;

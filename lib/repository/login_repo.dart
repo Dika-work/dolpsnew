@@ -30,8 +30,7 @@ class LoginRepository {
           showErrorSnackbar('Gagal😪', 'Username dan password salah..😒 ');
         }
       } else {
-        showErrorSnackbar(
-            'Gagal😪', 'Respon dari server tidak valid.${response.statusCode}');
+        showErrorSnackbar('Gagal😪', 'Username dan password salah..😒 ');
       }
     } catch (e) {
       handleError(e);

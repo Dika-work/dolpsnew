@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../helpers/helper_function.dart';
@@ -49,38 +50,29 @@ class AllEstimasiSource extends DataGridSource {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 60,
-                width: 100,
-                child: ElevatedButton(
-                    onPressed: () {
-                      if (onEdited != null && doEstimasi.isNotEmpty) {
-                        onEdited!(request);
-                      } else {
-                        return;
-                      }
-                    },
-                    child: const Text('Edit')),
-              )
+              IconButton(
+                  onPressed: () {
+                    if (onEdited != null && doEstimasi.isNotEmpty) {
+                      onEdited!(request);
+                    } else {
+                      return;
+                    }
+                  },
+                  icon: const Icon(Iconsax.grid_edit)),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
-                  height: 60,
-                  width: 100,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        if (onDeleted != null && doEstimasi.isNotEmpty) {
-                          onDeleted!(request);
-                        } else {
-                          return;
-                        }
-                      },
-                      style:
-                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                      child: const Text('Hapus')))
+              IconButton(
+                  onPressed: () {
+                    if (onDeleted != null && doEstimasi.isNotEmpty) {
+                      onDeleted!(request);
+                    } else {
+                      return;
+                    }
+                  },
+                  icon: const Icon(Iconsax.trash, color: Colors.red)),
             ],
           )
         ]);

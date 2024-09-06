@@ -28,6 +28,21 @@ class Homepage extends StatelessWidget {
     final storageUtil = StorageUtil();
     final user = storageUtil.getUserDetails();
 
+    Widget buildGridItem(String title, int value, Color color) {
+      return Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            '$title : $value',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ),
+      );
+    }
+
     late Map<String, double> columnWidthsHarianHome = {
       'No': double.nan,
       'Plant': double.nan,
@@ -71,6 +86,72 @@ class Homepage extends StatelessWidget {
       },
       child: ListView(
         children: [
+          if (user!.tipe == 'Pengurus Pabrik')
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12.0),
+              child: GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 2.5,
+                children: [
+                  buildGridItem('SRD', -40, Colors.redAccent),
+                  buildGridItem('MKS', -20, Colors.lightGreenAccent),
+                  buildGridItem('PTK', -30, Colors.pinkAccent),
+                  buildGridItem('BJM', -29, Colors.lightBlueAccent),
+                ],
+              ),
+            ),
+          if (user.tipe == 'admin' || user.tipe == 'Pengurus Pabrik')
+            Container(
+              margin: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12.0),
+              width: double.infinity,
+              height: 120,
+              color: Colors.blue,
+              child: Center(
+                child: Text(
+                  'KENDARAAN MAINTENANCE',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.apply(color: AppColors.error),
+                ),
+              ),
+            ),
+          if (user.tipe == 'admin' || user.tipe == 'Pengurus Pabrik')
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 12.0),
+              child: ExpandableRichContainer(
+                bgHeadColor: AppColors.white,
+                bgTransitionColor: AppColors.white,
+                borderHeadContent: Border.all(color: AppColors.grey),
+                headContent: RichText(
+                  text: TextSpan(
+                    text: 'ESTIMASI PENGAMBILAN MOTOR\n',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    children: [
+                      TextSpan(
+                        text: CustomHelperFunctions.getFormattedDate(
+                            DateTime.now()),
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(
+                                color: Colors.red, fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                ),
+                content: const Column(
+                  children: [
+                    Text('asdasdasd'),
+                    Text('asdasdasd'),
+                  ],
+                ),
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: CustomSize.md),
             child: Center(
@@ -347,7 +428,7 @@ class Homepage extends StatelessWidget {
               });
             },
           ),
-          user!.tipe == 'admin' ||
+          user.tipe == 'admin' ||
                   user.tipe == 'KOL' ||
                   user.tipe == 'k.pool' ||
                   user.tipe == 'Pengurus Pabrik'
@@ -633,246 +714,245 @@ class Homepage extends StatelessWidget {
                   ),
                 )
               : const SizedBox.shrink(),
-          user.tipe == 'admin' ||
-                  user.tipe == 'KOL' ||
-                  user.tipe == 'Pengurus Pabrik'
-              ? LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Obx(() {
-                      if (controller.isLoadingGlobalHarian.value) {
-                        return const CustomCircularLoader();
-                      } else {
-                        final dataSource = controller
-                                .doGlobalHarianModel.isEmpty
-                            ? EmptyDataSource(
-                                isAdmin: controller.roleUser ==
-                                    'admin', // Berdasarkan respons JSON
-                                userPlant: controller.rolePlant,
-                              )
-                            : DataDoGlobalHarianSource(
-                                doGlobalHarian: controller.doGlobalHarianModel,
-                                isAdmin: controller.isAdmin,
-                                userPlant: controller.rolePlant);
-
-                        final rowCount =
-                            controller.doGlobalHarianModel.length + 1;
-                        final double tableHeight =
-                            controller.doGlobalHarianModel.isEmpty &&
-                                    controller.roleUser != 'admin'
-                                ? 110
-                                : headerHeight +
-                                    (rowHeight * rowCount)
-                                        .clamp(0, gridHeight - headerHeight);
-
-                        return SizedBox(
-                          height: controller.roleUser == 'admin' &&
-                                  controller.doGlobalHarianModel.isEmpty
-                              ? emptygridHeight
-                              : controller.roleUser == 'admin' &&
-                                      controller.doGlobalHarianModel.isNotEmpty
-                                  ? gridHeight
-                                  : tableHeight,
-                          child: SfDataGrid(
-                            source: dataSource,
-                            columnWidthMode: ColumnWidthMode.auto,
-                            gridLinesVisibility: GridLinesVisibility.both,
-                            headerGridLinesVisibility: GridLinesVisibility.both,
-                            allowColumnsResizing: true,
-                            onColumnResizeUpdate:
-                                (ColumnResizeUpdateDetails details) {
-                              columnWidths[details.column.columnName] =
-                                  details.width;
-                              return true;
-                            },
-                            verticalScrollPhysics:
-                                const NeverScrollableScrollPhysics(),
-                            columns: [
-                              GridColumn(
-                                width: columnWidths['No']!,
-                                columnName: 'No',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'No',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                width: columnWidths['Plant']!,
-                                columnName: 'Plant',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Plant',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                width: columnWidths['Tujuan']!,
-                                columnName: 'Tujuan',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Tujuan',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                width: columnWidths['Jml']!,
-                                columnName: 'Jml',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Jml',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                width: columnWidths['SRD']!,
-                                columnName: 'SRD',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'SRD',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                width: columnWidths['MKS']!,
-                                columnName: 'MKS',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'MKS',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                width: columnWidths['PTK']!,
-                                columnName: 'PTK',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'PTK',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              GridColumn(
-                                width: columnWidths['BJM']!,
-                                columnName: 'BJM',
-                                label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'BJM',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    });
-                  },
-                )
-              : const SizedBox.shrink(),
-          user.tipe == 'Pengurus Stuffing' || user.tipe == 'k.pool'
-              ? Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: user.tipe == 'k.pool' ? 0 : 6.0),
-                  child: ExpandableRichContainer(
-                    bgHeadColor: AppColors.white,
-                    bgTransitionColor: AppColors.white,
-                    borderHeadContent: Border.all(color: AppColors.grey),
-                    headContent: RichText(
-                      text: TextSpan(
-                        text: 'ESTIMASI JENIS MOTOR\nSTUFFING ',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                        children: [
-                          TextSpan(
-                            text: CustomHelperFunctions.getFormattedDate(
-                                DateTime.now()),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold),
+          if (user.tipe == 'admin' ||
+              user.tipe == 'KOL' ||
+              user.tipe == 'Pengurus Pabrik')
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return Obx(() {
+                  if (controller.isLoadingGlobalHarian.value) {
+                    return const CustomCircularLoader();
+                  } else {
+                    final dataSource = controller.doGlobalHarianModel.isEmpty
+                        ? EmptyDataSource(
+                            isAdmin: controller.roleUser ==
+                                'admin', // Berdasarkan respons JSON
+                            userPlant: controller.rolePlant,
                           )
+                        : DataDoGlobalHarianSource(
+                            doGlobalHarian: controller.doGlobalHarianModel,
+                            isAdmin: controller.isAdmin,
+                            userPlant: controller.rolePlant);
+
+                    final rowCount = controller.doGlobalHarianModel.length + 1;
+                    final double tableHeight =
+                        controller.doGlobalHarianModel.isEmpty &&
+                                controller.roleUser != 'admin'
+                            ? 110
+                            : headerHeight +
+                                (rowHeight * rowCount)
+                                    .clamp(0, gridHeight - headerHeight);
+
+                    return SizedBox(
+                      height: controller.roleUser == 'admin' &&
+                              controller.doGlobalHarianModel.isEmpty
+                          ? emptygridHeight
+                          : controller.roleUser == 'admin' &&
+                                  controller.doGlobalHarianModel.isNotEmpty
+                              ? gridHeight
+                              : tableHeight,
+                      child: SfDataGrid(
+                        source: dataSource,
+                        columnWidthMode: ColumnWidthMode.auto,
+                        gridLinesVisibility: GridLinesVisibility.both,
+                        headerGridLinesVisibility: GridLinesVisibility.both,
+                        allowColumnsResizing: true,
+                        onColumnResizeUpdate:
+                            (ColumnResizeUpdateDetails details) {
+                          columnWidths[details.column.columnName] =
+                              details.width;
+                          return true;
+                        },
+                        verticalScrollPhysics:
+                            const NeverScrollableScrollPhysics(),
+                        columns: [
+                          GridColumn(
+                            width: columnWidths['No']!,
+                            columnName: 'No',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'No',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            width: columnWidths['Plant']!,
+                            columnName: 'Plant',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'Plant',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            width: columnWidths['Tujuan']!,
+                            columnName: 'Tujuan',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'Tujuan',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            width: columnWidths['Jml']!,
+                            columnName: 'Jml',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'Jml',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            width: columnWidths['SRD']!,
+                            columnName: 'SRD',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'SRD',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            width: columnWidths['MKS']!,
+                            columnName: 'MKS',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'MKS',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            width: columnWidths['PTK']!,
+                            columnName: 'PTK',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'PTK',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          GridColumn(
+                            width: columnWidths['BJM']!,
+                            columnName: 'BJM',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'BJM',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                    content: const Column(
+                    );
+                  }
+                });
+              },
+            ),
+          if (user.tipe == 'admin' ||
+              user.tipe == 'Pengurus Stuffing' ||
+              user.tipe == 'k.pool')
+            Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: user.tipe == 'k.pool' ? 0 : 6.0,
+                    vertical: 12.0),
+                child: ExpandableRichContainer(
+                  bgHeadColor: AppColors.white,
+                  bgTransitionColor: AppColors.white,
+                  borderHeadContent: Border.all(color: AppColors.grey),
+                  headContent: RichText(
+                    text: TextSpan(
+                      text: 'ESTIMASI JENIS MOTOR STUFFING\n',
+                      style: Theme.of(context).textTheme.headlineSmall,
                       children: [
-                        Text('asdasdasd'),
-                        Text('asdasdasd'),
+                        TextSpan(
+                          text: CustomHelperFunctions.getFormattedDate(
+                              DateTime.now()),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                        )
                       ],
                     ),
-                  ))
-              : const SizedBox.shrink(),
+                  ),
+                  content: const Column(
+                    children: [
+                      Text('asdasdasd'),
+                      Text('asdasdasd'),
+                    ],
+                  ),
+                ))
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/models/tampil%20seluruh%20data/do_tambah_all.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../controllers/tampil seluruh data/all_tambah_controller.dart';
@@ -53,10 +54,7 @@ class DataAllTambahSource extends DataGridSource {
       cells.add(Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 60,
-            width: 100,
-            child: ElevatedButton(
+          IconButton(
               onPressed: () {
                 if (onEdited != null && allGlobal.isNotEmpty) {
                   onEdited!(allGlobal[startIndex + rowIndex]);
@@ -64,9 +62,7 @@ class DataAllTambahSource extends DataGridSource {
                   return;
                 }
               },
-              child: const Text('Edit'),
-            ),
-          )
+              icon: const Icon(Iconsax.grid_edit)),
         ],
       ));
     }
@@ -75,20 +71,15 @@ class DataAllTambahSource extends DataGridSource {
       cells.add(Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 60,
-            width: 100,
-            child: ElevatedButton(
-                onPressed: () {
-                  if (onDeleted != null && allGlobal.isNotEmpty) {
-                    onDeleted!(allGlobal[startIndex + rowIndex]);
-                  } else {
-                    return;
-                  }
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text('Hapus')),
-          )
+          IconButton(
+              onPressed: () {
+                if (onDeleted != null && allGlobal.isNotEmpty) {
+                  onDeleted!(allGlobal[startIndex + rowIndex]);
+                } else {
+                  return;
+                }
+              },
+              icon: const Icon(Iconsax.trash, color: Colors.red)),
         ],
       ));
     }

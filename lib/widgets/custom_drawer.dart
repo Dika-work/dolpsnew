@@ -540,13 +540,16 @@ class CustomDrawer extends StatelessWidget {
                                         content: Column(
                                           children: [
                                             ListTile(
+                                              onTap: () => Get.toNamed(
+                                                  '/laporan-plant',
+                                                  arguments: 'PLANT 1100'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
                                                     .darkExpandableContent,
                                               ),
                                               title: Text(
-                                                '',
+                                                'Plant 1100',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleSmall
@@ -555,13 +558,106 @@ class CustomDrawer extends StatelessWidget {
                                               ),
                                             ),
                                             ListTile(
+                                              onTap: () => Get.toNamed(
+                                                  '/laporan-plant',
+                                                  arguments: 'PLANT 1200'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
                                                     .darkExpandableContent,
                                               ),
                                               title: Text(
-                                                '',
+                                                'Plant 1200',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              onTap: () => Get.toNamed(
+                                                  '/laporan-plant',
+                                                  arguments: 'PLANT 1300'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1300',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              onTap: () => Get.toNamed(
+                                                  '/laporan-plant',
+                                                  arguments: 'PLANT 1350'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1350',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              onTap: () => Get.toNamed(
+                                                  '/laporan-plant',
+                                                  arguments: 'PLANT 1700'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1700',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              onTap: () => Get.toNamed(
+                                                  '/laporan-plant',
+                                                  arguments: 'PLANT 1800'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1800',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              onTap: () => Get.toNamed(
+                                                  '/laporan-plant',
+                                                  arguments: 'PLANT 1900'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1900',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleSmall
@@ -577,13 +673,16 @@ class CustomDrawer extends StatelessWidget {
                                         content: Column(
                                           children: [
                                             ListTile(
+                                              // onTap: () => Get.toNamed(
+                                              //     '/laporan-plant',
+                                              //     arguments: 'PLANT 1100'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
                                                     .darkExpandableContent,
                                               ),
                                               title: Text(
-                                                '',
+                                                'Plant 1100',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleSmall
@@ -592,13 +691,106 @@ class CustomDrawer extends StatelessWidget {
                                               ),
                                             ),
                                             ListTile(
+                                              // onTap: () => Get.toNamed(
+                                              //     '/laporan-plant',
+                                              //     arguments: 'PLANT 1200'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
                                                     .darkExpandableContent,
                                               ),
                                               title: Text(
-                                                '',
+                                                'Plant 1200',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              // onTap: () => Get.toNamed(
+                                              //     '/laporan-plant',
+                                              //     arguments: 'PLANT 1300'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1300',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              // onTap: () => Get.toNamed(
+                                              //     '/laporan-plant',
+                                              //     arguments: 'PLANT 1350'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1350',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              // onTap: () => Get.toNamed(
+                                              //     '/laporan-plant',
+                                              //     arguments: 'PLANT 1700'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1700',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              // onTap: () => Get.toNamed(
+                                              //     '/laporan-plant',
+                                              //     arguments: 'PLANT 1800'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1800',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        color: AppColors.light),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              // onTap: () => Get.toNamed(
+                                              //     '/laporan-plant',
+                                              //     arguments: 'PLANT 1900'),
+                                              leading: const Icon(
+                                                Iconsax.record,
+                                                color: AppColors
+                                                    .darkExpandableContent,
+                                              ),
+                                              title: Text(
+                                                'Plant 1900',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .titleSmall

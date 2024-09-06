@@ -33,7 +33,7 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
       'Stay L/R': double.nan,
       'Ac Besar': double.nan,
       'Plastik': double.nan,
-      'Action': 150,
+      'Action': double.nan,
     };
 
     // const double dataPagerHeight = 60.0;
@@ -964,311 +964,515 @@ class _EditTypeMotorState extends State<EditTypeMotor> {
                 ),
                 const SizedBox(height: CustomSize.spaceBtwItems),
                 const Text('HLM'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: hlm,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          hlm = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: hlm,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          hlm = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          hlm = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: hlm,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  hlm = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          hlm = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: hlm,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  hlm = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const Text('AC'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: ac,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          ac = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: ac,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          ac = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          ac = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: ac,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  ac = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          ac = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: ac,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  ac = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const Text('KS'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: ks,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          ks = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: ks,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          ks = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          ks = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: ks,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  ks = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          ks = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: ks,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  ks = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const Text('TS'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: ts,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          ts = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: ts,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          ts = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          ts = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: ts,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  ts = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          ts = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: ts,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  ts = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const Text('BP'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: bp,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          bp = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: bp,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          bp = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          bp = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: bp,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  bp = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          bp = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: bp,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  bp = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const Text('BS'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: bs,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          bs = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: bs,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          bs = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          bs = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: bs,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  bs = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          bs = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: bs,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  bs = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const Text('PLT'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: plt,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          plt = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: plt,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          plt = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          plt = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: plt,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  plt = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          plt = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: plt,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  plt = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const Text('STAY L/R'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: stay,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          stay = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: stay,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          stay = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          stay = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: stay,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  stay = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          stay = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: stay,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  stay = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const Text('AC Besar'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: acBesar,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          acBesar = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: acBesar,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          acBesar = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          acBesar = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: acBesar,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  acBesar = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          acBesar = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: acBesar,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  acBesar = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 const Text('Plastik'),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Radio<int?>(
-                      value: 1,
-                      groupValue: plastik,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          plastik = value!;
-                        });
-                      },
-                    ),
-                    const Text('Yes'),
-                    const SizedBox(width: CustomSize.spaceBtwItems),
-                    Radio<int?>(
-                      value: 0, // Value untuk No adalah 0
-                      groupValue: plastik,
-                      activeColor: AppColors.primary,
-                      onChanged: (value) {
-                        setState(() {
-                          plastik = value!;
-                        });
-                      },
-                    ),
-                    const Text('No'),
-                    const SizedBox(width: 10)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 14.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          plastik = 1;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 1,
+                              groupValue: plastik,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  plastik = value!;
+                                });
+                              },
+                            ),
+                            const Text('Yes'),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          plastik = 0;
+                        }),
+                        child: Row(
+                          children: [
+                            Radio<int?>(
+                              value: 0, // Value untuk No adalah 0
+                              groupValue: plastik,
+                              activeColor: AppColors.primary,
+                              onChanged: (value) {
+                                setState(() {
+                                  plastik = value!;
+                                });
+                              },
+                            ),
+                            const Text('No'),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
           )),
       actions: <Widget>[
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            merk = CustomHelperFunctions.toTitleCase(widget.model.merk);
+            typeMotor = TextEditingController(text: widget.model.typeMotor);
+            hlm = widget.model.hlm;
+            ac = widget.model.ac;
+            ks = widget.model.ks;
+            ts = widget.model.ts;
+            bp = widget.model.bp;
+            bs = widget.model.bs;
+            plt = widget.model.plt;
+            stay = widget.model.stay;
+            acBesar = widget.model.acBesar;
+            plastik = widget.model.plastik;
+            Navigator.of(context).pop();
+          },
           child: const Text('Close'),
         ),
         TextButton(

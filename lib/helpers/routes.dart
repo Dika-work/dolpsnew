@@ -20,6 +20,7 @@ import '../screens/input data do/do_tambah.dart';
 import '../screens/input data realisasi/do_mutasi.dart';
 import '../screens/input data realisasi/do_reguler.dart';
 import '../screens/input data realisasi/request_kendaraan_screen.dart';
+import '../screens/laporan honda/laporan_plant.dart';
 import '../screens/login.dart';
 import '../screens/manajemen user/data_user_screen.dart';
 import '../screens/master data/type_motor_screen.dart';
@@ -150,5 +151,7 @@ class AppRoutes {
             binding: BindingsBuilder(() {
               Get.put(TypeMotorController());
             })),
+        // Laporan Honda
+        GetPage(name: '/laporan-plant', page: () => const LaporanPlant()),
       ];
 }
