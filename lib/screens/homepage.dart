@@ -1,4 +1,3 @@
-import 'package:doplsnew/widgets/expandable_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -6,6 +5,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../controllers/home/do_global_harian_controller.dart';
 import '../controllers/home/do_harian_home_bsk_controller.dart';
 import '../controllers/home/do_harian_home_controller.dart';
+import '../controllers/input data realisasi/estimasi_pengambilan_controller.dart';
 import '../helpers/helper_function.dart';
 import '../utils/constant/custom_size.dart';
 import '../utils/constant/storage_util.dart';
@@ -14,13 +14,17 @@ import '../utils/source/empty_data_source.dart';
 import '../utils/source/home/data_do_global_harian_source.dart';
 import '../utils/source/home/data_do_harian_bsk_source.dart';
 import '../utils/source/home/data_do_harian_home_source.dart';
+import '../utils/source/input data realisasi/estimasi_source.dart';
 import '../utils/theme/app_colors.dart';
+import '../widgets/expandable_container.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final estimasiPengambilanController =
+        Get.put(EstimasiPengambilanController());
     final controller = Get.put(DataDOGlobalHarianController());
     final controllerHarianHome = Get.put(DataDOHarianHomeController());
     final controllerHarianBskHome = Get.put(DoHarianHomeBskController());
@@ -67,6 +71,21 @@ class Homepage extends StatelessWidget {
       'MKS': 75,
       'PTK': 75,
       'BJM': 75,
+    };
+
+    late Map<String, double> columnEstimasi = {
+      'No': double.nan,
+      'Plant': double.nan,
+      'Tujuan': 120,
+      'Jumlah': double.nan,
+      'Jumlah_M16': double.nan,
+      'Jumlah_M40': double.nan,
+      'Jumlah_M64': double.nan,
+      'Jumlah_M86': double.nan,
+      'Estimation_M16': double.nan,
+      'Estimation_M40': double.nan,
+      'Estimation_M64': double.nan,
+      'Estimation_M86': double.nan,
     };
 
     // Tinggi per baris dan header
@@ -144,10 +163,518 @@ class Homepage extends StatelessWidget {
                     ],
                   ),
                 ),
-                content: const Column(
+                content: Column(
                   children: [
-                    Text('asdasdasd'),
-                    Text('asdasdasd'),
+                    Obx(
+                      () {
+                        if (estimasiPengambilanController
+                            .isLoadingEstimasi.value) {
+                          return const CustomCircularLoader();
+                        } else {
+                          final dataEstimasiSource = EstimasiSource(
+                              estimasiModel: estimasiPengambilanController
+                                  .estimasiPengambilanModel);
+
+                          final bool isTableEmpty =
+                              estimasiPengambilanController
+                                  .estimasiPengambilanModel.isEmpty;
+
+                          final double tableHeight = isTableEmpty
+                              ? 110
+                              : headerHeight +
+                                  (rowHeight * 9).clamp(
+                                      0,
+                                      headerHeight +
+                                          (rowHeight * 9) -
+                                          headerHeight);
+
+                          List<GridColumn> columns = [
+                            GridColumn(
+                              width: columnEstimasi['No']!,
+                              columnName: 'No',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Plant']!,
+                              columnName: 'Plant',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Plant',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Tujuan']!,
+                              columnName: 'Tujuan',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Tujuan',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Jumlah']!,
+                              columnName: 'Jumlah',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Jumlah',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Jumlah_M16']!,
+                              columnName: 'Jumlah_M16',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-16',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Jumlah_M40']!,
+                              columnName: 'Jumlah_M40',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-40',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Jumlah_M64']!,
+                              columnName: 'Jumlah_M64',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-64',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Jumlah_M86']!,
+                              columnName: 'Jumlah_M86',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-86',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            // Columns for Total Estimasi
+                            GridColumn(
+                              width: columnEstimasi['Estimation_M16']!,
+                              columnName: 'Estimation_M16',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-16',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Estimation_M40']!,
+                              columnName: 'Estimation_M40',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-40',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Estimation_M64']!,
+                              columnName: 'Estimation_M64',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-64',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasi['Estimation_M86']!,
+                              columnName: 'Estimation_M86',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-86',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ];
+
+                          return SizedBox(
+                            height: tableHeight,
+                            child: SfDataGrid(
+                              source: dataEstimasiSource,
+                              columnWidthMode: ColumnWidthMode.fitByColumnName,
+                              gridLinesVisibility: GridLinesVisibility.both,
+                              headerGridLinesVisibility:
+                                  GridLinesVisibility.horizontal,
+                              columns: columns,
+                              verticalScrollPhysics:
+                                  const NeverScrollableScrollPhysics(),
+                              stackedHeaderRows: [
+                                StackedHeaderRow(cells: [
+                                  StackedHeaderCell(
+                                    columnNames: [
+                                      'Jumlah_M16',
+                                      'Jumlah_M40',
+                                      'Jumlah_M64',
+                                      'Jumlah_M86'
+                                    ],
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        color: Colors.lightBlue.shade100,
+                                      ),
+                                      child: const Text(
+                                        'Jumlah Ritase Mobil',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                  StackedHeaderCell(
+                                    columnNames: [
+                                      'Estimation_M16',
+                                      'Estimation_M40',
+                                      'Estimation_M64',
+                                      'Estimation_M86'
+                                    ],
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        color: Colors.lightBlue.shade100,
+                                      ),
+                                      child: const Text(
+                                        'Total Estimasi Unit Motor',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                    // const SizedBox(height: CustomSize.spaceBtwItems),
+                    // Obx(
+                    //   () {
+                    //     if (estimasiPengambilanController
+                    //         .isLoadingEstimasi.value) {
+                    //       return const CustomCircularLoader();
+                    //     } else {
+                    //       final dataEstimasiSource = EstimasiSource(
+                    //           estimasiModel: estimasiPengambilanController
+                    //               .estimasiPengambilanModel);
+
+                    //       final bool isTableEmpty =
+                    //           estimasiPengambilanController
+                    //               .estimasiPengambilanModel.isEmpty;
+
+                    //       final double tableHeight = isTableEmpty
+                    //           ? 110
+                    //           : headerHeight +
+                    //               (rowHeight * 8)
+                    //                   .clamp(0, gridHeight - headerHeight);
+
+                    //       List<GridColumn> columns = [
+                    //         GridColumn(
+                    //           width: columnEstimasi['No']!,
+                    //           columnName: 'No',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'No',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         GridColumn(
+                    //           width: columnEstimasi['Plant']!,
+                    //           columnName: 'Plant',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'Plant',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         GridColumn(
+                    //           width: columnEstimasi['Tujuan']!,
+                    //           columnName: 'Tujuan',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'Tujuan',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         GridColumn(
+                    //           width: columnEstimasi['Jumlah']!,
+                    //           columnName: 'Jumlah',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'Jumlah',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         GridColumn(
+                    //           width: columnEstimasi['M-16']!,
+                    //           columnName: 'M-16',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'M-16',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         GridColumn(
+                    //           width: columnEstimasi['M-40']!,
+                    //           columnName: 'M-40',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'M-40',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         GridColumn(
+                    //           width: columnEstimasi['M-64']!,
+                    //           columnName: 'M-64',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'M-64',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         GridColumn(
+                    //           width: columnEstimasi['M-86']!,
+                    //           columnName: 'M-86',
+                    //           label: Container(
+                    //             alignment: Alignment.center,
+                    //             decoration: BoxDecoration(
+                    //               border: Border.all(color: Colors.grey),
+                    //               color: Colors.lightBlue.shade100,
+                    //             ),
+                    //             child: Text(
+                    //               'M-86',
+                    //               style: Theme.of(context)
+                    //                   .textTheme
+                    //                   .bodyMedium
+                    //                   ?.copyWith(fontWeight: FontWeight.bold),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         // GridColumn(
+                    //         //   width: columnEstimasi['Total Estimasi']!,
+                    //         //   columnName: 'Total Estimasi',
+                    //         //   label: Container(
+                    //         //     alignment: Alignment.center,
+                    //         //     decoration: BoxDecoration(
+                    //         //       border: Border.all(color: Colors.grey),
+                    //         //       color: Colors.lightBlue.shade100,
+                    //         //     ),
+                    //         //     child: Text(
+                    //         //       'Total Estimasi',
+                    //         //       style: Theme.of(context)
+                    //         //           .textTheme
+                    //         //           .bodyMedium
+                    //         //           ?.copyWith(fontWeight: FontWeight.bold),
+                    //         //     ),
+                    //         //   ),
+                    //         // ),
+                    //       ];
+
+                    //       return SizedBox(
+                    //         height: tableHeight,
+                    //         child: SfDataGrid(
+                    //             source: dataEstimasiSource,
+                    //             columnWidthMode: ColumnWidthMode.auto,
+                    //             gridLinesVisibility: GridLinesVisibility.both,
+                    //             headerGridLinesVisibility:
+                    //                 GridLinesVisibility.both,
+                    //             onColumnResizeUpdate:
+                    //                 (ColumnResizeUpdateDetails details) {
+                    //               columnWidths[details.column.columnName] =
+                    //                   details.width;
+                    //               return true;
+                    //             },
+                    //             verticalScrollPhysics:
+                    //                 const NeverScrollableScrollPhysics(),
+                    //             columns: columns),
+                    //       );
+                    //     }
+                    //   },
+                    // )
                   ],
                 ),
               ),
