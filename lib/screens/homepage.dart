@@ -75,7 +75,7 @@ class Homepage extends StatelessWidget {
 
     late Map<String, double> columnEstimasi = {
       'No': double.nan,
-      'Plant': double.nan,
+      'Plant': 80,
       'Tujuan': 120,
       'Jumlah': double.nan,
       'Jumlah_M16': double.nan,
@@ -86,6 +86,23 @@ class Homepage extends StatelessWidget {
       'Estimation_M40': double.nan,
       'Estimation_M64': double.nan,
       'Estimation_M86': double.nan,
+      'TOTAL': double.nan,
+    };
+
+    late Map<String, double> columnEstimasiYamaha = {
+      'No': double.nan,
+      'Plant': 180,
+      'Tujuan': 120,
+      'Jumlah': double.nan,
+      'Jumlah_M16': double.nan,
+      'Jumlah_M40': double.nan,
+      'Jumlah_M64': double.nan,
+      'Jumlah_M86': double.nan,
+      'Estimation_M16': double.nan,
+      'Estimation_M40': double.nan,
+      'Estimation_M64': double.nan,
+      'Estimation_M86': double.nan,
+      'TOTAL': double.nan,
     };
 
     // Tinggi per baris dan header
@@ -182,10 +199,10 @@ class Homepage extends StatelessWidget {
                           final double tableHeight = isTableEmpty
                               ? 110
                               : headerHeight +
-                                  (rowHeight * 9).clamp(
+                                  (rowHeight * 10).clamp(
                                       0,
                                       headerHeight +
-                                          (rowHeight * 9) -
+                                          (rowHeight * 10) -
                                           headerHeight);
 
                           List<GridColumn> columns = [
@@ -406,6 +423,24 @@ class Homepage extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            GridColumn(
+                              width: columnEstimasi['TOTAL']!,
+                              columnName: 'TOTAL',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'TOTAL',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
                           ];
 
                           return SizedBox(
@@ -468,213 +503,328 @@ class Homepage extends StatelessWidget {
                         }
                       },
                     ),
-                    // const SizedBox(height: CustomSize.spaceBtwItems),
-                    // Obx(
-                    //   () {
-                    //     if (estimasiPengambilanController
-                    //         .isLoadingEstimasi.value) {
-                    //       return const CustomCircularLoader();
-                    //     } else {
-                    //       final dataEstimasiSource = EstimasiSource(
-                    //           estimasiModel: estimasiPengambilanController
-                    //               .estimasiPengambilanModel);
+                    const SizedBox(height: CustomSize.spaceBtwItems),
+                    Obx(
+                      () {
+                        if (estimasiPengambilanController
+                            .isLoadingEstimasi.value) {
+                          return const CustomCircularLoader();
+                        } else {
+                          final dataEstimasiSource = EstimasiYamahaSuzuki(
+                              estimasiYamahaModel: estimasiPengambilanController
+                                  .estimasiPengambilanModel);
 
-                    //       final bool isTableEmpty =
-                    //           estimasiPengambilanController
-                    //               .estimasiPengambilanModel.isEmpty;
+                          final bool isTableEmpty =
+                              estimasiPengambilanController
+                                  .estimasiPengambilanModel.isEmpty;
 
-                    //       final double tableHeight = isTableEmpty
-                    //           ? 110
-                    //           : headerHeight +
-                    //               (rowHeight * 8)
-                    //                   .clamp(0, gridHeight - headerHeight);
+                          final double tableHeight = isTableEmpty
+                              ? 110
+                              : headerHeight +
+                                  (rowHeight * 5.1).clamp(
+                                      0,
+                                      headerHeight +
+                                          (rowHeight * 5.1) -
+                                          headerHeight);
 
-                    //       List<GridColumn> columns = [
-                    //         GridColumn(
-                    //           width: columnEstimasi['No']!,
-                    //           columnName: 'No',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'No',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GridColumn(
-                    //           width: columnEstimasi['Plant']!,
-                    //           columnName: 'Plant',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'Plant',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GridColumn(
-                    //           width: columnEstimasi['Tujuan']!,
-                    //           columnName: 'Tujuan',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'Tujuan',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GridColumn(
-                    //           width: columnEstimasi['Jumlah']!,
-                    //           columnName: 'Jumlah',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'Jumlah',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GridColumn(
-                    //           width: columnEstimasi['M-16']!,
-                    //           columnName: 'M-16',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'M-16',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GridColumn(
-                    //           width: columnEstimasi['M-40']!,
-                    //           columnName: 'M-40',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'M-40',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GridColumn(
-                    //           width: columnEstimasi['M-64']!,
-                    //           columnName: 'M-64',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'M-64',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GridColumn(
-                    //           width: columnEstimasi['M-86']!,
-                    //           columnName: 'M-86',
-                    //           label: Container(
-                    //             alignment: Alignment.center,
-                    //             decoration: BoxDecoration(
-                    //               border: Border.all(color: Colors.grey),
-                    //               color: Colors.lightBlue.shade100,
-                    //             ),
-                    //             child: Text(
-                    //               'M-86',
-                    //               style: Theme.of(context)
-                    //                   .textTheme
-                    //                   .bodyMedium
-                    //                   ?.copyWith(fontWeight: FontWeight.bold),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         // GridColumn(
-                    //         //   width: columnEstimasi['Total Estimasi']!,
-                    //         //   columnName: 'Total Estimasi',
-                    //         //   label: Container(
-                    //         //     alignment: Alignment.center,
-                    //         //     decoration: BoxDecoration(
-                    //         //       border: Border.all(color: Colors.grey),
-                    //         //       color: Colors.lightBlue.shade100,
-                    //         //     ),
-                    //         //     child: Text(
-                    //         //       'Total Estimasi',
-                    //         //       style: Theme.of(context)
-                    //         //           .textTheme
-                    //         //           .bodyMedium
-                    //         //           ?.copyWith(fontWeight: FontWeight.bold),
-                    //         //     ),
-                    //         //   ),
-                    //         // ),
-                    //       ];
+                          List<GridColumn> columns = [
+                            GridColumn(
+                              width: columnEstimasiYamaha['No']!,
+                              columnName: 'No',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Plant']!,
+                              columnName: 'Plant',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Plant',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Tujuan']!,
+                              columnName: 'Tujuan',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Tujuan',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Jumlah']!,
+                              columnName: 'Jumlah',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Jumlah',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Jumlah_M16']!,
+                              columnName: 'Jumlah_M16',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-16',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Jumlah_M40']!,
+                              columnName: 'Jumlah_M40',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-40',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Jumlah_M64']!,
+                              columnName: 'Jumlah_M64',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-64',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Jumlah_M86']!,
+                              columnName: 'Jumlah_M86',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-86',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            // Columns for Total Estimasi
+                            GridColumn(
+                              width: columnEstimasiYamaha['Estimation_M16']!,
+                              columnName: 'Estimation_M16',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-16',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Estimation_M40']!,
+                              columnName: 'Estimation_M40',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-40',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Estimation_M64']!,
+                              columnName: 'Estimation_M64',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-64',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['Estimation_M86']!,
+                              columnName: 'Estimation_M86',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'M-86',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnEstimasiYamaha['TOTAL']!,
+                              columnName: 'TOTAL',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'TOTAL',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          ];
 
-                    //       return SizedBox(
-                    //         height: tableHeight,
-                    //         child: SfDataGrid(
-                    //             source: dataEstimasiSource,
-                    //             columnWidthMode: ColumnWidthMode.auto,
-                    //             gridLinesVisibility: GridLinesVisibility.both,
-                    //             headerGridLinesVisibility:
-                    //                 GridLinesVisibility.both,
-                    //             onColumnResizeUpdate:
-                    //                 (ColumnResizeUpdateDetails details) {
-                    //               columnWidths[details.column.columnName] =
-                    //                   details.width;
-                    //               return true;
-                    //             },
-                    //             verticalScrollPhysics:
-                    //                 const NeverScrollableScrollPhysics(),
-                    //             columns: columns),
-                    //       );
-                    //     }
-                    //   },
-                    // )
+                          return SizedBox(
+                            height: tableHeight,
+                            child: SfDataGrid(
+                              source: dataEstimasiSource,
+                              columnWidthMode: ColumnWidthMode.fitByColumnName,
+                              gridLinesVisibility: GridLinesVisibility.both,
+                              headerGridLinesVisibility:
+                                  GridLinesVisibility.horizontal,
+                              columns: columns,
+                              verticalScrollPhysics:
+                                  const NeverScrollableScrollPhysics(),
+                              stackedHeaderRows: [
+                                StackedHeaderRow(cells: [
+                                  StackedHeaderCell(
+                                    columnNames: [
+                                      'Jumlah_M16',
+                                      'Jumlah_M40',
+                                      'Jumlah_M64',
+                                      'Jumlah_M86'
+                                    ],
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        color: Colors.lightBlue.shade100,
+                                      ),
+                                      child: const Text(
+                                        'Jumlah Ritase Mobil',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                  StackedHeaderCell(
+                                    columnNames: [
+                                      'Estimation_M16',
+                                      'Estimation_M40',
+                                      'Estimation_M64',
+                                      'Estimation_M86'
+                                    ],
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        color: Colors.lightBlue.shade100,
+                                      ),
+                                      child: const Text(
+                                        'Total Estimasi Unit Motor',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
