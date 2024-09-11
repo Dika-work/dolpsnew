@@ -1,4 +1,5 @@
 class EstimasiPengambilanModel {
+  int idPlot;
   int idPlant;
   String tujuan;
   int type;
@@ -11,6 +12,7 @@ class EstimasiPengambilanModel {
   String plant1;
 
   EstimasiPengambilanModel({
+    required this.idPlot,
     required this.idPlant,
     required this.tujuan,
     required this.type,
@@ -25,6 +27,7 @@ class EstimasiPengambilanModel {
 
   factory EstimasiPengambilanModel.fromJson(Map<String, dynamic> json) {
     return EstimasiPengambilanModel(
+        idPlot: json['id_plot'] ?? 0,
         idPlant: json['plant'] ?? 0,
         tujuan: json['tujuan'] ?? '',
         type: json['type'] ?? 0,

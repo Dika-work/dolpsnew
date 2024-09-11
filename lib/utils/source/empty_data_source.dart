@@ -160,3 +160,235 @@ class EmptyAllDataSource extends DataGridSource {
     );
   }
 }
+
+class EmptyEstimasiSource extends DataGridSource {
+  final List<int> validPlants = [
+    1100,
+    1200,
+    1300,
+    1350,
+    1700,
+    1800,
+    1900,
+  ];
+
+  final List<String> validTujuans = [
+    'Sunter',
+    'Pegangsaan',
+    'Cibitung',
+    'Cibitung',
+    'Dawuan',
+    'Dawuan',
+    'Cikarang',
+  ];
+
+  List<Map<String, dynamic>> data = [];
+
+  EmptyEstimasiSource() {
+    for (int i = 0; i < validPlants.length; i++) {
+      data.add({
+        'No': i + 1,
+        'Plant': validPlants[i],
+        'Tujuan': validTujuans[i],
+        'Jumlah': '-',
+        'Jumlah_M16': '-',
+        'Jumlah_M40': '-',
+        'Jumlah_M64': '-',
+        'Jumlah_M86': '-',
+        'Estimation_M16': '-',
+        'Estimation_M40': '-',
+        'Estimation_M64': '-',
+        'Estimation_M86': '-',
+        'TOTAL': '-'
+      });
+    }
+  }
+
+  @override
+  List<DataGridRow> get rows {
+    print("Empty rows: ${data.length}");
+    return data
+        .map(
+          (data) => DataGridRow(cells: [
+            DataGridCell<int>(columnName: 'No', value: data['No']),
+            DataGridCell<int>(columnName: 'Plant', value: data['Plant']),
+            DataGridCell<String>(columnName: 'Tujuan', value: data['Tujuan']),
+            DataGridCell<String>(columnName: 'Jumlah', value: data['Jumlah']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M16', value: data['Jumlah_M16']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M40', value: data['Jumlah_M40']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M64', value: data['Jumlah_M64']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M86', value: data['Jumlah_M86']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M16', value: data['Estimation_M16']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M40', value: data['Estimation_M40']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M64', value: data['Estimation_M64']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M86', value: data['Estimation_M86']),
+            DataGridCell<String>(columnName: 'TOTAL', value: data['TOTAL']),
+          ]),
+        )
+        .toList();
+  }
+
+  @override
+  DataGridRowAdapter buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+      cells: row.getCells().map<Widget>((cell) {
+        final String columnName = cell.columnName;
+        Color cellColor = Colors.transparent;
+
+        // Apply green color only to Jumlah Ritase Mobil columns (M-16, M-40, M-64, M-86) in the "TOTAL" row
+        if ((columnName == 'Jumlah_M16' ||
+            columnName == 'Jumlah_M40' ||
+            columnName == 'Jumlah_M64' ||
+            columnName == 'Jumlah_M86')) {
+          cellColor = Colors.green[100]!;
+        }
+
+        // Apply red color to Total Estimasi Unit Motor columns (M-16, M-40, M-64, M-86) up to the "TOTAL" row, but exclude "TOTAL DO" row
+        if ((columnName == 'Estimation_M16' ||
+            columnName == 'Estimation_M40' ||
+            columnName == 'Estimation_M64' ||
+            columnName == 'Estimation_M86')) {
+          cellColor = Colors.red[100]!;
+        }
+
+        if (columnName == 'Jumlah') {
+          cellColor = Colors.deepPurpleAccent[100]!;
+        }
+
+        if (columnName == 'TOTAL') {
+          cellColor = Colors.green[100]!;
+        }
+
+        return Container(
+          alignment: Alignment.center,
+          color: cellColor,
+          child: Text(
+            cell.value.toString(),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class EmptyEstimasiYamahaSuzukiSource extends DataGridSource {
+  final List<String> plantName = [
+    'DC (Pondok Ungu)',
+    'TB (Tambun Bekasi)',
+  ];
+
+  final List<int> validPlants = [
+    7,
+    8,
+  ];
+
+  final List<String> validTujuans = [
+    'Pondok Ungu',
+    'Tambun Bekasi',
+  ];
+
+  List<Map<String, dynamic>> data = [];
+
+  EmptyEstimasiYamahaSuzukiSource() {
+    for (int i = 0; i < validPlants.length; i++) {
+      data.add({
+        'No': i + 1,
+        'Plant': plantName[i],
+        'PlantID': validPlants[i], // Plant ID for reference
+        'Tujuan': validTujuans[i],
+        'Jumlah': '-',
+        'Jumlah_M16': '-',
+        'Jumlah_M40': '-',
+        'Jumlah_M64': '-',
+        'Jumlah_M86': '-',
+        'Estimation_M16': '-',
+        'Estimation_M40': '-',
+        'Estimation_M64': '-',
+        'Estimation_M86': '-',
+        'TOTAL': '-'
+      });
+    }
+  }
+
+  @override
+  List<DataGridRow> get rows {
+    print("Empty rows: ${data.length}");
+    return data
+        .map(
+          (data) => DataGridRow(cells: [
+            DataGridCell<int>(columnName: 'No', value: data['No']),
+            DataGridCell<String>(columnName: 'Plant', value: data['Plant']),
+            DataGridCell<String>(columnName: 'Tujuan', value: data['Tujuan']),
+            DataGridCell<String>(columnName: 'Jumlah', value: data['Jumlah']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M16', value: data['Jumlah_M16']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M40', value: data['Jumlah_M40']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M64', value: data['Jumlah_M64']),
+            DataGridCell<String>(
+                columnName: 'Jumlah_M86', value: data['Jumlah_M86']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M16', value: data['Estimation_M16']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M40', value: data['Estimation_M40']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M64', value: data['Estimation_M64']),
+            DataGridCell<String>(
+                columnName: 'Estimation_M86', value: data['Estimation_M86']),
+            DataGridCell<String>(columnName: 'TOTAL', value: data['TOTAL']),
+          ]),
+        )
+        .toList();
+  }
+
+  @override
+  DataGridRowAdapter buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+      cells: row.getCells().map<Widget>((cell) {
+        final String columnName = cell.columnName;
+        Color cellColor = Colors.transparent;
+
+        // Apply green color only to Jumlah Ritase Mobil columns (M-16, M-40, M-64, M-86) in the "TOTAL" row
+        if ((columnName == 'Jumlah_M16' ||
+            columnName == 'Jumlah_M40' ||
+            columnName == 'Jumlah_M64' ||
+            columnName == 'Jumlah_M86')) {
+          cellColor = Colors.green[100]!;
+        }
+
+        // Apply red color to Total Estimasi Unit Motor columns (M-16, M-40, M-64, M-86) up to the "TOTAL" row, but exclude "TOTAL DO" row
+        if ((columnName == 'Estimation_M16' ||
+            columnName == 'Estimation_M40' ||
+            columnName == 'Estimation_M64' ||
+            columnName == 'Estimation_M86')) {
+          cellColor = Colors.red[100]!;
+        }
+
+        if (columnName == 'Jumlah') {
+          cellColor = Colors.deepPurpleAccent[100]!;
+        }
+
+        if (columnName == 'TOTAL') {
+          cellColor = Colors.greenAccent[100]!;
+        }
+
+        return Container(
+          alignment: Alignment.center,
+          color: cellColor,
+          child: Text(
+            cell.value.toString(),
+          ),
+        );
+      }).toList(),
+    );
+  }
+}

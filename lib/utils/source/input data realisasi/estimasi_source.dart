@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../helpers/helper_function.dart';
 import '../../../models/input data realisasi/estimasi_pengambilan_model.dart';
+import '../../constant/custom_size.dart';
 
 class EstimasiSource extends DataGridSource {
   final List<int> validPlants = [
@@ -54,6 +57,7 @@ class EstimasiSource extends DataGridSource {
         EstimasiPengambilanModel? dataGridRow = estimasiModel.firstWhere(
           (item) => item.plant1 == plant.toString(),
           orElse: () => EstimasiPengambilanModel(
+              idPlot: 0,
               idPlant: plant,
               tujuan: validTujuans[i],
               type: 0,
@@ -146,13 +150,17 @@ class EstimasiSource extends DataGridSource {
         DataGridCell(columnName: 'Jumlah_M64', value: formatValue(totalM64)),
         DataGridCell(columnName: 'Jumlah_M86', value: formatValue(totalM86)),
         DataGridCell(
-            columnName: 'Estimation_M16', value: formatValue(totalM16)),
+            columnName: 'Estimation_M16',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * totalM16)),
         DataGridCell(
-            columnName: 'Estimation_M40', value: formatValue(totalM40)),
+            columnName: 'Estimation_M40',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * totalM40)),
         DataGridCell(
-            columnName: 'Estimation_M64', value: formatValue(totalM64)),
+            columnName: 'Estimation_M64',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * totalM64)),
         DataGridCell(
-            columnName: 'Estimation_M86', value: formatValue(totalM86)),
+            columnName: 'Estimation_M86',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * totalM86)),
         DataGridCell(columnName: 'TOTAL', value: formatValue('')),
       ]),
     );
@@ -193,22 +201,6 @@ class EstimasiSource extends DataGridSource {
     int rowIndex = estimasiData.indexOf(row);
     bool isTotalRow = row.getCells().any((cell) => cell.value == 'TOTAL');
     bool isTotalDoRow = row.getCells().any((cell) => cell.value == 'TOTAL DO');
-
-    int totalRowSum = 0; // Sum for the TOTAL row
-
-    if (isTotalRow && !isTotalDoRow) {
-      totalRowSum = row
-          .getCells()
-          .where((cell) =>
-              cell.columnName != 'No' &&
-              cell.columnName != 'Plant' &&
-              cell.columnName != 'Tujuan' &&
-              cell.columnName != 'Jumlah') // Sum other columns
-          .fold(
-              0,
-              (prev, cell) =>
-                  prev + (int.tryParse(cell.value.toString()) ?? 0));
-    }
 
     return DataGridRowAdapter(
       color: rowIndex % 2 == 0 ? Colors.white : Colors.grey[200],
@@ -256,12 +248,11 @@ class EstimasiSource extends DataGridSource {
 
         // Display the sum at the intersection of the TOTAL row and TOTAL column
         if (columnName == 'TOTAL' && isTotalRow) {
-          int totalSum = totalColumnSum + totalRowSum;
           return Container(
             alignment: Alignment.center,
             color: Colors.deepOrangeAccent[100]!,
             child: Text(
-              formatValue(totalSum).toString(),
+              formatValue(totalColumnSum).toString(),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -297,6 +288,7 @@ class EstimasiYamahaSuzuki extends DataGridSource {
     7,
     8,
   ];
+
   final List<String> validTujuans = [
     'Pondok Ungu',
     'Tambun Bekasi',
@@ -334,6 +326,7 @@ class EstimasiYamahaSuzuki extends DataGridSource {
         EstimasiPengambilanModel? dataGridRow = estimasiYamahaModel.firstWhere(
           (item) => item.idPlant == plant,
           orElse: () => EstimasiPengambilanModel(
+              idPlot: 0,
               idPlant: plant,
               tujuan: validTujuans[i],
               type: 0,
@@ -471,22 +464,6 @@ class EstimasiYamahaSuzuki extends DataGridSource {
     bool isTotalRow = row.getCells().any((cell) => cell.value == 'TOTAL');
     bool isTotalDoRow = row.getCells().any((cell) => cell.value == 'TOTAL DO');
 
-    int totalRowSum = 0; // Sum for the TOTAL row
-
-    if (isTotalRow && !isTotalDoRow) {
-      totalRowSum = row
-          .getCells()
-          .where((cell) =>
-              cell.columnName != 'No' &&
-              cell.columnName != 'Plant' &&
-              cell.columnName != 'Tujuan' &&
-              cell.columnName != 'Jumlah') // Sum other columns
-          .fold(
-              0,
-              (prev, cell) =>
-                  prev + (int.tryParse(cell.value.toString()) ?? 0));
-    }
-
     return DataGridRowAdapter(
       color: rowIndex % 2 == 0 ? Colors.white : Colors.grey[200],
       cells: row.getCells().map<Widget>((dataGridCell) {
@@ -533,12 +510,11 @@ class EstimasiYamahaSuzuki extends DataGridSource {
 
         // Display the sum at the intersection of the TOTAL row and TOTAL column
         if (columnName == 'TOTAL' && isTotalRow) {
-          int totalSum = totalColumnSum + totalRowSum;
           return Container(
             alignment: Alignment.center,
             color: Colors.deepOrangeAccent[100]!,
             child: Text(
-              formatValue(totalSum).toString(),
+              formatValue(totalColumnSum).toString(),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -560,6 +536,102 @@ class EstimasiYamahaSuzuki extends DataGridSource {
           ),
         );
       }).toList(),
+    );
+  }
+}
+
+class EstimasiPmSource extends DataGridSource {
+  final void Function(EstimasiPengambilanModel)? onEdited;
+  final void Function(EstimasiPengambilanModel)? onDeleted;
+  final List<EstimasiPengambilanModel> estimasiPmModel;
+  int startIndex = 0;
+  List<DataGridRow> estimasiPmData = [];
+
+  EstimasiPmSource({
+    required this.onEdited,
+    required this.onDeleted,
+    required this.estimasiPmModel,
+    int startIndex = 0,
+  }) {
+    int index = startIndex;
+
+    estimasiPmData = estimasiPmModel.asMap().entries.map<DataGridRow>(
+      (entry) {
+        final e = entry.value;
+        index++;
+        final tglParsed =
+            CustomHelperFunctions.getFormattedDate(DateTime.parse(e.tgl));
+
+        return DataGridRow(
+          cells: [
+            DataGridCell<int>(columnName: 'No', value: index),
+            DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
+            DataGridCell<String>(columnName: 'Plant', value: e.plant1),
+            DataGridCell<String>(columnName: 'Tujuan', value: e.tujuan),
+            DataGridCell<String>(
+                columnName: 'Type', value: e.type == 0 ? 'REGULER' : 'MUTASI'),
+            DataGridCell<String>(columnName: 'Jenis', value: e.jenisKen),
+            DataGridCell<int>(columnName: 'Jumlah', value: e.jumlah),
+            DataGridCell<String>(columnName: 'User', value: e.user),
+          ],
+        );
+      },
+    ).toList();
+  }
+
+  @override
+  List<DataGridRow> get rows => estimasiPmData;
+
+  @override
+  DataGridRowAdapter? buildRow(DataGridRow row) {
+    int rowIndex = estimasiPmData.indexOf(row);
+    bool isEvenRow = rowIndex % 2 == 0;
+
+    List<Widget> cells = row.getCells().map<Widget>(
+      (e) {
+        return Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+          child: Text(
+            e.value.toString(),
+            textAlign: TextAlign.center,
+          ),
+        );
+      },
+    ).toList();
+
+    // Add action buttons for edit and delete
+    cells.add(
+      Container(
+        alignment: Alignment.center,
+        child: IconButton(
+          onPressed: () {
+            if (onEdited != null && estimasiPmModel.isNotEmpty) {
+              onEdited!(estimasiPmModel[startIndex + rowIndex]);
+            }
+          },
+          icon: const Icon(Iconsax.grid_edit),
+        ),
+      ),
+    );
+
+    cells.add(
+      Container(
+        alignment: Alignment.center,
+        child: IconButton(
+          onPressed: () {
+            if (onDeleted != null && estimasiPmModel.isNotEmpty) {
+              onDeleted!(estimasiPmModel[startIndex + rowIndex]);
+            }
+          },
+          icon: const Icon(Iconsax.trash, color: Colors.red),
+        ),
+      ),
+    );
+
+    return DataGridRowAdapter(
+      color: isEvenRow ? Colors.white : Colors.grey[200],
+      cells: cells,
     );
   }
 }

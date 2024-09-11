@@ -421,36 +421,50 @@ class CustomDrawer extends StatelessWidget {
                                     : const SizedBox.shrink(),
                               ],
                             )),
-                        user.tipe == 'k.pool'
-                            ? ListTile(
-                                leading: const Icon(
-                                  Iconsax.record,
-                                  color: AppColors.darkExpandableContent,
-                                ),
-                                title: Text(
-                                  'Estimasi P M',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.copyWith(color: AppColors.light),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                        user.tipe == 'k.pool'
-                            ? ListTile(
-                                leading: const Icon(
-                                  Iconsax.record,
-                                  color: AppColors.darkExpandableContent,
-                                ),
-                                title: Text(
-                                  'Total Estimasi P M',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmall
-                                      ?.copyWith(color: AppColors.light),
-                                ),
-                              )
-                            : const SizedBox.shrink()
+                        if (user.tipe == 'k.pool' || user.tipe == 'admin')
+                          ListTile(
+                            onTap: () => Get.toNamed('/estimasi-pm'),
+                            leading: const Icon(
+                              Iconsax.record,
+                              color: AppColors.darkExpandableContent,
+                            ),
+                            title: Text(
+                              'Estimasi P M',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(color: AppColors.light),
+                            ),
+                          ),
+                        if (user.tipe == 'k.pool' || user.tipe == 'admin')
+                          ListTile(
+                            leading: const Icon(
+                              Iconsax.record,
+                              color: AppColors.darkExpandableContent,
+                            ),
+                            title: Text(
+                              'Total Estimasi P M',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(color: AppColors.light),
+                            ),
+                          ),
+                        if (user.tipe == 'k.pool' || user.tipe == 'admin')
+                          ListTile(
+                            onTap: () => Get.toNamed('/table-estimasi'),
+                            leading: const Icon(
+                              Iconsax.record,
+                              color: AppColors.darkExpandableContent,
+                            ),
+                            title: Text(
+                              'Table Estimasi P M',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(color: AppColors.light),
+                            ),
+                          ),
                       ],
                     ),
                   )

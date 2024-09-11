@@ -6,6 +6,7 @@ import '../controllers/input data do/do_kurang_controller.dart';
 import '../controllers/input data do/do_tambah_controller.dart';
 import '../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../controllers/input data realisasi/do_reguler_controller.dart';
+import '../controllers/input data realisasi/estimasi_pengambilan_controller.dart';
 import '../controllers/input data realisasi/request_kendaraan_controller.dart';
 import '../controllers/master data/type_motor_controller.dart';
 import '../controllers/tampil seluruh data/all_estimasi_controller.dart';
@@ -19,7 +20,9 @@ import '../screens/input data do/do_kurang.dart';
 import '../screens/input data do/do_tambah.dart';
 import '../screens/input data realisasi/do_mutasi.dart';
 import '../screens/input data realisasi/do_reguler.dart';
+import '../screens/input data realisasi/estimasi_pengambilan.dart';
 import '../screens/input data realisasi/request_kendaraan_screen.dart';
+import '../screens/input data realisasi/table_estimasi_pm.dart';
 import '../screens/laporan honda/laporan_plant.dart';
 import '../screens/login.dart';
 import '../screens/manajemen user/data_user_screen.dart';
@@ -143,6 +146,18 @@ class AppRoutes {
             page: () => const DoMutasiScreen(),
             binding: BindingsBuilder(() {
               Get.put(DoMutasiController());
+            })),
+        GetPage(
+            name: '/estimasi-pm',
+            page: () => const EstimasiPM(),
+            binding: BindingsBuilder(() {
+              Get.put(EstimasiPengambilanController());
+            })),
+        GetPage(
+            name: '/table-estimasi',
+            page: () => const TableEstimasiPM(),
+            binding: BindingsBuilder(() {
+              Get.put(EstimasiPengambilanController());
             })),
         // master data
         GetPage(
