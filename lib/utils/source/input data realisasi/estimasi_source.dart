@@ -26,7 +26,6 @@ class EstimasiSource extends DataGridSource {
     'Cikarang',
   ];
 
-  // Vehicle capacity multipliers
   final Map<String, int> kapasitasMap = {
     'MOBIL MOTOR 16': 14,
     'MOBIL MOTOR 40': 35,
@@ -34,153 +33,152 @@ class EstimasiSource extends DataGridSource {
     'MOBIL MOTOR 86': 76,
   };
 
-  int index = 0;
   List<DataGridRow> estimasiData = [];
-  int totalM16 = 0,
-      totalM40 = 0,
-      totalM64 = 0,
-      totalM86 = 0,
-      totalEstimation = 0;
-
-  // Calculate totalDO (sum of Jumlah column)
-  int totalDO = 0;
-
-  // Total column sum
-  int totalColumnSum = 0;
+  int totalM16 = 0, totalM40 = 0, totalM64 = 0, totalM86 = 0;
+  int totalDO = 0, totalColumnSum = 0, totalEstimation = 0;
 
   EstimasiSource({required List<EstimasiPengambilanModel> estimasiModel}) {
-    estimasiData = validPlants.asMap().entries.map<DataGridRow>(
-      (e) {
-        int i = e.key;
-        int plant = e.value;
+    estimasiData = validPlants.asMap().entries.map<DataGridRow>((e) {
+      int i = e.key;
+      int plant = e.value;
 
-        EstimasiPengambilanModel? dataGridRow = estimasiModel.firstWhere(
-          (item) => item.plant1 == plant.toString(),
-          orElse: () => EstimasiPengambilanModel(
-              idPlot: 0,
-              idPlant: plant,
-              tujuan: validTujuans[i],
-              type: 0,
-              jenisKen: '',
-              jumlah: 0,
-              user: '',
-              jam: '',
-              tgl: '',
-              status: 0,
-              plant1: ''),
-        );
+      List<EstimasiPengambilanModel> plantData = estimasiModel
+          .where((item) => item.plant1 == plant.toString())
+          .toList();
 
-        // Calculate total estimations
-        int totalEstimationPerRow = 0;
-        int jumlahM16 = 0, jumlahM40 = 0, jumlahM64 = 0, jumlahM86 = 0;
-
-        if (dataGridRow.jenisKen.toUpperCase() == 'MOBIL MOTOR 16') {
-          jumlahM16 = dataGridRow.jumlah;
-          totalEstimationPerRow = kapasitasMap['MOBIL MOTOR 16']! * jumlahM16;
-          totalM16 += jumlahM16;
-        } else if (dataGridRow.jenisKen.toUpperCase() == 'MOBIL MOTOR 40') {
-          jumlahM40 = dataGridRow.jumlah;
-          totalEstimationPerRow = kapasitasMap['MOBIL MOTOR 40']! * jumlahM40;
-          totalM40 += jumlahM40;
-        } else if (dataGridRow.jenisKen.toUpperCase() == 'MOBIL MOTOR 64') {
-          jumlahM64 = dataGridRow.jumlah;
-          totalEstimationPerRow = kapasitasMap['MOBIL MOTOR 64']! * jumlahM64;
-          totalM64 += jumlahM64;
-        } else if (dataGridRow.jenisKen.toUpperCase() == 'MOBIL MOTOR 86') {
-          jumlahM86 = dataGridRow.jumlah;
-          totalEstimationPerRow = kapasitasMap['MOBIL MOTOR 86']! * jumlahM86;
-          totalM86 += jumlahM86;
-        }
-
-        totalEstimation += totalEstimationPerRow;
-        final totalKanan = kapasitasMap['MOBIL MOTOR 16']! * jumlahM16 +
-            kapasitasMap['MOBIL MOTOR 40']! * jumlahM40 +
-            kapasitasMap['MOBIL MOTOR 64']! * jumlahM64 +
-            kapasitasMap['MOBIL MOTOR 86']! * jumlahM86;
-
-        // Update totalDO with the jumlah for this row
-        totalDO += dataGridRow.jumlah;
-
-        // Add to total column sum
-        totalColumnSum += totalKanan;
-
-        index++;
+      if (plantData.isEmpty) {
         return DataGridRow(cells: [
-          DataGridCell(columnName: 'No', value: index),
+          DataGridCell(columnName: 'No', value: i + 1),
           DataGridCell(columnName: 'Plant', value: plant),
           DataGridCell(columnName: 'Tujuan', value: validTujuans[i]),
-          DataGridCell(
-              columnName: 'Jumlah', value: formatValue(dataGridRow.jumlah)),
-
-          // Show 'Jumlah' for M-16, M-40, M-64, M-86
-          DataGridCell(columnName: 'Jumlah_M16', value: formatValue(jumlahM16)),
-          DataGridCell(columnName: 'Jumlah_M40', value: formatValue(jumlahM40)),
-          DataGridCell(columnName: 'Jumlah_M64', value: formatValue(jumlahM64)),
-          DataGridCell(columnName: 'Jumlah_M86', value: formatValue(jumlahM86)),
-
-          // Show 'Total Estimasi' for M-16, M-40, M-64, M-86 (capacity * jumlah)
-          DataGridCell(
-              columnName: 'Estimation_M16',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * jumlahM16)),
-          DataGridCell(
-              columnName: 'Estimation_M40',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * jumlahM40)),
-          DataGridCell(
-              columnName: 'Estimation_M64',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * jumlahM64)),
-          DataGridCell(
-              columnName: 'Estimation_M86',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * jumlahM86)),
-          DataGridCell(columnName: 'TOTAL', value: formatValue(totalKanan)),
+          const DataGridCell(columnName: 'Jumlah', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M16', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M40', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M64', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M86', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M16', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M40', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M64', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M86', value: '-'),
+          const DataGridCell(columnName: 'TOTAL', value: '-'),
         ]);
-      },
-    ).toList();
+      }
 
-    // Add TOTAL row first
+      int jumlahM16 = 0, jumlahM40 = 0, jumlahM64 = 0, jumlahM86 = 0;
+      int totalEstimationPerRow = 0;
+
+      for (var dataGridRow in plantData) {
+        if (dataGridRow.jenisKen.toUpperCase().contains('MOBIL MOTOR 16')) {
+          jumlahM16 = dataGridRow.jumlah;
+          totalEstimationPerRow += kapasitasMap['MOBIL MOTOR 16']! * jumlahM16;
+          totalM16 += jumlahM16;
+        }
+        if (dataGridRow.jenisKen.toUpperCase().contains('MOBIL MOTOR 40')) {
+          jumlahM40 = dataGridRow.jumlah;
+          totalEstimationPerRow += kapasitasMap['MOBIL MOTOR 40']! * jumlahM40;
+          totalM40 += jumlahM40;
+        }
+        if (dataGridRow.jenisKen.toUpperCase().contains('MOBIL MOTOR 64')) {
+          jumlahM64 = dataGridRow.jumlah;
+          totalEstimationPerRow += kapasitasMap['MOBIL MOTOR 64']! * jumlahM64;
+          totalM64 += jumlahM64;
+        }
+        if (dataGridRow.jenisKen.toUpperCase().contains('MOBIL MOTOR 86')) {
+          jumlahM86 = dataGridRow.jumlah;
+          totalEstimationPerRow += kapasitasMap['MOBIL MOTOR 86']! * jumlahM86;
+          totalM86 += jumlahM86;
+        }
+      }
+
+      final totalKanan = kapasitasMap['MOBIL MOTOR 16']! * jumlahM16 +
+          kapasitasMap['MOBIL MOTOR 40']! * jumlahM40 +
+          kapasitasMap['MOBIL MOTOR 64']! * jumlahM64 +
+          kapasitasMap['MOBIL MOTOR 86']! * jumlahM86;
+
+      totalEstimation += totalEstimationPerRow;
+      totalDO += jumlahM16 + jumlahM40 + jumlahM64 + jumlahM86;
+      totalColumnSum += totalKanan;
+
+      return DataGridRow(cells: [
+        DataGridCell(columnName: 'No', value: i + 1),
+        DataGridCell(columnName: 'Plant', value: plant),
+        DataGridCell(columnName: 'Tujuan', value: validTujuans[i]),
+        DataGridCell(columnName: 'Jumlah', value: totalDO),
+        DataGridCell(
+            columnName: 'Jumlah_M16', value: jumlahM16 == 0 ? '-' : jumlahM16),
+        DataGridCell(
+            columnName: 'Jumlah_M40', value: jumlahM40 == 0 ? '-' : jumlahM40),
+        DataGridCell(
+            columnName: 'Jumlah_M64', value: jumlahM64 == 0 ? '-' : jumlahM64),
+        DataGridCell(
+            columnName: 'Jumlah_M86', value: jumlahM86 == 0 ? '-' : jumlahM86),
+        DataGridCell(
+            columnName: 'Estimation_M16',
+            value: kapasitasMap['MOBIL MOTOR 16']! * jumlahM16 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 16']! * jumlahM16),
+        DataGridCell(
+            columnName: 'Estimation_M40',
+            value: kapasitasMap['MOBIL MOTOR 40']! * jumlahM40 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 40']! * jumlahM40),
+        DataGridCell(
+            columnName: 'Estimation_M64',
+            value: kapasitasMap['MOBIL MOTOR 64']! * jumlahM64 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 64']! * jumlahM64),
+        DataGridCell(
+            columnName: 'Estimation_M86',
+            value: kapasitasMap['MOBIL MOTOR 86']! * jumlahM86 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 86']! * jumlahM86),
+        DataGridCell(columnName: 'TOTAL', value: totalKanan),
+      ]);
+    }).toList();
+
+    // Tambahkan baris TOTAL
     estimasiData.add(
       DataGridRow(cells: [
         const DataGridCell(columnName: 'No', value: ''),
         const DataGridCell(columnName: 'Plant', value: 'TOTAL'),
         const DataGridCell(columnName: 'Tujuan', value: ''),
-        DataGridCell(
-            columnName: 'Jumlah',
-            value: formatValue(totalDO)), // Set totalDO here
-        DataGridCell(columnName: 'Jumlah_M16', value: formatValue(totalM16)),
-        DataGridCell(columnName: 'Jumlah_M40', value: formatValue(totalM40)),
-        DataGridCell(columnName: 'Jumlah_M64', value: formatValue(totalM64)),
-        DataGridCell(columnName: 'Jumlah_M86', value: formatValue(totalM86)),
+        DataGridCell(columnName: 'Jumlah', value: totalDO),
+        DataGridCell(columnName: 'Jumlah_M16', value: totalM16),
+        DataGridCell(columnName: 'Jumlah_M40', value: totalM40),
+        DataGridCell(columnName: 'Jumlah_M64', value: totalM64),
+        DataGridCell(columnName: 'Jumlah_M86', value: totalM86),
         DataGridCell(
             columnName: 'Estimation_M16',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * totalM16)),
+            value: kapasitasMap['MOBIL MOTOR 16']! * totalM16),
         DataGridCell(
             columnName: 'Estimation_M40',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * totalM40)),
+            value: kapasitasMap['MOBIL MOTOR 40']! * totalM40),
         DataGridCell(
             columnName: 'Estimation_M64',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * totalM64)),
+            value: kapasitasMap['MOBIL MOTOR 64']! * totalM64),
         DataGridCell(
             columnName: 'Estimation_M86',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * totalM86)),
-        DataGridCell(columnName: 'TOTAL', value: formatValue('')),
+            value: kapasitasMap['MOBIL MOTOR 86']! * totalM86),
+        DataGridCell(columnName: 'TOTAL', value: totalColumnSum),
       ]),
     );
 
-    // Add TOTAL DO row below TOTAL row
+    // Tambahkan baris TOTAL DO
     estimasiData.add(
-      DataGridRow(cells: [
-        const DataGridCell(columnName: 'No', value: ''),
-        const DataGridCell(columnName: 'Plant', value: 'TOTAL DO'),
-        const DataGridCell(columnName: 'Tujuan', value: ''),
-        DataGridCell(columnName: 'Jumlah', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M16', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M40', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M64', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M86', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M16', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M40', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M64', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M86', value: formatValue('')),
-        DataGridCell(columnName: 'TOTAL', value: formatValue('')),
+      const DataGridRow(cells: [
+        DataGridCell(columnName: 'No', value: ''),
+        DataGridCell(columnName: 'Plant', value: 'TOTAL DO'),
+        DataGridCell(columnName: 'Tujuan', value: ''),
+        DataGridCell(columnName: 'Jumlah', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M16', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M40', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M64', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M86', value: '-'),
+        DataGridCell(columnName: 'Estimation_M16', value: '-'),
+        DataGridCell(columnName: 'Estimation_M40', value: '-'),
+        DataGridCell(columnName: 'Estimation_M64', value: '-'),
+        DataGridCell(columnName: 'Estimation_M86', value: '-'),
+        DataGridCell(columnName: 'TOTAL', value: '-'),
       ]),
     );
   }
@@ -210,7 +208,7 @@ class EstimasiSource extends DataGridSource {
 
         Color cellColor = Colors.transparent;
 
-        // Apply green color only to Jumlah Ritase Mobil columns (M-16, M-40, M-64, M-86) in the "TOTAL" row
+        // Terapkan warna hijau pada kolom Jumlah Ritase Mobil di baris "TOTAL"
         if (isTotalRow &&
             (columnName == 'Jumlah_M16' ||
                 columnName == 'Jumlah_M40' ||
@@ -219,7 +217,7 @@ class EstimasiSource extends DataGridSource {
           cellColor = Colors.green[100]!;
         }
 
-        // Apply red color to Total Estimasi Unit Motor columns (M-16, M-40, M-64, M-86) up to the "TOTAL" row, but exclude "TOTAL DO" row
+        // Terapkan warna merah pada kolom Total Estimasi Unit Motor, kecuali baris "TOTAL DO"
         if (!isTotalRow &&
             !isTotalDoRow &&
             (columnName == 'Estimation_M16' ||
@@ -229,7 +227,7 @@ class EstimasiSource extends DataGridSource {
           cellColor = Colors.red[100]!;
         }
 
-        // Apply yellow color for the estimation columns in the "TOTAL" row
+        // Terapkan warna kuning untuk kolom estimasi di baris "TOTAL"
         if (isTotalRow &&
             (columnName == 'Estimation_M16' ||
                 columnName == 'Estimation_M40' ||
@@ -238,21 +236,23 @@ class EstimasiSource extends DataGridSource {
           cellColor = Colors.yellowAccent[100]!;
         }
 
+        // Warna hijau untuk kolom TOTAL jika tidak di baris TOTAL atau TOTAL DO
         if (columnName == 'TOTAL' && !isTotalRow && !isTotalDoRow) {
           cellColor = Colors.green[100]!;
         }
 
+        // Warna ungu pada kolom Jumlah di baris TOTAL
         if (columnName == 'Jumlah' && isTotalRow) {
           cellColor = Colors.deepPurpleAccent[100]!;
         }
 
-        // Display the sum at the intersection of the TOTAL row and TOTAL column
+        // Tampilkan jumlah total pada persimpangan baris dan kolom TOTAL
         if (columnName == 'TOTAL' && isTotalRow) {
           return Container(
             alignment: Alignment.center,
             color: Colors.deepOrangeAccent[100]!,
             child: Text(
-              formatValue(totalColumnSum).toString(),
+              totalColumnSum.toString(),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
@@ -261,7 +261,7 @@ class EstimasiSource extends DataGridSource {
           );
         }
 
-        // Normal handling for other cells
+        // Penanganan normal untuk sel lainnya
         return Container(
           alignment: Alignment.center,
           color: cellColor,
@@ -318,29 +318,37 @@ class EstimasiYamahaSuzuki extends DataGridSource {
 
   EstimasiYamahaSuzuki(
       {required List<EstimasiPengambilanModel> estimasiYamahaModel}) {
-    estimasiData = validPlants.asMap().entries.map<DataGridRow>(
-      (e) {
-        int i = e.key;
-        int plant = e.value;
+    estimasiData = validPlants.asMap().entries.map<DataGridRow>((e) {
+      int i = e.key;
+      int plant = e.value;
 
-        EstimasiPengambilanModel? dataGridRow = estimasiYamahaModel.firstWhere(
-          (item) => item.idPlant == plant,
-          orElse: () => EstimasiPengambilanModel(
-              idPlot: 0,
-              idPlant: plant,
-              tujuan: validTujuans[i],
-              type: 0,
-              jenisKen: '',
-              jumlah: 0,
-              user: '',
-              jam: '',
-              tgl: '',
-              status: 0,
-              plant1: ''),
-        );
-        int totalEstimationPerRow = 0;
-        int jumlahM16 = 0, jumlahM40 = 0, jumlahM64 = 0, jumlahM86 = 0;
+      List<EstimasiPengambilanModel> plantData =
+          estimasiYamahaModel.where((item) => item.idPlant == plant).toList();
 
+      // If there's no data, still display Plant and Tujuan with empty rows
+      if (plantData.isEmpty) {
+        return DataGridRow(cells: [
+          DataGridCell(columnName: 'No', value: i + 1),
+          DataGridCell(columnName: 'Plant', value: plantName[i]),
+          DataGridCell(columnName: 'Tujuan', value: validTujuans[i]),
+          const DataGridCell(columnName: 'Jumlah', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M16', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M40', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M64', value: '-'),
+          const DataGridCell(columnName: 'Jumlah_M86', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M16', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M40', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M64', value: '-'),
+          const DataGridCell(columnName: 'Estimation_M86', value: '-'),
+          const DataGridCell(columnName: 'TOTAL', value: '-'),
+        ]);
+      }
+
+      // Calculate estimations and totals for the row
+      int jumlahM16 = 0, jumlahM40 = 0, jumlahM64 = 0, jumlahM86 = 0;
+      int totalEstimationPerRow = 0;
+
+      for (var dataGridRow in plantData) {
         if (dataGridRow.jenisKen.toUpperCase() == 'MOBIL MOTOR 16') {
           jumlahM16 = dataGridRow.jumlah;
           totalEstimationPerRow = kapasitasMap['MOBIL MOTOR 16']! * jumlahM16;
@@ -358,50 +366,44 @@ class EstimasiYamahaSuzuki extends DataGridSource {
           totalEstimationPerRow = kapasitasMap['MOBIL MOTOR 86']! * jumlahM86;
           totalM86 += jumlahM86;
         }
+      }
 
-        totalEstimation += totalEstimationPerRow;
-        final totalKanan = kapasitasMap['MOBIL MOTOR 16']! * jumlahM16 +
-            kapasitasMap['MOBIL MOTOR 40']! * jumlahM40 +
-            kapasitasMap['MOBIL MOTOR 64']! * jumlahM64 +
-            kapasitasMap['MOBIL MOTOR 86']! * jumlahM86;
+      totalEstimation += totalEstimationPerRow;
+      final totalKanan = kapasitasMap['MOBIL MOTOR 16']! * jumlahM16 +
+          kapasitasMap['MOBIL MOTOR 40']! * jumlahM40 +
+          kapasitasMap['MOBIL MOTOR 64']! * jumlahM64 +
+          kapasitasMap['MOBIL MOTOR 86']! * jumlahM86;
 
-        // Update totalDO with the jumlah for this row
-        totalDO += dataGridRow.jumlah;
+      // Update totalDO with the jumlah for this row
+      totalDO += jumlahM16 + jumlahM40 + jumlahM64 + jumlahM86;
 
-        // Add to total column sum
-        totalColumnSum += totalKanan;
+      // Add to total column sum
+      totalColumnSum += totalKanan;
 
-        index++;
-        return DataGridRow(cells: [
-          DataGridCell(columnName: 'No', value: index),
-          DataGridCell(columnName: 'Plant', value: plantName[i]),
-          DataGridCell(columnName: 'Tujuan', value: validTujuans[i]),
-          DataGridCell(
-              columnName: 'Jumlah', value: formatValue(dataGridRow.jumlah)),
-
-          // Show 'Jumlah' for M-16, M-40, M-64, M-86
-          DataGridCell(columnName: 'Jumlah_M16', value: formatValue(jumlahM16)),
-          DataGridCell(columnName: 'Jumlah_M40', value: formatValue(jumlahM40)),
-          DataGridCell(columnName: 'Jumlah_M64', value: formatValue(jumlahM64)),
-          DataGridCell(columnName: 'Jumlah_M86', value: formatValue(jumlahM86)),
-
-          // Show 'Total Estimasi' for M-16, M-40, M-64, M-86 (capacity * jumlah)
-          DataGridCell(
-              columnName: 'Estimation_M16',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * jumlahM16)),
-          DataGridCell(
-              columnName: 'Estimation_M40',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * jumlahM40)),
-          DataGridCell(
-              columnName: 'Estimation_M64',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * jumlahM64)),
-          DataGridCell(
-              columnName: 'Estimation_M86',
-              value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * jumlahM86)),
-          DataGridCell(columnName: 'TOTAL', value: formatValue(totalKanan)),
-        ]);
-      },
-    ).toList();
+      return DataGridRow(cells: [
+        DataGridCell(columnName: 'No', value: i + 1),
+        DataGridCell(columnName: 'Plant', value: plantName[i]),
+        DataGridCell(columnName: 'Tujuan', value: validTujuans[i]),
+        DataGridCell(columnName: 'Jumlah', value: formatValue(totalDO)),
+        DataGridCell(columnName: 'Jumlah_M16', value: formatValue(jumlahM16)),
+        DataGridCell(columnName: 'Jumlah_M40', value: formatValue(jumlahM40)),
+        DataGridCell(columnName: 'Jumlah_M64', value: formatValue(jumlahM64)),
+        DataGridCell(columnName: 'Jumlah_M86', value: formatValue(jumlahM86)),
+        DataGridCell(
+            columnName: 'Estimation_M16',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * jumlahM16)),
+        DataGridCell(
+            columnName: 'Estimation_M40',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * jumlahM40)),
+        DataGridCell(
+            columnName: 'Estimation_M64',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * jumlahM64)),
+        DataGridCell(
+            columnName: 'Estimation_M86',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * jumlahM86)),
+        DataGridCell(columnName: 'TOTAL', value: formatValue(totalKanan)),
+      ]);
+    }).toList();
 
     // Add TOTAL row first
     estimasiData.add(
@@ -409,44 +411,47 @@ class EstimasiYamahaSuzuki extends DataGridSource {
         const DataGridCell(columnName: 'No', value: ''),
         const DataGridCell(columnName: 'Plant', value: 'TOTAL'),
         const DataGridCell(columnName: 'Tujuan', value: ''),
-        DataGridCell(
-            columnName: 'Jumlah',
-            value: formatValue(totalDO)), // Set totalDO here
+        DataGridCell(columnName: 'Jumlah', value: formatValue(totalDO)),
         DataGridCell(columnName: 'Jumlah_M16', value: formatValue(totalM16)),
         DataGridCell(columnName: 'Jumlah_M40', value: formatValue(totalM40)),
         DataGridCell(columnName: 'Jumlah_M64', value: formatValue(totalM64)),
         DataGridCell(columnName: 'Jumlah_M86', value: formatValue(totalM86)),
         DataGridCell(
-            columnName: 'Estimation_M16', value: formatValue(totalM16)),
+            columnName: 'Estimation_M16',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * totalM16)),
         DataGridCell(
-            columnName: 'Estimation_M40', value: formatValue(totalM40)),
+            columnName: 'Estimation_M40',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * totalM40)),
         DataGridCell(
-            columnName: 'Estimation_M64', value: formatValue(totalM64)),
+            columnName: 'Estimation_M64',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * totalM64)),
         DataGridCell(
-            columnName: 'Estimation_M86', value: formatValue(totalM86)),
-        DataGridCell(columnName: 'TOTAL', value: formatValue('')),
+            columnName: 'Estimation_M86',
+            value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * totalM86)),
+        DataGridCell(columnName: 'TOTAL', value: formatValue(totalColumnSum)),
       ]),
     );
 
     // Add TOTAL DO row below TOTAL row
     estimasiData.add(
-      DataGridRow(cells: [
-        const DataGridCell(columnName: 'No', value: ''),
-        const DataGridCell(columnName: 'Plant', value: 'TOTAL DO'),
-        const DataGridCell(columnName: 'Tujuan', value: ''),
-        DataGridCell(columnName: 'Jumlah', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M16', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M40', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M64', value: formatValue('')),
-        DataGridCell(columnName: 'Jumlah_M86', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M16', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M40', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M64', value: formatValue('')),
-        DataGridCell(columnName: 'Estimation_M86', value: formatValue('')),
-        DataGridCell(columnName: 'TOTAL', value: formatValue('')),
+      const DataGridRow(cells: [
+        DataGridCell(columnName: 'No', value: ''),
+        DataGridCell(columnName: 'Plant', value: 'TOTAL DO'),
+        DataGridCell(columnName: 'Tujuan', value: ''),
+        DataGridCell(columnName: 'Jumlah', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M16', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M40', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M64', value: '-'),
+        DataGridCell(columnName: 'Jumlah_M86', value: '-'),
+        DataGridCell(columnName: 'Estimation_M16', value: '-'),
+        DataGridCell(columnName: 'Estimation_M40', value: '-'),
+        DataGridCell(columnName: 'Estimation_M64', value: '-'),
+        DataGridCell(columnName: 'Estimation_M86', value: '-'),
+        DataGridCell(columnName: 'TOTAL', value: '-'),
       ]),
     );
   }
+
   // Helper function to format the values, replacing 0 with '-'
   String formatValue(dynamic value) {
     if (value == 0 || value == null) {

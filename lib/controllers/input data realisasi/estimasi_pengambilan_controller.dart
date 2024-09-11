@@ -93,6 +93,27 @@ class EstimasiPengambilanController extends GetxController {
     }
   }
 
+  Future<void> loadDataTableEstimasiPengambilan() async {
+    try {
+      isLoadingEstimasi.value = true;
+      final estimasiPengambilan =
+          await estimasiPengambilanRepo.fetchTableEstimasiPengambilan();
+
+      // Log data yang diterima
+      for (var item in estimasiPengambilan) {
+        print(
+            'Data Diterima: Plant = ${item.plant1}, Jenis Kendaraan = ${item.jenisKen}');
+      }
+
+      estimasiPengambilanModel.assignAll(estimasiPengambilan);
+    } catch (e) {
+      estimasiPengambilanModel.assignAll([]);
+      print('Error saat mengambil data estimasi: $e');
+    } finally {
+      isLoadingEstimasi.value = false;
+    }
+  }
+
   Future<void> addEstimasiPengambilanMotor() async {
     CustomDialogs.loadingIndicator();
 

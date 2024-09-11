@@ -20,6 +20,22 @@ class EstimasiPenambilanRepository {
     }
   }
 
+  Future<List<EstimasiPengambilanModel>> fetchTableEstimasiPengambilan() async {
+    final response = await http.get(Uri.parse(
+        '${storageUtil.baseURL}/DO/api/api_estimasi_kendaraaan.php?action=getData'));
+    if (response.statusCode == 200) {
+      Iterable list = json.decode(response.body);
+
+      for (var e in list) {
+        print('Jenis Kendaraan: ${e['jenis']}, Jumlah: ${e['jumlah']}');
+      }
+
+      return list.map((e) => EstimasiPengambilanModel.fromJson(e)).toList();
+    } else {
+      throw Exception('Gagal untuk mengambil seluruh data do estimasi');
+    }
+  }
+
   Future<void> addEstimasiPengambilanMotor(
       String idPlant,
       String tujuan,

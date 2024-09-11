@@ -14,7 +14,7 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.loadDataEstimasiPengambilan();
+      controller.loadDataTableEstimasiPengambilan();
     });
     late Map<String, double> columnEstimasi = {
       'No': double.nan,
@@ -64,7 +64,7 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          await controller.loadDataEstimasiPengambilan();
+          await controller.loadDataTableEstimasiPengambilan();
         },
         child: ListView(
           children: [
