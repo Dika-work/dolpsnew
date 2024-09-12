@@ -16,6 +16,7 @@ import 'component/edit_type.dart';
 import 'component/jumlah_unit.dart';
 import 'component/lihat_realisasi.dart';
 import 'component/tambah_type_kendaraan.dart';
+import 'plant_gabungan.dart';
 
 class DoRegulerScreen extends GetView<DoRegulerController> {
   const DoRegulerScreen({super.key});
@@ -95,6 +96,8 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
                       return Aksesoris(model: model);
                     },
                   );
+                } else if (model.status == 4) {
+                  Get.to(() => PlantGabungan(model: model));
                 }
               },
               onBatal: (DoRealisasiModel model) {

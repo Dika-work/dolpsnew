@@ -50,7 +50,7 @@ class CustomDrawer extends StatelessWidget {
                     child: CachedNetworkImage(
                       width: 70,
                       height: 70,
-                      imageUrl: '${storageUtil.baseURL}/do/${user!.gambar}',
+                      imageUrl: user!.gambar,
                       fit: BoxFit.cover,
                       progressIndicatorBuilder: (_, __, ___) =>
                           const CustomShimmerEffect(

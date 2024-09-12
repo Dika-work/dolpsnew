@@ -4,8 +4,10 @@ import 'package:get/get.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
 import '../../models/user_model.dart';
 import '../../repository/input data realisasi/do_reguler_repo.dart';
+import '../../repository/input data realisasi/kirim_kendaraan_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/full_screen_loader.dart';
+import '../../utils/popups/snackbar.dart';
 import 'do_mutasi_controller.dart';
 
 class DoRegulerController extends GetxController {
@@ -15,6 +17,7 @@ class DoRegulerController extends GetxController {
   RxList<DoRealisasiModel> doRealisasiModelAll = <DoRealisasiModel>[].obs;
 
   final doRegulerRepo = Get.put(DoRegulerRepository());
+  final kirimKendaraanRepo = Get.put(KirimKendaraanRepository());
   final doMutasiController = Get.put(DoMutasiController());
 
   String roleUser = '';
@@ -141,6 +144,48 @@ class DoRegulerController extends GetxController {
     await doMutasiController.fetchMutasiContent();
     await doMutasiController.fetchMutasiAllContent();
 
+    CustomFullScreenLoader.stopLoading();
+  }
+
+  Future<void> plantGabungan(
+    int idReq,
+    String plant,
+    String tujuan,
+    String plant2,
+    String tujuan2,
+    int type,
+    int kendaraan,
+    String supir,
+    String jam,
+    String tgl,
+    int bulan,
+    int tahun,
+    String user,
+  ) async {
+    CustomDialogs.loadingIndicator();
+    await kirimKendaraanRepo.addKirimKendaraan(
+      idReq,
+      plant,
+      tujuan,
+      plant2,
+      tujuan2,
+      type,
+      kendaraan,
+      supir,
+      jam,
+      tgl,
+      bulan,
+      tahun,
+      user,
+    );
+
+    await fetchRegulerContent();
+    CustomFullScreenLoader.stopLoading();
+
+    SnackbarLoader.successSnackBar(
+      title: 'Berhasil✨',
+      message: 'Menambahkan data do realisasi..',
+    );
     CustomFullScreenLoader.stopLoading();
   }
 }

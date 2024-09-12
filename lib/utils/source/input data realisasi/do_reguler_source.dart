@@ -150,6 +150,9 @@ class DoRegulerSource extends DataGridSource {
                   width: 100,
                   child: ElevatedButton(
                     onPressed: () {
+                      if (onAction != null) {
+                        onAction!(request!);
+                      }
                       print('..INI BAKALAN KE PLANT GABUNGAN');
                     },
                     child: const Text(
@@ -158,11 +161,14 @@ class DoRegulerSource extends DataGridSource {
                     ),
                   ),
                 ),
-              if (controller.roleUser == 'admin' ||
-                  controller.rolePlant == '1300' ||
-                  controller.rolePlant == '1350' ||
-                  controller.rolePlant == '1700' ||
-                  controller.rolePlant == '1800')
+              // if (controller.roleUser == 'admin' ||
+              //     controller.rolePlant == '1300' ||
+              //     controller.rolePlant == '1350' ||
+              //     controller.rolePlant == '1700' ||
+              //     controller.rolePlant == '1800')
+              // const SizedBox(height: CustomSize.sm),
+              if (doRealisasiModel.isNotEmpty &&
+                  doRealisasiModel.first.totalHutang != 0)
                 const SizedBox(height: CustomSize.sm),
               if (doRealisasiModel.isNotEmpty &&
                   doRealisasiModel.first.totalHutang != 0)
