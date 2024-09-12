@@ -384,24 +384,36 @@ class EstimasiYamahaSuzuki extends DataGridSource {
         DataGridCell(columnName: 'No', value: i + 1),
         DataGridCell(columnName: 'Plant', value: plantName[i]),
         DataGridCell(columnName: 'Tujuan', value: validTujuans[i]),
-        DataGridCell(columnName: 'Jumlah', value: formatValue(totalDO)),
-        DataGridCell(columnName: 'Jumlah_M16', value: formatValue(jumlahM16)),
-        DataGridCell(columnName: 'Jumlah_M40', value: formatValue(jumlahM40)),
-        DataGridCell(columnName: 'Jumlah_M64', value: formatValue(jumlahM64)),
-        DataGridCell(columnName: 'Jumlah_M86', value: formatValue(jumlahM86)),
+        DataGridCell(columnName: 'Jumlah', value: totalDO),
+        DataGridCell(
+            columnName: 'Jumlah_M16', value: jumlahM16 == 0 ? '-' : jumlahM16),
+        DataGridCell(
+            columnName: 'Jumlah_M40', value: jumlahM40 == 0 ? '-' : jumlahM40),
+        DataGridCell(
+            columnName: 'Jumlah_M64', value: jumlahM64 == 0 ? '-' : jumlahM64),
+        DataGridCell(
+            columnName: 'Jumlah_M86', value: jumlahM86 == 0 ? '-' : jumlahM86),
         DataGridCell(
             columnName: 'Estimation_M16',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * jumlahM16)),
+            value: kapasitasMap['MOBIL MOTOR 16']! * jumlahM16 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 16']! * jumlahM16),
         DataGridCell(
             columnName: 'Estimation_M40',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * jumlahM40)),
+            value: kapasitasMap['MOBIL MOTOR 40']! * jumlahM40 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 40']! * jumlahM40),
         DataGridCell(
             columnName: 'Estimation_M64',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * jumlahM64)),
+            value: kapasitasMap['MOBIL MOTOR 64']! * jumlahM64 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 64']! * jumlahM64),
         DataGridCell(
             columnName: 'Estimation_M86',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * jumlahM86)),
-        DataGridCell(columnName: 'TOTAL', value: formatValue(totalKanan)),
+            value: kapasitasMap['MOBIL MOTOR 86']! * jumlahM86 == 0
+                ? '-'
+                : kapasitasMap['MOBIL MOTOR 86']! * jumlahM86),
+        DataGridCell(columnName: 'TOTAL', value: totalKanan),
       ]);
     }).toList();
 
@@ -411,24 +423,24 @@ class EstimasiYamahaSuzuki extends DataGridSource {
         const DataGridCell(columnName: 'No', value: ''),
         const DataGridCell(columnName: 'Plant', value: 'TOTAL'),
         const DataGridCell(columnName: 'Tujuan', value: ''),
-        DataGridCell(columnName: 'Jumlah', value: formatValue(totalDO)),
-        DataGridCell(columnName: 'Jumlah_M16', value: formatValue(totalM16)),
-        DataGridCell(columnName: 'Jumlah_M40', value: formatValue(totalM40)),
-        DataGridCell(columnName: 'Jumlah_M64', value: formatValue(totalM64)),
-        DataGridCell(columnName: 'Jumlah_M86', value: formatValue(totalM86)),
+        DataGridCell(columnName: 'Jumlah', value: totalDO),
+        DataGridCell(columnName: 'Jumlah_M16', value: totalM16),
+        DataGridCell(columnName: 'Jumlah_M40', value: totalM40),
+        DataGridCell(columnName: 'Jumlah_M64', value: totalM64),
+        DataGridCell(columnName: 'Jumlah_M86', value: totalM86),
         DataGridCell(
             columnName: 'Estimation_M16',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 16']! * totalM16)),
+            value: kapasitasMap['MOBIL MOTOR 16']! * totalM16),
         DataGridCell(
             columnName: 'Estimation_M40',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 40']! * totalM40)),
+            value: kapasitasMap['MOBIL MOTOR 40']! * totalM40),
         DataGridCell(
             columnName: 'Estimation_M64',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 64']! * totalM64)),
+            value: kapasitasMap['MOBIL MOTOR 64']! * totalM64),
         DataGridCell(
             columnName: 'Estimation_M86',
-            value: formatValue(kapasitasMap['MOBIL MOTOR 86']! * totalM86)),
-        DataGridCell(columnName: 'TOTAL', value: formatValue(totalColumnSum)),
+            value: kapasitasMap['MOBIL MOTOR 86']! * totalM86),
+        DataGridCell(columnName: 'TOTAL', value: totalColumnSum),
       ]),
     );
 
@@ -450,14 +462,6 @@ class EstimasiYamahaSuzuki extends DataGridSource {
         DataGridCell(columnName: 'TOTAL', value: '-'),
       ]),
     );
-  }
-
-  // Helper function to format the values, replacing 0 with '-'
-  String formatValue(dynamic value) {
-    if (value == 0 || value == null) {
-      return '-';
-    }
-    return value.toString();
   }
 
   @override
@@ -519,7 +523,7 @@ class EstimasiYamahaSuzuki extends DataGridSource {
             alignment: Alignment.center,
             color: Colors.deepOrangeAccent[100]!,
             child: Text(
-              formatValue(totalColumnSum).toString(),
+              totalColumnSum.toString(),
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
