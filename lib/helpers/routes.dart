@@ -169,4 +169,56 @@ class AppRoutes {
         // Laporan Honda
         GetPage(name: '/laporan-plant', page: () => const LaporanPlant()),
       ];
+
+  static String mapCodeToRoute(String code) {
+    switch (code) {
+      case 'login':
+        return '/login';
+      case 'rootpage':
+        return '/rootpage';
+      case 'profile':
+        return '/profile';
+      case 'data-user':
+        return '/data-user';
+      case 'data-do-harian':
+        return '/data-do-harian';
+      case 'data-do-global':
+        return '/data-do-global';
+      case 'data-do-tambahan':
+        return '/data-do-tambahan';
+      case 'data-do-pengurangan':
+        return '/data-do-pengurangan';
+      case 'all-do-global':
+        return '/all-do-global';
+      case 'all-do-harian':
+        return '/all-do-harian';
+      case 'all-do-kurang':
+        return '/all-do-kurang';
+      case 'all-do-tambah':
+        return '/all-do-tambah';
+      case 'all-do-reguler':
+        return '/all-do-reguler';
+      case 'all-do-mutasi':
+        return '/all-do-mutasi';
+      case 'all-do-estimasi':
+        return '/all-do-estimasi';
+      case 'request-mobil':
+        return '/request-mobil';
+      case 'do-reguler':
+        return '/do-reguler';
+      case 'do-mutasi':
+        return '/do-mutasi';
+      case 'estimasi-pm':
+        return '/estimasi-pm';
+      case 'table-estimasi':
+        return '/table-estimasi';
+      case 'type-motor':
+        return '/type-motor';
+      case 'laporan-plant':
+        return '/laporan-plant';
+
+      default:
+        return '/';
+    }
+  }
 }

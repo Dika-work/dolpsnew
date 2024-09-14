@@ -1,4 +1,6 @@
+import 'package:doplsnew/helpers/context_util.dart';
 import 'package:doplsnew/helpers/routes.dart';
+import 'package:doplsnew/helpers/uni_services.dart';
 import 'package:doplsnew/screens/login.dart';
 import 'package:doplsnew/screens/onboarding.dart';
 import 'package:doplsnew/screens/rootpage.dart';
@@ -11,6 +13,7 @@ import 'package:get_storage/get_storage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  await UniServices.init();
 
   final localStorage = GetStorage();
   final bool isFirstTime = localStorage.read('IsFirstTime') ?? true;
@@ -36,6 +39,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      navigatorKey: ContextUtility.navigatorKey,
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
