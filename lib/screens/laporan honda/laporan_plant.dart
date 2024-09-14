@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../controllers/laporan honda/laporan_plant_controller.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/source/laporan honda/laporan_plant_source.dart';
 import '../../widgets/dropdown.dart';
@@ -17,13 +18,13 @@ class LaporanPlant extends StatefulWidget {
 
 class _LaporanPlantState extends State<LaporanPlant> {
   List<String> plant = [
-    'PLANT 1100',
-    'PLANT 1200',
-    'PLANT 1300',
-    'PLANT 1350',
-    'PLANT 1700',
-    'PLANT 1800',
-    'PLANT 1900',
+    '1100',
+    '1200',
+    '1300',
+    '1350',
+    '1700',
+    '1800',
+    '1900',
   ];
 
   List<String> months = [
@@ -49,6 +50,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
   String selectedPlant = '';
 
   LaporanPlantSource? laporanPlantSource;
+  final controller = Get.put(LaporanPlantController());
 
   @override
   void initState() {
@@ -57,16 +59,27 @@ class _LaporanPlantState extends State<LaporanPlant> {
       selectedPlant = Get.arguments as String;
       selectedIndex = plant.indexOf(selectedPlant);
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchDataAndRefreshSource();
+    });
+  }
+
+  Future<void> _fetchDataAndRefreshSource() async {
+    String formattedMonth =
+        (months.indexOf(selectedMonth) + 1).toString().padLeft(2, '0');
+    await controller.fetchLaporanPlant(formattedMonth, selectedYear);
+    await controller.fetchLaporanRealisasi(formattedMonth, selectedYear);
     _updateLaporanSource();
   }
 
-  // Fungsi untuk memperbarui sumber data berdasarkan bulan dan tahun yang dipilih
   void _updateLaporanSource() {
     setState(() {
       laporanPlantSource = LaporanPlantSource(
         selectedYear: int.parse(selectedYear),
-        selectedMonth: months.indexOf(selectedMonth) +
-            1, // Konversi nama bulan menjadi angka bulan
+        selectedMonth: months.indexOf(selectedMonth) + 1,
+        plantModel: controller.laporanModel,
+        plantRealisasi: controller.laporanRealisasiModel,
+        selectedPlant: selectedPlant, // Tambahkan selectedPlant di sini
       );
     });
   }
@@ -153,6 +166,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
                       setState(() {
                         selectedIndex = index;
                         selectedPlant = plant[index];
+                        _updateLaporanSource(); // Panggil fungsi ini untuk memperbarui tabel
                       });
                     },
                     style: ElevatedButton.styleFrom(
@@ -196,7 +210,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
                                 color: Colors.lightBlue.shade100,
                               ),
                               child: Text(
-                                selectedPlant, // Display selected plant here
+                                'PLANT $selectedPlant', // Display selected plant here
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,

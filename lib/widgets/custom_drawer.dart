@@ -556,7 +556,7 @@ class CustomDrawer extends StatelessWidget {
                                             ListTile(
                                               onTap: () => Get.toNamed(
                                                   '/laporan-plant',
-                                                  arguments: 'PLANT 1100'),
+                                                  arguments: '1100'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
@@ -574,7 +574,7 @@ class CustomDrawer extends StatelessWidget {
                                             ListTile(
                                               onTap: () => Get.toNamed(
                                                   '/laporan-plant',
-                                                  arguments: 'PLANT 1200'),
+                                                  arguments: '1200'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
@@ -592,7 +592,7 @@ class CustomDrawer extends StatelessWidget {
                                             ListTile(
                                               onTap: () => Get.toNamed(
                                                   '/laporan-plant',
-                                                  arguments: 'PLANT 1300'),
+                                                  arguments: '1300'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
@@ -610,7 +610,7 @@ class CustomDrawer extends StatelessWidget {
                                             ListTile(
                                               onTap: () => Get.toNamed(
                                                   '/laporan-plant',
-                                                  arguments: 'PLANT 1350'),
+                                                  arguments: '1350'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
@@ -628,7 +628,7 @@ class CustomDrawer extends StatelessWidget {
                                             ListTile(
                                               onTap: () => Get.toNamed(
                                                   '/laporan-plant',
-                                                  arguments: 'PLANT 1700'),
+                                                  arguments: '1700'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
@@ -646,7 +646,7 @@ class CustomDrawer extends StatelessWidget {
                                             ListTile(
                                               onTap: () => Get.toNamed(
                                                   '/laporan-plant',
-                                                  arguments: 'PLANT 1800'),
+                                                  arguments: '1800'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
@@ -664,7 +664,7 @@ class CustomDrawer extends StatelessWidget {
                                             ListTile(
                                               onTap: () => Get.toNamed(
                                                   '/laporan-plant',
-                                                  arguments: 'PLANT 1900'),
+                                                  arguments: '1900'),
                                               leading: const Icon(
                                                 Iconsax.record,
                                                 color: AppColors
