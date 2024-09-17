@@ -497,6 +497,8 @@ class CustomDrawer extends StatelessWidget {
                                 content: Column(
                                   children: [
                                     ListTile(
+                                      onTap: () =>
+                                          Get.toNamed('/laporan-samarinda'),
                                       leading: const Icon(
                                         Iconsax.record,
                                         color: AppColors.darkExpandableContent,

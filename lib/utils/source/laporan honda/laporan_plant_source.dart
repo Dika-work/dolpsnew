@@ -150,38 +150,41 @@ class LaporanPlantSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     final region = row.getCells().first.value.toString();
 
-    Color backgroundColor;
-    switch (region) {
-      case 'SRD':
-        backgroundColor = Colors.yellow.shade300;
-        break;
-      case 'MKS':
-        backgroundColor = Colors.yellow.shade300;
-        break;
-      case 'PTK':
-        backgroundColor = Colors.yellow.shade300;
-        break;
-      case 'BJM':
-        backgroundColor = Colors.yellow.shade300;
-        break;
-      default:
-        backgroundColor = Colors.white;
+    // Set the default background color for specific regions (SRD, MKS, PTK, BJM)
+    Color backgroundColor = Colors.white;
+
+    // Apply yellow background for SRD, MKS, PTK, BJM across all columns
+    if (['SRD', 'MKS', 'PTK', 'BJM'].contains(region)) {
+      backgroundColor = Colors.yellow.shade300;
     }
 
     return DataGridRowAdapter(
-        color: backgroundColor,
-        cells: row.getCells().map<Widget>((dataGridCell) {
-          return Container(
-            alignment: Alignment.center,
-            child: Text(
-              dataGridCell.value.toString(),
-              style: TextStyle(
-                  color: (dataGridCell.columnName.contains('Unfilled') &&
-                          dataGridCell.value < 0)
-                      ? Colors.red
-                      : Colors.black),
+      cells: row.getCells().map<Widget>((dataGridCell) {
+        final String columnName = dataGridCell.columnName;
+        final dynamic cellValue = dataGridCell.value;
+
+        Color cellColor =
+            backgroundColor; // Set default cell color to row's background color
+
+        // Apply green color only to 'TOTAL' column, unless it's 'DO UNFILLED'
+        if (columnName == 'TOTAL' &&
+            !['SRD', 'MKS', 'PTK', 'BJM'].contains(region)) {
+          cellColor = Colors.greenAccent.shade100;
+        }
+
+        return Container(
+          alignment: Alignment.center,
+          color: cellColor, // Apply the color to each cell
+          child: Text(
+            dataGridCell.value.toString(),
+            style: TextStyle(
+              color: (cellValue is int && cellValue < 0)
+                  ? Colors.red
+                  : Colors.black,
             ),
-          );
-        }).toList());
+          ),
+        );
+      }).toList(),
+    );
   }
 }

@@ -46,6 +46,11 @@ class _LaporanPlantState extends State<LaporanPlant> {
 
   String selectedYear = DateTime.now().year.toString();
   String selectedMonth = DateFormat('MMMM').format(DateTime.now());
+
+  // Variabel sementara untuk menampung perubahan sebelum tombol ditekan
+  String tempSelectedMonth = DateFormat('MMMM').format(DateTime.now());
+  String tempSelectedYear = DateTime.now().year.toString();
+
   int? selectedIndex;
   String selectedPlant = '';
 
@@ -74,12 +79,16 @@ class _LaporanPlantState extends State<LaporanPlant> {
 
   void _updateLaporanSource() {
     setState(() {
+      // Update nilai sebenarnya dari selectedMonth dan selectedYear
+      selectedMonth = tempSelectedMonth;
+      selectedYear = tempSelectedYear;
+
       laporanPlantSource = LaporanPlantSource(
         selectedYear: int.parse(selectedYear),
         selectedMonth: months.indexOf(selectedMonth) + 1,
         plantModel: controller.laporanModel,
         plantRealisasi: controller.laporanRealisasiModel,
-        selectedPlant: selectedPlant, // Tambahkan selectedPlant di sini
+        selectedPlant: selectedPlant,
       );
     });
   }
@@ -116,12 +125,12 @@ class _LaporanPlantState extends State<LaporanPlant> {
                   Expanded(
                     flex: 2,
                     child: DropDownWidget(
-                      value: selectedMonth,
+                      value: tempSelectedMonth, // Gunakan variabel sementara
                       items: months,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedMonth = newValue!;
-                          print('INI BULAN YANG DI PILIH $selectedMonth');
+                          tempSelectedMonth = newValue!;
+                          print('INI BULAN YANG DI PILIH $tempSelectedMonth');
                         });
                       },
                     ),
@@ -130,12 +139,12 @@ class _LaporanPlantState extends State<LaporanPlant> {
                   Expanded(
                     flex: 2,
                     child: DropDownWidget(
-                      value: selectedYear,
+                      value: tempSelectedYear, // Gunakan variabel sementara
                       items: years,
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedYear = newValue!;
-                          print('INI TAHUN YANG DI PILIH $selectedYear');
+                          tempSelectedYear = newValue!;
+                          print('INI TAHUN YANG DI PILIH $tempSelectedYear');
                         });
                       },
                     ),
@@ -144,7 +153,9 @@ class _LaporanPlantState extends State<LaporanPlant> {
                   Expanded(
                     flex: 1,
                     child: OutlinedButton(
-                      onPressed: () => _updateLaporanSource(),
+                      onPressed: () {
+                        _updateLaporanSource(); // Pastikan tombol memperbarui nilai di dalam setState
+                      },
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
                               vertical: CustomSize.md)),
@@ -247,7 +258,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
                               color: Colors.lightBlue.shade100,
                             ),
                             child: Text(
-                              '${selectedMonth.substring(0, 3)}-$selectedYear',
+                              '${selectedMonth.substring(0, 3)}-$selectedYear', // Tampilkan bulan dan tahun yang telah diperbarui
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -302,7 +313,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
                     )
                   : const Center(
                       child:
-                          CircularProgressIndicator()), // Display loading spinner while source is null
+                          CircularProgressIndicator()), // Tampilkan loading spinner jika source masih null
             ),
           ],
         ),
