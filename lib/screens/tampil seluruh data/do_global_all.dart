@@ -1,3 +1,4 @@
+import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -264,6 +265,74 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
             builder: (context, constraint) {
               return Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(CustomSize.sm),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.none,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      showDatePicker(
+                                        context: context,
+                                        locale: const Locale("id", "ID"),
+                                        initialDate:
+                                            controller.pickDate.value ??
+                                                DateTime.now(),
+                                        firstDate: DateTime(1850),
+                                        lastDate: DateTime(2040),
+                                      ).then((newSelectedDate) {
+                                        if (newSelectedDate != null) {
+                                          controller.pickDate.value =
+                                              newSelectedDate;
+                                          print(
+                                              'ini tanggal yang di pilih ${controller.pickDate.value}');
+                                        }
+                                      });
+                                    },
+                                    icon: const Icon(Iconsax.calendar),
+                                  ),
+                                  // Reactive hintText, updates when pickDate is set
+                                  hintText: controller.pickDate.value != null
+                                      ? CustomHelperFunctions.getFormattedDate(
+                                          controller.pickDate.value!)
+                                      : 'Tanggal',
+                                ),
+                              )),
+                        ),
+                        const SizedBox(width: CustomSize.sm),
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller.pickDate.value != null
+                                  ? controller.fetchAllGlobalData(
+                                      pickDate: controller.pickDate.value)
+                                  : SnackbarLoader.errorSnackBar(
+                                      title: 'Oops😒',
+                                      message:
+                                          'Harap pilih tanggal terlebih dahulu');
+                            },
+                            child: const Text('Apply Filter'),
+                          ),
+                        ),
+                        if (controller.pickDate.value != null)
+                          const SizedBox(width: CustomSize.sm),
+                        if (controller.pickDate.value != null)
+                          Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () => controller.resetFilterDate(),
+                              child: const Text('Reset'),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                   Expanded(
                       child: SfDataGrid(
                     source: dataSource,

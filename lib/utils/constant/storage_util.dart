@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import '../../controllers/home/do_global_harian_controller.dart';
 import '../../controllers/home/do_harian_home_bsk_controller.dart';
 import '../../controllers/home/do_harian_home_controller.dart';
+import '../../controllers/login_controller.dart';
 import '../../screens/homepage.dart';
 
 class StorageUtil {
@@ -25,16 +26,25 @@ class StorageUtil {
     prefs.write('user', user.toJson());
   }
 
-  void logout() {
-    Get.delete<DataDOHarianHomeController>(); // Hapus instance lama
-    Get.delete<DoHarianHomeBskController>();
-    Get.delete<DataDOGlobalHarianController>();
+void logout() {
+  // Hapus controller yang terkait
+  Get.delete<DataDOHarianHomeController>(); 
+  Get.delete<DoHarianHomeBskController>();
+  Get.delete<DataDOGlobalHarianController>();
 
-    prefs.remove('user');
-    Get.offAllNamed('/login');
-    SnackbarLoader.successSnackBar(
-        title: 'Logged Out', message: 'Anda telah berhasil keluar 👍');
-  }
+  final loginController = Get.find<LoginController>();
+  loginController.resetFormKey(); // Reset GlobalKey untuk form
+
+  // Hapus data user dari GetStorage
+  prefs.remove('user');
+  prefs.remove('userToken');
+
+  Get.offAllNamed('/login'); // Arahkan kembali ke halaman login
+
+  SnackbarLoader.successSnackBar(
+      title: 'Logged Out', message: 'Anda telah berhasil keluar 👍');
+}
+
 
   final selectedIndex = 0.obs;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();

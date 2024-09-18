@@ -19,6 +19,7 @@ class LaporanPlantController extends GetxController {
       laporanModel.assignAll(getLaporan);
     } catch (e) {
       print('Error while fetching laporan plant: $e');
+      throw Exception('Gagal mengambil data laporan plant');
     } finally {
       isLoading.value = false;
     }
@@ -32,6 +33,7 @@ class LaporanPlantController extends GetxController {
       laporanRealisasiModel.assignAll(getLaporanRealisasi);
     } catch (e) {
       print('Error while fetching laporan do realisasi: $e');
+      throw Exception('Gagal mengambil data laporan realisasi');
     } finally {
       isLoadingRealisasi.value = false;
     }

@@ -122,7 +122,13 @@ class LoginScreen extends StatelessWidget {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  controller.emailAndPasswordSignIn();
+                                  // Ambil rute redirect dari arguments, jika ada
+                                  String? redirectRoute =
+                                      Get.arguments?['redirectRoute'];
+
+                                  // Panggil sign in dengan rute tujuan jika ada
+                                  controller.emailAndPasswordSignIn(
+                                      redirectRoute: redirectRoute);
                                 },
                                 child: const Text('Sign In'),
                               ),

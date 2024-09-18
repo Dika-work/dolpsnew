@@ -17,6 +17,8 @@ class DataAllGlobalController extends GetxController {
   int rolesEdit = 0;
   int rolesHapus = 0;
 
+  var pickDate = Rxn<DateTime>();
+
   @override
   void onInit() {
     UserModel? user = storageUtil.getUserDetails();
@@ -28,17 +30,33 @@ class DataAllGlobalController extends GetxController {
     super.onInit();
   }
 
-  Future<void> fetchAllGlobalData() async {
+  Future<void> fetchAllGlobalData({DateTime? pickDate}) async {
     try {
       isLoadingGlobalHarian.value = true;
       final dataHarian = await dataGlobalAllRepo.fetchGlobalHarianContent();
-      doAllGlobalModel.assignAll(dataHarian);
+
+      if (pickDate != null) {
+        doAllGlobalModel.assignAll(dataHarian.where((data) {
+          final dataDate = DateTime.parse(data.tgl);
+          // Compare if the day, month, and year of both dates are the same
+          return dataDate.year == pickDate.year &&
+              dataDate.month == pickDate.month &&
+              dataDate.day == pickDate.day;
+        }).toList());
+      } else {
+        doAllGlobalModel.assignAll(dataHarian);
+      }
     } catch (e) {
-      print('Error fetching data do harian : $e');
+      print('Error fetching data do harian: $e');
       doAllGlobalModel.assignAll([]);
     } finally {
       isLoadingGlobalHarian.value = false;
     }
+  }
+
+  void resetFilterDate() {
+    pickDate.value = null; // Clear the selected date
+    fetchAllGlobalData(); // Fetch all data without filtering
   }
 
   Future<void> editDOGlobal(

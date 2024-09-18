@@ -315,7 +315,11 @@ class DoRegulerAllSource extends DataGridSource {
     bool isAdmin,
   ) {
     this.startIndex = startIndex;
-    index = startIndex;
+
+    // Perbaiki perhitungan index berdasarkan halaman saat ini
+    int currentPageStartIndex =
+        startIndex * 10; // Misalnya, setiap halaman memiliki 10 item
+    index = currentPageStartIndex;
 
     final List<int> validPlants = [
       1100,
@@ -337,7 +341,7 @@ class DoRegulerAllSource extends DataGridSource {
       _doRegulerData = doRealisasiModelAll
           .where(
               (item) => filteredPlants.contains(int.tryParse(item.plant) ?? 0))
-          .skip(startIndex)
+          .skip(currentPageStartIndex)
           .take(10)
           .map<DataGridRow>(
         (data) {
@@ -345,7 +349,9 @@ class DoRegulerAllSource extends DataGridSource {
           final tglParsed =
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
           List<DataGridCell> cells = [
-            DataGridCell<int>(columnName: 'No', value: index),
+            DataGridCell<int>(
+                columnName: 'No',
+                value: index), // Nomor yang benar berdasarkan halaman
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
             DataGridCell<String>(
@@ -375,6 +381,7 @@ class DoRegulerAllSource extends DataGridSource {
             cells.add(
                 const DataGridCell<String>(columnName: 'Edit', value: 'Edit'));
           }
+
           return DataGridRow(cells: cells);
         },
       ).toList();

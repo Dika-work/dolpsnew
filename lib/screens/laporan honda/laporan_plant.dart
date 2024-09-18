@@ -47,10 +47,6 @@ class _LaporanPlantState extends State<LaporanPlant> {
   String selectedYear = DateTime.now().year.toString();
   String selectedMonth = DateFormat('MMMM').format(DateTime.now());
 
-  // Variabel sementara untuk menampung perubahan sebelum tombol ditekan
-  String tempSelectedMonth = DateFormat('MMMM').format(DateTime.now());
-  String tempSelectedYear = DateTime.now().year.toString();
-
   int? selectedIndex;
   String selectedPlant = '';
 
@@ -79,10 +75,6 @@ class _LaporanPlantState extends State<LaporanPlant> {
 
   void _updateLaporanSource() {
     setState(() {
-      // Update nilai sebenarnya dari selectedMonth dan selectedYear
-      selectedMonth = tempSelectedMonth;
-      selectedYear = tempSelectedYear;
-
       laporanPlantSource = LaporanPlantSource(
         selectedYear: int.parse(selectedYear),
         selectedMonth: months.indexOf(selectedMonth) + 1,
@@ -114,7 +106,8 @@ class _LaporanPlantState extends State<LaporanPlant> {
     ];
 
     return Scaffold(
-      body: SafeArea(
+      body: RefreshIndicator(
+        onRefresh: () async => _fetchDataAndRefreshSource(),
         child: ListView(
           children: [
             Padding(
@@ -125,12 +118,13 @@ class _LaporanPlantState extends State<LaporanPlant> {
                   Expanded(
                     flex: 2,
                     child: DropDownWidget(
-                      value: tempSelectedMonth, // Gunakan variabel sementara
+                      value: selectedMonth, // Gunakan variabel sementara
                       items: months,
                       onChanged: (String? newValue) {
                         setState(() {
-                          tempSelectedMonth = newValue!;
-                          print('INI BULAN YANG DI PILIH $tempSelectedMonth');
+                          selectedMonth = newValue!;
+                          print('INI BULAN YANG DI PILIH $selectedMonth');
+                          _fetchDataAndRefreshSource();
                         });
                       },
                     ),
@@ -139,12 +133,13 @@ class _LaporanPlantState extends State<LaporanPlant> {
                   Expanded(
                     flex: 2,
                     child: DropDownWidget(
-                      value: tempSelectedYear, // Gunakan variabel sementara
+                      value: selectedYear, // Gunakan variabel sementara
                       items: years,
                       onChanged: (String? newValue) {
                         setState(() {
-                          tempSelectedYear = newValue!;
-                          print('INI TAHUN YANG DI PILIH $tempSelectedYear');
+                          selectedYear = newValue!;
+                          print('INI TAHUN YANG DI PILIH $selectedYear');
+                          _fetchDataAndRefreshSource();
                         });
                       },
                     ),
@@ -153,8 +148,8 @@ class _LaporanPlantState extends State<LaporanPlant> {
                   Expanded(
                     flex: 1,
                     child: OutlinedButton(
-                      onPressed: () {
-                        _updateLaporanSource(); // Pastikan tombol memperbarui nilai di dalam setState
+                      onPressed: () async {
+                        await _fetchDataAndRefreshSource(); // Pastikan tombol memperbarui nilai di dalam setState
                       },
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(
@@ -177,7 +172,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
                       setState(() {
                         selectedIndex = index;
                         selectedPlant = plant[index];
-                        _updateLaporanSource(); // Panggil fungsi ini untuk memperbarui tabel
+                        _fetchDataAndRefreshSource(); // Panggil fungsi ini untuk memperbarui tabel
                       });
                     },
                     style: ElevatedButton.styleFrom(

@@ -17,6 +17,8 @@ class DataAllKurangController extends GetxController {
   int rolesEdit = 0;
   int rolesHapus = 0;
 
+  var pickDate = Rxn<DateTime>();
+
   @override
   void onInit() {
     UserModel? user = storageUtil.getUserDetails();
@@ -28,17 +30,35 @@ class DataAllKurangController extends GetxController {
     super.onInit();
   }
 
-  Future<void> fetchDataDoGlobal() async {
+  Future<void> fetchDataDoGlobal({DateTime? pickDate}) async {
     try {
       isLoadingGlobalHarian.value = true;
       final dataHarian = await dataGlobalHarianRepo.fetchGlobalHarianContent();
-      doGlobalHarianModel.assignAll(dataHarian);
+
+      if (pickDate != null) {
+        doGlobalHarianModel.assignAll(dataHarian.where(
+          (data) {
+            final dataDate = DateTime.parse(data.tgl);
+
+            return dataDate.year == pickDate.year &&
+                dataDate.month == pickDate.month &&
+                dataDate.day == pickDate.day;
+          },
+        ));
+      } else {
+        doGlobalHarianModel.assignAll(dataHarian);
+      }
     } catch (e) {
       print('Error fetching data do harian : $e');
       doGlobalHarianModel.assignAll([]);
     } finally {
       isLoadingGlobalHarian.value = false;
     }
+  }
+
+  void resetFilterDate() {
+    pickDate.value = null; // Clear the selected date
+    fetchDataDoGlobal(); // Fetch all data without filtering
   }
 
   Future<void> editDOGlobal(

@@ -10,6 +10,8 @@ class LoginController extends GetxController {
   final hidePassword = true.obs;
   final localStorage = GetStorage();
   final loginRepository = Get.put(LoginRepository());
+
+  // Gunakan GlobalKey<FormState> untuk validasi form
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
 
   final usernameController = TextEditingController();
@@ -17,18 +19,31 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
+    // Inisialisasi data dari localStorage
     usernameController.text = localStorage.read('REMEMBER_ME_EMAIL') ?? '';
     passwordController.text = localStorage.read('REMEMBER_ME_PASSWORD') ?? '';
     super.onInit();
   }
 
-  Future<void> emailAndPasswordSignIn() async {
+  @override
+  void onClose() {
+    // Dispose TextEditingController untuk menghindari kebocoran memori
+    usernameController.dispose();
+    passwordController.dispose();
+    super.onClose();
+  }
+
+  Future<void> emailAndPasswordSignIn({String? redirectRoute}) async {
     print('Awalan controller..');
-    if (!loginFormKey.currentState!.validate()) {
+
+    // Validasi form menggunakan GlobalKey<FormState>
+    if (loginFormKey.currentState != null &&
+        !loginFormKey.currentState!.validate()) {
       return;
     }
 
     if (rememberMe.value) {
+      // Simpan username dan password jika opsi "Ingat Saya" aktif
       localStorage.write('REMEMBER_ME_EMAIL', usernameController.text.trim());
       localStorage.write(
           'REMEMBER_ME_PASSWORD', passwordController.text.trim());
@@ -42,6 +57,13 @@ class LoginController extends GetxController {
     final username = usernameController.text.trim();
     final password = passwordController.text.trim();
 
-    await loginRepository.fetchUserDetails(username, password);
+    // Oper rute tujuan jika ada
+    await loginRepository.fetchUserDetails(username, password,
+        redirectRoute: redirectRoute);
+  }
+
+  // Reset GlobalKey untuk menghindari duplikat setelah logout atau perubahan
+  void resetFormKey() {
+    loginFormKey = GlobalKey<FormState>();
   }
 }

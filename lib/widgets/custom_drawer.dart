@@ -845,6 +845,20 @@ class CustomDrawer extends StatelessWidget {
                                   ],
                                 ))
                             : const SizedBox.shrink(),
+                        ListTile(
+                          onTap: () => Get.toNamed('/laporan-estimasi'),
+                          leading: const Icon(
+                            Iconsax.record,
+                            color: AppColors.darkExpandableContent,
+                          ),
+                          title: Text(
+                            'Estimasi',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(color: AppColors.light),
+                          ),
+                        ),
                         user.tipe == 'admin'
                             ? ExpandableContainer(
                                 icon: Iconsax.diagram,

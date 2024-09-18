@@ -2,14 +2,17 @@ import 'package:doplsnew/models/user_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:doplsnew/utils/popups/full_screen_loader.dart';
 import 'package:doplsnew/utils/popups/snackbar.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:get/get.dart';
 
 class LoginRepository {
   final storageUtil = Get.put(StorageUtil());
+  final storage = GetStorage(); // Tambahkan GetStorage untuk menyimpan data
 
-  Future<UserModel?> fetchUserDetails(String username, String password) async {
+  Future<UserModel?> fetchUserDetails(String username, String password,
+      {String? redirectRoute}) async {
     try {
       final response = await http.get(
         Uri.parse(
@@ -20,11 +23,22 @@ class LoginRepository {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
-        // Periksa kunci yang benar
         if (data['status'] == 'success' && data['data'] != null) {
           final user = UserModel.fromJson(data['data']);
+
+          // Simpan user data atau token ke GetStorage
+          storage.write('userToken',
+              data['token']); // Sesuaikan dengan key token dari API
+
           storageUtil.saveUserDetails(user);
-          Get.offAllNamed('/rootpage');
+
+          // Arahkan ke rute sesuai redirectRoute jika ada
+          if (redirectRoute != null && redirectRoute.isNotEmpty) {
+            Get.offAllNamed(redirectRoute);
+          } else {
+            Get.offAllNamed('/rootpage');
+          }
+
           return user;
         } else {
           showErrorSnackbar('Gagal😪', 'Username dan password salah..😒 ');
