@@ -1,3 +1,4 @@
+import 'package:doplsnew/helpers/connectivity.dart';
 import 'package:doplsnew/helpers/context_util.dart';
 import 'package:doplsnew/helpers/routes.dart';
 import 'package:doplsnew/helpers/uni_services.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: const [Locale('en'), Locale('id')],
       home: initialPage,
       getPages: AppRoutes.routes(),
+      initialBinding: InitialBindings(),
     );
   }
 }

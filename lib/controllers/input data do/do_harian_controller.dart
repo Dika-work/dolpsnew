@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doplsnew/helpers/helper_function.dart';
 import 'package:doplsnew/models/user_model.dart';
 import 'package:doplsnew/utils/constant/storage_util.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/connectivity.dart';
 import '../../models/input data do/do_harian_model.dart';
 import '../../repository/input data do/do_harian_repo.dart';
 import '../../utils/popups/dialogs.dart';
@@ -24,6 +26,8 @@ class DataDoHarianController extends GetxController {
   final dataHarianHomeBskController = Get.put(DoHarianHomeBskController());
 
   GlobalKey<FormState> addHarianKey = GlobalKey<FormState>();
+  final isConnected = Rx<bool>(true);
+  final networkManager = Get.find<NetworkManager>();
 
   final tujuan = '1'.obs;
   final tgl =
@@ -67,7 +71,6 @@ class DataDoHarianController extends GetxController {
 
   @override
   void onInit() {
-    fetchDataDoHarian();
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       namaUser = user.nama;
@@ -78,12 +81,44 @@ class DataDoHarianController extends GetxController {
     ever(plant, (_) {
       idplant.value = idPlantMap[plant.value] ?? '1';
     });
+
+    networkManager.connectionStream.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // Jika koneksi hilang, tampilkan pesan
+        if (isConnected.value) {
+          SnackbarLoader.errorSnackBar(
+            title: 'Koneksi Terputus',
+            message: 'Anda telah kehilangan koneksi internet.',
+          );
+          isConnected.value = false;
+        }
+      } else {
+        // Jika koneksi kembali, perbarui status koneksi
+        if (!isConnected.value) {
+          isConnected.value = true;
+          fetchDataDoHarian();
+        }
+      }
+    });
+
+    fetchDataDoHarian();
     super.onInit();
   }
 
   Future<void> fetchDataDoHarian() async {
     try {
+      final connectionStatus = await networkManager.isConnected();
+      if (!connectionStatus) {
+        isConnected.value = false;
+        SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silakan coba lagi setelah koneksi tersedia',
+        );
+        return;
+      }
+
       isLoadingHarian.value = true;
+      isConnected.value = true;
       final dataHarian = await dataHarianRepo.fetchDataHarianContent();
       doHarianModel.assignAll(dataHarian);
     } catch (e) {
@@ -96,6 +131,15 @@ class DataDoHarianController extends GetxController {
 
   Future<void> addDataDOHarian() async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     if (!addHarianKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
@@ -142,10 +186,6 @@ class DataDoHarianController extends GetxController {
     await dataHarianHomeBskController.fetchHarianBesok();
     CustomFullScreenLoader.stopLoading();
 
-    SnackbarLoader.successSnackBar(
-      title: 'Berhasil✨',
-      message: 'Menambahkan data do harian baru..',
-    );
     CustomFullScreenLoader.stopLoading();
   }
 
@@ -160,6 +200,16 @@ class DataDoHarianController extends GetxController {
     int bjm,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
+
     await dataHarianRepo.editDOHarianContent(
         id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
     CustomFullScreenLoader.stopLoading();
@@ -174,6 +224,15 @@ class DataDoHarianController extends GetxController {
     int id,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
     await dataHarianRepo.deleteDOHarianContent(id);
 
     await fetchDataDoHarian();

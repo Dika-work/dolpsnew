@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/laporan honda/samarinda_controller.dart';
+import '../../models/laporan honda/samarinda_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/source/laporan honda/samarinda_source.dart';
 import '../../widgets/dropdown.dart';
@@ -51,11 +52,35 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
   }
 
   Future<void> _fetchDataAndRefreshSource() async {
-    await controller.fetchLaporanSamarinda(int.parse(selectedYear));
-    print("Data diambil: ${controller.samarindaModel.length} entri");
-    setState(() {
-      _updateLaporanSource();
-    });
+    try {
+      await controller.fetchLaporanSamarinda(int.parse(selectedYear));
+      print("Data diambil: ${controller.samarindaModel.length} entri");
+    } catch (e) {
+      print("Gagal mengambil data, menggunakan data default");
+      controller.samarindaModel.assignAll(
+          _generateDefaultData()); // Jika gagal ambil data, gunakan data default
+    }
+    _updateLaporanSource();
+  }
+
+// Metode untuk menghasilkan data default (bulan 1-12, hasil = 0)
+  List<SamarindaModel> _generateDefaultData() {
+    List<SamarindaModel> defaultData = [];
+    for (int i = 1; i <= 12; i++) {
+      defaultData.add(SamarindaModel(
+        bulan: i,
+        tahun: int.parse(selectedYear),
+        sumberData: "do_global",
+        hasil: 0,
+      ));
+      defaultData.add(SamarindaModel(
+        bulan: i,
+        tahun: int.parse(selectedYear),
+        sumberData: "do_harian",
+        hasil: 0,
+      ));
+    }
+    return defaultData;
   }
 
   void _updateLaporanSource() {

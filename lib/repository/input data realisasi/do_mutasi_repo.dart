@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:doplsnew/utils/constant/storage_util.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/input data realisasi/do_realisasi_model.dart';
@@ -27,17 +26,11 @@ class DoMutasiRepository {
     final response = await http.get(Uri.parse(
         '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getDataMutasiAll'));
     if (response.statusCode == 200) {
-      // Gunakan isolate untuk memproses data besar
-      return compute(_parseMutasiData, response.body);
+      Iterable list = json.decode(response.body);
+      return list.map((e) => DoRealisasiModel.fromJson(e)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data do reguler');
     }
-  }
-
-  // Fungsi untuk memproses data di isolate
-  List<DoRealisasiModel> _parseMutasiData(String responseBody) {
-    Iterable list = json.decode(responseBody);
-    return list.map((e) => DoRealisasiModel.fromJson(e)).toList();
   }
 
   Future<void> tambahJumlahUnit(int id, String user, int jumlahUnit) async {

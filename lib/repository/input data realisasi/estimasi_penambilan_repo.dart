@@ -60,15 +60,24 @@ class EstimasiPenambilanRepository {
             'tgl': tgl,
           });
 
-      if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+        SnackbarLoader.successSnackBar(
+          title: 'Berhasil✨',
+          message: 'Menambahkan estimasi pengambilan motor baru..',
+        );
+      } else if (response.statusCode != 200) {
         CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
           message: 'Pastikan telah terkoneksi dengan internet😁',
         );
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message: 'Something went wrong, please contact developer🥰',
+        );
       }
     } catch (e) {
-      CustomFullScreenLoader.stopLoading();
       print('Error while adding data estimasi: $e');
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',

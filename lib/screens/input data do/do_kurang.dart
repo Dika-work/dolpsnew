@@ -49,7 +49,12 @@ class InputDataDoPengurangan extends GetView<DataDOKurangController> {
           ),
         ),
         body: Obx(() {
-          if (controller.isLoadingKurang.value &&
+          if (!controller.isConnected.value) {
+            return const CustomAnimationLoaderWidget(
+                text:
+                    'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+                animation: 'assets/animations/404.json');
+          } else if (controller.isLoadingKurang.value &&
               controller.doKurangModel.isEmpty) {
             return const CustomCircularLoader();
           } else if (controller.doKurangModel.isEmpty) {

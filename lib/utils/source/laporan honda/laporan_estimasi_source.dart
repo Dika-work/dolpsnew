@@ -23,14 +23,16 @@ class LaporanEstimasiSource extends DataGridSource {
     final List<int> doHarian = List.generate(lastDayOfMonth, (index) => 0);
     final List<int> doEstimasi = List.generate(lastDayOfMonth, (index) => 0);
 
-    for (var model in laporanEstimasiModel) {
-      final DateTime date = DateTime.parse(model.tgl);
+    if (laporanEstimasiModel.isNotEmpty) {
+      for (var model in laporanEstimasiModel) {
+        final DateTime date = DateTime.parse(model.tgl);
 
-      if (date.year == selectedYear && date.month == selectedMonth) {
-        final int dayIndex = date.day - 1;
+        if (date.year == selectedYear && date.month == selectedMonth) {
+          final int dayIndex = date.day - 1;
 
-        doHarian[dayIndex] = model.doHarian;
-        doEstimasi[dayIndex] = model.doEstimasi;
+          doHarian[dayIndex] = model.doHarian;
+          doEstimasi[dayIndex] = model.doEstimasi;
+        }
       }
     }
 
@@ -103,19 +105,21 @@ class LaporanEstimasiTentative extends DataGridSource {
     final List<int> estimasiMKS = List.generate(lastDayOfMonth, (index) => 0);
     final List<int> estimasiPTK = List.generate(lastDayOfMonth, (index) => 0);
 
-    for (var model in laporanEstimasiModel) {
-      final DateTime date = DateTime.parse(model.tgl);
+    if (laporanEstimasiModel.isNotEmpty) {
+      for (var model in laporanEstimasiModel) {
+        final DateTime date = DateTime.parse(model.tgl);
 
-      if (date.year == selectedYear && date.month == selectedMonth) {
-        final int dayIndex = date.day - 1;
+        if (date.year == selectedYear && date.month == selectedMonth) {
+          final int dayIndex = date.day - 1;
 
-        estimasiSRD[dayIndex] = model.estimasiSRD;
-        estimasiMKS[dayIndex] = model.estimasiMKS;
-        estimasiPTK[dayIndex] = model.estimasiPTK;
+          estimasiSRD[dayIndex] = model.estimasiSRD;
+          estimasiMKS[dayIndex] = model.estimasiMKS;
+          estimasiPTK[dayIndex] = model.estimasiPTK;
+        }
       }
     }
 
-    // Add DO Estimasi SRD
+    // Add DO Estimasi SRD Row
     estimasiData.add(
       DataGridRow(
         cells: [
@@ -131,7 +135,7 @@ class LaporanEstimasiTentative extends DataGridSource {
       ),
     );
 
-    // Add DO Estimasi MKS
+    // Add DO Estimasi MKS Row
     estimasiData.add(
       DataGridRow(
         cells: [
@@ -147,7 +151,7 @@ class LaporanEstimasiTentative extends DataGridSource {
       ),
     );
 
-    // Add DO Estimasi PTK
+    // Add DO Estimasi PTK Row
     estimasiData.add(
       DataGridRow(
         cells: [

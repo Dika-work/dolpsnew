@@ -4,6 +4,7 @@ import 'package:doplsnew/utils/constant/storage_util.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/input data realisasi/request_kendaraan_model.dart';
+import '../../utils/popups/full_screen_loader.dart';
 import '../../utils/popups/snackbar.dart';
 
 class RequestKendaraanRepository {
@@ -47,17 +48,29 @@ class RequestKendaraanRepository {
             'jumlah_req': jumlahReq.toString(),
             'status_req': statusReq.toString()
           });
-      if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+        SnackbarLoader.successSnackBar(
+          title: 'Berhasil✨',
+          message: 'Menambahkan data request kendaraan..',
+        );
+      } else if (response.statusCode != 200) {
+        CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
-          message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
+          message: 'Pastikan telah terkoneksi dengan internet😁',
+        );
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message: 'Something went wrong, please contact developer🥰',
         );
       }
     } catch (e) {
-      print('Error while adding data request kendaraan honda: $e');
+      CustomFullScreenLoader.stopLoading();
+      CustomFullScreenLoader.stopLoading();
       SnackbarLoader.errorSnackBar(
         title: 'Error☠️',
-        message: 'Pastikan sudah terhubung dengan wifi kantor 😁',
+        message: 'Pastikan sudah terhubung dengan internet 😁',
       );
       return;
     }

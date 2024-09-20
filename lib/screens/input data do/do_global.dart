@@ -50,37 +50,41 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
         ),
       ),
       body: Obx(() {
-        if (controller.isLoadingGlobal.value &&
+        if (!controller.isConnected.value) {
+          return const CustomAnimationLoaderWidget(
+              text:
+                  'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+              animation: 'assets/animations/404.json');
+        } else if (controller.isLoadingGlobal.value &&
             controller.doGlobalModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.doGlobalModel.isEmpty) {
           return GestureDetector(
             onTap: () {
               CustomDialogs.defaultDialog(
-                  context: context,
-                  titleWidget: const Text('Input DO Global'),
-                  contentWidget: AddDOGlobal(
-                    controller: controller,
-                  ),
-                  onConfirm: () {
-                    if (controller.tgl.value.isEmpty) {
-                      SnackbarLoader.errorSnackBar(
-                        title: 'Gagal😪',
-                        message: 'Pastikan tanggal telah di isi 😁',
-                      );
-                    } else {
-                      controller.addDataDOGlobal();
-                    }
-                  },
-                  onCancel: () {
-                    Get.back();
-                    controller.srdController.clear();
-                    controller.mksController.clear();
-                    controller.ptkController.clear();
-                    controller.bjmController.clear();
-                  },
-                  cancelText: 'Close',
-                  confirmText: 'Tambahkan');
+                context: context,
+                titleWidget: const Text('Input DO Global'),
+                contentWidget: AddDOGlobal(controller: controller),
+                onConfirm: () {
+                  if (controller.tgl.value.isEmpty) {
+                    SnackbarLoader.errorSnackBar(
+                      title: 'Gagal😪',
+                      message: 'Pastikan tanggal telah di isi 😁',
+                    );
+                  } else {
+                    controller.addDataDOGlobal();
+                  }
+                },
+                onCancel: () {
+                  Get.back();
+                  controller.srdController.clear();
+                  controller.mksController.clear();
+                  controller.ptkController.clear();
+                  controller.bjmController.clear();
+                },
+                cancelText: 'Close',
+                confirmText: 'Tambahkan',
+              );
             },
             child: CustomAnimationLoaderWidget(
               text: 'Tambahkan Data Baru',
@@ -94,7 +98,6 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
             doGlobal: controller.doGlobalModel,
             startIndex: currentPage * rowsPerPage,
             onEdited: (DoGlobalModel model) {
-              // Implementasi edit data di sini
               showDialog(
                 context: context,
                 builder: (context) {

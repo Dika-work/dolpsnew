@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../helpers/connectivity.dart';
 import '../repository/login_repo.dart';
 import '../utils/popups/full_screen_loader.dart';
+import '../utils/popups/snackbar.dart';
 
 class LoginController extends GetxController {
   final rememberMe = false.obs;
@@ -34,7 +36,13 @@ class LoginController extends GetxController {
   }
 
   Future<void> emailAndPasswordSignIn({String? redirectRoute}) async {
-    print('Awalan controller..');
+    final isConnected = await NetworkManager.instance.isConnected();
+    if (!isConnected) {
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     // Validasi form menggunakan GlobalKey<FormState>
     if (loginFormKey.currentState != null &&

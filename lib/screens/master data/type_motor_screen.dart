@@ -53,7 +53,12 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
         ),
       ),
       body: Obx(() {
-        if (controller.isLoadingTypeMotor.value &&
+        if (!controller.isConnected.value) {
+          return const CustomAnimationLoaderWidget(
+              text:
+                  'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+              animation: 'assets/animations/404.json');
+        } else if (controller.isLoadingTypeMotor.value &&
             controller.typeMotorModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.typeMotorModel.isEmpty) {

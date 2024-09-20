@@ -50,7 +50,12 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
         ),
       ),
       body: Obx(() {
-        if (controller.isLoadingHarian.value &&
+        if (!controller.isConnected.value) {
+          return const CustomAnimationLoaderWidget(
+              text:
+                  'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+              animation: 'assets/animations/404.json');
+        } else if (controller.isLoadingHarian.value &&
             controller.doHarianModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.doHarianModel.isEmpty) {

@@ -8,7 +8,6 @@ import '../../models/user_model.dart';
 import '../../repository/input data realisasi/request_kendaraan_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/full_screen_loader.dart';
-import '../../utils/popups/snackbar.dart';
 import '../home/do_harian_home_controller.dart';
 
 class RequestKendaraanController extends GetxController {
@@ -190,10 +189,6 @@ class RequestKendaraanController extends GetxController {
     await fetchRequestKendaraan();
     CustomFullScreenLoader.stopLoading();
 
-    SnackbarLoader.successSnackBar(
-      title: 'Berhasil✨',
-      message: 'Menambahkan data request kendaraan..',
-    );
     CustomFullScreenLoader.stopLoading();
   }
 

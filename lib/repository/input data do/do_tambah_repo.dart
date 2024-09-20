@@ -53,14 +53,25 @@ class DataDoTambahRepository {
             plant: plant,
           });
 
-      if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+        SnackbarLoader.successSnackBar(
+          title: 'Berhasil✨',
+          message: 'Menambahkan data do tambah baru..',
+        );
+      } else if (response.statusCode != 200) {
         CustomFullScreenLoader.stopLoading();
         SnackbarLoader.errorSnackBar(
           title: 'Gagal😪',
-          message: 'Pastikan telah terkoneksi dengan wifi kantor 😁',
+          message: 'Pastikan telah terkoneksi dengan internet😁',
+        );
+      } else {
+        SnackbarLoader.errorSnackBar(
+          title: 'Error',
+          message: 'Something went wrong, please contact developer🥰',
         );
       }
     } catch (e) {
+      CustomFullScreenLoader.stopLoading();
       CustomFullScreenLoader.stopLoading();
       print('Error while adding data: $e');
       SnackbarLoader.errorSnackBar(

@@ -25,6 +25,7 @@ import '../screens/input data realisasi/request_kendaraan_screen.dart';
 import '../screens/input data realisasi/table_estimasi_pm.dart';
 import '../screens/laporan honda/laporan_estimasi.dart';
 import '../screens/laporan honda/laporan_plant.dart';
+import '../screens/laporan honda/laporan_realisasi.dart';
 import '../screens/laporan honda/samarinda.dart';
 import '../screens/login.dart';
 import '../screens/manajemen user/data_user_screen.dart';
@@ -173,6 +174,8 @@ class AppRoutes {
         GetPage(
             name: '/laporan-samarinda', page: () => const LaporanSamarinda()),
         GetPage(name: '/laporan-estimasi', page: () => const LaporanEstimasi()),
+        GetPage(
+            name: '/laporan-realisasi', page: () => const LaporanRealisasi()),
       ];
 
   static String mapCodeToRoute(String code) {
@@ -225,6 +228,8 @@ class AppRoutes {
         return '/laporan-samarinda';
       case 'laporan-estimasi':
         return '/laporan-estimasi';
+      case 'laporan-realisasi':
+        return '/laporan-realisasi';
 
       default:
         return '/';

@@ -30,52 +30,67 @@ class AllEstimasiSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _doEstimasiData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-    var request = doEstimasi[startIndex + rowIndex];
 
-    return DataGridRowAdapter(
+    // Tambahkan pengecekan apakah list doEstimasi kosong
+    if (doEstimasi.isNotEmpty) {
+      var request = doEstimasi[startIndex + rowIndex];
+
+      return DataGridRowAdapter(
         color: isEvenRow ? Colors.white : Colors.grey[200],
         cells: [
-          ...row.getCells().take(7).map<Widget>(
-            (e) {
-              return Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
-                child: Text(
-                  e.value.toString(),
-                  textAlign: TextAlign.center,
-                ),
-              );
-            },
-          ),
+          ...row.getCells().take(7).map<Widget>((e) {
+            return Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+              child: Text(
+                e.value.toString(),
+                textAlign: TextAlign.center,
+              ),
+            );
+          }),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                  onPressed: () {
-                    if (onEdited != null && doEstimasi.isNotEmpty) {
-                      onEdited!(request);
-                    } else {
-                      return;
-                    }
-                  },
-                  icon: const Icon(Iconsax.grid_edit)),
+                onPressed: () {
+                  if (onEdited != null && doEstimasi.isNotEmpty) {
+                    onEdited!(request);
+                  }
+                },
+                icon: const Icon(Iconsax.grid_edit),
+              ),
             ],
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                  onPressed: () {
-                    if (onDeleted != null && doEstimasi.isNotEmpty) {
-                      onDeleted!(request);
-                    } else {
-                      return;
-                    }
-                  },
-                  icon: const Icon(Iconsax.trash, color: Colors.red)),
+                onPressed: () {
+                  if (onDeleted != null && doEstimasi.isNotEmpty) {
+                    onDeleted!(request);
+                  }
+                },
+                icon: const Icon(Iconsax.trash, color: Colors.red),
+              ),
             ],
-          )
-        ]);
+          ),
+        ],
+      );
+    } else {
+      return DataGridRowAdapter(
+        color: isEvenRow ? Colors.white : Colors.grey[200],
+        cells: row.getCells().map<Widget>((e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: CustomSize.md),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
+            ),
+          );
+        }).toList(),
+      );
+    }
   }
 
   List<DataGridRow> _generateEmptyRows(int count) {
@@ -87,9 +102,9 @@ class AllEstimasiSource extends DataGridSource {
           DataGridCell<String>(columnName: 'Tanggal', value: '-'),
           DataGridCell<String>(columnName: 'HSO - SRD', value: '-'),
           DataGridCell<String>(columnName: 'HSO - MKS', value: '-'),
-          DataGridCell<String>(columnName: 'HSO - MKS', value: '-'),
           DataGridCell<String>(columnName: 'HSO - PTK', value: '-'),
-          DataGridCell<String>(columnName: 'BJM', value: '-'),
+          DataGridCell<String>(columnName: 'Edit', value: ''),
+          DataGridCell<String>(columnName: 'Hapus', value: ''),
         ]);
       },
     );
@@ -99,7 +114,7 @@ class AllEstimasiSource extends DataGridSource {
     this.startIndex = startIndex;
     index = startIndex;
 
-    if (doEstimasi.isEmpty) {
+    if (allGlobal.isEmpty) {
       _doEstimasiData = _generateEmptyRows(1);
     } else {
       _doEstimasiData =
@@ -119,9 +134,6 @@ class AllEstimasiSource extends DataGridSource {
           DataGridCell<String>(
               columnName: 'HSO - PTK',
               value: data.jumlah3 == 0 ? '-' : data.jumlah3.toString()),
-          DataGridCell<String>(
-              columnName: 'BJM',
-              value: data.jumlah4 == 0 ? '-' : data.jumlah4.toString()),
         ]);
       }).toList();
       notifyListeners();

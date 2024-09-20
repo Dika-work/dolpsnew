@@ -49,7 +49,12 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
         ),
       ),
       body: Obx(() {
-        if (controller.isLoadingTambah.value &&
+        if (!controller.isConnected.value) {
+          return const CustomAnimationLoaderWidget(
+              text:
+                  'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+              animation: 'assets/animations/404.json');
+        } else if (controller.isLoadingTambah.value &&
             controller.doTambahModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.doTambahModel.isEmpty) {

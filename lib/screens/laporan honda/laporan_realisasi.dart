@@ -4,19 +4,19 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../controllers/laporan honda/laporan_estimasi_controller.dart';
+import '../../controllers/laporan honda/laporan_realisasi_controller.dart';
 import '../../utils/constant/custom_size.dart';
-import '../../utils/source/laporan honda/laporan_estimasi_source.dart';
+import '../../utils/source/laporan honda/laporan_realisasi_source.dart';
 import '../../widgets/dropdown.dart';
 
-class LaporanEstimasi extends StatefulWidget {
-  const LaporanEstimasi({super.key});
+class LaporanRealisasi extends StatefulWidget {
+  const LaporanRealisasi({super.key});
 
   @override
-  State<LaporanEstimasi> createState() => _LaporanEstimasiState();
+  State<LaporanRealisasi> createState() => _LaporanRealisasiState();
 }
 
-class _LaporanEstimasiState extends State<LaporanEstimasi> {
+class _LaporanRealisasiState extends State<LaporanRealisasi> {
   List<String> months = [
     'January',
     'February',
@@ -37,9 +37,10 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
   String selectedYear = DateTime.now().year.toString();
   String selectedMonth = DateFormat('MMMM').format(DateTime.now());
 
-  LaporanEstimasiSource? source;
-  LaporanEstimasiTentative? sourceTentative;
-  final controller = Get.put(LaporanEstimasiController());
+  LaporanRealisasiSource? source;
+  LaporanRealisasiUnfieldSource? sourceUnfielld;
+
+  final controller = Get.put(LaporanRealisasiController());
 
   @override
   void initState() {
@@ -54,58 +55,29 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
   Future<void> _fetchDataAndRefreshSource() async {
     String formattedMonth =
         (months.indexOf(selectedMonth) + 1).toString().padLeft(2, '0');
-
-    try {
-      await controller.fetchLaporanEstimasi(formattedMonth, selectedYear);
-      _updateLaporanSource();
-      _updateLaporanTentativeSource();
-    } catch (error) {
-      // Handle error (e.g., no internet)
-      print('Error fetching data: $error');
-      // Fallback with empty data (zeros) for the table
-      _updateLaporanSourceWithDefaultValues();
-      _updateLaporanTentativeSourceWithDefaultValues();
-    }
-  }
-
-  void _updateLaporanSourceWithDefaultValues() {
-    setState(() {
-      source = LaporanEstimasiSource(
-        selectedYear: int.parse(selectedYear),
-        selectedMonth: months.indexOf(selectedMonth) + 1,
-        laporanEstimasiModel: [], // Pass an empty list to represent no data
-      );
-    });
-  }
-
-  void _updateLaporanTentativeSourceWithDefaultValues() {
-    setState(() {
-      sourceTentative = LaporanEstimasiTentative(
-        selectedYear: int.parse(selectedYear),
-        selectedMonth: months.indexOf(selectedMonth) + 1,
-        laporanEstimasiModel: [], // Pass an empty list to represent no data
-      );
-    });
+    await controller.fetchLaporanRealisasi(formattedMonth, selectedYear);
+    _updateLaporanSource();
+    _updateLaporanUnfilledSource();
   }
 
   void _updateLaporanSource() {
     // Call setState only once when the source is updated
     setState(() {
-      source = LaporanEstimasiSource(
+      source = LaporanRealisasiSource(
         selectedYear: int.parse(selectedYear),
         selectedMonth: months.indexOf(selectedMonth) + 1,
-        laporanEstimasiModel: controller.laporanEstimasiModel,
+        laporanEstimasiModel: controller.laporanRealisasiModel,
       );
     });
   }
 
-  void _updateLaporanTentativeSource() {
+  void _updateLaporanUnfilledSource() {
     // Call setState only once when the source is updated
     setState(() {
-      sourceTentative = LaporanEstimasiTentative(
+      sourceUnfielld = LaporanRealisasiUnfieldSource(
         selectedYear: int.parse(selectedYear),
         selectedMonth: months.indexOf(selectedMonth) + 1,
-        laporanEstimasiModel: controller.laporanEstimasiModel,
+        laporanRealisasiUnfielld: controller.laporanRealisasiModel,
       );
     });
   }
@@ -115,26 +87,25 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
     late Map<String, double> columnWidths = {
       'Title': 135,
       'Day': double.nan,
+      // 'Avg': double.nan,
       'Total': double.nan,
     };
 
     const double rowHeight = 50.0;
-    const double headerHeight = 73.0;
+    const double headerHeight = 65.0;
 
     const double gridHeight = headerHeight + (rowHeight * 4);
-    const double gridTentativeHeight = headerHeight + (rowHeight * 5);
 
     final List<String> dayColumnNames = [
       for (int day = 1; day <= (source?.lastDayOfMonth ?? 30); day++) 'Day $day'
     ];
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
             onPressed: () => Get.back(),
             icon: const Icon(Icons.arrow_back_ios)),
         title: Text(
-          'Laporan Estimasi',
+          'Laporan Realisasi',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
@@ -212,25 +183,6 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
                       stackedHeaderRows: [
                         StackedHeaderRow(cells: [
                           StackedHeaderCell(
-                            columnNames: ['Title', ...dayColumnNames, 'Total'],
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: const Text(
-                                'DO ESTIMASI (TENTATIVE) & DO HARIAN', // Display selected plant here
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ]),
-                        StackedHeaderRow(cells: [
-                          StackedHeaderCell(
                             columnNames: dayColumnNames,
                             child: Container(
                               alignment: Alignment.center,
@@ -286,6 +238,23 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
                               ),
                             ),
                           ),
+                        // GridColumn(
+                        //   width: columnWidths['Avg']!,
+                        //   columnName: 'Avg',
+                        //   label: Container(
+                        //     alignment: Alignment.center,
+                        //     decoration: BoxDecoration(
+                        //       border: Border.all(color: Colors.grey),
+                        //       color: Colors.lightBlue.shade100,
+                        //     ),
+                        //     child: Text(
+                        //       'Avg',
+                        //       style: TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //           color: Colors.purple.shade400),
+                        //     ),
+                        //   ),
+                        // ),
                         GridColumn(
                           width: columnWidths['Total']!,
                           columnName: 'Total',
@@ -311,10 +280,10 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
             ),
             const SizedBox(height: CustomSize.spaceBtwInputFields),
             SizedBox(
-              height: gridTentativeHeight,
-              child: sourceTentative != null
+              height: gridHeight,
+              child: sourceUnfielld != null
                   ? SfDataGrid(
-                      source: sourceTentative!,
+                      source: sourceUnfielld!,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,
@@ -327,25 +296,6 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
                         return true;
                       },
                       stackedHeaderRows: [
-                        StackedHeaderRow(cells: [
-                          StackedHeaderCell(
-                            columnNames: ['Title', ...dayColumnNames, 'Total'],
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: const Text(
-                                'DO ESTIMASI (TENTATIVE) & DO HARIAN', // Display selected plant here
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ]),
                         StackedHeaderRow(cells: [
                           StackedHeaderCell(
                             columnNames: dayColumnNames,
@@ -403,6 +353,23 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
                               ),
                             ),
                           ),
+                        // GridColumn(
+                        //   width: columnWidths['Avg']!,
+                        //   columnName: 'Avg',
+                        //   label: Container(
+                        //     alignment: Alignment.center,
+                        //     decoration: BoxDecoration(
+                        //       border: Border.all(color: Colors.grey),
+                        //       color: Colors.lightBlue.shade100,
+                        //     ),
+                        //     child: Text(
+                        //       'Avg',
+                        //       style: TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //           color: Colors.purple.shade400),
+                        //     ),
+                        //   ),
+                        // ),
                         GridColumn(
                           width: columnWidths['Total']!,
                           columnName: 'Total',
@@ -425,7 +392,7 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
                   : const Center(
                       child: CircularProgressIndicator(),
                     ),
-            ),
+            )
           ],
         ),
       ),

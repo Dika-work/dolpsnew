@@ -248,13 +248,19 @@ class DoMutasiAllSource extends DataGridSource {
   void _updateDataPager(
       List<DoRealisasiModel> doRealisasiModelAll, int startIndex) {
     this.startIndex = startIndex;
-    index = startIndex;
+
+    // Perbaiki perhitungan index berdasarkan halaman saat ini
+    int currentPageStartIndex =
+        startIndex * 10; // Misalnya, setiap halaman memiliki 10 item
+    index = currentPageStartIndex;
 
     if (doRealisasiModelAll.isEmpty) {
       _doMutasiData = _generateEmptyRows(1);
     } else {
-      _doMutasiData =
-          doRealisasiModelAll.skip(startIndex).take(10).map<DataGridRow>(
+      _doMutasiData = doRealisasiModelAll
+          .skip(currentPageStartIndex)
+          .take(10)
+          .map<DataGridRow>(
         (data) {
           index++;
           final tglParsed =
@@ -285,8 +291,7 @@ class DoMutasiAllSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
-    _updateDataPager(controller.doRealisasiModelAll, startIndex);
+    _updateDataPager(controller.doRealisasiModelAll, newPageIndex);
     notifyListeners();
     return true;
   }

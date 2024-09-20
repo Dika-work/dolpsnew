@@ -54,7 +54,8 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
             controller.doGlobalHarianModel.isEmpty) {
           return const CustomCircularLoader();
         } else {
-          final dataSource = controller.doGlobalHarianModel.isEmpty
+          final dataSource = controller.doGlobalHarianModel.isEmpty ||
+                  !controller.isConnected.value
               ? EmptyAllDataSource()
               : DataAllHarianLpsSource(
                   allGlobal: controller.doGlobalHarianModel,

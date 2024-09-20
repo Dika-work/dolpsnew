@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../utils/loader/animation_loader.dart';
 import '../../utils/source/data_user_source.dart';
 import '../../widgets/curved_edges.dart';
 
@@ -43,9 +44,9 @@ class DataUserScreen extends StatelessWidget {
             controller.dataUserModel.isEmpty) {
           return const CustomCircularLoader();
         } else if (controller.dataUserModel.isEmpty) {
-          return Center(
-              child: Text('Data User Tidak Tersedia',
-                  style: Theme.of(context).textTheme.bodyMedium));
+          return const CustomAnimationLoaderWidget(
+              text: 'Data User Tidak Tersedia',
+              animation: 'assets/animations/user_not_found.json');
         } else {
           return Column(
             children: [

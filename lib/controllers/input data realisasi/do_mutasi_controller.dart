@@ -23,6 +23,8 @@ class DoMutasiController extends GetxController {
   int rolesJumlah = 0;
 
   final storageUtil = StorageUtil();
+  var startPickDate = Rxn<DateTime>();
+  var endPickDate = Rxn<DateTime>();
 
   bool get isAdmin => roleUser == 'admin' || roleUser == 'k.pool';
   bool get isPengurusPabrik => roleUser == 'Pengurus Pabrik';
@@ -64,16 +66,28 @@ class DoMutasiController extends GetxController {
     }
   }
 
-  Future<void> fetchMutasiAllContent() async {
+  Future<void> fetchMutasiAllContent(
+      {DateTime? startDate, DateTime? endDate}) async {
     try {
       isLoadingMutasi.value = true;
       final getRegulerDo = await doMutasiRepo.fetchAllMutasiData();
       if (getRegulerDo.isNotEmpty) {
-        if (isPengurusPabrik) {
+        final filteredData = getRegulerDo.where(
+          (item) {
+            final itemDate = DateTime.parse(item.tgl);
+
+            if (startDate != null && endDate != null) {
+              return itemDate.isAfter(startDate) && itemDate.isBefore(endDate);
+            }
+            return true;
+          },
+        ).toList();
+
+        if (!isPengurusPabrik) {
           doRealisasiModelAll.assignAll(
-              getRegulerDo.where((item) => item.plant == rolePlant).toList());
+              filteredData.where((item) => item.plant == rolePlant).toList());
         } else {
-          doRealisasiModelAll.assignAll(getRegulerDo);
+          doRealisasiModelAll.assignAll(filteredData);
         }
       } else {
         doRealisasiModelAll.assignAll([]);
@@ -84,6 +98,12 @@ class DoMutasiController extends GetxController {
     } finally {
       isLoadingMutasi.value = false;
     }
+  }
+
+  void resetFilterDate() {
+    startPickDate.value = null; // Clear the selected date
+    endPickDate.value = null; // Clear the selected date
+    fetchMutasiAllContent(); // Fetch all data without filtering
   }
 
   Future<void> editRealisasiMutasi(

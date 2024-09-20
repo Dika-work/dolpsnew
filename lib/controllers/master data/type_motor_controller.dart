@@ -1,6 +1,8 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/connectivity.dart';
 import '../../models/master data/type_motor_model.dart';
 import '../../repository/master data/type_motor_repo.dart';
 import '../../utils/popups/dialogs.dart';
@@ -12,6 +14,9 @@ class TypeMotorController extends GetxController {
   RxList<TypeMotorModel> typeMotorModel = <TypeMotorModel>[].obs;
   final typeMotorRepo = Get.put(TypeMotorRepository());
   GlobalKey<FormState> addTypeMotor = GlobalKey<FormState>();
+
+  final isConnected = Rx<bool>(true);
+  final networkManager = Get.find<NetworkManager>();
 
   final List<String> typeMotorList = [
     'Honda',
@@ -35,13 +40,44 @@ class TypeMotorController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
+    // Listener untuk memantau perubahan koneksi
+    networkManager.connectionStream.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // Jika koneksi hilang, tampilkan pesan
+        if (isConnected.value) {
+          SnackbarLoader.errorSnackBar(
+            title: 'Koneksi Terputus',
+            message: 'Anda telah kehilangan koneksi internet.',
+          );
+          isConnected.value = false;
+        }
+      } else {
+        // Jika koneksi kembali, perbarui status koneksi
+        if (!isConnected.value) {
+          isConnected.value = true;
+          fetchTypeMotorData(); // Otomatis fetch data ketika koneksi kembali
+        }
+      }
+    });
+
     fetchTypeMotorData();
+    super.onInit();
   }
 
   Future<void> fetchTypeMotorData() async {
     try {
+      final connectionStatus = await networkManager.isConnected();
+      if (!connectionStatus) {
+        isConnected.value = false;
+        SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silakan coba lagi setelah koneksi tersedia',
+        );
+        return;
+      }
+
       isLoadingTypeMotor.value = true;
+      isConnected.value = true;
       final getTypeMotor = await typeMotorRepo.fetchTypeMotorContent();
       typeMotorModel.assignAll(getTypeMotor);
     } catch (e) {
@@ -54,6 +90,15 @@ class TypeMotorController extends GetxController {
 
   Future<void> addTypeMotorData() async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     if (!addTypeMotor.currentState!.validate() ||
         hlm.value == null ||
@@ -127,6 +172,15 @@ class TypeMotorController extends GetxController {
       int plastik) async {
     CustomDialogs.loadingIndicator();
 
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
+
     await typeMotorRepo.editTypeMotorData(idType, merk, typeMotor, hlm, ac, ks,
         ts, bp, bs, plt, stay, acBesar, plastik);
     CustomFullScreenLoader.stopLoading();
@@ -137,6 +191,15 @@ class TypeMotorController extends GetxController {
 
   Future<void> hapusTypeMotorData(int idType) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     await typeMotorRepo.hapusTypeMotor(idType);
     await fetchTypeMotorData();

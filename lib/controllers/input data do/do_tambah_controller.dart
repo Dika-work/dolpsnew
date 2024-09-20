@@ -1,7 +1,9 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/connectivity.dart';
 import '../../helpers/helper_function.dart';
 import '../../models/input data do/do_tambah_model.dart';
 import '../../models/user_model.dart';
@@ -22,6 +24,9 @@ class DataDoTambahanController extends GetxController {
 
   final dataHarianHomeController = Get.put(DataDOHarianHomeController());
   final dataHarianHomeBskController = Get.put(DoHarianHomeBskController());
+
+  final isConnected = Rx<bool>(true);
+  final networkManager = Get.find<NetworkManager>();
 
   final tujuan = '1'.obs;
   final tgl =
@@ -69,7 +74,6 @@ class DataDoTambahanController extends GetxController {
 
   @override
   void onInit() {
-    fetchDataDoTambah();
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       namaUser = user.nama;
@@ -90,12 +94,44 @@ class DataDoTambahanController extends GetxController {
     ever(plant, (_) {
       idplant.value = idPlantMap[plant.value] ?? '1';
     });
+
+    networkManager.connectionStream.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // Jika koneksi hilang, tampilkan pesan
+        if (isConnected.value) {
+          SnackbarLoader.errorSnackBar(
+            title: 'Koneksi Terputus',
+            message: 'Anda telah kehilangan koneksi internet.',
+          );
+          isConnected.value = false;
+        }
+      } else {
+        // Jika koneksi kembali, perbarui status koneksi
+        if (!isConnected.value) {
+          isConnected.value = true;
+          fetchDataDoTambah(); // Otomatis fetch data ketika koneksi kembali
+        }
+      }
+    });
+
+    fetchDataDoTambah();
     super.onInit();
   }
 
   Future<void> fetchDataDoTambah() async {
     try {
+      final connectionStatus = await networkManager.isConnected();
+      if (!connectionStatus) {
+        isConnected.value = false;
+        SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silakan coba lagi setelah koneksi tersedia',
+        );
+        return;
+      }
+
       isLoadingTambah.value = true;
+      isConnected.value = true;
       final dataTambah = await dataTambahRepo.fetchDataTambahContent();
       if (dataTambah.isNotEmpty) {
         if (isAdmin) {
@@ -117,6 +153,15 @@ class DataDoTambahanController extends GetxController {
 
   Future<void> addDataDoTambah() async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     if (!addTambahKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
@@ -159,10 +204,6 @@ class DataDoTambahanController extends GetxController {
     await dataHarianHomeBskController.fetchHarianBesok();
     CustomFullScreenLoader.stopLoading();
 
-    SnackbarLoader.successSnackBar(
-      title: 'Berhasil✨',
-      message: 'Menambahkan data do tambah baru..',
-    );
     CustomFullScreenLoader.stopLoading();
   }
 
@@ -177,6 +218,16 @@ class DataDoTambahanController extends GetxController {
     int bjm,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
+
     await dataTambahRepo.editDOTambahContent(
         id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
     CustomFullScreenLoader.stopLoading();
@@ -191,6 +242,15 @@ class DataDoTambahanController extends GetxController {
     int id,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
     await dataTambahRepo.deleteDOTambahContent(id);
 
     await fetchDataDoTambah();

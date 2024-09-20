@@ -525,6 +525,8 @@ class CustomDrawer extends StatelessWidget {
                                       ),
                                     ),
                                     ListTile(
+                                      onTap: () =>
+                                          Get.toNamed('/laporan-realisasi'),
                                       leading: const Icon(
                                         Iconsax.record,
                                         color: AppColors.darkExpandableContent,
@@ -823,19 +825,6 @@ class CustomDrawer extends StatelessWidget {
                                       ),
                                       title: Text(
                                         'Dealer',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall
-                                            ?.copyWith(color: AppColors.light),
-                                      ),
-                                    ),
-                                    ListTile(
-                                      leading: const Icon(
-                                        Iconsax.record,
-                                        color: AppColors.darkExpandableContent,
-                                      ),
-                                      title: Text(
-                                        'Estimasi',
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleSmall

@@ -8,24 +8,20 @@ class SamarindaSource extends DataGridSource {
   final int selectedMonth;
   final List<SamarindaModel> samarindaModel;
 
-  // Constructor menerima input bulan, tahun, dan data model
   SamarindaSource({
     required this.selectedYear,
     required this.selectedMonth,
     required this.samarindaModel,
   }) {
-    _buildData(); // Memanggil fungsi untuk membangun data row
+    _buildData();
   }
 
   List<DataGridRow> samarindaData = [];
 
-  // Fungsi untuk mengkonversi data model menjadi DataGridRow
   void _buildData() {
-    const int numberOfMonths = 12; // Jumlah bulan tetap 12
-    Map<int, int> doGlobalResults =
-        {}; // Untuk menyimpan hasil DO Global per bulan
-    Map<int, int> doHarianResults =
-        {}; // Untuk menyimpan hasil DO Harian per bulan
+    const int numberOfMonths = 12;
+    Map<int, int> doGlobalResults = {};
+    Map<int, int> doHarianResults = {};
 
     // Memasukkan data dari samarindaModel ke dalam map sesuai dengan sumber_data dan bulan
     for (var data in samarindaModel) {
@@ -54,13 +50,13 @@ class SamarindaSource extends DataGridSource {
 
     for (int i = 1; i <= numberOfMonths; i++) {
       // Mengisi nilai DO Global
-      int globalResult = doGlobalResults[i] ?? 0;
+      int globalResult = doGlobalResults[i] ?? 0; // Pastikan default 0
       doGlobalCells
           .add(DataGridCell<int>(columnName: 'Bulan $i', value: globalResult));
       totalGlobal += globalResult;
 
       // Mengisi nilai DO Harian
-      int harianResult = doHarianResults[i] ?? 0;
+      int harianResult = doHarianResults[i] ?? 0; // Pastikan default 0
       doHarianCells
           .add(DataGridCell<int>(columnName: 'Bulan $i', value: harianResult));
       totalHarian += harianResult;

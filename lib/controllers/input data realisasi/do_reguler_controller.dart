@@ -24,6 +24,8 @@ class DoRegulerController extends GetxController {
   String rolePlant = '';
   final storageUtil = StorageUtil();
   String namaUser = '';
+  var startPickDate = Rxn<DateTime>();
+  var endPickDate = Rxn<DateTime>();
 
   // roles users
   int rolesLihat = 0;
@@ -72,17 +74,29 @@ class DoRegulerController extends GetxController {
     }
   }
 
-  Future<void> fetchRegulerAllContent() async {
+  Future<void> fetchRegulerAllContent(
+      {DateTime? startDate, DateTime? endDate}) async {
     try {
       isLoadingRegulerAll.value = true;
+
       final getRegulerDo = await doRegulerRepo.fetchAllRegulerData();
+
       if (getRegulerDo.isNotEmpty) {
-        if (isAdmin) {
-          doRealisasiModelAll.assignAll(getRegulerDo);
-        } else {
+        final filteredData = getRegulerDo.where((item) {
+          final itemDate = DateTime.parse(item.tgl);
+
+          // Check if date falls within the range
+          if (startDate != null && endDate != null) {
+            return itemDate.isAfter(startDate) && itemDate.isBefore(endDate);
+          }
+          return true;
+        }).toList();
+
+        if (!isAdmin) {
           doRealisasiModelAll.assignAll(
-              getRegulerDo.where((item) => item.plant == rolePlant).toList());
-          print('INI YG LOGIN ADMIN DI DO REGULER..');
+              filteredData.where((item) => item.plant == rolePlant).toList());
+        } else {
+          doRealisasiModelAll.assignAll(filteredData);
         }
       } else {
         doRealisasiModelAll.assignAll([]);
@@ -93,6 +107,12 @@ class DoRegulerController extends GetxController {
     } finally {
       isLoadingRegulerAll.value = false;
     }
+  }
+
+  void resetFilterDate() {
+    startPickDate.value = null; // Clear the selected date
+    endPickDate.value = null; // Clear the selected date
+    fetchRegulerAllContent(); // Fetch all data without filtering
   }
 
   Future<void> editRealisasiReguler(

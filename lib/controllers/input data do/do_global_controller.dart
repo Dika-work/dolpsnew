@@ -1,6 +1,8 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/connectivity.dart';
 import '../../helpers/helper_function.dart';
 import '../../models/input data do/do_global_model.dart';
 import '../../models/user_model.dart';
@@ -18,6 +20,9 @@ class DataDOGlobalController extends GetxController {
   final dataGlobalRepo = Get.put(DataDoGlobalRepository());
   final doGlobalHarianController = Get.put(DataDOGlobalHarianController());
   GlobalKey<FormState> addGlobalKey = GlobalKey<FormState>();
+
+  final isConnected = Rx<bool>(true);
+  final networkManager = Get.find<NetworkManager>();
 
   final tujuan = '1'.obs;
   final tgl =
@@ -65,7 +70,6 @@ class DataDOGlobalController extends GetxController {
 
   @override
   void onInit() {
-    fetchDataDoGlobal();
     UserModel? user = storageUtil.getUserDetails();
     if (user != null) {
       namaUser = user.nama;
@@ -87,12 +91,45 @@ class DataDOGlobalController extends GetxController {
     ever(plant, (_) {
       idplant.value = idPlantMap[plant.value] ?? '1';
     });
+
+    // Listener untuk memantau perubahan koneksi
+    networkManager.connectionStream.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // Jika koneksi hilang, tampilkan pesan
+        if (isConnected.value) {
+          SnackbarLoader.errorSnackBar(
+            title: 'Koneksi Terputus',
+            message: 'Anda telah kehilangan koneksi internet.',
+          );
+          isConnected.value = false;
+        }
+      } else {
+        // Jika koneksi kembali, perbarui status koneksi
+        if (!isConnected.value) {
+          isConnected.value = true;
+          fetchDataDoGlobal(); // Otomatis fetch data ketika koneksi kembali
+        }
+      }
+    });
+
+    fetchDataDoGlobal();
     super.onInit();
   }
 
   Future<void> fetchDataDoGlobal() async {
     try {
+      final connectionStatus = await networkManager.isConnected();
+      if (!connectionStatus) {
+        isConnected.value = false;
+        SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silakan coba lagi setelah koneksi tersedia',
+        );
+        return;
+      }
+
       isLoadingGlobal.value = true;
+      isConnected.value = true;
       final dataGlobal = await dataGlobalRepo.fetchDataGlobalContent();
       if (dataGlobal.isNotEmpty) {
         if (isAdmin) {
@@ -114,6 +151,15 @@ class DataDOGlobalController extends GetxController {
 
   Future<void> addDataDOGlobal() async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     if (!addGlobalKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
@@ -156,10 +202,6 @@ class DataDOGlobalController extends GetxController {
     await doGlobalHarianController.fetchDataDoGlobal();
     CustomFullScreenLoader.stopLoading();
 
-    SnackbarLoader.successSnackBar(
-      title: 'Berhasil✨',
-      message: 'Menambahkan data do global baru..',
-    );
     CustomFullScreenLoader.stopLoading();
   }
 
@@ -175,12 +217,21 @@ class DataDOGlobalController extends GetxController {
   ) async {
     CustomDialogs.loadingIndicator();
 
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
+
     await dataGlobalRepo.editDOGlobalContent(
         id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
-    CustomFullScreenLoader.stopLoading();
 
     await fetchDataDoGlobal();
     await doGlobalHarianController.fetchDataDoGlobal();
+    CustomFullScreenLoader.stopLoading();
     CustomFullScreenLoader.stopLoading();
   }
 
@@ -188,6 +239,15 @@ class DataDOGlobalController extends GetxController {
     int id,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
     await dataGlobalRepo.deleteDOGlobalContent(id);
 
     await fetchDataDoGlobal();

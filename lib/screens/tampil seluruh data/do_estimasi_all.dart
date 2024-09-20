@@ -24,7 +24,6 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
       'HSO - SRD': double.nan,
       'HSO - MKS': double.nan,
       'HSO - PTK': double.nan,
-      'BJM': double.nan,
       'Edit': double.nan,
       'Hapus': double.nan,
     };
@@ -146,24 +145,6 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
                     ),
                     child: Text(
                       'HSO - PTK',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-                GridColumn(
-                  width: columnWidths['BJM']!,
-                  columnName: 'BJM',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'BJM',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium

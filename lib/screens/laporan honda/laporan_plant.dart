@@ -1,3 +1,4 @@
+import 'package:doplsnew/helpers/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -6,6 +7,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/laporan honda/laporan_plant_controller.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/animation_loader.dart';
+import '../../utils/popups/snackbar.dart';
 import '../../utils/source/laporan honda/laporan_plant_source.dart';
 import '../../widgets/dropdown.dart';
 
@@ -52,6 +55,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
 
   LaporanPlantSource? laporanPlantSource;
   final controller = Get.put(LaporanPlantController());
+  final networkConn = Get.find<NetworkManager>();
 
   @override
   void initState() {
@@ -66,6 +70,12 @@ class _LaporanPlantState extends State<LaporanPlant> {
   }
 
   Future<void> _fetchDataAndRefreshSource() async {
+    // Cek koneksi internet terlebih dahulu
+    if (!await networkConn.isConnected()) {
+      return;
+    }
+
+    // Lanjutkan fetch data jika ada koneksi
     String formattedMonth =
         (months.indexOf(selectedMonth) + 1).toString().padLeft(2, '0');
     await controller.fetchLaporanPlant(formattedMonth, selectedYear);
@@ -106,93 +116,109 @@ class _LaporanPlantState extends State<LaporanPlant> {
     ];
 
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async => _fetchDataAndRefreshSource(),
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: CustomSize.sm),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+      appBar: laporanPlantSource != null
+          ? AppBar(
+              title: Text(
+                'Laporan Plant',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () => Get.back(),
+              ),
+            )
+          : null,
+      body: laporanPlantSource != null
+          ? RefreshIndicator(
+              onRefresh: () async => _fetchDataAndRefreshSource(),
+              child: ListView(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: DropDownWidget(
-                      value: selectedMonth, // Gunakan variabel sementara
-                      items: months,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedMonth = newValue!;
-                          print('INI BULAN YANG DI PILIH $selectedMonth');
-                          _fetchDataAndRefreshSource();
-                        });
-                      },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                        CustomSize.sm, CustomSize.md, CustomSize.sm, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: DropDownWidget(
+                            value: selectedMonth, // Gunakan variabel sementara
+                            items: months,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedMonth = newValue!;
+                                print('INI BULAN YANG DI PILIH $selectedMonth');
+                                _fetchDataAndRefreshSource();
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: CustomSize.sm),
+                        Expanded(
+                          flex: 2,
+                          child: DropDownWidget(
+                            value: selectedYear, // Gunakan variabel sementara
+                            items: years,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedYear = newValue!;
+                                print('INI TAHUN YANG DI PILIH $selectedYear');
+                                _fetchDataAndRefreshSource();
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: CustomSize.sm),
+                        Expanded(
+                          flex: 1,
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              await _fetchDataAndRefreshSource(); // Pastikan tombol memperbarui nilai di dalam setState
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: CustomSize.md)),
+                            child: const Icon(Iconsax.calendar_search),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  const SizedBox(width: CustomSize.sm),
-                  Expanded(
-                    flex: 2,
-                    child: DropDownWidget(
-                      value: selectedYear, // Gunakan variabel sementara
-                      items: years,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedYear = newValue!;
-                          print('INI TAHUN YANG DI PILIH $selectedYear');
-                          _fetchDataAndRefreshSource();
-                        });
-                      },
+                  const SizedBox(height: CustomSize.spaceBtwInputFields),
+                  Center(
+                    child: Wrap(
+                      spacing: 16.0,
+                      runSpacing: 4.0,
+                      alignment: WrapAlignment.center,
+                      children: List.generate(plant.length, (index) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedIndex = index;
+                              selectedPlant = plant[index];
+                              _fetchDataAndRefreshSource(); // Panggil fungsi ini untuk memperbarui tabel
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: CustomSize.sm)),
+                          child: Text(plant[index],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.apply(
+                                    color: selectedIndex == index
+                                        ? Colors.red
+                                        : Colors.white,
+                                  )),
+                        );
+                      }),
                     ),
                   ),
-                  const SizedBox(width: CustomSize.sm),
-                  Expanded(
-                    flex: 1,
-                    child: OutlinedButton(
-                      onPressed: () async {
-                        await _fetchDataAndRefreshSource(); // Pastikan tombol memperbarui nilai di dalam setState
-                      },
-                      style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: CustomSize.md)),
-                      child: const Icon(Iconsax.calendar_search),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(height: CustomSize.spaceBtwInputFields),
-            Center(
-              child: Wrap(
-                spacing: 16.0,
-                runSpacing: 4.0,
-                alignment: WrapAlignment.center,
-                children: List.generate(plant.length, (index) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedIndex = index;
-                        selectedPlant = plant[index];
-                        _fetchDataAndRefreshSource(); // Panggil fungsi ini untuk memperbarui tabel
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: CustomSize.sm)),
-                    child: Text(plant[index],
-                        style: Theme.of(context).textTheme.titleMedium?.apply(
-                              color: selectedIndex == index
-                                  ? Colors.red
-                                  : Colors.white,
-                            )),
-                  );
-                }),
-              ),
-            ),
-            const SizedBox(height: CustomSize.spaceBtwInputFields),
-            SizedBox(
-              height: gridHeight,
-              child: laporanPlantSource != null
-                  ? SfDataGrid(
+                  const SizedBox(height: CustomSize.spaceBtwInputFields),
+                  SizedBox(
+                    height: gridHeight,
+                    child: SfDataGrid(
                       source: laporanPlantSource!,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
@@ -305,14 +331,34 @@ class _LaporanPlantState extends State<LaporanPlant> {
                           ),
                         ),
                       ],
-                    )
-                  : const Center(
-                      child:
-                          CircularProgressIndicator()), // Tampilkan loading spinner jika source masih null
+                    ), // Tampilkan loading spinner jika source masih null
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CustomAnimationLoaderWidget(
+                    text:
+                        'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+                    animation: 'assets/animations/404.json'),
+                OutlinedButton(
+                  onPressed: () async {
+                    // Pastikan ada koneksi sebelum refresh
+                    if (await networkConn.isConnected()) {
+                      await _fetchDataAndRefreshSource();
+                    } else {
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Tidak ada internet',
+                        message: 'Silahkan coba lagi setelah koneksi tersedia',
+                      );
+                    }
+                  },
+                  child: const Text('refresh'),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
+import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
+import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/snackbar.dart';
 import '../../utils/source/tampil seluruh data source/all_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../input data realisasi/component/edit_realisasi_mutasi_all.dart';
@@ -128,6 +132,124 @@ class DoMutasiAll extends GetView<DoMutasiController> {
             return LayoutBuilder(builder: (_, __) {
               return Column(
                 children: [
+                  Padding(
+                    padding: const EdgeInsets.all(CustomSize.sm),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.none,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      showDatePicker(
+                                        context: context,
+                                        locale: const Locale("id", "ID"),
+                                        initialDate:
+                                            controller.startPickDate.value ??
+                                                DateTime.now(),
+                                        firstDate: DateTime(1850),
+                                        lastDate: DateTime(2040),
+                                      ).then((newSelectedDate) {
+                                        if (newSelectedDate != null) {
+                                          controller.startPickDate.value =
+                                              newSelectedDate;
+                                          print(
+                                              'ini tanggal yang di pilih ${controller.startPickDate.value}');
+                                        }
+                                      });
+                                    },
+                                    icon: const Icon(Iconsax.calendar),
+                                  ),
+                                  // Reactive hintText, updates when startPickDate is set
+                                  hintText: controller.startPickDate.value !=
+                                          null
+                                      ? CustomHelperFunctions.getFormattedDate(
+                                          controller.startPickDate.value!)
+                                      : 'Tanggal',
+                                ),
+                              )),
+                        ),
+                        const SizedBox(width: CustomSize.sm),
+                        Expanded(
+                          flex: 2,
+                          child: Obx(() => TextFormField(
+                                keyboardType: TextInputType.none,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
+                                      showDatePicker(
+                                        context: context,
+                                        locale: const Locale("id", "ID"),
+                                        initialDate:
+                                            controller.endPickDate.value ??
+                                                DateTime.now(),
+                                        firstDate: DateTime(1850),
+                                        lastDate: DateTime(2040),
+                                      ).then((newSelectedDate) {
+                                        if (newSelectedDate != null) {
+                                          controller.endPickDate.value =
+                                              newSelectedDate;
+                                          print(
+                                              'ini tanggal yang di pilih ${controller.endPickDate.value}');
+                                        }
+                                      });
+                                    },
+                                    icon: const Icon(Iconsax.calendar),
+                                  ),
+                                  // Reactive hintText, updates when endPickDate is set
+                                  hintText: controller.endPickDate.value != null
+                                      ? CustomHelperFunctions.getFormattedDate(
+                                          controller.endPickDate.value!)
+                                      : 'Tanggal',
+                                ),
+                              )),
+                        ),
+                        const SizedBox(width: CustomSize.sm),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (controller.startPickDate.value != null &&
+                                controller.endPickDate.value != null) {
+                              if (controller.startPickDate.value!
+                                  .isAfter(controller.endPickDate.value!)) {
+                                SnackbarLoader.errorSnackBar(
+                                  title: 'Oops😪',
+                                  message:
+                                      'Tanggal mulai tidak boleh melebihi tanggal akhir',
+                                );
+                              } else {
+                                controller.fetchMutasiAllContent(
+                                  startDate: controller.startPickDate.value,
+                                  endDate: controller.endPickDate.value,
+                                );
+                              }
+                            } else {
+                              SnackbarLoader.errorSnackBar(
+                                title: 'Oops😒',
+                                message: 'Harap pilih tanggal terlebih dahulu',
+                              );
+                            }
+                          },
+                          child: const Text('Filter'),
+                        ),
+                        if (controller.startPickDate.value != null &&
+                            controller.endPickDate.value != null)
+                          const SizedBox(width: CustomSize.sm),
+                        if (controller.startPickDate.value != null &&
+                            controller.endPickDate.value != null)
+                          Expanded(
+                            flex: 1,
+                            child: ElevatedButton(
+                              onPressed: () => controller.resetFilterDate(),
+                              child: const Text('Reset'),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
@@ -149,17 +271,16 @@ class DoMutasiAll extends GetView<DoMutasiController> {
 
                             var request = dataSource
                                         .doRealisasiModelAll.isNotEmpty &&
-                                    (dataSource.startIndex + rowIndex) <
+                                    (rowIndex + dataSource.startIndex) <
                                         dataSource.doRealisasiModelAll.length
                                 ? dataSource.doRealisasiModelAll[
-                                    dataSource.startIndex + rowIndex]
+                                    rowIndex + dataSource.startIndex]
                                 : null;
 
                             if (request != null) {
                               if (controller.roleUser == 'admin' &&
                                   (request.status == 2 ||
-                                      request.status == 3 ||
-                                      request.status == 5)) {
+                                      request.status == 3)) {
                                 return 150.0;
                               } else {
                                 return 65.0;

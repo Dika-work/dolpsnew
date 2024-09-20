@@ -137,10 +137,6 @@ class EstimasiPengambilanController extends GetxController {
     await loadDataEstimasiPengambilan();
     CustomFullScreenLoader.stopLoading();
 
-    SnackbarLoader.successSnackBar(
-      title: 'Berhasil✨',
-      message: 'Menambahkan estimasi pengambilan motor baru..',
-    );
     CustomFullScreenLoader.stopLoading();
   }
 

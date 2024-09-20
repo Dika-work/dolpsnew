@@ -52,7 +52,8 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
             controller.doAllGlobalModel.isEmpty) {
           return const CustomCircularLoader();
         } else {
-          final dataSource = controller.doAllGlobalModel.isEmpty
+          final dataSource = controller.doAllGlobalModel.isEmpty ||
+                  !controller.isConnected.value
               ? EmptyAllDataSource()
               : DataAllGlobalSource(
                   allGlobal: controller.doAllGlobalModel,

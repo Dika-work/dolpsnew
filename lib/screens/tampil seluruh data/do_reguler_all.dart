@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/do_reguler_controller.dart';
 import '../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_controller.dart';
+import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
+import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/snackbar.dart';
 import '../../utils/source/tampil seluruh data source/all_reguler_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../input data realisasi/component/aksesoris.dart';
@@ -127,6 +131,123 @@ class DoRegulerAll extends GetView<DoRegulerController> {
 
             return Column(
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(CustomSize.sm),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Obx(() => TextFormField(
+                              keyboardType: TextInputType.none,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    showDatePicker(
+                                      context: context,
+                                      locale: const Locale("id", "ID"),
+                                      initialDate:
+                                          controller.startPickDate.value ??
+                                              DateTime.now(),
+                                      firstDate: DateTime(1850),
+                                      lastDate: DateTime(2040),
+                                    ).then((newSelectedDate) {
+                                      if (newSelectedDate != null) {
+                                        controller.startPickDate.value =
+                                            newSelectedDate;
+                                        print(
+                                            'ini tanggal yang di pilih ${controller.startPickDate.value}');
+                                      }
+                                    });
+                                  },
+                                  icon: const Icon(Iconsax.calendar),
+                                ),
+                                // Reactive hintText, updates when startPickDate is set
+                                hintText: controller.startPickDate.value != null
+                                    ? CustomHelperFunctions.getFormattedDate(
+                                        controller.startPickDate.value!)
+                                    : 'Tanggal',
+                              ),
+                            )),
+                      ),
+                      const SizedBox(width: CustomSize.sm),
+                      Expanded(
+                        flex: 2,
+                        child: Obx(() => TextFormField(
+                              keyboardType: TextInputType.none,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    showDatePicker(
+                                      context: context,
+                                      locale: const Locale("id", "ID"),
+                                      initialDate:
+                                          controller.endPickDate.value ??
+                                              DateTime.now(),
+                                      firstDate: DateTime(1850),
+                                      lastDate: DateTime(2040),
+                                    ).then((newSelectedDate) {
+                                      if (newSelectedDate != null) {
+                                        controller.endPickDate.value =
+                                            newSelectedDate;
+                                        print(
+                                            'ini tanggal yang di pilih ${controller.endPickDate.value}');
+                                      }
+                                    });
+                                  },
+                                  icon: const Icon(Iconsax.calendar),
+                                ),
+                                // Reactive hintText, updates when endPickDate is set
+                                hintText: controller.endPickDate.value != null
+                                    ? CustomHelperFunctions.getFormattedDate(
+                                        controller.endPickDate.value!)
+                                    : 'Tanggal',
+                              ),
+                            )),
+                      ),
+                      const SizedBox(width: CustomSize.sm),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (controller.startPickDate.value != null &&
+                              controller.endPickDate.value != null) {
+                            if (controller.startPickDate.value!
+                                .isAfter(controller.endPickDate.value!)) {
+                              SnackbarLoader.errorSnackBar(
+                                title: 'Oops😪',
+                                message:
+                                    'Tanggal mulai tidak boleh melebihi tanggal akhir',
+                              );
+                            } else {
+                              controller.fetchRegulerAllContent(
+                                startDate: controller.startPickDate.value,
+                                endDate: controller.endPickDate.value,
+                              );
+                            }
+                          } else {
+                            SnackbarLoader.errorSnackBar(
+                              title: 'Oops😒',
+                              message: 'Harap pilih tanggal terlebih dahulu',
+                            );
+                          }
+                        },
+                        child: const Text('Filter'),
+                      ),
+                      if (controller.startPickDate.value != null &&
+                          controller.endPickDate.value != null)
+                        const SizedBox(width: CustomSize.sm),
+                      if (controller.startPickDate.value != null &&
+                          controller.endPickDate.value != null)
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            onPressed: () => controller.resetFilterDate(),
+                            child: const Text('Reset'),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
@@ -164,7 +285,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                               return 65.0;
                             }
                           } else {
-                            return details.rowHeight;
+                            return 60.0;
                           }
                         },
                         columns: [
