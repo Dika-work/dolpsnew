@@ -40,13 +40,12 @@ class DataUserScreen extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (controller.isDataUserLoading.value &&
-            controller.dataUserModel.isEmpty) {
-          return const CustomCircularLoader();
-        } else if (controller.dataUserModel.isEmpty) {
+        if (!controller.isConnected.value || controller.dataUserModel.isEmpty) {
           return const CustomAnimationLoaderWidget(
               text: 'Data User Tidak Tersedia',
               animation: 'assets/animations/user_not_found.json');
+        } else if (controller.isDataUserLoading.value) {
+          return const CustomCircularLoader();
         } else {
           return Column(
             children: [

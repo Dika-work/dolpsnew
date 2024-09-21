@@ -33,7 +33,7 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
       if (controller.rolesHapus == 1) 'Hapus': double.nan,
     };
 
-    const int rowsPerPage = 7;
+    const int rowsPerPage = 8;
     int currentPage = 0;
 
     return Scaffold(
@@ -351,7 +351,8 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
                   )),
                   SfDataPager(
                     delegate: dataSource,
-                    pageCount: controller.doGlobalHarianModel.isEmpty
+                    pageCount: controller.doGlobalHarianModel.isEmpty ||
+                            !controller.isConnected.value
                         ? 1
                         : (controller.doGlobalHarianModel.length / rowsPerPage)
                             .ceilToDouble(),

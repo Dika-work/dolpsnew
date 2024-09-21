@@ -4,8 +4,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/laporan honda/samarinda_controller.dart';
+import '../../helpers/connectivity.dart';
 import '../../models/laporan honda/samarinda_model.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/popups/snackbar.dart';
 import '../../utils/source/laporan honda/samarinda_source.dart';
 import '../../widgets/dropdown.dart';
 
@@ -39,6 +41,7 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
 
   SamarindaSource? samarindaSource;
   final controller = Get.put(SamarindaController());
+  final networkConn = Get.find<NetworkManager>();
 
   @override
   void initState() {
@@ -52,11 +55,15 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
   }
 
   Future<void> _fetchDataAndRefreshSource() async {
+    if (!await networkConn.isConnected()) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Koneksi Terputus',
+        message: 'Anda telah kehilangan koneksi internet.',
+      );
+    }
     try {
       await controller.fetchLaporanSamarinda(int.parse(selectedYear));
-      print("Data diambil: ${controller.samarindaModel.length} entri");
     } catch (e) {
-      print("Gagal mengambil data, menggunakan data default");
       controller.samarindaModel.assignAll(
           _generateDefaultData()); // Jika gagal ambil data, gunakan data default
     }
@@ -120,8 +127,8 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
       body: RefreshIndicator(
         onRefresh: () async => await _fetchDataAndRefreshSource(),
         child: ListView(
-          padding: const EdgeInsets.only(
-              left: CustomSize.sm, right: CustomSize.sm, top: CustomSize.sm),
+          padding: const EdgeInsets.fromLTRB(
+              CustomSize.sm, CustomSize.sm, CustomSize.sm, 0),
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,

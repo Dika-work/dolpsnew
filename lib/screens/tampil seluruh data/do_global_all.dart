@@ -33,7 +33,7 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
       if (controller.rolesHapus == 1) 'Hapus': double.nan,
     };
 
-    const int rowsPerPage = 7;
+    const int rowsPerPage = 8;
     int currentPage = 0;
 
     return Scaffold(
@@ -345,7 +345,8 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
                   )),
                   SfDataPager(
                     delegate: dataSource,
-                    pageCount: controller.doAllGlobalModel.isEmpty
+                    pageCount: controller.doAllGlobalModel.isEmpty ||
+                            !controller.isConnected.value
                         ? 1
                         : (controller.doAllGlobalModel.length / rowsPerPage)
                             .ceilToDouble(),

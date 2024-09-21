@@ -1,13 +1,16 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:doplsnew/utils/popups/dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/connectivity.dart';
 import '../../helpers/helper_function.dart';
 import '../../models/input data realisasi/request_kendaraan_model.dart';
 import '../../models/user_model.dart';
 import '../../repository/input data realisasi/request_kendaraan_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/full_screen_loader.dart';
+import '../../utils/popups/snackbar.dart';
 import '../home/do_harian_home_controller.dart';
 
 class RequestKendaraanController extends GetxController {
@@ -39,6 +42,8 @@ class RequestKendaraanController extends GetxController {
       <RequestKendaraanModel>[].obs;
   final dataDOHarianHomeController = Get.put(DataDOHarianHomeController());
   final requestRepo = Get.put(RequestKendaraanRepository());
+  final isConnected = Rx<bool>(true);
+  final networkManager = Get.find<NetworkManager>();
 
   final Rx<int> jumlahHarian = 0.obs;
 
@@ -117,6 +122,23 @@ class RequestKendaraanController extends GetxController {
       print('ini plant user yg milih $plant');
     }
 
+    // Listener untuk memantau perubahan koneksi
+    networkManager.connectionStream.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        if (isConnected.value) {
+          isConnected.value = false;
+          print("No internet connection detected.");
+          return;
+        }
+      } else {
+        if (!isConnected.value) {
+          isConnected.value = true;
+          print("Internet connection restored.");
+          fetchRequestKendaraan();
+        }
+      }
+    });
+
     fetchRequestKendaraan();
     super.onInit();
   }
@@ -156,6 +178,15 @@ class RequestKendaraanController extends GetxController {
 
   Future<void> addRequestKendaraan() async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     if (!requestKendaraanKey.currentState!.validate()) {
       CustomFullScreenLoader.stopLoading();
@@ -202,6 +233,15 @@ class RequestKendaraanController extends GetxController {
     int jumlahReq,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
 
     await requestRepo.editRequestKendaraan(
         idReq, tgl, plant, tujuan, type, jenisReq, jumlahReq);

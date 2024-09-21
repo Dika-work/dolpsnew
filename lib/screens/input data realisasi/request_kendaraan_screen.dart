@@ -51,12 +51,20 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       ),
       body: Obx(
         () {
-          if (controller.isRequestLoading.value &&
+          if (!controller.isConnected.value) {
+            print('tidak ada sambungan ${controller.isConnected.value}');
+            return const CustomAnimationLoaderWidget(
+                text:
+                    'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+                animation: 'assets/animations/404.json');
+          } else if (controller.isRequestLoading.value &&
               controller.requestKendaraanModel.isEmpty) {
             return const CustomCircularLoader();
           } else if (controller.requestKendaraanModel.isEmpty) {
             return GestureDetector(
               onTap: () {
+                print(
+                    'ini nilai internet connection di request : ${controller.isConnected.value}');
                 CustomDialogs.defaultDialog(
                     context: context,
                     titleWidget: const Text('Tambah Request Kendaraan'),

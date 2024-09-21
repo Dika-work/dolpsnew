@@ -38,11 +38,8 @@ class DataAllGlobalController extends GetxController {
       if (result == ConnectivityResult.none) {
         // Jika koneksi hilang, tampilkan pesan
         if (isConnected.value) {
-          SnackbarLoader.errorSnackBar(
-            title: 'Koneksi Terputus',
-            message: 'Anda telah kehilangan koneksi internet.',
-          );
           isConnected.value = false;
+          return;
         }
       } else {
         // Jika koneksi kembali, perbarui status koneksi
@@ -59,18 +56,7 @@ class DataAllGlobalController extends GetxController {
 
   Future<void> fetchAllGlobalData({DateTime? pickDate}) async {
     try {
-      final connectionStatus = await networkManager.isConnected();
-      if (!connectionStatus) {
-        isConnected.value = false;
-        SnackbarLoader.errorSnackBar(
-          title: 'Tidak ada koneksi internet',
-          message: 'Silakan coba lagi setelah koneksi tersedia',
-        );
-        return;
-      }
-
       isLoadingGlobalHarian.value = true;
-      isConnected.value = true;
       final dataHarian = await dataGlobalAllRepo.fetchGlobalHarianContent();
 
       if (pickDate != null) {

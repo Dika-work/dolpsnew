@@ -56,7 +56,7 @@ class DoHarianHomeBskController extends GetxController {
         doHarianHomeBskModel.assignAll([]);
       }
     } catch (e) {
-      print('Error fetching data do harian : $e');
+      //print('Error fetching data do harian : $e');
       doHarianHomeBskModel.assignAll([]);
     } finally {
       isLoadingGlobalHarian.value = false;

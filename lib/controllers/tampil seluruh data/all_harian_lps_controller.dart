@@ -38,11 +38,8 @@ class DataAllHarianLpsController extends GetxController {
       if (result == ConnectivityResult.none) {
         // Jika koneksi hilang, tampilkan pesan
         if (isConnected.value) {
-          SnackbarLoader.errorSnackBar(
-            title: 'Koneksi Terputus',
-            message: 'Anda telah kehilangan koneksi internet.',
-          );
           isConnected.value = false;
+          return;
         }
       } else {
         // Jika koneksi kembali, perbarui status koneksi
@@ -59,16 +56,6 @@ class DataAllHarianLpsController extends GetxController {
 
   Future<void> fetchDataDoGlobal({DateTime? pickDate}) async {
     try {
-      final connectionStatus = await networkManager.isConnected();
-      if (!connectionStatus) {
-        isConnected.value = false;
-        SnackbarLoader.errorSnackBar(
-          title: 'Tidak ada koneksi internet',
-          message: 'Silakan coba lagi setelah koneksi tersedia',
-        );
-        return;
-      }
-
       isLoadingGlobalHarian.value = true;
       isConnected.value = true;
       final dataHarian = await dataGlobalHarianRepo.fetchGlobalHarianContent();
@@ -87,7 +74,7 @@ class DataAllHarianLpsController extends GetxController {
         doGlobalHarianModel.assignAll(dataHarian);
       }
     } catch (e) {
-      print('Error fetching data do harian : $e');
+      //print('Error fetching data do harian : $e');
       doGlobalHarianModel.assignAll([]);
     } finally {
       isLoadingGlobalHarian.value = false;

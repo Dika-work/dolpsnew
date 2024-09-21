@@ -96,7 +96,7 @@ class DataAllHarianLpsSource extends DataGridSource {
     this.startIndex = startIndex;
     index = startIndex;
     _allGlobalData =
-        allGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
+        allGlobal.skip(startIndex).take(8).map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -123,7 +123,7 @@ class DataAllHarianLpsSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 7;
+    final int startIndex = newPageIndex * 8;
     _updateDataPager(allGlobal, startIndex);
     notifyListeners();
     return true;

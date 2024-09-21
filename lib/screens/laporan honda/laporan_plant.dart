@@ -116,18 +116,16 @@ class _LaporanPlantState extends State<LaporanPlant> {
     ];
 
     return Scaffold(
-      appBar: laporanPlantSource != null
-          ? AppBar(
-              title: Text(
-                'Laporan Plant',
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios),
-                onPressed: () => Get.back(),
-              ),
-            )
-          : null,
+      appBar: AppBar(
+        title: Text(
+          'Laporan Plant',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Get.back(),
+        ),
+      ),
       body: laporanPlantSource != null
           ? RefreshIndicator(
               onRefresh: () async => _fetchDataAndRefreshSource(),

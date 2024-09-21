@@ -5,6 +5,7 @@ import 'package:doplsnew/helpers/uni_services.dart';
 import 'package:doplsnew/screens/login.dart';
 import 'package:doplsnew/screens/onboarding.dart';
 import 'package:doplsnew/screens/rootpage.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:doplsnew/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await UniServices.init();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   final localStorage = GetStorage();
   final bool isFirstTime = localStorage.read('IsFirstTime') ?? true;

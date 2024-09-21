@@ -33,7 +33,7 @@ class DoKurangAll extends GetView<DataAllKurangController> {
       if (controller.rolesHapus == 1) 'Hapus': double.nan,
     };
 
-    const int rowsPerPage = 7;
+    const int rowsPerPage = 8;
     int currentPage = 0;
 
     return Scaffold(
@@ -54,7 +54,8 @@ class DoKurangAll extends GetView<DataAllKurangController> {
             controller.doGlobalHarianModel.isEmpty) {
           return const CustomCircularLoader();
         } else {
-          final dataSource = controller.doGlobalHarianModel.isEmpty
+          final dataSource = controller.doGlobalHarianModel.isEmpty ||
+                  !controller.isConnected.value
               ? EmptyAllDataSource()
               : DataAllKurangSource(
                   allGlobal: controller.doGlobalHarianModel,
@@ -345,7 +346,8 @@ class DoKurangAll extends GetView<DataAllKurangController> {
                           columns: column)),
                   SfDataPager(
                     delegate: dataSource,
-                    pageCount: controller.doGlobalHarianModel.isEmpty
+                    pageCount: controller.doGlobalHarianModel.isEmpty ||
+                            !controller.isConnected.value
                         ? 1
                         : (controller.doGlobalHarianModel.length / rowsPerPage)
                             .ceilToDouble(),

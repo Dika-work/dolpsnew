@@ -50,7 +50,7 @@ class DataDOGlobalHarianController extends GetxController {
         doGlobalHarianModel.assignAll([]);
       }
     } catch (e) {
-      print('Error fetching data do harian : $e');
+      //print('Error fetching data do harian : $e');
       doGlobalHarianModel.assignAll([]);
     } finally {
       isLoadingGlobalHarian.value = false;

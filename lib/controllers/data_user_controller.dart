@@ -1,8 +1,10 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
+import '../helpers/connectivity.dart';
 import '../models/get_all_user_model.dart';
 import '../repository/data_user_repo.dart';
 import '../utils/popups/dialogs.dart';
@@ -16,6 +18,7 @@ class DataUserController extends GetxController {
   final isDataUserLoading = Rx<bool>(false);
   final hidePassword = true.obs;
   final dataUserRepo = Get.put(DataUserRepository());
+  final isConnected = Rx<bool>(true);
 
   // textEditingController
   final usernameController = TextEditingController();
@@ -34,6 +37,24 @@ class DataUserController extends GetxController {
 
   @override
   void onInit() {
+    // Listener untuk memantau perubahan koneksi
+    NetworkManager.instance.connectionStream
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // Jika koneksi hilang, tampilkan pesan
+        if (isConnected.value) {
+          isConnected.value = false;
+          return;
+        }
+      } else {
+        // Jika koneksi kembali, perbarui status koneksi
+        if (!isConnected.value) {
+          isConnected.value = true;
+          fetchUserData(); // Otomatis fetch data ketika koneksi kembali
+        }
+      }
+    });
+
     fetchUserData();
     super.onInit();
   }

@@ -1,16 +1,20 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/connectivity.dart';
 import '../../models/tampil seluruh data/do_tambah_all.dart';
 import '../../models/user_model.dart';
 import '../../repository/tampil seluruh data/tambah_all_repo.dart';
 import '../../utils/constant/storage_util.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/full_screen_loader.dart';
+import '../../utils/popups/snackbar.dart';
 
 class DataAllTambahController extends GetxController {
   final isLoadingGlobalHarian = Rx<bool>(false);
   RxList<DoTambahAllModel> doGlobalHarianModel = <DoTambahAllModel>[].obs;
   final dataGlobalHarianRepo = Get.put(TambahAllRepository());
+  final networkManager = Get.find<NetworkManager>();
   final storageUtil = StorageUtil();
 
   // roles users
@@ -18,6 +22,7 @@ class DataAllTambahController extends GetxController {
   int rolesHapus = 0;
 
   var pickDate = Rxn<DateTime>();
+  final isConnected = Rx<bool>(true);
 
   @override
   void onInit() {
@@ -26,6 +31,22 @@ class DataAllTambahController extends GetxController {
       rolesEdit = user.edit;
       rolesHapus = user.hapus;
     }
+    // Listener untuk memantau perubahan koneksi
+    networkManager.connectionStream.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // Jika koneksi hilang, tampilkan pesan
+        if (isConnected.value) {
+          isConnected.value = false;
+          return;
+        }
+      } else {
+        // Jika koneksi kembali, perbarui status koneksi
+        if (!isConnected.value) {
+          isConnected.value = true;
+          fetchDataDoGlobal();
+        }
+      }
+    });
     fetchDataDoGlobal();
     super.onInit();
   }
@@ -49,7 +70,7 @@ class DataAllTambahController extends GetxController {
         doGlobalHarianModel.assignAll(dataHarian);
       }
     } catch (e) {
-      print('Error fetching data do harian : $e');
+      //print('Error fetching data do harian : $e');
       doGlobalHarianModel.assignAll([]);
     } finally {
       isLoadingGlobalHarian.value = false;
@@ -72,6 +93,16 @@ class DataAllTambahController extends GetxController {
     int bjm,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
+
     await dataGlobalHarianRepo.editDOTambahContent(
         id, tgl, idPlant, tujuan, srd, mks, ptk, bjm);
     CustomFullScreenLoader.stopLoading();
@@ -84,6 +115,16 @@ class DataAllTambahController extends GetxController {
     int id,
   ) async {
     CustomDialogs.loadingIndicator();
+
+    final isConnected = await networkManager.isConnected();
+    if (!isConnected) {
+      CustomFullScreenLoader.stopLoading();
+      SnackbarLoader.errorSnackBar(
+          title: 'Tidak ada koneksi internet',
+          message: 'Silahkan coba lagi setelah koneksi tersedia');
+      return;
+    }
+
     await dataGlobalHarianRepo.deleteDOTambahContent(id);
 
     await fetchDataDoGlobal();

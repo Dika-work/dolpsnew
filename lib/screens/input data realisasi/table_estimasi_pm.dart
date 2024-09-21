@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/input data realisasi/estimasi_pengambilan_controller.dart';
+import '../../helpers/connectivity.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/snackbar.dart';
 import '../../utils/source/empty_data_source.dart';
 import '../../utils/source/input data realisasi/estimasi_source.dart';
 
@@ -13,7 +15,23 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    final networkConn = Get.find<NetworkManager>();
+
+    final RxBool isConnected = true.obs;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final connectionStatus = await networkConn.isConnected();
+      if (!connectionStatus) {
+        isConnected.value = false;
+        print("Internet Terputus");
+        SnackbarLoader.errorSnackBar(
+          title: 'Tidak Ada Koneksi Internet',
+          message: 'Silakan periksa koneksi internet anda dan coba lagi',
+        );
+        return; // Jika tidak ada koneksi, batalkan refresh
+      }
+
+      isConnected.value = true;
       controller.loadDataTableEstimasiPengambilan();
     });
     late Map<String, double> columnEstimasi = {
@@ -64,6 +82,9 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
+          if (!await networkConn.isConnected()) {
+            return;
+          }
           await controller.loadDataTableEstimasiPengambilan();
         },
         child: ListView(
@@ -74,7 +95,8 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
                   return const CustomCircularLoader();
                 } else {
                   final dataEstimasiSource = controller
-                          .estimasiPengambilanModel.isEmpty
+                              .estimasiPengambilanModel.isEmpty ||
+                          !isConnected.value
                       ? EmptyEstimasiSource()
                       : EstimasiSource(
                           estimasiModel: controller.estimasiPengambilanModel);

@@ -1,3 +1,4 @@
+import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -5,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/laporan honda/laporan_estimasi_controller.dart';
+import '../../helpers/connectivity.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/source/laporan honda/laporan_estimasi_source.dart';
 import '../../widgets/dropdown.dart';
@@ -40,6 +42,7 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
   LaporanEstimasiSource? source;
   LaporanEstimasiTentative? sourceTentative;
   final controller = Get.put(LaporanEstimasiController());
+  final networkConn = Get.find<NetworkManager>();
 
   @override
   void initState() {
@@ -52,6 +55,12 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
   }
 
   Future<void> _fetchDataAndRefreshSource() async {
+    if (!await networkConn.isConnected()) {
+      SnackbarLoader.errorSnackBar(
+        title: 'Koneksi Terputus',
+        message: 'Anda telah kehilangan koneksi internet.',
+      );
+    }
     String formattedMonth =
         (months.indexOf(selectedMonth) + 1).toString().padLeft(2, '0');
 

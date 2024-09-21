@@ -859,83 +859,83 @@ class CustomDrawer extends StatelessWidget {
                     ),
                   )
                 : const SizedBox.shrink(),
-            user.menu9 == 1
-                ? ExpandableContainer(
-                    icon: Iconsax.add,
-                    textTitle: 'Laporan YMH & Suzuki',
-                    content: ExpandableContainer(
-                      icon: Iconsax.record,
-                      textTitle: 'Yamaha & Suzuki',
-                      content: Column(
-                        children: [
-                          user.tipe == 'Pengurus Stuffing' ||
-                                  user.tipe == 'admin'
-                              ? ListTile(
-                                  leading: const Icon(
-                                    Iconsax.record,
-                                    color: AppColors.darkExpandableContent,
-                                  ),
-                                  title: Text(
-                                    'DO Harian',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: AppColors.light),
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          ExpandableContainer(
-                            icon: Iconsax.record,
-                            textTitle: 'DO Bulanan',
-                            content: Column(
-                              children: [
-                                ListTile(
-                                  leading: const Icon(
-                                    Iconsax.record,
-                                    color: AppColors.darkExpandableContent,
-                                  ),
-                                  title: Text(
-                                    'Global',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: AppColors.light),
-                                  ),
-                                ),
-                                ListTile(
-                                  leading: const Icon(
-                                    Iconsax.record,
-                                    color: AppColors.darkExpandableContent,
-                                  ),
-                                  title: Text(
-                                    'Daerah',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(color: AppColors.light),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          ListTile(
-                            leading: const Icon(
-                              Iconsax.record,
-                              color: AppColors.darkExpandableContent,
-                            ),
-                            title: Text(
-                              'DO Tahunan',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(color: AppColors.light),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : const SizedBox.shrink(),
+            // user.menu9 == 1
+            //     ? ExpandableContainer(
+            //         icon: Iconsax.add,
+            //         textTitle: 'Laporan YMH & Suzuki',
+            //         content: ExpandableContainer(
+            //           icon: Iconsax.record,
+            //           textTitle: 'Yamaha & Suzuki',
+            //           content: Column(
+            //             children: [
+            //               user.tipe == 'Pengurus Stuffing' ||
+            //                       user.tipe == 'admin'
+            //                   ? ListTile(
+            //                       leading: const Icon(
+            //                         Iconsax.record,
+            //                         color: AppColors.darkExpandableContent,
+            //                       ),
+            //                       title: Text(
+            //                         'DO Harian',
+            //                         style: Theme.of(context)
+            //                             .textTheme
+            //                             .titleSmall
+            //                             ?.copyWith(color: AppColors.light),
+            //                       ),
+            //                     )
+            //                   : const SizedBox.shrink(),
+            //               ExpandableContainer(
+            //                 icon: Iconsax.record,
+            //                 textTitle: 'DO Bulanan',
+            //                 content: Column(
+            //                   children: [
+            //                     ListTile(
+            //                       leading: const Icon(
+            //                         Iconsax.record,
+            //                         color: AppColors.darkExpandableContent,
+            //                       ),
+            //                       title: Text(
+            //                         'Global',
+            //                         style: Theme.of(context)
+            //                             .textTheme
+            //                             .titleSmall
+            //                             ?.copyWith(color: AppColors.light),
+            //                       ),
+            //                     ),
+            //                     ListTile(
+            //                       leading: const Icon(
+            //                         Iconsax.record,
+            //                         color: AppColors.darkExpandableContent,
+            //                       ),
+            //                       title: Text(
+            //                         'Daerah',
+            //                         style: Theme.of(context)
+            //                             .textTheme
+            //                             .titleSmall
+            //                             ?.copyWith(color: AppColors.light),
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               ListTile(
+            //                 leading: const Icon(
+            //                   Iconsax.record,
+            //                   color: AppColors.darkExpandableContent,
+            //                 ),
+            //                 title: Text(
+            //                   'DO Tahunan',
+            //                   style: Theme.of(context)
+            //                       .textTheme
+            //                       .titleSmall
+            //                       ?.copyWith(color: AppColors.light),
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       )
+            //     : const SizedBox.shrink(),
             user.menu10 == 1
                 ? ExpandableContainer(
                     icon: Iconsax.setting,

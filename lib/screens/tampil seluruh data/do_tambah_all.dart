@@ -33,7 +33,7 @@ class DoTambahAll extends GetView<DataAllTambahController> {
       if (controller.rolesHapus == 1) 'Hapus': double.nan,
     };
 
-    const int rowsPerPage = 7;
+    const int rowsPerPage = 8;
     int currentPage = 0;
 
     return Scaffold(
@@ -54,7 +54,8 @@ class DoTambahAll extends GetView<DataAllTambahController> {
             controller.doGlobalHarianModel.isEmpty) {
           return const CustomCircularLoader();
         } else {
-          final dataSource = controller.doGlobalHarianModel.isEmpty
+          final dataSource = controller.doGlobalHarianModel.isEmpty ||
+                  !controller.isConnected.value
               ? EmptyAllDataSource()
               : DataAllTambahSource(
                   allGlobal: controller.doGlobalHarianModel,
@@ -347,7 +348,8 @@ class DoTambahAll extends GetView<DataAllTambahController> {
                   )),
                   SfDataPager(
                     delegate: dataSource,
-                    pageCount: controller.doGlobalHarianModel.isEmpty
+                    pageCount: controller.doGlobalHarianModel.isEmpty ||
+                            !controller.isConnected.value
                         ? 1
                         : (controller.doGlobalHarianModel.length / rowsPerPage)
                             .ceilToDouble(),

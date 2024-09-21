@@ -5,8 +5,11 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../controllers/input data realisasi/do_mutasi_controller.dart';
 import '../../controllers/input data realisasi/edit_type_motor_controller.dart';
 import '../../controllers/input data realisasi/tambah_type_motor_mutasi_controller.dart';
+import '../../helpers/connectivity.dart';
 import '../../models/input data realisasi/do_realisasi_model.dart';
+import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
+import '../../utils/popups/snackbar.dart';
 import '../../utils/source/input data realisasi/do_mutasi_source.dart';
 import '../../utils/theme/app_colors.dart';
 import 'component/batal_jalan.dart';
@@ -25,8 +28,23 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
     final editTypeMotorController = Get.put(EditTypeMotorController());
     final tambahTypeMotorController =
         Get.put(TambahTypeMotorMutasiController());
+    final networkConn = Get.find<NetworkManager>();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    final RxBool isConnected = true.obs;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final connectionStatus = await networkConn.isConnected();
+      if (!connectionStatus) {
+        isConnected.value = false;
+        print("Internet Terputus");
+        SnackbarLoader.errorSnackBar(
+          title: 'Tidak Ada Koneksi Internet',
+          message: 'Silakan periksa koneksi internet anda dan coba lagi',
+        );
+        return; // Jika tidak ada koneksi, batalkan refresh
+      }
+
+      isConnected.value = true;
       controller.fetchMutasiContent();
     });
 
@@ -61,7 +79,12 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
       ),
       body: Obx(
         () {
-          if (controller.isLoadingMutasi.value &&
+          if (!isConnected.value) {
+            return const CustomAnimationLoaderWidget(
+                text:
+                    'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+                animation: 'assets/animations/404.json');
+          } else if (controller.isLoadingMutasi.value &&
               controller.doRealisasiModel.isEmpty) {
             return const CustomCircularLoader();
           } else {
