@@ -1,4 +1,5 @@
 import 'package:doplsnew/utils/popups/dialogs.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../models/input data realisasi/do_realisasi_model.dart';
@@ -13,8 +14,15 @@ import 'do_mutasi_controller.dart';
 class DoRegulerController extends GetxController {
   final isLoadingReguler = Rx<bool>(false);
   final isLoadingRegulerAll = Rx<bool>(false);
+  final isLoadingMore = Rx<bool>(false);
   RxList<DoRealisasiModel> doRealisasiModel = <DoRealisasiModel>[].obs;
   RxList<DoRealisasiModel> doRealisasiModelAll = <DoRealisasiModel>[].obs;
+  RxList<DoRealisasiModel> displayedData = <DoRealisasiModel>[].obs;
+
+  // lazy loading
+  final ScrollController scrollController = ScrollController();
+  int initialDataCount = 20;
+  int loadMoreCount = 5;
 
   final doRegulerRepo = Get.put(DoRegulerRepository());
   final kirimKendaraanRepo = Get.put(KirimKendaraanRepository());
@@ -79,30 +87,39 @@ class DoRegulerController extends GetxController {
     try {
       isLoadingRegulerAll.value = true;
 
+      // Fetch semua data dari API
       final getRegulerDo = await doRegulerRepo.fetchAllRegulerData();
 
       if (getRegulerDo.isNotEmpty) {
+        // Filter data berdasarkan range tanggal
         final filteredData = getRegulerDo.where((item) {
           final itemDate = DateTime.parse(item.tgl);
 
-          // Check if date falls within the range
           if (startDate != null && endDate != null) {
+            // Jika ada filter range tanggal, lakukan filterisasi
             return itemDate.isAfter(startDate) && itemDate.isBefore(endDate);
           }
           return true;
         }).toList();
 
-        if (!isAdmin) {
-          doRealisasiModelAll.assignAll(
-              filteredData.where((item) => item.plant == rolePlant).toList());
-        } else {
-          doRealisasiModelAll.assignAll(filteredData);
-        }
+        // Filter data berdasarkan role
+        final roleFilteredData = !isAdmin
+            ? filteredData.where((item) => item.plant == rolePlant).toList()
+            : filteredData;
+
+        // Simpan data hasil filterisasi di doRealisasiModelAll
+        doRealisasiModelAll.assignAll(roleFilteredData);
+
+        // Tampilkan hanya sebagian data di UI untuk lazy loading
+        displayedData
+            .assignAll(doRealisasiModelAll.take(initialDataCount).toList());
+        print(
+            'Initial data loaded with filtering: ${displayedData.length} items');
       } else {
         doRealisasiModelAll.assignAll([]);
       }
     } catch (e) {
-      print('Error while fetching data do reguler zzzz: $e');
+      print('Error while fetching data do reguler: $e');
       throw Exception('Gagal mengambil data do reguler');
     } finally {
       isLoadingRegulerAll.value = false;
@@ -113,6 +130,37 @@ class DoRegulerController extends GetxController {
     startPickDate.value = null; // Clear the selected date
     endPickDate.value = null; // Clear the selected date
     fetchRegulerAllContent(); // Fetch all data without filtering
+  }
+
+  // lazy loading func
+  void scrollListener() {
+    print(
+        "Scroll Position: ${scrollController.position.pixels}, Max Scroll: ${scrollController.position.maxScrollExtent}");
+    if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent &&
+        !isLoadingRegulerAll.value &&
+        !isLoadingMore.value) {
+      // Load more data when reaching the bottom
+      loadMoreData();
+    }
+  }
+
+  void loadMoreData() {
+    // Load additional data if available
+    if (displayedData.length < doRealisasiModelAll.length &&
+        !isLoadingMore.value) {
+      print("Loading more data...");
+      isLoadingMore.value = true;
+      final nextData = doRealisasiModelAll
+          .skip(displayedData.length)
+          .take(loadMoreCount)
+          .toList();
+      displayedData.addAll(nextData);
+
+      print(
+          'Additional data loaded: ${displayedData.length} items'); // Cetak jumlah data setelah load more
+      isLoadingMore.value = false;
+    }
   }
 
   Future<void> editRealisasiReguler(

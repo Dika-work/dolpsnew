@@ -15,7 +15,7 @@ class DoRegulerAllSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onEdit;
   final void Function(DoRealisasiModel)? onType;
   final List<DoRealisasiModel> doRealisasiModelAll;
-  int startIndex = 0;
+  // int startIndex = 0;
 
   DoRegulerAllSource({
     required this.onLihat,
@@ -24,9 +24,11 @@ class DoRegulerAllSource extends DataGridSource {
     required this.onEdit,
     required this.onType,
     required this.doRealisasiModelAll,
-    int startIndex = 0,
+    // int startIndex = 0,
   }) {
-    _updateDataPager(doRealisasiModelAll, startIndex, controller.rolePlant,
+    _updateDataPager(
+        doRealisasiModelAll, //startIndex,
+        controller.rolePlant,
         controller.isAdmin);
   }
 
@@ -42,8 +44,11 @@ class DoRegulerAllSource extends DataGridSource {
     int rowIndex = _doRegulerData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
     var request = doRealisasiModelAll.isNotEmpty &&
-            startIndex + rowIndex < doRealisasiModelAll.length
-        ? doRealisasiModelAll[startIndex + rowIndex]
+            // startIndex +
+            rowIndex < doRealisasiModelAll.length
+        ? doRealisasiModelAll[
+            //startIndex +
+            rowIndex]
         : null;
 
     List<Widget> cells = [
@@ -310,16 +315,16 @@ class DoRegulerAllSource extends DataGridSource {
 
   void _updateDataPager(
     List<DoRealisasiModel> doRealisasiModelAll,
-    int startIndex,
+    // int startIndex,
     String userPlant,
     bool isAdmin,
   ) {
-    this.startIndex = startIndex;
+    // this.startIndex = startIndex;
 
     // Perbaiki perhitungan index berdasarkan halaman saat ini
-    int currentPageStartIndex =
-        startIndex * 10; // Misalnya, setiap halaman memiliki 10 item
-    index = currentPageStartIndex;
+    // int currentPageStartIndex =
+    //     startIndex * 10; // Misalnya, setiap halaman memiliki 10 item
+    // index = currentPageStartIndex;
 
     final List<int> validPlants = [
       1100,
@@ -341,8 +346,8 @@ class DoRegulerAllSource extends DataGridSource {
       _doRegulerData = doRealisasiModelAll
           .where(
               (item) => filteredPlants.contains(int.tryParse(item.plant) ?? 0))
-          .skip(currentPageStartIndex)
-          .take(10)
+          // .skip(currentPageStartIndex)
+          // .take(10)
           .map<DataGridRow>(
         (data) {
           index++;
@@ -391,8 +396,10 @@ class DoRegulerAllSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    _updateDataPager(controller.doRealisasiModelAll, newPageIndex,
-        controller.rolePlant, controller.isAdmin);
+    _updateDataPager(
+        controller.doRealisasiModelAll, //newPageIndex,
+        controller.rolePlant,
+        controller.isAdmin);
     notifyListeners();
     return true;
   }
