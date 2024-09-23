@@ -168,6 +168,7 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
               child: samarindaSource != null
                   ? SfDataGrid(
                       source: samarindaSource!,
+                      frozenColumnsCount: 1,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,

@@ -207,6 +207,7 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
               child: source != null
                   ? SfDataGrid(
                       source: source!,
+                      frozenColumnsCount: 1,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,
@@ -324,6 +325,7 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
               child: sourceTentative != null
                   ? SfDataGrid(
                       source: sourceTentative!,
+                      frozenColumnsCount: 1,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,

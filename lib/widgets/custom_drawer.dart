@@ -819,6 +819,8 @@ class CustomDrawer extends StatelessWidget {
                                           ],
                                         )),
                                     ListTile(
+                                      onTap: () =>
+                                          Get.toNamed('/laporan-dealer'),
                                       leading: const Icon(
                                         Iconsax.record,
                                         color: AppColors.darkExpandableContent,

@@ -137,6 +137,7 @@ class EstimasiPM extends GetView<EstimasiPengambilanController> {
                 Expanded(
                   child: SfDataGrid(
                     source: dataSource,
+                    frozenColumnsCount: 2,
                     columnWidthMode: ColumnWidthMode.auto,
                     gridLinesVisibility: GridLinesVisibility.both,
                     headerGridLinesVisibility: GridLinesVisibility.both,

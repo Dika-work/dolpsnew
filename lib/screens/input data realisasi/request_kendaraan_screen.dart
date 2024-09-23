@@ -349,6 +349,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                   Expanded(
                       child: SfDataGrid(
                     source: dataSource,
+                    frozenColumnsCount: 2,
                     rowHeight: 65,
                     columnWidthMode: ColumnWidthMode.auto,
                     gridLinesVisibility: GridLinesVisibility.both,

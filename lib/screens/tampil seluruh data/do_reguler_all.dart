@@ -322,6 +322,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                               },
                               child: SfDataGrid(
                                   source: dataSource,
+                                  frozenColumnsCount: 2,
                                   columnWidthMode: ColumnWidthMode.auto,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:

@@ -320,6 +320,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                               },
                               child: SfDataGrid(
                                   source: dataSource,
+                                  frozenColumnsCount: 2,
                                   columnWidthMode: ColumnWidthMode.auto,
                                   gridLinesVisibility: GridLinesVisibility.both,
                                   headerGridLinesVisibility:
@@ -377,25 +378,6 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                                                           FontWeight.bold),
                                             ))),
                                     GridColumn(
-                                        width: columnWidths['Tujuan']!,
-                                        columnName: 'Tujuan',
-                                        label: Container(
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: Colors.grey),
-                                              color: Colors.lightBlue.shade100,
-                                            ),
-                                            child: Text(
-                                              'Tujuan',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ))),
-                                    GridColumn(
                                         width: columnWidths['Plant']!,
                                         columnName: 'Plant',
                                         label: Container(
@@ -407,6 +389,25 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                                             ),
                                             child: Text(
                                               'Plant',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ))),
+                                    GridColumn(
+                                        width: columnWidths['Tujuan']!,
+                                        columnName: 'Tujuan',
+                                        label: Container(
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey),
+                                              color: Colors.lightBlue.shade100,
+                                            ),
+                                            child: Text(
+                                              'Tujuan',
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium

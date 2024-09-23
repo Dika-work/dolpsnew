@@ -280,8 +280,8 @@ class EstimasiSource extends DataGridSource {
 
 class EstimasiYamahaSuzuki extends DataGridSource {
   final List<String> plantName = [
-    'DC (Pondok Ungu)',
-    'TB (Tambun Bekasi)',
+    'DC',
+    'TB',
   ];
 
   final List<int> validPlants = [

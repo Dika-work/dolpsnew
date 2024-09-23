@@ -52,7 +52,7 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
 
     late Map<String, double> columnEstimasiYamaha = {
       'No': double.nan,
-      'Plant': 180,
+      'Plant': 80,
       'Tujuan': 120,
       'Jumlah': double.nan,
       'Jumlah_M16': double.nan,
@@ -355,6 +355,7 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
                     height: tableHeight,
                     child: SfDataGrid(
                       source: dataEstimasiSource,
+                      frozenColumnsCount: 2,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.horizontal,
@@ -672,6 +673,7 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
                     height: tableHeight,
                     child: SfDataGrid(
                       source: dataEstimasiSource,
+                      frozenColumnsCount: 2,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.horizontal,

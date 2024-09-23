@@ -350,6 +350,7 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
                 },
                 child: SfDataGrid(
                   source: dataSource,
+                  frozenColumnsCount: 2,
                   columnWidthMode: ColumnWidthMode.auto,
                   gridLinesVisibility: GridLinesVisibility.both,
                   headerGridLinesVisibility: GridLinesVisibility.both,

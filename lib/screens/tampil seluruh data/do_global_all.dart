@@ -344,6 +344,7 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
                 },
                 child: SfDataGrid(
                   source: dataSource,
+                  frozenColumnsCount: 2,
                   columnWidthMode: ColumnWidthMode.auto,
                   gridLinesVisibility: GridLinesVisibility.both,
                   headerGridLinesVisibility: GridLinesVisibility.both,

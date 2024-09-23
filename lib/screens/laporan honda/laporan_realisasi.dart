@@ -214,6 +214,7 @@ class _LaporanRealisasiState extends State<LaporanRealisasi> {
                         child: source != null
                             ? SfDataGrid(
                                 source: source!,
+                                frozenColumnsCount: 1,
                                 columnWidthMode:
                                     ColumnWidthMode.fitByColumnName,
                                 gridLinesVisibility: GridLinesVisibility.both,
@@ -321,6 +322,7 @@ class _LaporanRealisasiState extends State<LaporanRealisasi> {
                         child: sourceUnfielld != null
                             ? SfDataGrid(
                                 source: sourceUnfielld!,
+                                frozenColumnsCount: 1,
                                 columnWidthMode:
                                     ColumnWidthMode.fitByColumnName,
                                 gridLinesVisibility: GridLinesVisibility.both,

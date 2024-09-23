@@ -254,8 +254,8 @@ class DoMutasiSource extends DataGridSource {
       (index) {
         return const DataGridRow(cells: [
           DataGridCell<String>(columnName: 'No', value: '-'),
-          DataGridCell<String>(columnName: 'Tujuan', value: '-'),
           DataGridCell<String>(columnName: 'Plant', value: '-'),
+          DataGridCell<String>(columnName: 'Tujuan', value: '-'),
           DataGridCell<String>(columnName: 'Type', value: '-'),
           DataGridCell<String>(columnName: 'Tgl', value: '-'),
           DataGridCell<String>(columnName: 'Supir(Panggilan)', value: '-'),
@@ -308,8 +308,8 @@ class DoMutasiSource extends DataGridSource {
               CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
           List<DataGridCell> cells = [
             DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
             DataGridCell<String>(columnName: 'Plant', value: data.plant),
+            DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
             DataGridCell<String>(
                 columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
             DataGridCell<String>(columnName: 'Tgl', value: tglParsed),

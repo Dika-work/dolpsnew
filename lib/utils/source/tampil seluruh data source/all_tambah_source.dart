@@ -93,9 +93,15 @@ class DataAllTambahSource extends DataGridSource {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
+      String plantValue = data.plant;
+      if (plantValue.contains('DC')) {
+        plantValue = 'DC';
+      } else if (plantValue.contains('TB')) {
+        plantValue = 'TB';
+      }
       return DataGridRow(cells: [
         DataGridCell<int>(columnName: 'No', value: index),
-        DataGridCell<String>(columnName: 'Plant', value: data.plant),
+        DataGridCell<String>(columnName: 'Plant', value: plantValue),
         DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
         DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
         DataGridCell<String>(
