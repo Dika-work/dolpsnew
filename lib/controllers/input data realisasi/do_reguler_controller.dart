@@ -21,7 +21,7 @@ class DoRegulerController extends GetxController {
 
   // lazy loading
   final ScrollController scrollController = ScrollController();
-  int initialDataCount = 20;
+  int initialDataCount = 10;
   int loadMoreCount = 5;
 
   final doRegulerRepo = Get.put(DoRegulerRepository());
@@ -101,6 +101,11 @@ class DoRegulerController extends GetxController {
           }
           return true;
         }).toList();
+
+        print("Filtered data count: ${filteredData.length}");
+
+        // Check rolePlant and isPengurusPabrik
+        print("Role Plant: $rolePlant, Is Pengurus Pabrik: $isAdmin");
 
         // Filter data berdasarkan role
         final roleFilteredData = !isAdmin

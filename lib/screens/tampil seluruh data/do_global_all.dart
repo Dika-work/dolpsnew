@@ -33,9 +33,6 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
       if (controller.rolesHapus == 1) 'Hapus': double.nan,
     };
 
-    const int rowsPerPage = 8;
-    int currentPage = 0;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -56,8 +53,7 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
                   !controller.isConnected.value
               ? EmptyAllDataSource()
               : DataAllGlobalSource(
-                  allGlobal: controller.doAllGlobalModel,
-                  startIndex: currentPage * rowsPerPage,
+                  allGlobal: controller.displayedData,
                   onEdited: (DoGlobalAllModel model) {
                     // Implementasi edit data di sini
                     showDialog(
@@ -262,99 +258,107 @@ class DoGlobalAll extends GetView<DataAllGlobalController> {
             ));
           }
 
-          return LayoutBuilder(
-            builder: (context, constraint) {
-              return Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(CustomSize.sm),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Obx(() => TextFormField(
-                                keyboardType: TextInputType.none,
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      showDatePicker(
-                                        context: context,
-                                        locale: const Locale("id", "ID"),
-                                        initialDate:
-                                            controller.pickDate.value ??
-                                                DateTime.now(),
-                                        firstDate: DateTime(1850),
-                                        lastDate: DateTime(2040),
-                                      ).then((newSelectedDate) {
-                                        if (newSelectedDate != null) {
-                                          controller.pickDate.value =
-                                              newSelectedDate;
-                                          print(
-                                              'ini tanggal yang di pilih ${controller.pickDate.value}');
-                                        }
-                                      });
-                                    },
-                                    icon: const Icon(Iconsax.calendar),
-                                  ),
-                                  // Reactive hintText, updates when pickDate is set
-                                  hintText: controller.pickDate.value != null
-                                      ? CustomHelperFunctions.getFormattedDate(
-                                          controller.pickDate.value!)
-                                      : 'Tanggal',
-                                ),
-                              )),
-                        ),
-                        const SizedBox(width: CustomSize.sm),
-                        Expanded(
-                          flex: 1,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              controller.pickDate.value != null
-                                  ? controller.fetchAllGlobalData(
-                                      pickDate: controller.pickDate.value)
-                                  : SnackbarLoader.errorSnackBar(
-                                      title: 'Oops😒',
-                                      message:
-                                          'Harap pilih tanggal terlebih dahulu');
-                            },
-                            child: const Text('Apply Filter'),
-                          ),
-                        ),
-                        if (controller.pickDate.value != null)
-                          const SizedBox(width: CustomSize.sm),
-                        if (controller.pickDate.value != null)
-                          Expanded(
-                            flex: 1,
-                            child: ElevatedButton(
-                              onPressed: () => controller.resetFilterDate(),
-                              child: const Text('Reset'),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(CustomSize.sm),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Obx(() => TextFormField(
+                            keyboardType: TextInputType.none,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                onPressed: () {
+                                  showDatePicker(
+                                    context: context,
+                                    locale: const Locale("id", "ID"),
+                                    initialDate: controller.pickDate.value ??
+                                        DateTime.now(),
+                                    firstDate: DateTime(1850),
+                                    lastDate: DateTime(2040),
+                                  ).then((newSelectedDate) {
+                                    if (newSelectedDate != null) {
+                                      controller.pickDate.value =
+                                          newSelectedDate;
+                                      print(
+                                          'ini tanggal yang di pilih ${controller.pickDate.value}');
+                                    }
+                                  });
+                                },
+                                icon: const Icon(Iconsax.calendar),
+                              ),
+                              // Reactive hintText, updates when pickDate is set
+                              hintText: controller.pickDate.value != null
+                                  ? CustomHelperFunctions.getFormattedDate(
+                                      controller.pickDate.value!)
+                                  : 'Tanggal',
                             ),
-                          ),
-                      ],
+                          )),
                     ),
-                  ),
-                  Expanded(
-                      child: SfDataGrid(
-                    source: dataSource,
-                    columnWidthMode: ColumnWidthMode.auto,
-                    gridLinesVisibility: GridLinesVisibility.both,
-                    headerGridLinesVisibility: GridLinesVisibility.both,
-                    rowHeight: 65,
-                    columns: column,
-                  )),
-                  SfDataPager(
-                    delegate: dataSource,
-                    pageCount: controller.doAllGlobalModel.isEmpty ||
-                            !controller.isConnected.value
-                        ? 1
-                        : (controller.doAllGlobalModel.length / rowsPerPage)
-                            .ceilToDouble(),
-                    direction: Axis.horizontal,
-                  ),
-                ],
-              );
-            },
+                    const SizedBox(width: CustomSize.sm),
+                    Expanded(
+                      flex: 1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          controller.pickDate.value != null
+                              ? controller.fetchAllGlobalData(
+                                  pickDate: controller.pickDate.value)
+                              : SnackbarLoader.errorSnackBar(
+                                  title: 'Oops😒',
+                                  message:
+                                      'Harap pilih tanggal terlebih dahulu');
+                        },
+                        child: const Text('Apply Filter'),
+                      ),
+                    ),
+                    if (controller.pickDate.value != null)
+                      const SizedBox(width: CustomSize.sm),
+                    if (controller.pickDate.value != null)
+                      Expanded(
+                        flex: 1,
+                        child: ElevatedButton(
+                          onPressed: () => controller.resetFilterDate(),
+                          child: const Text('Reset'),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: RefreshIndicator(
+                onRefresh: () async {
+                  if (!await controller.networkManager.isConnected()) {
+                    controller.isConnected.value = false;
+                    return;
+                  }
+                  controller.isConnected.value = true;
+                  if (!controller.hasFetchedData.value) {
+                    await controller
+                        .fetchAllGlobalData(); // Hanya panggil sekali
+                    controller.hasFetchedData.value =
+                        true; // Update flag setelah fetching
+                  }
+                },
+                child: SfDataGrid(
+                  source: dataSource,
+                  columnWidthMode: ColumnWidthMode.auto,
+                  gridLinesVisibility: GridLinesVisibility.both,
+                  headerGridLinesVisibility: GridLinesVisibility.both,
+                  rowHeight: 65,
+                  verticalScrollController: controller.scrollController,
+                  columns: column,
+                ),
+              )),
+              if (controller
+                  .isLoadingMore.value) // Loader di bawah ketika lazy loading
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(child: CircularProgressIndicator()),
+                ),
+            ],
           );
         }
       }),

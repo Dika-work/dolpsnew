@@ -12,15 +12,13 @@ class DataAllGlobalSource extends DataGridSource {
   final void Function(DoGlobalAllModel)? onEdited;
   final void Function(DoGlobalAllModel)? onDeleted;
   final List<DoGlobalAllModel> allGlobal;
-  int startIndex = 0;
 
   DataAllGlobalSource({
     required this.onEdited,
     required this.onDeleted,
     required this.allGlobal,
-    int startIndex = 0,
   }) {
-    _updateDataPager(allGlobal, startIndex);
+    _updateDataPager(allGlobal);
   }
 
   List<DataGridRow> _allGlobalData = [];
@@ -33,7 +31,7 @@ class DataAllGlobalSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _allGlobalData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-    var request = allGlobal[startIndex + rowIndex];
+    var request = allGlobal[rowIndex];
     final controller = Get.find<DataAllGlobalController>();
 
     List<Widget> cells = [
@@ -93,12 +91,8 @@ class DataAllGlobalSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoGlobalAllModel> allGlobal, int startIndex) {
-    this.startIndex = startIndex;
-    index = startIndex;
-
-    _allGlobalData =
-        allGlobal.skip(startIndex).take(8).map<DataGridRow>((data) {
+  void _updateDataPager(List<DoGlobalAllModel> allGlobal) {
+    _allGlobalData = allGlobal.map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -125,8 +119,7 @@ class DataAllGlobalSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 8;
-    _updateDataPager(allGlobal, startIndex);
+    _updateDataPager(allGlobal);
     notifyListeners();
     return true;
   }

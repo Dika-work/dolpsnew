@@ -27,6 +27,7 @@ class DoMutasiRepository {
         '${storageUtil.baseURL}/DO/api/api_realisasi.php?action=getDataMutasiAll'));
     if (response.statusCode == 200) {
       Iterable list = json.decode(response.body);
+      print('ini response all mutasi : ${list.toList()}');
       return list.map((e) => DoRealisasiModel.fromJson(e)).toList();
     } else {
       throw Exception('Gagal untuk mengambil data do reguler');

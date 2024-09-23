@@ -12,15 +12,13 @@ class DataAllKurangSource extends DataGridSource {
   final void Function(DoKurangAllModel)? onEdited;
   final void Function(DoKurangAllModel)? onDeleted;
   final List<DoKurangAllModel> allGlobal;
-  int startIndex = 0;
 
   DataAllKurangSource({
     required this.onEdited,
     required this.onDeleted,
     required this.allGlobal,
-    int startIndex = 0,
   }) {
-    _updateDataPager(allGlobal, startIndex);
+    _updateDataPager(allGlobal);
   }
 
   List<DataGridRow> _allGlobalData = [];
@@ -57,7 +55,7 @@ class DataAllKurangSource extends DataGridSource {
           IconButton(
               onPressed: () {
                 if (onEdited != null && allGlobal.isNotEmpty) {
-                  onEdited!(allGlobal[startIndex + rowIndex]);
+                  onEdited!(allGlobal[rowIndex]);
                 } else {
                   return;
                 }
@@ -75,7 +73,7 @@ class DataAllKurangSource extends DataGridSource {
           IconButton(
               onPressed: () {
                 if (onDeleted != null && allGlobal.isNotEmpty) {
-                  onDeleted!(allGlobal[startIndex + rowIndex]);
+                  onDeleted!(allGlobal[rowIndex]);
                 } else {
                   return;
                 }
@@ -91,11 +89,8 @@ class DataAllKurangSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoKurangAllModel> allGlobal, int startIndex) {
-    this.startIndex = startIndex;
-    index = startIndex;
-    _allGlobalData =
-        allGlobal.skip(startIndex).take(8).map<DataGridRow>((data) {
+  void _updateDataPager(List<DoKurangAllModel> allGlobal) {
+    _allGlobalData = allGlobal.map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -122,8 +117,7 @@ class DataAllKurangSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 8;
-    _updateDataPager(allGlobal, startIndex);
+    _updateDataPager(allGlobal);
     notifyListeners();
     return true;
   }

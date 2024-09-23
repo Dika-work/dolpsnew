@@ -15,7 +15,7 @@ class DoMutasiAllSource extends DataGridSource {
   final void Function(DoRealisasiModel)? onEdit;
   final void Function(DoRealisasiModel)? onType;
   final List<DoRealisasiModel> doRealisasiModelAll;
-  int startIndex = 0;
+  // int startIndex = 0;
 
   DoMutasiAllSource({
     required this.onLihat,
@@ -24,9 +24,12 @@ class DoMutasiAllSource extends DataGridSource {
     required this.onEdit,
     required this.onType,
     required this.doRealisasiModelAll,
-    int startIndex = 0,
+    // int startIndex = 0,
   }) {
-    _updateDataPager(doRealisasiModelAll, startIndex);
+    _updateDataPager(
+      doRealisasiModelAll,
+      //  startIndex
+    );
   }
 
   List<DataGridRow> _doMutasiData = [];
@@ -41,8 +44,11 @@ class DoMutasiAllSource extends DataGridSource {
     int rowIndex = _doMutasiData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
     var request = doRealisasiModelAll.isNotEmpty &&
-            startIndex + rowIndex < doRealisasiModelAll.length
-        ? doRealisasiModelAll[startIndex + rowIndex]
+            // startIndex +
+            rowIndex < doRealisasiModelAll.length
+        ? doRealisasiModelAll[
+            // startIndex +
+            rowIndex]
         : null;
 
     List<Widget> cells = [
@@ -245,53 +251,45 @@ class DoMutasiAllSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(
-      List<DoRealisasiModel> doRealisasiModelAll, int startIndex) {
-    this.startIndex = startIndex;
-
-    // Perbaiki perhitungan index berdasarkan halaman saat ini
-    int currentPageStartIndex =
-        startIndex * 10; // Misalnya, setiap halaman memiliki 10 item
-    index = currentPageStartIndex;
-
+  void _updateDataPager(List<DoRealisasiModel> doRealisasiModelAll) {
+    print("doRealisasiModelAll length: ${doRealisasiModelAll.length}");
+    print("_doMutasiData length: ${_doMutasiData.length}");
     if (doRealisasiModelAll.isEmpty) {
       _doMutasiData = _generateEmptyRows(1);
     } else {
-      _doMutasiData = doRealisasiModelAll
-          .skip(currentPageStartIndex)
-          .take(10)
-          .map<DataGridRow>(
-        (data) {
-          index++;
-          final tglParsed =
-              CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
-          return DataGridRow(cells: [
-            DataGridCell<int>(columnName: 'No', value: index),
-            DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
-            DataGridCell<String>(columnName: 'Plant', value: data.plant),
-            DataGridCell<String>(
-                columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
-            DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
-            DataGridCell<String>(
-                columnName: 'Supir(Panggilan)',
-                value: data.namaPanggilan.isEmpty
-                    ? data.supir
-                    : '${data.supir}\n(${data.namaPanggilan})'),
-            DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
-            DataGridCell<String>(
-                columnName: 'Jenis',
-                value: '${data.inisialDepan}${data.inisialBelakang}'),
-            DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
-          ]);
-        },
-      ).toList();
+      _doMutasiData = doRealisasiModelAll.map<DataGridRow>((data) {
+        index++;
+        final tglParsed =
+            CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
+        return DataGridRow(cells: [
+          DataGridCell<int>(columnName: 'No', value: index),
+          DataGridCell<String>(columnName: 'Tujuan', value: data.tujuan),
+          DataGridCell<String>(columnName: 'Plant', value: data.plant),
+          DataGridCell<String>(
+              columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
+          DataGridCell<String>(columnName: 'Tgl', value: tglParsed),
+          DataGridCell<String>(
+              columnName: 'Supir(Panggilan)',
+              value: data.namaPanggilan.isEmpty
+                  ? data.supir
+                  : '${data.supir}\n(${data.namaPanggilan})'),
+          DataGridCell<String>(columnName: 'Kendaraan', value: data.noPolisi),
+          DataGridCell<String>(
+              columnName: 'Jenis',
+              value: '${data.inisialDepan}${data.inisialBelakang}'),
+          DataGridCell<int>(columnName: 'Jumlah', value: data.jumlahUnit),
+        ]);
+      }).toList();
       notifyListeners();
     }
   }
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    _updateDataPager(controller.doRealisasiModelAll, newPageIndex);
+    _updateDataPager(
+      controller.doRealisasiModelAll,
+      // newPageIndex
+    );
     notifyListeners();
     return true;
   }

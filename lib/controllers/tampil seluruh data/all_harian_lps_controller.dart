@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/connectivity.dart';
@@ -12,11 +13,19 @@ import '../../utils/popups/snackbar.dart';
 
 class DataAllHarianLpsController extends GetxController {
   final isLoadingGlobalHarian = Rx<bool>(false);
+  final isLoadingMore = Rx<bool>(false); // For lazy loading
   RxList<DoHarianAllLpsModel> doGlobalHarianModel = <DoHarianAllLpsModel>[].obs;
+  RxList<DoHarianAllLpsModel> displayedData = <DoHarianAllLpsModel>[].obs;
   final dataGlobalHarianRepo = Get.put(GlobalHarianAllLpsRepository());
   final storageUtil = StorageUtil();
 
+  // Lazy loading parameters
+  final ScrollController scrollController = ScrollController();
+  int initialDataCount = 10;
+  int loadMoreCount = 5;
+
   final isConnected = Rx<bool>(true);
+  final RxBool hasFetchedData = false.obs;
   final networkManager = Get.find<NetworkManager>();
 
   // roles users
@@ -43,14 +52,18 @@ class DataAllHarianLpsController extends GetxController {
         }
       } else {
         // Jika koneksi kembali, perbarui status koneksi
-        if (!isConnected.value) {
-          isConnected.value = true;
-          fetchDataDoGlobal(); // Otomatis fetch data ketika koneksi kembali
+        isConnected.value = true;
+        if (!hasFetchedData.value) {
+          fetchDataDoGlobal(); // Automatically fetch data when connection is restored
+          scrollController.addListener(scrollListener);
+          print('data harian all :${displayedData.length}');
+          hasFetchedData.value = true;
         }
       }
     });
 
     fetchDataDoGlobal();
+    scrollController.addListener(scrollListener);
     super.onInit();
   }
 
@@ -60,19 +73,26 @@ class DataAllHarianLpsController extends GetxController {
       isConnected.value = true;
       final dataHarian = await dataGlobalHarianRepo.fetchGlobalHarianContent();
 
-      if (pickDate != null) {
-        doGlobalHarianModel.assignAll(dataHarian.where(
-          (data) {
-            final dataDate = DateTime.parse(data.tgl);
+      List<DoHarianAllLpsModel> filteredData;
 
-            return dataDate.year == pickDate.year &&
-                dataDate.month == pickDate.month &&
-                dataDate.day == pickDate.day;
-          },
-        ).toList());
+      if (pickDate != null) {
+        filteredData = dataHarian.where((data) {
+          final dataDate = DateTime.parse(data.tgl);
+          return dataDate.year == pickDate.year &&
+              dataDate.month == pickDate.month &&
+              dataDate.day == pickDate.day;
+        }).toList();
       } else {
-        doGlobalHarianModel.assignAll(dataHarian);
+        filteredData = dataHarian;
       }
+
+      doGlobalHarianModel.assignAll(filteredData);
+
+      // Lazy loading: Display initial data
+      displayedData.assignAll(
+        doGlobalHarianModel.take(initialDataCount).toList(),
+      );
+      print('Initial data loaded: ${displayedData.length} items');
     } catch (e) {
       //print('Error fetching data do harian : $e');
       doGlobalHarianModel.assignAll([]);
@@ -84,6 +104,33 @@ class DataAllHarianLpsController extends GetxController {
   void resetFilterDate() {
     pickDate.value = null; // Clear the selected date
     fetchDataDoGlobal(); // Fetch all data without filtering
+  }
+
+  // Scroll listener for lazy loading
+  void scrollListener() {
+    if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent &&
+        !isLoadingMore.value &&
+        displayedData.length < doGlobalHarianModel.length) {
+      loadMoreData();
+    }
+  }
+
+  // Load more data as part of lazy loading
+  void loadMoreData() {
+    if (displayedData.length < doGlobalHarianModel.length) {
+      print("Loading more data...");
+      isLoadingMore.value = true;
+
+      final nextData = doGlobalHarianModel
+          .skip(displayedData.length)
+          .take(loadMoreCount)
+          .toList();
+      displayedData.addAll(nextData);
+      print('Additional data loaded: ${displayedData.length} items');
+
+      isLoadingMore.value = false;
+    }
   }
 
   Future<void> editDOHarian(

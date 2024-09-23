@@ -12,15 +12,13 @@ class DataAllHarianLpsSource extends DataGridSource {
   final void Function(DoHarianAllLpsModel)? onEdited;
   final void Function(DoHarianAllLpsModel)? onDeleted;
   final List<DoHarianAllLpsModel> allGlobal;
-  int startIndex = 0;
 
   DataAllHarianLpsSource({
     required this.onEdited,
     required this.onDeleted,
     required this.allGlobal,
-    int startIndex = 0,
   }) {
-    _updateDataPager(allGlobal, startIndex);
+    _updateDataPager(allGlobal);
   }
 
   List<DataGridRow> _allGlobalData = [];
@@ -58,7 +56,7 @@ class DataAllHarianLpsSource extends DataGridSource {
             IconButton(
                 onPressed: () {
                   if (onEdited != null && allGlobal.isNotEmpty) {
-                    onEdited!(allGlobal[startIndex + rowIndex]);
+                    onEdited!(allGlobal[rowIndex]);
                   } else {
                     return;
                   }
@@ -76,7 +74,7 @@ class DataAllHarianLpsSource extends DataGridSource {
           IconButton(
               onPressed: () {
                 if (onDeleted != null && allGlobal.isNotEmpty) {
-                  onDeleted!(allGlobal[startIndex + rowIndex]);
+                  onDeleted!(allGlobal[rowIndex]);
                 } else {
                   return;
                 }
@@ -92,11 +90,8 @@ class DataAllHarianLpsSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoHarianAllLpsModel> allGlobal, int startIndex) {
-    this.startIndex = startIndex;
-    index = startIndex;
-    _allGlobalData =
-        allGlobal.skip(startIndex).take(8).map<DataGridRow>((data) {
+  void _updateDataPager(List<DoHarianAllLpsModel> allGlobal) {
+    _allGlobalData = allGlobal.map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -123,8 +118,7 @@ class DataAllHarianLpsSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 8;
-    _updateDataPager(allGlobal, startIndex);
+    _updateDataPager(allGlobal);
     notifyListeners();
     return true;
   }
