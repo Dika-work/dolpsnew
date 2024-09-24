@@ -53,17 +53,17 @@ class DoRegulerAll extends GetView<DoRegulerController> {
     });
 
     late Map<String, double> columnWidths = {
-      'No': double.nan,
-      'Plant': double.nan,
-      'Tgl': 130,
-      'Supir(Panggilan)': 200,
-      'Kendaraan': 120,
-      'Tipe': double.nan,
-      'Jenis': double.nan,
-      'Jumlah': double.nan,
-      if (controller.rolesLihat == 1) 'Lihat': 150,
-      if (controller.rolesJumlah == 1) 'Action': 150,
-      if (controller.rolesEdit == 1) 'Edit': 150,
+      'No': 50,
+      'Plant': 60,
+      'Tgl': 70,
+      'Supir(Panggilan)': 140,
+      'Kendaraan': 100,
+      'Tipe': 50,
+      'Jenis': 60,
+      'Jml': 50,
+      if (controller.rolesLihat == 1) 'Lihat': 120,
+      if (controller.rolesJumlah == 1) 'Action': 120,
+      if (controller.rolesEdit == 1) 'Edit': 120,
     };
 
     // const int rowsPerPage = 10;
@@ -500,8 +500,8 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                                           FontWeight.bold),
                                             ))),
                                     GridColumn(
-                                        width: columnWidths['Jumlah']!,
-                                        columnName: 'Jumlah',
+                                        width: columnWidths['Jml']!,
+                                        columnName: 'Jml',
                                         label: Container(
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
@@ -510,7 +510,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                               color: Colors.lightBlue.shade100,
                                             ),
                                             child: Text(
-                                              'Jumlah',
+                                              'Jml',
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium

@@ -43,12 +43,12 @@ class LihatRealisasi extends StatelessWidget {
     });
 
     late Map<String, double> columnWidths = {
-      'No': double.nan,
+      'No': 50,
       'Type Motor': double.nan,
-      'SRD': double.nan,
-      'MKS': double.nan,
-      'PTK': double.nan,
-      'BJM': double.nan,
+      'SRD': 70,
+      'MKS': 70,
+      'PTK': 70,
+      'BJM': 70,
     };
 
     late Map<String, double> columnWidthsMutasi = {
@@ -58,16 +58,16 @@ class LihatRealisasi extends StatelessWidget {
     };
 
     late Map<String, double> columnWidthsHutang = {
-      'HLM': double.nan,
-      'AC': double.nan,
-      'KS': double.nan,
-      'TS': double.nan,
-      'BP': double.nan,
-      'BS': double.nan,
-      'PLT': double.nan,
-      'STAY L/R': double.nan,
-      'AC BESAR': double.nan,
-      'PLASTIK': double.nan,
+      'HLM': 70,
+      'AC': 70,
+      'KS': 70,
+      'TS': 70,
+      'BP': 70,
+      'BS': 70,
+      'PLT': 70,
+      'STAY L/R': 70,
+      'AC BESAR': 70,
+      'PLASTIK': 70,
     };
 
     Widget buildHutangPabrik(

@@ -41,11 +41,11 @@ class KirimKendaraanScreen extends StatelessWidget {
     });
 
     late Map<String, double> columnWidths = {
-      'No': double.nan,
-      'No Polisi': 120,
-      'Status': double.nan,
-      'Supir': 130,
-      'Hapus': 150,
+      'No': 50,
+      'No Polisi': 110,
+      'Status': 70,
+      'Supir': 100,
+      'Hapus': 55,
     };
 
     const double rowHeight = 70.0;
@@ -94,106 +94,110 @@ class KirimKendaraanScreen extends StatelessWidget {
               builder: (context, constraints) {
                 return ListView(
                   children: [
-                    SizedBox(
-                      height: tableHeight,
-                      child: SfDataGrid(
-                        source: dataSource,
-                        verticalScrollPhysics:
-                            const NeverScrollableScrollPhysics(),
-                        columnWidthMode: ColumnWidthMode.auto,
-                        gridLinesVisibility: GridLinesVisibility.both,
-                        headerGridLinesVisibility: GridLinesVisibility.both,
-                        rowHeight: rowHeight,
-                        columns: [
-                          GridColumn(
-                            width: columnWidths['No']!,
-                            columnName: 'No',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'No',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['No Polisi']!,
-                            columnName: 'No Polisi',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'No Polisi',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['Supir']!,
-                            columnName: 'Supir',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Supir',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                            width: columnWidths['Status']!,
-                            columnName: 'Status',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'Status',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                          GridColumn(
-                              width: columnWidths['Hapus']!,
-                              columnName: 'Hapus',
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: SizedBox(
+                        height: tableHeight,
+                        child: SfDataGrid(
+                          source: dataSource,
+                          verticalScrollPhysics:
+                              const NeverScrollableScrollPhysics(),
+                          columnWidthMode: ColumnWidthMode.auto,
+                          gridLinesVisibility: GridLinesVisibility.both,
+                          headerGridLinesVisibility: GridLinesVisibility.both,
+                          rowHeight: rowHeight,
+                          columns: [
+                            GridColumn(
+                              width: columnWidths['No']!,
+                              columnName: 'No',
                               label: Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    color: Colors.lightBlue.shade100,
-                                  ),
-                                  child: Text(
-                                    'Hapus',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(fontWeight: FontWeight.bold),
-                                  ))),
-                        ],
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnWidths['No Polisi']!,
+                              columnName: 'No Polisi',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'No Polisi',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnWidths['Supir']!,
+                              columnName: 'Supir',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Supir',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                              width: columnWidths['Status']!,
+                              columnName: 'Status',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  'Status',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            GridColumn(
+                                width: columnWidths['Hapus']!,
+                                columnName: 'Hapus',
+                                label: Container(
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      color: Colors.lightBlue.shade100,
+                                    ),
+                                    child: Text(
+                                      'Hapus',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ))),
+                          ],
+                        ),
                       ),
                     ),
                     rowCount > 0

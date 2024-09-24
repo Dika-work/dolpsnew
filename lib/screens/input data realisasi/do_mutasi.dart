@@ -49,19 +49,19 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
     });
 
     late Map<String, double> columnWidths = {
-      'No': double.nan,
-      'Tujuan': 130,
-      'Plant': double.nan,
-      'Tipe': double.nan,
-      'Tgl': double.nan,
-      'Supir(Panggilan)': 200,
-      'Kendaraan': double.nan,
-      'Jenis': double.nan,
-      'Jumlah': double.nan,
-      if (controller.rolesLihat == 1) 'Lihat': 150,
-      if (controller.rolesJumlah == 1) 'Action': 150,
-      if (controller.rolesEdit == 1) 'Edit': 150,
-      if (controller.rolesBatal == 1) 'Batal': 150,
+      'No': 50,
+      'Tujuan': 100,
+      'Plant': 60,
+      'Tipe': 50,
+      'Tgl': 70,
+      'Supir(Panggilan)': 140,
+      'Kendaraan': 100,
+      'Jenis': 60,
+      'Jml': 50,
+      if (controller.rolesLihat == 1) 'Lihat': 120,
+      if (controller.rolesJumlah == 1) 'Action': 120,
+      if (controller.rolesEdit == 1) 'Edit': 120,
+      if (controller.rolesBatal == 1) 'Batal': 120,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -328,8 +328,8 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                         ?.copyWith(fontWeight: FontWeight.bold),
                                   ))),
                           GridColumn(
-                              width: columnWidths['Jumlah']!,
-                              columnName: 'Jumlah',
+                              width: columnWidths['Jml']!,
+                              columnName: 'Jml',
                               label: Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -337,7 +337,7 @@ class DoMutasiScreen extends GetView<DoMutasiController> {
                                     color: Colors.lightBlue.shade100,
                                   ),
                                   child: Text(
-                                    'Jumlah',
+                                    'Jml',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium

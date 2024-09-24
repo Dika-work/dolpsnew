@@ -48,6 +48,7 @@ class RequestMobilSource extends DataGridSource {
             child: Text(
               e.value.toString(),
               textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: CustomSize.fontSizeXm),
             ),
           );
         },
@@ -134,10 +135,10 @@ class RequestMobilSource extends DataGridSource {
         DataGridCell<String>(columnName: 'Tanggal', value: tglParsed),
         DataGridCell<String>(columnName: 'Plant', value: data.plant),
         DataGridCell<String>(
-            columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
-        DataGridCell<String>(
             columnName: 'Jenis',
             value: '${data.inisialDepan}${data.inisitalBelakang}'),
+        DataGridCell<String>(
+            columnName: 'Type', value: data.type == 0 ? 'R' : 'M'),
         DataGridCell<int>(columnName: 'Jumlah', value: data.jumlah),
       ]);
     }).toList();

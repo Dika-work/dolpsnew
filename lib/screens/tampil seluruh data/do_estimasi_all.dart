@@ -19,13 +19,13 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
   @override
   Widget build(BuildContext context) {
     late Map<String, double> columnWidths = {
-      'No': double.nan,
-      'Tanggal': 150,
-      'HSO - SRD': double.nan,
-      'HSO - MKS': double.nan,
-      'HSO - PTK': double.nan,
-      'Edit': double.nan,
-      'Hapus': double.nan,
+      'No': 50,
+      'Tgl': 70,
+      'HSO - SRD': 80,
+      'HSO - MKS': 80,
+      'HSO - PTK': 80,
+      'Edit': 70,
+      'Hapus': 70,
     };
 
     const int rowsPerPage = 7;
@@ -81,8 +81,8 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
                   ),
                 ),
                 GridColumn(
-                  width: columnWidths['Tanggal']!,
-                  columnName: 'Tanggal',
+                  width: columnWidths['Tgl']!,
+                  columnName: 'Tgl',
                   label: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -90,7 +90,7 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
                       color: Colors.lightBlue.shade100,
                     ),
                     child: Text(
-                      'Tanggal',
+                      'Tgl',
                       style: Theme.of(context)
                           .textTheme
                           .bodyMedium
@@ -238,6 +238,7 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
                     },
                     child: SfDataGrid(
                       source: dataSource,
+                      frozenColumnsCount: 2,
                       columnWidthMode: ColumnWidthMode.auto,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,

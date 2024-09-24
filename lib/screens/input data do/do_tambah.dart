@@ -22,16 +22,16 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
   @override
   Widget build(BuildContext context) {
     late Map<String, double> columnWidths = {
-      'No': double.nan,
-      'Plant': double.nan,
-      'Tujuan': 130,
-      'Tanggal': 150,
-      'HSO - SRD': double.nan,
-      'HSO - MKS': double.nan,
-      'HSO - PTK': double.nan,
-      'BJM': double.nan,
-      if (controller.rolesEdit == 1) 'Edit': double.nan,
-      if (controller.rolesHapus == 1) 'Hapus': double.nan,
+      'No': 50,
+      'Plant': 60,
+      'Tujuan': 100,
+      'Tgl': 70,
+      'HSO - SRD': 80,
+      'HSO - MKS': 80,
+      'HSO - PTK': 80,
+      'BJM': 80,
+      if (controller.rolesEdit == 1) 'Edit': 70,
+      if (controller.rolesHapus == 1) 'Hapus': 70,
     };
 
     const int rowsPerPage = 7;
@@ -170,6 +170,7 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                   Expanded(
                     child: SfDataGrid(
                       source: dataSource,
+                      frozenColumnsCount: 2,
                       columnWidthMode: ColumnWidthMode.auto,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.both,
@@ -224,8 +225,8 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                 ))),
                         GridColumn(
-                            width: columnWidths['Tanggal']!,
-                            columnName: 'Tanggal',
+                            width: columnWidths['Tgl']!,
+                            columnName: 'Tgl',
                             label: Container(
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
@@ -233,7 +234,7 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                                   color: Colors.lightBlue.shade100,
                                 ),
                                 child: Text(
-                                  'Tanggal',
+                                  'Tgl',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium

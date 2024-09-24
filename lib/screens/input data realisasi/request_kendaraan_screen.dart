@@ -25,15 +25,15 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
   @override
   Widget build(BuildContext context) {
     late Map<String, double> columnWidths = {
-      'No': double.nan,
-      'Tanggal': 130,
-      'Plant': double.nan,
-      'Type': double.nan,
-      'Jenis': double.nan,
-      'Jumlah': double.nan,
-      if (controller.rolesLihat == 1) 'Lihat': 150,
-      if (controller.rolesKirim == 1) 'Kirim': 150,
-      if (controller.rolesEdit == 1) 'Edit': 150,
+      'No': 50,
+      'Tgl': 70,
+      'Plant': 60,
+      'Type': 50,
+      'Jenis': 60,
+      'Jml': 50,
+      if (controller.rolesLihat == 1) 'Lihat': 80,
+      if (controller.rolesKirim == 1) 'Kirim': 80,
+      if (controller.rolesEdit == 1) 'Edit': 80,
     };
     const int rowsPerPage = 10;
     int currentPage = 0;
@@ -51,13 +51,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       ),
       body: Obx(
         () {
-          if (!controller.isConnected.value) {
-            print('tidak ada sambungan ${controller.isConnected.value}');
-            return const CustomAnimationLoaderWidget(
-                text:
-                    'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
-                animation: 'assets/animations/404.json');
-          } else if (controller.isRequestLoading.value &&
+          if (controller.isRequestLoading.value &&
               controller.requestKendaraanModel.isEmpty) {
             return const CustomCircularLoader();
           } else if (controller.requestKendaraanModel.isEmpty) {
@@ -143,8 +137,8 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ))),
               GridColumn(
-                  width: columnWidths['Tanggal']!,
-                  columnName: 'Tanggal',
+                  width: columnWidths['Tgl']!,
+                  columnName: 'Tgl',
                   label: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -152,7 +146,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                         color: Colors.lightBlue.shade100,
                       ),
                       child: Text(
-                        'Tanggal',
+                        'Tgl',
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
@@ -175,22 +169,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ))),
               GridColumn(
-                  width: columnWidths['Type']!,
-                  columnName: 'Type',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Type',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
                   width: columnWidths['Jenis']!,
                   columnName: 'Jenis',
                   label: Container(
@@ -207,8 +185,8 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ))),
               GridColumn(
-                  width: columnWidths['Jumlah']!,
-                  columnName: 'Jumlah',
+                  width: columnWidths['Type']!,
+                  columnName: 'Type',
                   label: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -216,7 +194,23 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                         color: Colors.lightBlue.shade100,
                       ),
                       child: Text(
-                        'Jumlah',
+                        'Type',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['Jml']!,
+                  columnName: 'Jml',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Jml',
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
@@ -349,7 +343,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                   Expanded(
                       child: SfDataGrid(
                     source: dataSource,
-                    frozenColumnsCount: 2,
+                    frozenColumnsCount: 4,
                     rowHeight: 65,
                     columnWidthMode: ColumnWidthMode.auto,
                     gridLinesVisibility: GridLinesVisibility.both,

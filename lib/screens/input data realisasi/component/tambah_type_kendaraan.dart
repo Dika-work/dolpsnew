@@ -111,12 +111,12 @@ class _TambahTypeKendaraanState extends State<TambahTypeKendaraan> {
   @override
   Widget build(BuildContext context) {
     late Map<String, double> columnWidths = {
-      'No': double.nan,
+      'No': 50,
       'Type Motor': 150,
-      'SRD': double.nan,
-      'MKS': double.nan,
-      'PTK': double.nan,
-      'BJM': double.nan,
+      'SRD': 70,
+      'MKS': 70,
+      'PTK': 70,
+      'BJM': 70,
     };
 
     int currentPage = 0;

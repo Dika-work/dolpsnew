@@ -578,7 +578,7 @@ class EstimasiPmSource extends DataGridSource {
             DataGridCell<String>(columnName: 'Plant', value: e.plant1),
             DataGridCell<String>(columnName: 'Tujuan', value: e.tujuan),
             DataGridCell<String>(
-                columnName: 'Type', value: e.type == 0 ? 'REGULER' : 'MUTASI'),
+                columnName: 'Type', value: e.type == 0 ? 'R' : 'M'),
             DataGridCell<String>(columnName: 'Jenis', value: e.jenisKen),
             DataGridCell<int>(columnName: 'Jumlah', value: e.jumlah),
             DataGridCell<String>(columnName: 'User', value: e.user),
@@ -604,6 +604,7 @@ class EstimasiPmSource extends DataGridSource {
           child: Text(
             e.value.toString(),
             textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: CustomSize.fontSizeXm),
           ),
         );
       },

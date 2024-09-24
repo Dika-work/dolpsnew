@@ -29,16 +29,16 @@ class EstimasiPM extends GetView<EstimasiPengambilanController> {
     int currentPage = 0;
 
     late Map<String, double> columnEstimasi = {
-      'No': double.nan,
-      'Tanggal': 150,
-      'Plant': double.nan,
-      'Tujuan': 130,
-      'Type': 120,
-      'Jenis': 120,
-      'Jumlah': double.nan,
-      'User': double.nan,
-      'Edit': double.nan,
-      'Hapus': double.nan,
+      'No': 40,
+      'Tgl': 70,
+      'Plant': 60,
+      'Tujuan': 100,
+      'Type': 50,
+      'Jenis': 100,
+      'Jml': 50,
+      'User': 70,
+      'Edit': 70,
+      'Hapus': 70,
     };
     return Scaffold(
       appBar: AppBar(
@@ -160,8 +160,8 @@ class EstimasiPM extends GetView<EstimasiPengambilanController> {
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ))),
                       GridColumn(
-                          width: columnEstimasi['Tanggal']!,
-                          columnName: 'Tanggal',
+                          width: columnEstimasi['Tgl']!,
+                          columnName: 'Tgl',
                           label: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -169,7 +169,7 @@ class EstimasiPM extends GetView<EstimasiPengambilanController> {
                                 color: Colors.lightBlue.shade100,
                               ),
                               child: Text(
-                                'Tanggal',
+                                'Tgl',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -240,8 +240,8 @@ class EstimasiPM extends GetView<EstimasiPengambilanController> {
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ))),
                       GridColumn(
-                          width: columnEstimasi['Jumlah']!,
-                          columnName: 'Jumlah',
+                          width: columnEstimasi['Jml']!,
+                          columnName: 'Jml',
                           label: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -249,7 +249,7 @@ class EstimasiPM extends GetView<EstimasiPengambilanController> {
                                 color: Colors.lightBlue.shade100,
                               ),
                               child: Text(
-                                'Jumlah',
+                                'Jml',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium

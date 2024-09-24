@@ -44,8 +44,8 @@ class TambahTypeMotorSource extends DataGridSource {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontWeight: isTotalRow ? FontWeight.bold : FontWeight.normal,
-            ),
+                fontWeight: isTotalRow ? FontWeight.bold : FontWeight.normal,
+                fontSize: CustomSize.fontSizeXm),
           ),
         );
       }).toList(),

@@ -44,6 +44,7 @@ class DataDoHarianSource extends DataGridSource {
             child: Text(
               e.value.toString(),
               textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: CustomSize.fontSizeXm),
             ),
           );
         },
