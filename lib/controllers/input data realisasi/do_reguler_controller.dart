@@ -97,7 +97,9 @@ class DoRegulerController extends GetxController {
 
           if (startDate != null && endDate != null) {
             // Jika ada filter range tanggal, lakukan filterisasi
-            return itemDate.isAfter(startDate) && itemDate.isBefore(endDate);
+            return itemDate
+                    .isAfter(startDate.subtract(const Duration(days: 1))) &&
+                itemDate.isBefore(endDate.add(const Duration(days: 1)));
           }
           return true;
         }).toList();

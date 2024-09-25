@@ -8,6 +8,7 @@ import '../../controllers/laporan honda/laporan_dealer_controller.dart';
 import '../../helpers/connectivity.dart';
 import '../../models/laporan honda/laporan_dealer_model.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/laporan honda/laporan_dealer_source.dart';
 import '../../widgets/dropdown.dart';
 
@@ -388,9 +389,7 @@ class _LaporanDealerState extends State<LaporanDealer> {
                       ],
                     ),
                   )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                : const CustomCircularLoader(),
             const SizedBox(height: CustomSize.spaceBtwInputFields),
             dealerHarianSource != null
                 ? SizedBox(
@@ -512,9 +511,7 @@ class _LaporanDealerState extends State<LaporanDealer> {
                       ],
                     ),
                   )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                : const CustomCircularLoader(),
             const SizedBox(height: CustomSize.spaceBtwInputFields),
             dealerRealisasiSource != null
                 ? SizedBox(
@@ -636,9 +633,7 @@ class _LaporanDealerState extends State<LaporanDealer> {
                       ],
                     ),
                   )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                : const CustomCircularLoader(),
           ],
         ),
       ),

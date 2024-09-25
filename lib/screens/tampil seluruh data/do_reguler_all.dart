@@ -277,7 +277,6 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                               controller.startPickDate.value,
                                           endDate: controller.endPickDate.value,
                                         );
-                                        hasFetchedData.value = true;
                                       }
                                     } else {
                                       SnackbarLoader.errorSnackBar(

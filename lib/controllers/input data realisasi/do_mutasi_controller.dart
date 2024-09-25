@@ -90,7 +90,9 @@ class DoMutasiController extends GetxController {
           final itemDate = DateTime.parse(item.tgl);
 
           if (startDate != null && endDate != null) {
-            return itemDate.isAfter(startDate) && itemDate.isBefore(endDate);
+            return itemDate
+                    .isAfter(startDate.subtract(const Duration(days: 1))) &&
+                itemDate.isBefore(endDate.add(const Duration(days: 1)));
           }
           return true; // If no date range is provided, include all items
         }).toList();
