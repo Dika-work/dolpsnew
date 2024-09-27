@@ -425,6 +425,7 @@ class Homepage extends StatelessWidget {
                         );
 
                         return SizedBox(
+                          width: constraints.maxWidth,
                           height: (controllerHarianHome.roleUser == 'admin' ||
                                           controllerHarianHome.roleUser ==
                                               'Pengurus Stuffing' ||
@@ -443,10 +444,14 @@ class Homepage extends StatelessWidget {
                                   ? gridHeight
                                   : tableHeight,
                           child: shouldCenterTable
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 6.0),
-                                  child: tableWidget,
+                              ? Center(
+                                  widthFactor: constraints.maxWidth,
+                                  child: ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth: constraints.maxWidth * .91,
+                                    ),
+                                    child: tableWidget,
+                                  ),
                                 )
                               : tableWidget,
                         );

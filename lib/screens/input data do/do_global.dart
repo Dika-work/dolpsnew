@@ -399,12 +399,9 @@ class AddDOGlobal extends StatelessWidget {
                         lastDate: DateTime(2040),
                       ).then((newSelectedDate) {
                         if (newSelectedDate != null) {
-                          // Hanya ubah nilai tanggal, biarkan waktu tetap default
                           controller.tgl.value =
                               CustomHelperFunctions.getFormattedDateDatabase(
                                   newSelectedDate);
-                          // print(
-                          //     'Ini tanggal yang dipilih : ${controller.tgl.value}');
                         }
                       });
                     },
@@ -426,11 +423,8 @@ class AddDOGlobal extends StatelessWidget {
               () => DropDownWidget(
                 value: controller.plant.value,
                 items: controller.isAdmin
-                    ? controller.idPlantMap.keys
-                        .toList() // Menampilkan semua plant jika admin
-                    : [
-                        controller.plant.value
-                      ], // Menampilkan plant spesifik untuk non-admin
+                    ? controller.idPlantMap.keys.toList()
+                    : [controller.plant.value],
                 onChanged: (String? newValue) {
                   if (newValue != null) {
                     controller.plant.value = newValue;
