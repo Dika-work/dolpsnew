@@ -475,7 +475,9 @@ class CustomDrawer extends StatelessWidget {
                     textTitle: 'Laporan Honda',
                     content: Column(
                       children: [
-                        user.tipe == 'Pengurus Stuffing' || user.tipe == 'admin'
+                        user.tipe == 'Pengurus Stuffing' ||
+                                user.tipe == 'admin' ||
+                                user.tipe == 'Pengurus Pabrik'
                             ? ListTile(
                                 leading: const Icon(
                                   Iconsax.record,
@@ -490,7 +492,7 @@ class CustomDrawer extends StatelessWidget {
                                 ),
                               )
                             : const SizedBox.shrink(),
-                        user.tipe == 'admin'
+                        user.tipe == 'admin' || user.tipe == 'Pengurus Pabrik'
                             ? ExpandableContainer(
                                 icon: Iconsax.receipt,
                                 textTitle: 'DO Bulanan',
@@ -552,139 +554,69 @@ class CustomDrawer extends StatelessWidget {
                                             ?.copyWith(color: AppColors.light),
                                       ),
                                     ),
-                                    ExpandableContainer(
+                                    if (user.tipe == 'Pengurus Pabrik' ||
+                                        user.tipe == 'admin')
+                                      ExpandableContainer(
                                         icon: Iconsax.box,
                                         textTitle: 'Plant',
                                         content: Column(
                                           children: [
-                                            ListTile(
-                                              onTap: () => Get.toNamed(
-                                                  '/laporan-plant',
-                                                  arguments: '1100'),
-                                              leading: const Icon(
-                                                Iconsax.record,
-                                                color: AppColors
-                                                    .darkExpandableContent,
-                                              ),
-                                              title: Text(
-                                                'Plant 1100',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: AppColors.light),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () => Get.toNamed(
-                                                  '/laporan-plant',
-                                                  arguments: '1200'),
-                                              leading: const Icon(
-                                                Iconsax.record,
-                                                color: AppColors
-                                                    .darkExpandableContent,
-                                              ),
-                                              title: Text(
-                                                'Plant 1200',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: AppColors.light),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () => Get.toNamed(
-                                                  '/laporan-plant',
-                                                  arguments: '1300'),
-                                              leading: const Icon(
-                                                Iconsax.record,
-                                                color: AppColors
-                                                    .darkExpandableContent,
-                                              ),
-                                              title: Text(
-                                                'Plant 1300',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: AppColors.light),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () => Get.toNamed(
-                                                  '/laporan-plant',
-                                                  arguments: '1350'),
-                                              leading: const Icon(
-                                                Iconsax.record,
-                                                color: AppColors
-                                                    .darkExpandableContent,
-                                              ),
-                                              title: Text(
-                                                'Plant 1350',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: AppColors.light),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () => Get.toNamed(
-                                                  '/laporan-plant',
-                                                  arguments: '1700'),
-                                              leading: const Icon(
-                                                Iconsax.record,
-                                                color: AppColors
-                                                    .darkExpandableContent,
-                                              ),
-                                              title: Text(
-                                                'Plant 1700',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: AppColors.light),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () => Get.toNamed(
-                                                  '/laporan-plant',
-                                                  arguments: '1800'),
-                                              leading: const Icon(
-                                                Iconsax.record,
-                                                color: AppColors
-                                                    .darkExpandableContent,
-                                              ),
-                                              title: Text(
-                                                'Plant 1800',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: AppColors.light),
-                                              ),
-                                            ),
-                                            ListTile(
-                                              onTap: () => Get.toNamed(
-                                                  '/laporan-plant',
-                                                  arguments: '1900'),
-                                              leading: const Icon(
-                                                Iconsax.record,
-                                                color: AppColors
-                                                    .darkExpandableContent,
-                                              ),
-                                              title: Text(
-                                                'Plant 1900',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color: AppColors.light),
+                                            ...(user.plant == '0'
+                                                    ? [
+                                                        '1100',
+                                                        '1200',
+                                                        '1300',
+                                                        '1350',
+                                                        '1700',
+                                                        '1800',
+                                                        '1900'
+                                                      ] // Semua plant untuk admin
+                                                    : [
+                                                        '1100',
+                                                        '1200',
+                                                        '1300',
+                                                        '1350',
+                                                        '1700',
+                                                        '1800',
+                                                        '1900'
+                                                      ]
+                                                        .where((plant) =>
+                                                            user.plant ==
+                                                                plant ||
+                                                            (user.plant ==
+                                                                    '1300' &&
+                                                                plant ==
+                                                                    '1350') ||
+                                                            (user.plant ==
+                                                                    '1350' &&
+                                                                plant ==
+                                                                    '1300'))
+                                                        .toList() // Tampilkan plant sesuai user, dan tambahkan plant yang saling berhubungan untuk 1300 dan 1350
+                                                )
+                                                .map(
+                                              (plant) => ListTile(
+                                                onTap: () => Get.toNamed(
+                                                    '/laporan-plant',
+                                                    arguments: plant),
+                                                leading: const Icon(
+                                                  Iconsax.record,
+                                                  color: AppColors
+                                                      .darkExpandableContent,
+                                                ),
+                                                title: Text(
+                                                  'Plant $plant',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleSmall
+                                                      ?.copyWith(
+                                                          color:
+                                                              AppColors.light),
+                                                ),
                                               ),
                                             ),
                                           ],
-                                        )),
+                                        ),
+                                      ),
                                     ExpandableContainer(
                                         icon: Iconsax.box,
                                         textTitle: 'Total DO Harian',

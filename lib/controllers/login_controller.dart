@@ -27,13 +27,13 @@ class LoginController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    // Dispose TextEditingController untuk menghindari kebocoran memori
-    usernameController.dispose();
-    passwordController.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   // Dispose TextEditingController untuk menghindari kebocoran memori
+  //   usernameController.dispose();
+  //   passwordController.dispose();
+  //   super.onClose();
+  // }
 
   Future<void> emailAndPasswordSignIn({String? redirectRoute}) async {
     final isConnected = await NetworkManager.instance.isConnected();

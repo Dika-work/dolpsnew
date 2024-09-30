@@ -424,7 +424,11 @@ class AddDOGlobal extends StatelessWidget {
                 value: controller.plant.value,
                 items: controller.isAdmin
                     ? controller.idPlantMap.keys.toList()
-                    : [controller.plant.value],
+                    : [
+                        controller.plant.value,
+                        if (controller.plant.value == '1300') '1350',
+                        if (controller.plant.value == '1350') '1300',
+                      ],
                 onChanged: (String? newValue) {
                   if (newValue != null) {
                     controller.plant.value = newValue;

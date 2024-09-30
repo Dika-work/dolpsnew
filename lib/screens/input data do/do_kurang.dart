@@ -430,7 +430,9 @@ class AddDOPengurangan extends StatelessWidget {
                     ? controller.idPlantMap.keys
                         .toList() // Menampilkan semua plant jika admin
                     : [
-                        controller.plant.value
+                        controller.plant.value,
+                        if (controller.plant.value == '1300') '1350',
+                        if (controller.plant.value == '1350') '1300',
                       ], // Menampilkan plant spesifik untuk non-admin
                 onChanged: (String? newValue) {
                   if (newValue != null) {
