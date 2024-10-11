@@ -11,9 +11,17 @@ import 'package:doplsnew/utils/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+
+  OneSignal.initialize("efd0cf00-50c2-4b95-bce7-645580401cf5");
+
+  OneSignal.Notifications.requestPermission(true);
+
   await GetStorage.init();
   await UniServices.init();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

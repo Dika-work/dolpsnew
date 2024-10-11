@@ -8,6 +8,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../controllers/laporan honda/laporan_plant_controller.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/animation_loader.dart';
+import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/laporan honda/laporan_plant_source.dart';
 import '../../widgets/dropdown.dart';
@@ -108,26 +109,64 @@ class _LaporanPlantState extends State<LaporanPlant> {
 
     const double gridHeight = headerHeight + (rowHeight * 18);
 
-    final List<String> dayColumnNames = [
-      for (int day = 1;
-          day <= (laporanPlantSource?.lastDayOfMonth ?? 30);
-          day++)
-        'Day $day'
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Laporan Plant',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),
         ),
       ),
-      body: laporanPlantSource != null
-          ? RefreshIndicator(
+      body: FutureBuilder<bool>(
+        future: networkConn.isConnected(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CustomCircularLoader());
+          } else if (snapshot.hasError || !snapshot.data!) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CustomAnimationLoaderWidget(
+                    text:
+                        'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+                    animation: 'assets/animations/404.json',
+                  ),
+                  const SizedBox(height: 20),
+                  OutlinedButton(
+                    onPressed: () async {
+                      if (await networkConn.isConnected()) {
+                        await _fetchDataAndRefreshSource();
+                      } else {
+                        SnackbarLoader.errorSnackBar(
+                          title: 'Tidak ada internet',
+                          message:
+                              'Silahkan coba lagi setelah koneksi tersedia',
+                        );
+                      }
+                    },
+                    child: const Text('Refresh'),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            if (laporanPlantSource == null) {
+              return const Center(child: CustomCircularLoader());
+            }
+
+            final List<String> dayColumnNames = [
+              for (int day = 1;
+                  day <= laporanPlantSource!.lastDayOfMonth;
+                  day++)
+                'Day $day'
+            ];
+
+            return RefreshIndicator(
               onRefresh: () async => _fetchDataAndRefreshSource(),
               child: ListView(
                 children: [
@@ -224,6 +263,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
                       verticalScrollPhysics:
                           const NeverScrollableScrollPhysics(),
                       allowColumnsResizing: true,
+                      frozenColumnsCount: 1,
                       onColumnResizeUpdate:
                           (ColumnResizeUpdateDetails details) {
                         columnWidths[details.column.columnName] = details.width;
@@ -232,7 +272,7 @@ class _LaporanPlantState extends State<LaporanPlant> {
                       stackedHeaderRows: [
                         StackedHeaderRow(cells: [
                           StackedHeaderCell(
-                            columnNames: ['Daerah', ...dayColumnNames, 'TOTAL'],
+                            columnNames: dayColumnNames,
                             child: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -333,30 +373,10 @@ class _LaporanPlantState extends State<LaporanPlant> {
                   ),
                 ],
               ),
-            )
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CustomAnimationLoaderWidget(
-                    text:
-                        'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
-                    animation: 'assets/animations/404.json'),
-                OutlinedButton(
-                  onPressed: () async {
-                    // Pastikan ada koneksi sebelum refresh
-                    if (await networkConn.isConnected()) {
-                      await _fetchDataAndRefreshSource();
-                    } else {
-                      SnackbarLoader.errorSnackBar(
-                        title: 'Tidak ada internet',
-                        message: 'Silahkan coba lagi setelah koneksi tersedia',
-                      );
-                    }
-                  },
-                  child: const Text('refresh'),
-                ),
-              ],
-            ),
+            );
+          }
+        },
+      ),
     );
   }
 }

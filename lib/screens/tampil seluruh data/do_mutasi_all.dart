@@ -212,7 +212,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                                               ? CustomHelperFunctions
                                                   .getFormattedDate(controller
                                                       .startPickDate.value!)
-                                              : 'Tanggal',
+                                              : 'Tgl Awal...',
                                         ),
                                       )),
                                 ),
@@ -251,7 +251,7 @@ class DoMutasiAll extends GetView<DoMutasiController> {
                                               ? CustomHelperFunctions
                                                   .getFormattedDate(controller
                                                       .endPickDate.value!)
-                                              : 'Tanggal',
+                                              : 'Tgl Akhir...',
                                         ),
                                       )),
                                 ),

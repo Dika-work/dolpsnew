@@ -213,7 +213,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                               ? CustomHelperFunctions
                                                   .getFormattedDate(controller
                                                       .startPickDate.value!)
-                                              : 'Tanggal',
+                                              : 'Tgl Awal...',
                                         ),
                                       )),
                                 ),
@@ -253,7 +253,7 @@ class DoRegulerAll extends GetView<DoRegulerController> {
                                               ? CustomHelperFunctions
                                                   .getFormattedDate(controller
                                                       .endPickDate.value!)
-                                              : 'Tanggal',
+                                              : 'Tgl Akhir...',
                                         ),
                                       )),
                                 ),

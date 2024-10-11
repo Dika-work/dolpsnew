@@ -127,7 +127,7 @@ class LihatRealisasi extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
             ),
-            const SizedBox(height: CustomSize.xs),
+            const Divider(),
             buildHutangPabrik('Tgl', 'No\nPolisi',
                 DateFormat('dd MMM yyyy').format(parsedDate), model.noPolisi),
             const SizedBox(height: CustomSize.xs),
@@ -292,7 +292,8 @@ class LihatRealisasi extends StatelessWidget {
                                             ))),
                                   ]),
                             ),
-                            if (controller.tambahTypeMotorModel.isNotEmpty)
+                            if (controller.tambahTypeMotorModel.isNotEmpty &&
+                                rowCount >= rowsPerPage)
                               SfDataPager(
                                 delegate: dataSource,
                                 pageCount: isTableEmpty
@@ -405,7 +406,8 @@ class LihatRealisasi extends StatelessWidget {
                               ),
                             ),
                             if (controllerMutasi
-                                .tambahTypeMotorMutasiModel.isNotEmpty)
+                                    .tambahTypeMotorMutasiModel.isNotEmpty &&
+                                rowCount >= rowsPerPage)
                               SfDataPager(
                                 delegate: dataSource,
                                 pageCount: isTableEmpty
@@ -659,15 +661,15 @@ class LihatRealisasi extends StatelessWidget {
                                           ))),
                                 ]),
                           ),
-                          hutangController.doKelengkapan.isEmpty
-                              ? const SizedBox.shrink()
-                              : SfDataPager(
-                                  delegate: dataSourceHutang,
-                                  pageCount: isTableEmpty
-                                      ? 1
-                                      : (rowCount / rowsPerPage).ceilToDouble(),
-                                  direction: Axis.horizontal,
-                                ),
+                          if (hutangController.doKelengkapan.isNotEmpty &&
+                              rowCount >= rowsPerPage)
+                            SfDataPager(
+                              delegate: dataSourceHutang,
+                              pageCount: isTableEmpty
+                                  ? 1
+                                  : (rowCount / rowsPerPage).ceilToDouble(),
+                              direction: Axis.horizontal,
+                            ),
                         ],
                       );
                     }
@@ -912,7 +914,8 @@ class LihatRealisasi extends StatelessWidget {
                                           ))),
                                 ]),
                           ),
-                          if (hutangController.doHutang.isNotEmpty)
+                          if (hutangController.doHutang.isNotEmpty &&
+                              rowCount >= rowsPerPage)
                             SfDataPager(
                               delegate: dataSourceHutang,
                               pageCount: isTableEmpty

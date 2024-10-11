@@ -424,22 +424,33 @@ class AddRequestKendaraan extends StatelessWidget {
             const Text('Plant'),
             Obx(
               () => DropDownWidget(
-                value: controller.plant.value,
+                value: controller.plant.value == '0' && controller.isAdmin
+                    ? 'Pilih plant..' // Admin default ke "Pilih plant.."
+                    : controller
+                        .plant.value, // Untuk non-admin, plant sudah ditentukan
+
                 items: controller.isAdmin
-                    ? ['Pilih plant..'] + controller.regulerPlants
-                    : [
-                        'Pilih plant..',
-                        controller.plant.value,
-                        if (controller.plant.value == '1300') '1350',
-                        if (controller.plant.value == '1350') '1300',
-                      ],
+                    ? ['Pilih plant..'] +
+                        controller.regulerPlants // Admin melihat semua plant
+                    : controller.plant.value == '1300' ||
+                            controller.plant.value == '1350'
+                        ? [
+                            '1300',
+                            '1350'
+                          ] // Jika plant-nya 1300 atau 1350, tampilkan kedua plant tersebut
+                        : [
+                            controller.plant.value
+                          ], // Selain itu, hanya tampilkan plant yang dipilih
+
                 onChanged: (String? newValue) {
                   if (newValue != null && newValue != 'Pilih plant..') {
-                    controller.plant.value = newValue;
-                    print('ini value dari plant ${controller.plant.value}');
+                    controller.plant.value =
+                        newValue; // Set plant sesuai pilihan baru
+                    print('Nilai plant dipilih: ${controller.plant.value}');
                   } else if (newValue == 'Pilih plant..') {
                     controller.plant.value =
-                        'Pilih plant..'; // Reset ke nilai default
+                        '0'; // Reset ke 0 jika memilih "Pilih plant.."
+                    print('Plant reset ke default admin: 0');
                   }
                 },
               ),

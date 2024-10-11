@@ -162,7 +162,7 @@ class LaporanRealisasiUnfieldSource extends DataGridSource {
         },
       ),
       // DataGridCell<int>(columnName: 'Avg', value: avgGlobal),
-      DataGridCell<int>(columnName: 'Total', value: totalGlobal),
+      DataGridCell<int>(columnName: 'Total', value: totalHarian),
     ]));
 
     // add DO Harian
@@ -176,7 +176,7 @@ class LaporanRealisasiUnfieldSource extends DataGridSource {
         },
       ),
       // DataGridCell<int>(columnName: 'Avg', value: avgHarian),
-      DataGridCell<int>(columnName: 'Total', value: totalHarian),
+      DataGridCell<int>(columnName: 'Total', value: totalGlobal),
     ]));
 
     // add DO Kompetitor

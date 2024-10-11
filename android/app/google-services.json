@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "132977314201",
+    "project_id": "doplsnew",
+    "storage_bucket": "doplsnew.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132977314201:android:471b36910dce8660e76b08",
+        "android_client_info": {
+          "package_name": "com.example.doplsnew"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMd6b79ra75MSOpyhQOnCY3IWyraZWwX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
