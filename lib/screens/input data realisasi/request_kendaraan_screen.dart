@@ -35,8 +35,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
       if (controller.rolesKirim == 1) 'Kirim': 80,
       if (controller.rolesEdit == 1) 'Edit': 80,
     };
-    const int rowsPerPage = 10;
-    int currentPage = 0;
 
     return Scaffold(
       appBar: AppBar(
@@ -44,6 +42,7 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
           'Request Kendaraan Honda',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),
@@ -116,7 +115,6 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                 );
               },
               requestKendaraanModel: controller.requestKendaraanModel,
-              startIndex: currentPage * rowsPerPage,
             );
 
             List<GridColumn> column = [
@@ -286,85 +284,60 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
               onRefresh: () async {
                 await controller.fetchRequestKendaraan();
               },
-              child: Column(
-                children: [
-                  controller.roleUser == 'admin' ||
-                          controller.roleUser == 'Pengurus Pabrik'
-                      ? GestureDetector(
-                          onTap: () {
-                            CustomDialogs.defaultDialog(
-                                context: context,
-                                titleWidget:
-                                    const Text('Tambah Request Kendaraan'),
-                                contentWidget: AddRequestKendaraan(
-                                  controller: controller,
-                                ),
-                                onConfirm: () {
-                                  if (controller.tgl.value.isEmpty) {
-                                    SnackbarLoader.errorSnackBar(
-                                      title: 'Gagal😪',
-                                      message:
-                                          'Pastikan tanggal telah di isi 😁',
-                                    );
-                                  } else if (controller.plant.value ==
-                                      'Pilih plant..') {
-                                    SnackbarLoader.errorSnackBar(
-                                      title: 'Gagal😪',
-                                      message:
-                                          'Pastikan plant telah di pilih 😁',
-                                    );
-                                  } else {
-                                    controller.addRequestKendaraan();
-                                  }
-                                },
-                                cancelText: 'Close',
-                                confirmText: 'Tambahkan');
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const IconButton(
-                                  onPressed: null,
-                                  icon: Icon(Iconsax.add_circle)),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: CustomSize.sm),
-                                child: Text(
-                                  'Tambah data',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium,
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  Expanded(
-                      child: SfDataGrid(
-                    source: dataSource,
-                    frozenColumnsCount: 4,
-                    rowHeight: 65,
-                    columnWidthMode: ColumnWidthMode.auto,
-                    gridLinesVisibility: GridLinesVisibility.both,
-                    headerGridLinesVisibility: GridLinesVisibility.both,
-                    columns: column,
-                  )),
-                  SfDataPager(
-                    delegate: dataSource,
-                    pageCount: controller.requestKendaraanModel.isEmpty
-                        ? 1
-                        : (controller.requestKendaraanModel.length /
-                                rowsPerPage)
-                            .ceilToDouble(),
-                    direction: Axis.horizontal,
-                  ),
-                ],
+              child: Expanded(
+                child: SfDataGrid(
+                  source: dataSource,
+                  frozenColumnsCount: 4,
+                  rowHeight: 65,
+                  columnWidthMode: ColumnWidthMode.auto,
+                  gridLinesVisibility: GridLinesVisibility.both,
+                  headerGridLinesVisibility: GridLinesVisibility.both,
+                  columns: column,
+                ),
               ),
             );
           }
         },
       ),
+      floatingActionButton: (controller.roleUser == 'admin' ||
+                  controller.roleUser == 'Pengurus Pabrik') &&
+              controller.requestKendaraanModel.isNotEmpty
+          ? FloatingActionButton.extended(
+              backgroundColor: AppColors.primary,
+              foregroundColor: Colors.white,
+              onPressed: () {
+                CustomDialogs.defaultDialog(
+                    context: context,
+                    titleWidget: const Text('Tambah Request Kendaraan'),
+                    contentWidget: AddRequestKendaraan(
+                      controller: controller,
+                    ),
+                    onConfirm: () {
+                      if (controller.tgl.value.isEmpty) {
+                        SnackbarLoader.errorSnackBar(
+                          title: 'Gagal😪',
+                          message: 'Pastikan tanggal telah di isi 😁',
+                        );
+                      } else if (controller.plant.value == 'Pilih plant..') {
+                        SnackbarLoader.errorSnackBar(
+                          title: 'Gagal😪',
+                          message: 'Pastikan plant telah di pilih 😁',
+                        );
+                      } else {
+                        controller.addRequestKendaraan();
+                      }
+                    },
+                    cancelText: 'Close',
+                    confirmText: 'Tambahkan');
+              },
+              icon: const Icon(Iconsax.add),
+              label: Text('New User',
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium
+                      ?.apply(color: AppColors.white)),
+            )
+          : null,
     );
   }
 }

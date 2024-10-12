@@ -72,9 +72,10 @@ class DoRegulerAll extends GetView<DoRegulerController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Semua Data Reguler DO LPS',
+          'Semua Reguler DO LPS',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),

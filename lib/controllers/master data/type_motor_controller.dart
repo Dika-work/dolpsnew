@@ -11,11 +11,20 @@ import '../../utils/popups/snackbar.dart';
 
 class TypeMotorController extends GetxController {
   final isLoadingTypeMotor = Rx<bool>(false);
+  final isLoadingMore = Rx<bool>(false); // For lazy loading
+
   RxList<TypeMotorModel> typeMotorModel = <TypeMotorModel>[].obs;
+  RxList<TypeMotorModel> displayedData = <TypeMotorModel>[].obs;
   final typeMotorRepo = Get.put(TypeMotorRepository());
   GlobalKey<FormState> addTypeMotor = GlobalKey<FormState>();
 
+  // Lazy loading parameters
+  final ScrollController scrollController = ScrollController();
+  int initialDataCount = 10;
+  int loadMoreCount = 5;
+
   final isConnected = Rx<bool>(true);
+  final RxBool hasFetchedData = false.obs;
   final networkManager = Get.find<NetworkManager>();
 
   final List<String> typeMotorList = [
@@ -40,28 +49,55 @@ class TypeMotorController extends GetxController {
 
   @override
   void onInit() {
+    scrollController.addListener(scrollListener);
+
     // Listener untuk memantau perubahan koneksi
     networkManager.connectionStream.listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
         // Jika koneksi hilang, tampilkan pesan
         if (isConnected.value) {
-          SnackbarLoader.errorSnackBar(
-            title: 'Koneksi Terputus',
-            message: 'Anda telah kehilangan koneksi internet.',
-          );
           isConnected.value = false;
         }
       } else {
         // Jika koneksi kembali, perbarui status koneksi
-        if (!isConnected.value) {
-          isConnected.value = true;
+        isConnected.value = true;
+        if (!hasFetchedData.value) {
           fetchTypeMotorData(); // Otomatis fetch data ketika koneksi kembali
+          print('data harian all :${displayedData.length}');
+          hasFetchedData.value = true;
         }
       }
     });
 
     fetchTypeMotorData();
     super.onInit();
+  }
+
+  // Scroll listener for lazy loading
+  void scrollListener() {
+    if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent &&
+        !isLoadingMore.value &&
+        displayedData.length < typeMotorModel.length) {
+      loadMoreData();
+    }
+  }
+
+  // Load more data as part of lazy loading
+  void loadMoreData() {
+    if (displayedData.length < typeMotorModel.length) {
+      print("Loading more data...");
+      isLoadingMore.value = true;
+
+      final nextData = typeMotorModel
+          .skip(displayedData.length)
+          .take(loadMoreCount)
+          .toList();
+      displayedData.addAll(nextData);
+      print('Additional data loaded: ${displayedData.length} items');
+
+      isLoadingMore.value = false;
+    }
   }
 
   Future<void> fetchTypeMotorData() async {
@@ -80,6 +116,9 @@ class TypeMotorController extends GetxController {
       isConnected.value = true;
       final getTypeMotor = await typeMotorRepo.fetchTypeMotorContent();
       typeMotorModel.assignAll(getTypeMotor);
+      displayedData.assignAll(
+        typeMotorModel.take(initialDataCount).toList(),
+      );
     } catch (e) {
       print('Error while fetching master type motor: $e');
       typeMotorModel.assignAll([]);

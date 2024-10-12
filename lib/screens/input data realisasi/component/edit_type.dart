@@ -100,6 +100,7 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           automaticallyImplyLeading: false,
+          centerTitle: true,
         ),
         body: PopScope(
           canPop: false,
@@ -497,18 +498,20 @@ class _EditTypeKendaraanState extends State<EditTypeKendaraan> {
                                     ),
                                   ]),
                             ),
-                            const SizedBox(height: CustomSize.spaceBtwItems),
-                            Center(
-                              child: SfDataPager(
-                                delegate: dataSource,
-                                pageCount: controller.doRealisasiModel.isEmpty
-                                    ? 1
-                                    : (controller.doRealisasiModel.length /
-                                            rowsPerPage)
-                                        .ceilToDouble(),
-                                direction: Axis.horizontal,
+                            if (controller.doRealisasiModel.length >= 5)
+                              const SizedBox(height: CustomSize.spaceBtwItems),
+                            if (controller.doRealisasiModel.length >= 5)
+                              Center(
+                                child: SfDataPager(
+                                  delegate: dataSource,
+                                  pageCount: controller.doRealisasiModel.isEmpty
+                                      ? 1
+                                      : (controller.doRealisasiModel.length /
+                                              rowsPerPage)
+                                          .ceilToDouble(),
+                                  direction: Axis.horizontal,
+                                ),
                               ),
-                            ),
                           ],
                         );
                       },

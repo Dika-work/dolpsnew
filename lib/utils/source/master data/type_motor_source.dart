@@ -11,15 +11,13 @@ class TypeMotorSource extends DataGridSource {
   final void Function(TypeMotorModel)? onEdit;
   final void Function(TypeMotorModel)? onHapus;
   final List<TypeMotorModel> typeMotorModel;
-  int startIndex = 0;
 
   TypeMotorSource({
     required this.onEdit,
     required this.onHapus,
     required this.typeMotorModel,
-    int startIndex = 0,
   }) {
-    _updateDataPager(typeMotorModel, startIndex);
+    _updateDataPager(typeMotorModel);
   }
 
   List<DataGridRow> _typeMotorData = [];
@@ -41,7 +39,8 @@ class TypeMotorSource extends DataGridSource {
             return Center(
               child: Text(
                 e.value.toString(),
-                maxLines: 1,
+                maxLines: 2,
+                textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
             );
@@ -52,7 +51,7 @@ class TypeMotorSource extends DataGridSource {
               IconButton(
                   onPressed: () {
                     if (onEdit != null && typeMotorModel.isNotEmpty) {
-                      onEdit!(typeMotorModel[startIndex + rowIndex]);
+                      onEdit!(typeMotorModel[rowIndex]);
                     } else {
                       return;
                     }
@@ -62,7 +61,7 @@ class TypeMotorSource extends DataGridSource {
               IconButton(
                   onPressed: () {
                     if (onHapus != null && typeMotorModel.isNotEmpty) {
-                      onHapus!(typeMotorModel[startIndex + rowIndex]);
+                      onHapus!(typeMotorModel[rowIndex]);
                     } else {
                       return;
                     }
@@ -73,17 +72,14 @@ class TypeMotorSource extends DataGridSource {
         ]);
   }
 
-  void _updateDataPager(List<TypeMotorModel> typeMotorModel, int startIndex) {
-    this.startIndex = startIndex;
-    index = startIndex;
-
-    _typeMotorData = typeMotorModel.skip(startIndex).take(10).map<DataGridRow>(
+  void _updateDataPager(List<TypeMotorModel> typeMotorModel) {
+    _typeMotorData = typeMotorModel.map<DataGridRow>(
       (data) {
         index++;
         return DataGridRow(cells: [
           DataGridCell<int>(columnName: 'No', value: index),
-          DataGridCell<String>(columnName: 'Merk', value: data.merk),
           DataGridCell<String>(columnName: 'Type Motor', value: data.typeMotor),
+          DataGridCell<String>(columnName: 'Merk', value: data.merk),
           DataGridCell<String>(
               columnName: 'HLM', value: data.hlm == 0 ? 'NO' : 'YES'),
           DataGridCell<String>(
@@ -111,8 +107,7 @@ class TypeMotorSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
-    _updateDataPager(controller.typeMotorModel, startIndex);
+    _updateDataPager(controller.typeMotorModel);
     notifyListeners();
     return true;
   }

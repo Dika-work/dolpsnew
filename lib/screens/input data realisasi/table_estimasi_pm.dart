@@ -52,7 +52,7 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
 
     late Map<String, double> columnEstimasiYamaha = {
       'No': double.nan,
-      'Plant': 80,
+      'Plant': double.nan,
       'Tujuan': 120,
       'Jumlah': double.nan,
       'Jumlah_M16': double.nan,
@@ -72,9 +72,10 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Table Estimasi Pengambilan Motor',
+          'Estimasi Pengambilan Motor',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),
@@ -673,7 +674,6 @@ class TableEstimasiPM extends GetView<EstimasiPengambilanController> {
                     height: tableHeight,
                     child: SfDataGrid(
                       source: dataEstimasiSource,
-                      frozenColumnsCount: 2,
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                       gridLinesVisibility: GridLinesVisibility.both,
                       headerGridLinesVisibility: GridLinesVisibility.horizontal,

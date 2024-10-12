@@ -22,8 +22,8 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
   Widget build(BuildContext context) {
     late Map<String, double> columnWidths = {
       'No': 50,
-      'Plant': 60,
-      'Tujuan': 100,
+      'Plant': 70,
+      'Tujuan': 120,
       'Tgl': 70,
       'HSO - SRD': 80,
       'HSO - MKS': 80,
@@ -36,9 +36,10 @@ class DoHarianLps extends GetView<DataAllHarianLpsController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Tampil seluruh data DO Harian',
+          'Seluruh DO Harian',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),

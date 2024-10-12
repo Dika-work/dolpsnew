@@ -12,6 +12,7 @@ import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/dialogs.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/tampil seluruh data source/all_estimasi_source.dart';
+import '../../utils/theme/app_colors.dart';
 
 class AllDoEstimasi extends GetView<AllEstimasiController> {
   const AllDoEstimasi({super.key});
@@ -28,237 +29,218 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
       'Hapus': 70,
     };
 
-    const int rowsPerPage = 7;
-    int currentPage = 0;
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () => Get.back(),
-              icon: const Icon(Icons.arrow_back_ios_new)),
-          title: Text('Data DO Estimasi (Tentative)',
-              style: Theme.of(context).textTheme.headlineMedium),
-        ),
-        body: Obx(
-          () {
-            if (controller.isEstimasiLoading.value &&
-                controller.doAllEstimasiModel.isEmpty) {
-              return const CustomCircularLoader();
-            } else {
-              final dataSource = AllEstimasiSource(
-                  onEdited: (DoEstimasiAllModel model) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return EditEstimasi(
-                          controller: controller,
-                          model: model,
-                        );
-                      },
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () => Get.back(),
+            icon: const Icon(Icons.arrow_back_ios_new)),
+        centerTitle: true,
+        title: Text('DO Estimasi (Tentative)',
+            style: Theme.of(context).textTheme.headlineMedium),
+      ),
+      body: Obx(
+        () {
+          if (controller.isEstimasiLoading.value &&
+              controller.doAllEstimasiModel.isEmpty) {
+            return const CustomCircularLoader();
+          } else {
+            final dataSource = AllEstimasiSource(
+              onEdited: (DoEstimasiAllModel model) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return EditEstimasi(
+                      controller: controller,
+                      model: model,
                     );
                   },
-                  onDeleted: (DoEstimasiAllModel model) =>
-                      controller.hapusEstimasi(model.id),
-                  doEstimasi: controller.doAllEstimasiModel,
-                  startIndex: currentPage * rowsPerPage);
+                );
+              },
+              onDeleted: (DoEstimasiAllModel model) =>
+                  controller.hapusEstimasi(model.id),
+              doEstimasi: controller.doAllEstimasiModel,
+            );
 
-              List<GridColumn> column = [
-                GridColumn(
-                  width: columnWidths['No']!,
-                  columnName: 'No',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'No',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+            List<GridColumn> column = [
+              GridColumn(
+                width: columnWidths['No']!,
+                columnName: 'No',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'No',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                GridColumn(
-                  width: columnWidths['Tgl']!,
-                  columnName: 'Tgl',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'Tgl',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+              ),
+              GridColumn(
+                width: columnWidths['Tgl']!,
+                columnName: 'Tgl',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'Tgl',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                GridColumn(
-                  width: columnWidths['HSO - SRD']!,
-                  columnName: 'HSO - SRD',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'HSO - SRD',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+              ),
+              GridColumn(
+                width: columnWidths['HSO - SRD']!,
+                columnName: 'HSO - SRD',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'HSO - SRD',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                GridColumn(
-                  width: columnWidths['HSO - MKS']!,
-                  columnName: 'HSO - MKS',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'HSO - MKS',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+              ),
+              GridColumn(
+                width: columnWidths['HSO - MKS']!,
+                columnName: 'HSO - MKS',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'HSO - MKS',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                GridColumn(
-                  width: columnWidths['HSO - PTK']!,
-                  columnName: 'HSO - PTK',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'HSO - PTK',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+              ),
+              GridColumn(
+                width: columnWidths['HSO - PTK']!,
+                columnName: 'HSO - PTK',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'HSO - PTK',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                GridColumn(
-                  width: columnWidths['Edit']!,
-                  columnName: 'Edit',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'Edit',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+              ),
+              GridColumn(
+                width: columnWidths['Edit']!,
+                columnName: 'Edit',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'Edit',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                 ),
-                GridColumn(
-                  width: columnWidths['Hapus']!,
-                  columnName: 'Hapus',
-                  label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'Hapus',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
+              ),
+              GridColumn(
+                width: columnWidths['Hapus']!,
+                columnName: 'Hapus',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
                   ),
-                )
-              ];
+                  child: Text(
+                    'Hapus',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            ];
 
-              return Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      CustomDialogs.defaultDialog(
-                          context: context,
-                          titleWidget: const Text('Tambah Data DO Estimasi'),
-                          contentWidget: AddEstimasi(controller: controller),
-                          onConfirm: () {
-                            if (controller.tgl.value.isEmpty) {
-                              SnackbarLoader.errorSnackBar(
-                                  title: 'Gagal😒',
-                                  message: 'Pastikan tanggal telah di isi👌');
-                            } else {
-                              controller.addDataEstimasi();
-                            }
-                          },
-                          onCancel: () {
-                            controller.srdController.clear();
-                            controller.mksController.clear();
-                            controller.ptkController.clear();
-                            Get.back();
-                          },
-                          cancelText: 'Close',
-                          confirmText: 'Save');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const IconButton(
-                            onPressed: null, icon: Icon(Iconsax.add_circle)),
-                        Padding(
-                          padding: const EdgeInsets.only(right: CustomSize.sm),
-                          child: Text(
-                            'Tambah Data',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                      child: RefreshIndicator(
-                    onRefresh: () async {
-                      await controller.fetchAllEstimasi();
-                    },
-                    child: SfDataGrid(
-                      source: dataSource,
-                      frozenColumnsCount: 2,
-                      columnWidthMode: ColumnWidthMode.auto,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      rowHeight: 65,
-                      columns: column,
-                    ),
-                  )),
-                  SfDataPager(
-                    delegate: dataSource,
-                    pageCount: controller.doAllEstimasiModel.isEmpty
-                        ? 1
-                        : (controller.doAllEstimasiModel.length / rowsPerPage)
-                            .ceilToDouble(),
-                    direction: Axis.horizontal,
-                  ),
-                ],
-              );
-            }
-          },
-        ));
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.fetchAllEstimasi();
+              },
+              child: SfDataGrid(
+                source: dataSource,
+                frozenColumnsCount: 2,
+                columnWidthMode: ColumnWidthMode.auto,
+                gridLinesVisibility: GridLinesVisibility.both,
+                headerGridLinesVisibility: GridLinesVisibility.both,
+                rowHeight: 65,
+                columns: column,
+              ),
+            );
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        onPressed: () {
+          CustomDialogs.defaultDialog(
+              context: context,
+              titleWidget: const Text('Tambah Data DO Estimasi'),
+              contentWidget: AddEstimasi(controller: controller),
+              onConfirm: () {
+                if (controller.tgl.value.isEmpty) {
+                  SnackbarLoader.errorSnackBar(
+                      title: 'Gagal😒',
+                      message: 'Pastikan tanggal telah di isi👌');
+                } else {
+                  controller.addDataEstimasi();
+                }
+              },
+              onCancel: () {
+                controller.srdController.clear();
+                controller.mksController.clear();
+                controller.ptkController.clear();
+                Get.back();
+              },
+              cancelText: 'Close',
+              confirmText: 'Save');
+        },
+        icon: const Icon(Iconsax.add),
+        label: Text('New Data',
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium
+                ?.apply(color: AppColors.white)),
+      ),
+    );
   }
 }
 

@@ -36,17 +36,13 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
       'Action': double.nan,
     };
 
-    // const double dataPagerHeight = 60.0;
-    const int rowsPerPage = 10;
-
-    int currentPage = 0;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Data Type Motor',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),
@@ -99,8 +95,7 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
           );
         } else {
           final dataSource = TypeMotorSource(
-            typeMotorModel: controller.typeMotorModel,
-            startIndex: currentPage * rowsPerPage,
+            typeMotorModel: controller.displayedData,
             onEdit: (TypeMotorModel model) {
               showDialog(
                 context: context,
@@ -115,317 +110,295 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
               print('..TRIGGER BTN HAPUS DI MASTER TYPE MOTOR...');
             },
           );
-          return LayoutBuilder(
-            builder: (__, _) {
-              return Column(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      CustomDialogs.defaultDialog(
-                          context: context,
-                          titleWidget: const Text('Input Type Motor'),
-                          contentWidget: AddTypeMotor(
-                            controller: controller,
-                          ),
-                          onConfirm: controller.addTypeMotorData,
-                          onCancel: () {
-                            Get.back();
-
-                            controller.merkValue.value = 'Honda';
-                            controller.typeMotorController.clear();
-                            controller.hlm.value = null;
-                            controller.ac.value = null;
-                            controller.ks.value = null;
-                            controller.ts.value = null;
-                            controller.bp.value = null;
-                            controller.bs.value = null;
-                            controller.plt.value = null;
-                            controller.stay.value = null;
-                            controller.acBesar.value = null;
-                            controller.plastik.value = null;
-                          },
-                          cancelText: 'Close',
-                          confirmText: 'Tambahkan');
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        const IconButton(
-                            onPressed: null, icon: Icon(Iconsax.add_circle)),
-                        Padding(
-                          padding: const EdgeInsets.only(right: CustomSize.sm),
-                          child: Text(
-                            'Tambah data',
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
-                        )
-                      ],
+          return SfDataGrid(
+            source: dataSource,
+            columnWidthMode: ColumnWidthMode.auto,
+            frozenColumnsCount: 2,
+            gridLinesVisibility: GridLinesVisibility.both,
+            headerGridLinesVisibility: GridLinesVisibility.both,
+            verticalScrollController: controller.scrollController,
+            rowHeight: 150,
+            columns: [
+              GridColumn(
+                  width: columnWidths['No']!,
+                  columnName: 'No',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'No',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['Type Motor']!,
+                  columnName: 'Type Motor',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Type Motor',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['Merk']!,
+                  columnName: 'Merk',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Merk',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['HLM']!,
+                  columnName: 'HLM',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'HLM',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['AC']!,
+                  columnName: 'AC',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'AC',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['KS']!,
+                  columnName: 'KS',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
                     ),
-                  ),
-                  Expanded(
-                    child: SfDataGrid(
-                      source: dataSource,
-                      columnWidthMode: ColumnWidthMode.auto,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      rowHeight: 150,
-                      columns: [
-                        GridColumn(
-                            width: columnWidths['No']!,
-                            columnName: 'No',
-                            label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'No',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
-                            width: columnWidths['Merk']!,
-                            columnName: 'Merk',
-                            label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'Merk',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
-                            width: columnWidths['Type Motor']!,
-                            columnName: 'Type Motor',
-                            label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'Type Motor',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
-                            width: columnWidths['HLM']!,
-                            columnName: 'HLM',
-                            label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'HLM',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
-                            width: columnWidths['AC']!,
-                            columnName: 'AC',
-                            label: Container(
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  color: Colors.lightBlue.shade100,
-                                ),
-                                child: Text(
-                                  'AC',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ))),
-                        GridColumn(
-                            width: columnWidths['KS']!,
-                            columnName: 'KS',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'KS',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        GridColumn(
-                            width: columnWidths['TS']!,
-                            columnName: 'TS',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'TS',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        GridColumn(
-                            width: columnWidths['BP']!,
-                            columnName: 'BP',
-                            label: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
-                              ),
-                              child: Text(
-                                'BP',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        GridColumn(
-                          width: columnWidths['BS']!,
-                          columnName: 'BS',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'BS',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          width: columnWidths['PLT']!,
-                          columnName: 'PLT',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'PLT',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          width: columnWidths['Stay L/R']!,
-                          columnName: 'Stay L/R',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Stay L/R',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          width: columnWidths['Ac Besar']!,
-                          columnName: 'Ac Besar',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Ac Besar',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          width: columnWidths['Plastik']!,
-                          columnName: 'Plastik',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Plastik',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        GridColumn(
-                          width: columnWidths['Action']!,
-                          columnName: 'Action',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              'Action',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      'KS',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
+                  )),
+              GridColumn(
+                  width: columnWidths['TS']!,
+                  columnName: 'TS',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'TS',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              GridColumn(
+                  width: columnWidths['BP']!,
+                  columnName: 'BP',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'BP',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              GridColumn(
+                width: columnWidths['BS']!,
+                columnName: 'BS',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
                   ),
-                  SfDataPager(
-                    delegate: dataSource,
-                    pageCount: controller.typeMotorModel.isEmpty
-                        ? 1
-                        : (controller.typeMotorModel.length / rowsPerPage)
-                            .ceilToDouble(),
-                    direction: Axis.horizontal,
+                  child: Text(
+                    'BS',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                ],
-              );
-            },
+                ),
+              ),
+              GridColumn(
+                width: columnWidths['PLT']!,
+                columnName: 'PLT',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'PLT',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              GridColumn(
+                width: columnWidths['Stay L/R']!,
+                columnName: 'Stay L/R',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'Stay L/R',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              GridColumn(
+                width: columnWidths['Ac Besar']!,
+                columnName: 'Ac Besar',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'Ac Besar',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              GridColumn(
+                width: columnWidths['Plastik']!,
+                columnName: 'Plastik',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'Plastik',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              GridColumn(
+                width: columnWidths['Action']!,
+                columnName: 'Action',
+                label: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    color: Colors.lightBlue.shade100,
+                  ),
+                  child: Text(
+                    'Action',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
           );
         }
       }),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppColors.primary,
+        foregroundColor: Colors.white,
+        onPressed: () {
+          CustomDialogs.defaultDialog(
+              context: context,
+              titleWidget: const Text('Input Type Motor'),
+              contentWidget: AddTypeMotor(
+                controller: controller,
+              ),
+              onConfirm: controller.addTypeMotorData,
+              onCancel: () {
+                Get.back();
+
+                controller.merkValue.value = 'Honda';
+                controller.typeMotorController.clear();
+                controller.hlm.value = null;
+                controller.ac.value = null;
+                controller.ks.value = null;
+                controller.ts.value = null;
+                controller.bp.value = null;
+                controller.bs.value = null;
+                controller.plt.value = null;
+                controller.stay.value = null;
+                controller.acBesar.value = null;
+                controller.plastik.value = null;
+              },
+              cancelText: 'Close',
+              confirmText: 'Tambahkan');
+        },
+        icon: const Icon(Iconsax.add),
+        label: Text('Type Motor',
+            style: Theme.of(context)
+                .textTheme
+                .labelMedium
+                ?.apply(color: AppColors.white)),
+      ),
     );
   }
 }

@@ -406,7 +406,9 @@ class Homepage extends StatelessWidget {
 
                         Widget tableWidget = SfDataGrid(
                           source: dataSource,
-                          columnWidthMode: ColumnWidthMode.auto,
+                          columnWidthMode: shouldCenterTable
+                              ? ColumnWidthMode.fill
+                              : ColumnWidthMode.auto,
                           gridLinesVisibility: GridLinesVisibility.both,
                           headerGridLinesVisibility: GridLinesVisibility.both,
                           allowColumnsResizing: true,
@@ -443,17 +445,7 @@ class Homepage extends StatelessWidget {
                                       !isConnected.value
                                   ? gridHeight
                                   : tableHeight,
-                          child: shouldCenterTable
-                              ? Center(
-                                  widthFactor: constraints.maxWidth,
-                                  child: ConstrainedBox(
-                                    constraints: BoxConstraints(
-                                      maxWidth: constraints.maxWidth * .91,
-                                    ),
-                                    child: tableWidget,
-                                  ),
-                                )
-                              : tableWidget,
+                          child: tableWidget,
                         );
                       }
                     });

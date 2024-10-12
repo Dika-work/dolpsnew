@@ -70,9 +70,10 @@ class DoRegulerScreen extends GetView<DoRegulerController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Data Reguler DO LPS',
+          'Reguler DO LPS',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),

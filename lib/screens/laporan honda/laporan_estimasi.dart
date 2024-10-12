@@ -146,6 +146,7 @@ class _LaporanEstimasiState extends State<LaporanEstimasi> {
           'Laporan Estimasi',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
       ),
       body: RefreshIndicator(
         onRefresh: () async => _fetchDataAndRefreshSource(),

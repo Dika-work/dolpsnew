@@ -13,16 +13,14 @@ class RequestMobilSource extends DataGridSource {
   final void Function(RequestKendaraanModel)? onKirim;
   final void Function(RequestKendaraanModel)? onEdit;
   final List<RequestKendaraanModel> requestKendaraanModel;
-  int startIndex = 0;
 
   RequestMobilSource({
     required this.onLihat,
     required this.onKirim,
     required this.onEdit,
     required this.requestKendaraanModel,
-    int startIndex = 0,
   }) {
-    _updateDataPager(requestKendaraanModel, startIndex);
+    _updateDataPager(requestKendaraanModel);
   }
 
   List<DataGridRow> _requestMobilData = [];
@@ -36,7 +34,7 @@ class RequestMobilSource extends DataGridSource {
   DataGridRowAdapter? buildRow(DataGridRow row) {
     int rowIndex = _requestMobilData.indexOf(row);
     bool isEvenRow = rowIndex % 2 == 0;
-    var request = requestKendaraanModel[startIndex + rowIndex];
+    var request = requestKendaraanModel[rowIndex];
     var controller = requestKendaraanController;
 
     List<Widget> cells = [
@@ -119,14 +117,8 @@ class RequestMobilSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(
-      List<RequestKendaraanModel> requestKendaraanModel, int startIndex) {
-    this.startIndex = startIndex;
-    index = startIndex;
-    _requestMobilData = requestKendaraanModel
-        .skip(startIndex)
-        .take(10)
-        .map<DataGridRow>((data) {
+  void _updateDataPager(List<RequestKendaraanModel> requestKendaraanModel) {
+    _requestMobilData = requestKendaraanModel.map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -147,9 +139,7 @@ class RequestMobilSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 10;
-    _updateDataPager(
-        requestKendaraanController.requestKendaraanModel, startIndex);
+    _updateDataPager(requestKendaraanController.requestKendaraanModel);
     notifyListeners();
     return true;
   }

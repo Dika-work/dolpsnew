@@ -12,16 +12,13 @@ class DataDoGlobalSource extends DataGridSource {
   final void Function(DoGlobalModel)? onEdited;
   final void Function(DoGlobalModel)? onDeleted;
   final List<DoGlobalModel> doGlobal;
-  int startIndex = 0;
 
   DataDoGlobalSource({
     required this.onEdited,
     required this.onDeleted,
     required this.doGlobal,
-    int startIndex = 0,
   }) {
-    _updateDataPager(
-        doGlobal, startIndex, controller.rolePlant, controller.isAdmin);
+    _updateDataPager(doGlobal, controller.rolePlant, controller.isAdmin);
   }
 
   List<DataGridRow> _doGlobalData = [];
@@ -61,7 +58,7 @@ class DataDoGlobalSource extends DataGridSource {
             IconButton(
                 onPressed: () {
                   if (onEdited != null && doGlobal.isNotEmpty) {
-                    onEdited!(doGlobal[startIndex + rowIndex]);
+                    onEdited!(doGlobal[rowIndex]);
                   } else {
                     return;
                   }
@@ -80,7 +77,7 @@ class DataDoGlobalSource extends DataGridSource {
             IconButton(
                 onPressed: () {
                   if (onDeleted != null && doGlobal.isNotEmpty) {
-                    onDeleted!(doGlobal[startIndex + rowIndex]);
+                    onDeleted!(doGlobal[rowIndex]);
                   } else {
                     return;
                   }
@@ -97,11 +94,8 @@ class DataDoGlobalSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoGlobalModel> doGlobal, int startIndex,
-      String userPlant, bool isAdmin) {
-    this.startIndex = startIndex;
-    index = startIndex;
-
+  void _updateDataPager(
+      List<DoGlobalModel> doGlobal, String userPlant, bool isAdmin) {
     final List<int> validPlants = [
       1100,
       1200,
@@ -118,8 +112,6 @@ class DataDoGlobalSource extends DataGridSource {
 
     _doGlobalData = doGlobal
         .where((item) => filteredPlants.contains(int.tryParse(item.plant) ?? 0))
-        .skip(startIndex)
-        .take(7)
         .map<DataGridRow>(
       (data) {
         index++;
@@ -151,8 +143,8 @@ class DataDoGlobalSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    _updateDataPager(controller.doGlobalModel, newPageIndex,
-        controller.rolePlant, controller.isAdmin);
+    _updateDataPager(
+        controller.doGlobalModel, controller.rolePlant, controller.isAdmin);
     notifyListeners();
     return true;
   }

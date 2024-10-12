@@ -57,8 +57,8 @@ class DoMutasiAll extends GetView<DoMutasiController> {
 
     late Map<String, double> columnWidths = {
       'No': 50,
-      'Tujuan': 100,
-      'Plant': 60,
+      'Tujuan': 120,
+      'Plant': 70,
       'Tipe': 50,
       'Tgl': 70,
       'Supir(Panggilan)': 140,
@@ -73,9 +73,10 @@ class DoMutasiAll extends GetView<DoMutasiController> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Semua Data DO Mutasi LPS',
+          'Semua DO Mutasi LPS',
           style: Theme.of(context).textTheme.headlineMedium,
         ),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Get.back(),

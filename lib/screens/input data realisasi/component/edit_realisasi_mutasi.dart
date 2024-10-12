@@ -95,7 +95,7 @@ class _EditRealisasiMutasiState extends State<EditRealisasiMutasi> {
     int typeValue = typeDOMap[type] ?? 0;
 
     return AlertDialog(
-      title: const Text('Edit DO Realisasi'),
+      title: const Center(child: Text('Edit DO Realisasi')),
       content: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(

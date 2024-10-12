@@ -12,15 +12,13 @@ class DataDoHarianSource extends DataGridSource {
   final void Function(DoHarianModel)? onEdited;
   final void Function(DoHarianModel)? onDeleted;
   final List<DoHarianModel> doHarian;
-  int startIndex = 0;
 
   DataDoHarianSource({
     required this.onEdited,
     required this.onDeleted,
     required this.doHarian,
-    int startIndex = 0,
   }) {
-    _updateDataPager(doHarian, startIndex);
+    _updateDataPager(doHarian);
   }
 
   List<DataGridRow> _doHarianData = [];
@@ -60,7 +58,7 @@ class DataDoHarianSource extends DataGridSource {
             IconButton(
                 onPressed: () {
                   if (onEdited != null && doHarian.isNotEmpty) {
-                    onEdited!(doHarian[startIndex + rowIndex]);
+                    onEdited!(doHarian[rowIndex]);
                   } else {
                     return;
                   }
@@ -82,7 +80,7 @@ class DataDoHarianSource extends DataGridSource {
             IconButton(
                 onPressed: () {
                   if (onDeleted != null && doHarian.isNotEmpty) {
-                    onDeleted!(doHarian[startIndex + rowIndex]);
+                    onDeleted!(doHarian[rowIndex]);
                   } else {
                     return;
                   }
@@ -102,10 +100,8 @@ class DataDoHarianSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoHarianModel> doHarian, int startIndex) {
-    this.startIndex = startIndex;
-    index = startIndex;
-    _doHarianData = doHarian.skip(startIndex).take(7).map<DataGridRow>((data) {
+  void _updateDataPager(List<DoHarianModel> doHarian) {
+    _doHarianData = doHarian.map<DataGridRow>((data) {
       index++;
       final tglParsed =
           CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -132,8 +128,7 @@ class DataDoHarianSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 7;
-    _updateDataPager(controller.doHarianModel, startIndex);
+    _updateDataPager(controller.doHarianModel);
     notifyListeners();
     return true;
   }

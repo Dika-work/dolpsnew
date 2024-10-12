@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../controllers/laporan honda/laporan_plant_controller.dart';
 import '../../utils/constant/custom_size.dart';
+import '../../utils/constant/storage_util.dart';
 import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/snackbar.dart';
@@ -53,14 +54,18 @@ class _LaporanPlantState extends State<LaporanPlant> {
 
   int? selectedIndex;
   String selectedPlant = '';
+  String tipeUser = '';
 
   LaporanPlantSource? laporanPlantSource;
   final controller = Get.put(LaporanPlantController());
   final networkConn = Get.find<NetworkManager>();
+  final storage = StorageUtil();
 
   @override
   void initState() {
     super.initState();
+    final user = storage.getUserDetails();
+    tipeUser = user!.tipe;
     if (Get.arguments != null) {
       selectedPlant = Get.arguments as String;
       selectedIndex = plant.indexOf(selectedPlant);
@@ -221,37 +226,39 @@ class _LaporanPlantState extends State<LaporanPlant> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: CustomSize.spaceBtwInputFields),
-                  Center(
-                    child: Wrap(
-                      spacing: 16.0,
-                      runSpacing: 4.0,
-                      alignment: WrapAlignment.center,
-                      children: List.generate(plant.length, (index) {
-                        return ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              selectedIndex = index;
-                              selectedPlant = plant[index];
-                              _fetchDataAndRefreshSource(); // Panggil fungsi ini untuk memperbarui tabel
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: CustomSize.sm)),
-                          child: Text(plant[index],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.apply(
-                                    color: selectedIndex == index
-                                        ? Colors.red
-                                        : Colors.white,
-                                  )),
-                        );
-                      }),
+                  if (tipeUser == 'admin')
+                    const SizedBox(height: CustomSize.spaceBtwInputFields),
+                  if (tipeUser == 'admin')
+                    Center(
+                      child: Wrap(
+                        spacing: 16.0,
+                        runSpacing: 4.0,
+                        alignment: WrapAlignment.center,
+                        children: List.generate(plant.length, (index) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                selectedIndex = index;
+                                selectedPlant = plant[index];
+                                _fetchDataAndRefreshSource(); // Panggil fungsi ini untuk memperbarui tabel
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: CustomSize.sm)),
+                            child: Text(plant[index],
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.apply(
+                                      color: selectedIndex == index
+                                          ? Colors.red
+                                          : Colors.white,
+                                    )),
+                          );
+                        }),
+                      ),
                     ),
-                  ),
                   const SizedBox(height: CustomSize.spaceBtwInputFields),
                   SizedBox(
                     height: gridHeight,

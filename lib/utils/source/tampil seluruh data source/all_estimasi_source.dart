@@ -10,14 +10,13 @@ class AllEstimasiSource extends DataGridSource {
   final void Function(DoEstimasiAllModel)? onEdited;
   final void Function(DoEstimasiAllModel)? onDeleted;
   final List<DoEstimasiAllModel> doEstimasi;
-  int startIndex = 0;
 
-  AllEstimasiSource(
-      {required this.onEdited,
-      required this.onDeleted,
-      required this.doEstimasi,
-      int startIndex = 0}) {
-    _updateDataPager(doEstimasi, startIndex);
+  AllEstimasiSource({
+    required this.onEdited,
+    required this.onDeleted,
+    required this.doEstimasi,
+  }) {
+    _updateDataPager(doEstimasi);
   }
 
   List<DataGridRow> _doEstimasiData = [];
@@ -33,7 +32,7 @@ class AllEstimasiSource extends DataGridSource {
 
     // Tambahkan pengecekan apakah list doEstimasi kosong
     if (doEstimasi.isNotEmpty) {
-      var request = doEstimasi[startIndex + rowIndex];
+      var request = doEstimasi[rowIndex];
 
       return DataGridRowAdapter(
         color: isEvenRow ? Colors.white : Colors.grey[200],
@@ -111,15 +110,11 @@ class AllEstimasiSource extends DataGridSource {
     );
   }
 
-  void _updateDataPager(List<DoEstimasiAllModel> allGlobal, int startIndex) {
-    this.startIndex = startIndex;
-    index = startIndex;
-
+  void _updateDataPager(List<DoEstimasiAllModel> allGlobal) {
     if (allGlobal.isEmpty) {
       _doEstimasiData = _generateEmptyRows(1);
     } else {
-      _doEstimasiData =
-          allGlobal.skip(startIndex).take(7).map<DataGridRow>((data) {
+      _doEstimasiData = allGlobal.map<DataGridRow>((data) {
         index++;
         final tglParsed =
             CustomHelperFunctions.getFormattedDate(DateTime.parse(data.tgl));
@@ -143,8 +138,7 @@ class AllEstimasiSource extends DataGridSource {
 
   @override
   Future<bool> handlePageChange(int oldPageIndex, int newPageIndex) async {
-    final int startIndex = newPageIndex * 7;
-    _updateDataPager(doEstimasi, startIndex);
+    _updateDataPager(doEstimasi);
     notifyListeners();
     return true;
   }
