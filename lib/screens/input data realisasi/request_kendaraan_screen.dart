@@ -37,272 +37,273 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
     };
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Request Kendaraan Honda',
-          style: Theme.of(context).textTheme.headlineMedium,
+        appBar: AppBar(
+          title: Text(
+            'Request Kendaraan Honda',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => Get.back(),
+          ),
         ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.back(),
-        ),
-      ),
-      body: Obx(
-        () {
-          if (controller.isRequestLoading.value &&
-              controller.requestKendaraanModel.isEmpty) {
-            return const CustomCircularLoader();
-          } else if (controller.requestKendaraanModel.isEmpty) {
-            return GestureDetector(
-              onTap: () {
-                print(
-                    'ini nilai internet connection di request : ${controller.isConnected.value}');
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Tambah Request Kendaraan'),
-                    contentWidget: AddRequestKendaraan(
-                      controller: controller,
-                    ),
-                    onConfirm: () {
-                      if (controller.tgl.value.isEmpty) {
-                        SnackbarLoader.errorSnackBar(
-                          title: 'Gagal😪',
-                          message: 'Pastikan tanggal telah di isi 😁',
-                        );
-                      } else {
-                        controller.addRequestKendaraan();
-                      }
-                    },
-                    cancelText: 'Close',
-                    confirmText: 'Tambahkan');
-              },
-              child: CustomAnimationLoaderWidget(
-                text: 'Tambahkan Data Baru',
-                animation: 'assets/animations/add-data-animation.json',
-                height: CustomHelperFunctions.screenHeight() * 0.4,
-                width: CustomHelperFunctions.screenHeight(),
-              ),
-            );
-          } else {
-            final dataSource = RequestMobilSource(
-              onLihat: (RequestKendaraanModel model) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) {
-                    return LihatKendaraanScreen(
-                      model: model,
-                    );
-                  },
-                );
-              },
-              onKirim: (RequestKendaraanModel model) =>
-                  Get.to(() => KirimKendaraanScreen(
-                        model: model,
-                        selectedIndex: model.idReq,
-                      )),
-              onEdit: (RequestKendaraanModel model) {
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) {
-                    return EditRequestKendaraan(
-                      controller: controller,
-                      model: model,
-                    );
-                  },
-                );
-              },
-              requestKendaraanModel: controller.requestKendaraanModel,
-            );
-
-            List<GridColumn> column = [
-              GridColumn(
-                  width: columnWidths['No']!,
-                  columnName: 'No',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
+        body: Obx(
+          () {
+            if (controller.isRequestLoading.value &&
+                controller.requestKendaraanModel.isEmpty) {
+              return const CustomCircularLoader();
+            } else if (controller.requestKendaraanModel.isEmpty) {
+              return GestureDetector(
+                onTap: () {
+                  print(
+                      'ini nilai internet connection di request : ${controller.isConnected.value}');
+                  CustomDialogs.defaultDialog(
+                      context: context,
+                      titleWidget: const Text('Tambah Request Kendaraan'),
+                      contentWidget: AddRequestKendaraan(
+                        controller: controller,
                       ),
-                      child: Text(
-                        'No',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Tgl']!,
-                  columnName: 'Tgl',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Tgl',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Plant']!,
-                  columnName: 'Plant',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Plant',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Jenis']!,
-                  columnName: 'Jenis',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Jenis',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Type']!,
-                  columnName: 'Type',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Type',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-              GridColumn(
-                  width: columnWidths['Jml']!,
-                  columnName: 'Jml',
-                  label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Jml',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ))),
-            ];
-
-            // Tambahkan kolom dinamis berdasarkan peran
-            if (controller.rolesLihat == 1) {
-              column.add(GridColumn(
-                width: columnWidths['Lihat']!,
-                columnName: 'Lihat',
-                label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'Lihat',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    )),
-              ));
-            }
-
-            if (controller.rolesKirim == 1) {
-              column.add(GridColumn(
-                width: columnWidths['Kirim']!,
-                columnName: 'Kirim',
-                label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'Kirim',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    )),
-              ));
-            }
-
-            if (controller.rolesEdit == 1) {
-              column.add(GridColumn(
-                width: columnWidths['Edit']!,
-                columnName: 'Edit',
-                label: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      color: Colors.lightBlue.shade100,
-                    ),
-                    child: Text(
-                      'Edit',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    )),
-              ));
-            }
-
-            // Print jumlah kolom
-            print('Columns kendaraan: ${column.length}');
-
-            return RefreshIndicator(
-              onRefresh: () async {
-                await controller.fetchRequestKendaraan();
-              },
-              child: Expanded(
-                child: SfDataGrid(
-                  source: dataSource,
-                  frozenColumnsCount: 4,
-                  rowHeight: 65,
-                  columnWidthMode: ColumnWidthMode.auto,
-                  gridLinesVisibility: GridLinesVisibility.both,
-                  headerGridLinesVisibility: GridLinesVisibility.both,
-                  columns: column,
+                      onConfirm: () {
+                        if (controller.tgl.value.isEmpty) {
+                          SnackbarLoader.errorSnackBar(
+                            title: 'Gagal😪',
+                            message: 'Pastikan tanggal telah di isi 😁',
+                          );
+                        } else {
+                          controller.addRequestKendaraan();
+                        }
+                      },
+                      cancelText: 'Close',
+                      confirmText: 'Tambahkan');
+                },
+                child: CustomAnimationLoaderWidget(
+                  text: 'Tambahkan Data Baru',
+                  animation: 'assets/animations/add-data-animation.json',
+                  height: CustomHelperFunctions.screenHeight() * 0.4,
+                  width: CustomHelperFunctions.screenHeight(),
                 ),
-              ),
-            );
-          }
-        },
-      ),
-      floatingActionButton: (controller.roleUser == 'admin' ||
+              );
+            } else {
+              final dataSource = RequestMobilSource(
+                onLihat: (RequestKendaraanModel model) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return LihatKendaraanScreen(
+                        model: model,
+                      );
+                    },
+                  );
+                },
+                onKirim: (RequestKendaraanModel model) =>
+                    Get.to(() => KirimKendaraanScreen(
+                          model: model,
+                          selectedIndex: model.idReq,
+                        )),
+                onEdit: (RequestKendaraanModel model) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return EditRequestKendaraan(
+                        controller: controller,
+                        model: model,
+                      );
+                    },
+                  );
+                },
+                requestKendaraanModel: controller.requestKendaraanModel,
+              );
+
+              List<GridColumn> column = [
+                GridColumn(
+                    width: columnWidths['No']!,
+                    columnName: 'No',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'No',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Tgl']!,
+                    columnName: 'Tgl',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Tgl',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Plant']!,
+                    columnName: 'Plant',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Plant',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Jenis']!,
+                    columnName: 'Jenis',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Jenis',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Type']!,
+                    columnName: 'Type',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Type',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+                GridColumn(
+                    width: columnWidths['Jml']!,
+                    columnName: 'Jml',
+                    label: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          color: Colors.lightBlue.shade100,
+                        ),
+                        child: Text(
+                          'Jml',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ))),
+              ];
+
+              // Tambahkan kolom dinamis berdasarkan peran
+              if (controller.rolesLihat == 1) {
+                column.add(GridColumn(
+                  width: columnWidths['Lihat']!,
+                  columnName: 'Lihat',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Lihat',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      )),
+                ));
+              }
+
+              if (controller.rolesKirim == 1) {
+                column.add(GridColumn(
+                  width: columnWidths['Kirim']!,
+                  columnName: 'Kirim',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Kirim',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      )),
+                ));
+              }
+
+              if (controller.rolesEdit == 1) {
+                column.add(GridColumn(
+                  width: columnWidths['Edit']!,
+                  columnName: 'Edit',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Edit',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      )),
+                ));
+              }
+
+              // Print jumlah kolom
+              print('Columns kendaraan: ${column.length}');
+
+              return RefreshIndicator(
+                onRefresh: () async {
+                  await controller.fetchRequestKendaraan();
+                },
+                child: Expanded(
+                  child: SfDataGrid(
+                    source: dataSource,
+                    frozenColumnsCount: 4,
+                    rowHeight: 65,
+                    columnWidthMode: ColumnWidthMode.auto,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    columns: column,
+                  ),
+                ),
+              );
+            }
+          },
+        ),
+        floatingActionButton: Obx(() {
+          if ((controller.roleUser == 'admin' ||
                   controller.roleUser == 'Pengurus Pabrik') &&
-              controller.requestKendaraanModel.isNotEmpty
-          ? FloatingActionButton.extended(
+              controller.requestKendaraanModel.isNotEmpty) {
+            return FloatingActionButton.extended(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
               onPressed: () {
@@ -336,9 +337,11 @@ class RequestKendaraanScreen extends GetView<RequestKendaraanController> {
                       .textTheme
                       .labelMedium
                       ?.apply(color: AppColors.white)),
-            )
-          : null,
-    );
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }));
   }
 }
 

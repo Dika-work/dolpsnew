@@ -207,39 +207,45 @@ class AllDoEstimasi extends GetView<AllEstimasiController> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          CustomDialogs.defaultDialog(
-              context: context,
-              titleWidget: const Text('Tambah Data DO Estimasi'),
-              contentWidget: AddEstimasi(controller: controller),
-              onConfirm: () {
-                if (controller.tgl.value.isEmpty) {
-                  SnackbarLoader.errorSnackBar(
-                      title: 'Gagal😒',
-                      message: 'Pastikan tanggal telah di isi👌');
-                } else {
-                  controller.addDataEstimasi();
-                }
-              },
-              onCancel: () {
-                controller.srdController.clear();
-                controller.mksController.clear();
-                controller.ptkController.clear();
-                Get.back();
-              },
-              cancelText: 'Close',
-              confirmText: 'Save');
-        },
-        icon: const Icon(Iconsax.add),
-        label: Text('New Data',
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.apply(color: AppColors.white)),
-      ),
+      floatingActionButton: Obx(() {
+        if (controller.doAllEstimasiModel.isNotEmpty) {
+          return FloatingActionButton.extended(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  titleWidget: const Text('Tambah Data DO Estimasi'),
+                  contentWidget: AddEstimasi(controller: controller),
+                  onConfirm: () {
+                    if (controller.tgl.value.isEmpty) {
+                      SnackbarLoader.errorSnackBar(
+                          title: 'Gagal😒',
+                          message: 'Pastikan tanggal telah di isi👌');
+                    } else {
+                      controller.addDataEstimasi();
+                    }
+                  },
+                  onCancel: () {
+                    controller.srdController.clear();
+                    controller.mksController.clear();
+                    controller.ptkController.clear();
+                    Get.back();
+                  },
+                  cancelText: 'Close',
+                  confirmText: 'Save');
+            },
+            icon: const Icon(Iconsax.add),
+            label: Text('New Data',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.apply(color: AppColors.white)),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
     );
   }
 }

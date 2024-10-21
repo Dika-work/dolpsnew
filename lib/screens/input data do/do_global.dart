@@ -293,48 +293,52 @@ class InputDataDOGlobal extends GetView<DataDOGlobalController> {
           );
         }
       }),
-      floatingActionButton: (controller.roleUser == 'admin' ||
-                  controller.roleUser == 'Pengurus Pabrik') &&
-              controller.doGlobalModel.isNotEmpty
-          ? FloatingActionButton.extended(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              onPressed: () {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Input DO Global'),
-                    contentWidget: AddDOGlobal(
-                      controller: controller,
-                    ),
-                    onConfirm: () {
-                      if (controller.tgl.value.isEmpty) {
-                        SnackbarLoader.errorSnackBar(
-                          title: 'Gagal😪',
-                          message: 'Pastikan tanggal telah di isi 😁',
-                        );
-                      } else {
-                        controller.addDataDOGlobal();
-                      }
-                    },
-                    onCancel: () {
-                      Get.back();
-                      controller.tujuan.value = '1';
-                      controller.srdController.clear();
-                      controller.mksController.clear();
-                      controller.ptkController.clear();
-                      controller.bjmController.clear();
-                    },
-                    cancelText: 'Close',
-                    confirmText: 'Tambahkan');
-              },
-              icon: const Icon(Iconsax.add),
-              label: Text('New Data',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.apply(color: AppColors.white)),
-            )
-          : null,
+      floatingActionButton: Obx(() {
+        if ((controller.roleUser == 'admin' ||
+                controller.roleUser == 'Pengurus Pabrik') &&
+            controller.doGlobalModel.isNotEmpty) {
+          return FloatingActionButton.extended(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  titleWidget: const Text('Input DO Global'),
+                  contentWidget: AddDOGlobal(
+                    controller: controller,
+                  ),
+                  onConfirm: () {
+                    if (controller.tgl.value.isEmpty) {
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Gagal😪',
+                        message: 'Pastikan tanggal telah di isi 😁',
+                      );
+                    } else {
+                      controller.addDataDOGlobal();
+                    }
+                  },
+                  onCancel: () {
+                    Get.back();
+                    controller.tujuan.value = '1';
+                    controller.srdController.clear();
+                    controller.mksController.clear();
+                    controller.ptkController.clear();
+                    controller.bjmController.clear();
+                  },
+                  cancelText: 'Close',
+                  confirmText: 'Tambahkan');
+            },
+            icon: const Icon(Iconsax.add),
+            label: Text('New Data',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.apply(color: AppColors.white)),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
     );
   }
 }

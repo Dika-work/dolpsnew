@@ -105,234 +105,236 @@ class InputDataDoHarian extends GetView<DataDoHarianController> {
             },
           );
 
-          return Expanded(
-            child: SfDataGrid(
-              source: dataSource,
-              frozenColumnsCount: 2,
-              columnWidthMode: ColumnWidthMode.auto,
-              gridLinesVisibility: GridLinesVisibility.both,
-              headerGridLinesVisibility: GridLinesVisibility.both,
-              rowHeight: 65,
-              columns: [
-                GridColumn(
-                    width: columnWidths['No']!,
-                    columnName: 'No',
-                    label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'No',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ))),
-                GridColumn(
-                    width: columnWidths['Plant']!,
-                    columnName: 'Plant',
-                    label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'Plant',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ))),
-                GridColumn(
-                    width: columnWidths['Tujuan']!,
-                    columnName: 'Tujuan',
-                    label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'Tujuan',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ))),
-                GridColumn(
-                    width: columnWidths['Tgl']!,
-                    columnName: 'Tgl',
-                    label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'Tgl',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ))),
-                GridColumn(
-                    width: columnWidths['HSO - SRD']!,
-                    columnName: 'HSO - SRD',
-                    label: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey),
-                          color: Colors.lightBlue.shade100,
-                        ),
-                        child: Text(
-                          'HSO - SRD',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ))),
-                GridColumn(
-                    width: columnWidths['HSO - MKS']!,
-                    columnName: 'HSO - MKS',
-                    label: Container(
+          return SfDataGrid(
+            source: dataSource,
+            frozenColumnsCount: 2,
+            columnWidthMode: ColumnWidthMode.auto,
+            gridLinesVisibility: GridLinesVisibility.both,
+            headerGridLinesVisibility: GridLinesVisibility.both,
+            rowHeight: 65,
+            columns: [
+              GridColumn(
+                  width: columnWidths['No']!,
+                  columnName: 'No',
+                  label: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         color: Colors.lightBlue.shade100,
                       ),
                       child: Text(
-                        'HSO - MKS',
+                        'No',
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['Plant']!,
+                  columnName: 'Plant',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
                       ),
-                    )),
+                      child: Text(
+                        'Plant',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['Tujuan']!,
+                  columnName: 'Tujuan',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Tujuan',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['Tgl']!,
+                  columnName: 'Tgl',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'Tgl',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['HSO - SRD']!,
+                  columnName: 'HSO - SRD',
+                  label: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        color: Colors.lightBlue.shade100,
+                      ),
+                      child: Text(
+                        'HSO - SRD',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ))),
+              GridColumn(
+                  width: columnWidths['HSO - MKS']!,
+                  columnName: 'HSO - MKS',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'HSO - MKS',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              GridColumn(
+                  width: columnWidths['HSO - PTK']!,
+                  columnName: 'HSO - PTK',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'HSO - PTK',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              GridColumn(
+                  width: columnWidths['BJM']!,
+                  columnName: 'BJM',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'BJM',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              // Edit column
+              if (controller.rolesEdit == 1)
                 GridColumn(
-                    width: columnWidths['HSO - PTK']!,
-                    columnName: 'HSO - PTK',
-                    label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'HSO - PTK',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    )),
-                GridColumn(
-                    width: columnWidths['BJM']!,
-                    columnName: 'BJM',
-                    label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'BJM',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    )),
-                // Edit column
-                if (controller.rolesEdit == 1)
-                  GridColumn(
-                    width: columnWidths['Edit']!,
-                    columnName: 'Edit',
-                    label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Edit',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                  width: columnWidths['Edit']!,
+                  columnName: 'Edit',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'Edit',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
-                // Hapus
-                if (controller.rolesHapus == 1)
-                  GridColumn(
-                    width: columnWidths['Hapus']!,
-                    columnName: 'Hapus',
-                    label: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        color: Colors.lightBlue.shade100,
-                      ),
-                      child: Text(
-                        'Hapus',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
+                ),
+              // Hapus
+              if (controller.rolesHapus == 1)
+                GridColumn(
+                  width: columnWidths['Hapus']!,
+                  columnName: 'Hapus',
+                  label: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      color: Colors.lightBlue.shade100,
+                    ),
+                    child: Text(
+                      'Hapus',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           );
         }
       }),
-      floatingActionButton: controller.doHarianModel.isNotEmpty
-          ? FloatingActionButton.extended(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              onPressed: () {
-                CustomDialogs.defaultDialog(
-                    context: context,
-                    titleWidget: const Text('Input DO Harian'),
-                    contentWidget: AddDOHarian(
-                      controller: controller,
-                    ),
-                    onConfirm: () {
-                      if (controller.tgl.value.isEmpty) {
-                        SnackbarLoader.errorSnackBar(
-                          title: 'Gagal😪',
-                          message: 'Pastikan tanggal telah di isi 😁',
-                        );
-                      } else {
-                        controller.addDataDOHarian();
-                        print('ini tanggal nya: ${controller.tgl.value}');
-                      }
-                    },
-                    onCancel: () {
-                      Get.back();
-                      controller.tgl.value =
-                          CustomHelperFunctions.getFormattedDateDatabase(
-                              DateTime.now());
-                      controller.srdController.clear();
-                      controller.mksController.clear();
-                      controller.ptkController.clear();
-                      controller.bjmController.clear();
-                    },
-                    cancelText: 'Close',
-                    confirmText: 'Tambahkan');
-              },
-              icon: const Icon(Iconsax.add),
-              label: Text('New Data',
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.apply(color: AppColors.white)),
-            )
-          : null,
+      floatingActionButton: Obx(() {
+        if (controller.doHarianModel.isNotEmpty) {
+          return FloatingActionButton.extended(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  titleWidget: const Text('Input DO Harian'),
+                  contentWidget: AddDOHarian(
+                    controller: controller,
+                  ),
+                  onConfirm: () {
+                    if (controller.tgl.value.isEmpty) {
+                      SnackbarLoader.errorSnackBar(
+                        title: 'Gagal😪',
+                        message: 'Pastikan tanggal telah di isi 😁',
+                      );
+                    } else {
+                      controller.addDataDOHarian();
+                      print('ini tanggal nya: ${controller.tgl.value}');
+                    }
+                  },
+                  onCancel: () {
+                    Get.back();
+                    controller.tgl.value =
+                        CustomHelperFunctions.getFormattedDateDatabase(
+                            DateTime.now());
+                    controller.srdController.clear();
+                    controller.mksController.clear();
+                    controller.ptkController.clear();
+                    controller.bjmController.clear();
+                  },
+                  cancelText: 'Close',
+                  confirmText: 'Tambahkan');
+            },
+            icon: const Icon(Iconsax.add),
+            label: Text('New Data',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.apply(color: AppColors.white)),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
     );
   }
 }

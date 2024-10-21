@@ -38,88 +38,87 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
 
     int currentPage = 0;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Input DO Tambahan',
-          style: Theme.of(context).textTheme.headlineMedium,
+        appBar: AppBar(
+          title: Text(
+            'Input DO Tambahan',
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => Get.back(),
+          ),
         ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Get.back(),
-        ),
-      ),
-      body: Obx(() {
-        if (!controller.isConnected.value) {
-          return const CustomAnimationLoaderWidget(
-              text:
-                  'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
-              animation: 'assets/animations/404.json');
-        } else if (controller.isLoadingTambah.value &&
-            controller.doTambahModel.isEmpty) {
-          return const CustomCircularLoader();
-        } else if (controller.doTambahModel.isEmpty) {
-          return GestureDetector(
-            onTap: () {
-              CustomDialogs.defaultDialog(
+        body: Obx(() {
+          if (!controller.isConnected.value) {
+            return const CustomAnimationLoaderWidget(
+                text:
+                    'Koneksi internet terputus\nsilakan tekan tombol refresh untuk mencoba kembali.',
+                animation: 'assets/animations/404.json');
+          } else if (controller.isLoadingTambah.value &&
+              controller.doTambahModel.isEmpty) {
+            return const CustomCircularLoader();
+          } else if (controller.doTambahModel.isEmpty) {
+            return GestureDetector(
+              onTap: () {
+                CustomDialogs.defaultDialog(
+                    context: context,
+                    titleWidget: const Text('Tambah Data DO Tambahan'),
+                    contentWidget: AddDOTambahan(
+                      controller: controller,
+                    ),
+                    onConfirm: () {
+                      if (controller.tgl.value.isEmpty) {
+                        SnackbarLoader.errorSnackBar(
+                          title: 'Gagal😪',
+                          message: 'Pastikan tanggal telah di isi 😁',
+                        );
+                      } else {
+                        controller.addDataDoTambah();
+                      }
+                    },
+                    onCancel: () {
+                      Get.back();
+                      controller.tgl.value =
+                          CustomHelperFunctions.getFormattedDateDatabase(
+                              DateTime.now());
+                      controller.srdController.clear();
+                      controller.mksController.clear();
+                      controller.ptkController.clear();
+                      controller.bjmController.clear();
+                    },
+                    cancelText: 'Close',
+                    confirmText: 'Tambahkan');
+              },
+              child: CustomAnimationLoaderWidget(
+                text: 'Tambahkan Data Baru',
+                animation: 'assets/animations/add-data-animation.json',
+                height: CustomHelperFunctions.screenHeight() * 0.4,
+                width: CustomHelperFunctions.screenHeight(),
+              ),
+            );
+          } else {
+            final dataSource = DataDoTambahSource(
+              doTambah: controller.doTambahModel,
+              startIndex: currentPage * rowsPerPage,
+              onEdited: (DoTambahModel model) {
+                // Implementasi edit data di sini
+                showDialog(
                   context: context,
-                  titleWidget: const Text('Tambah Data DO Tambahan'),
-                  contentWidget: AddDOTambahan(
-                    controller: controller,
-                  ),
-                  onConfirm: () {
-                    if (controller.tgl.value.isEmpty) {
-                      SnackbarLoader.errorSnackBar(
-                        title: 'Gagal😪',
-                        message: 'Pastikan tanggal telah di isi 😁',
-                      );
-                    } else {
-                      controller.addDataDoTambah();
-                    }
+                  builder: (context) {
+                    return EditDataDOTambah(
+                      controller: controller,
+                      model: model,
+                    );
                   },
-                  onCancel: () {
-                    Get.back();
-                    controller.tgl.value =
-                        CustomHelperFunctions.getFormattedDateDatabase(
-                            DateTime.now());
-                    controller.srdController.clear();
-                    controller.mksController.clear();
-                    controller.ptkController.clear();
-                    controller.bjmController.clear();
-                  },
-                  cancelText: 'Close',
-                  confirmText: 'Tambahkan');
-            },
-            child: CustomAnimationLoaderWidget(
-              text: 'Tambahkan Data Baru',
-              animation: 'assets/animations/add-data-animation.json',
-              height: CustomHelperFunctions.screenHeight() * 0.4,
-              width: CustomHelperFunctions.screenHeight(),
-            ),
-          );
-        } else {
-          final dataSource = DataDoTambahSource(
-            doTambah: controller.doTambahModel,
-            startIndex: currentPage * rowsPerPage,
-            onEdited: (DoTambahModel model) {
-              // Implementasi edit data di sini
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return EditDataDOTambah(
-                    controller: controller,
-                    model: model,
-                  );
-                },
-              );
-            },
-            onDeleted: (DoTambahModel model) {
-              controller.hapusDOTambah(model.id);
-              print('ini deleted btn');
-            },
-          );
-          return Expanded(
-            child: SfDataGrid(
+                );
+              },
+              onDeleted: (DoTambahModel model) {
+                controller.hapusDOTambah(model.id);
+                print('ini deleted btn');
+              },
+            );
+            return SfDataGrid(
               source: dataSource,
               frozenColumnsCount: 2,
               columnWidthMode: ColumnWidthMode.auto,
@@ -299,12 +298,12 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                     ),
                   ),
               ],
-            ),
-          );
-        }
-      }),
-      floatingActionButton: controller.doTambahModel.isNotEmpty
-          ? FloatingActionButton.extended(
+            );
+          }
+        }),
+        floatingActionButton: Obx(() {
+          if (controller.doTambahModel.isNotEmpty) {
+            return FloatingActionButton.extended(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
               onPressed: () {
@@ -343,9 +342,11 @@ class InputDataDoTambahan extends GetView<DataDoTambahanController> {
                       .textTheme
                       .labelMedium
                       ?.apply(color: AppColors.white)),
-            )
-          : null,
-    );
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }));
   }
 }
 

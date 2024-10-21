@@ -362,43 +362,49 @@ class TypeMotorScreen extends GetView<TypeMotorController> {
           );
         }
       }),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
-        onPressed: () {
-          CustomDialogs.defaultDialog(
-              context: context,
-              titleWidget: const Text('Input Type Motor'),
-              contentWidget: AddTypeMotor(
-                controller: controller,
-              ),
-              onConfirm: controller.addTypeMotorData,
-              onCancel: () {
-                Get.back();
+      floatingActionButton: Obx(() {
+        if (controller.typeMotorModel.isNotEmpty) {
+          return FloatingActionButton.extended(
+            backgroundColor: AppColors.primary,
+            foregroundColor: Colors.white,
+            onPressed: () {
+              CustomDialogs.defaultDialog(
+                  context: context,
+                  titleWidget: const Text('Input Type Motor'),
+                  contentWidget: AddTypeMotor(
+                    controller: controller,
+                  ),
+                  onConfirm: controller.addTypeMotorData,
+                  onCancel: () {
+                    Get.back();
 
-                controller.merkValue.value = 'Honda';
-                controller.typeMotorController.clear();
-                controller.hlm.value = null;
-                controller.ac.value = null;
-                controller.ks.value = null;
-                controller.ts.value = null;
-                controller.bp.value = null;
-                controller.bs.value = null;
-                controller.plt.value = null;
-                controller.stay.value = null;
-                controller.acBesar.value = null;
-                controller.plastik.value = null;
-              },
-              cancelText: 'Close',
-              confirmText: 'Tambahkan');
-        },
-        icon: const Icon(Iconsax.add),
-        label: Text('Type Motor',
-            style: Theme.of(context)
-                .textTheme
-                .labelMedium
-                ?.apply(color: AppColors.white)),
-      ),
+                    controller.merkValue.value = 'Honda';
+                    controller.typeMotorController.clear();
+                    controller.hlm.value = null;
+                    controller.ac.value = null;
+                    controller.ks.value = null;
+                    controller.ts.value = null;
+                    controller.bp.value = null;
+                    controller.bs.value = null;
+                    controller.plt.value = null;
+                    controller.stay.value = null;
+                    controller.acBesar.value = null;
+                    controller.plastik.value = null;
+                  },
+                  cancelText: 'Close',
+                  confirmText: 'Tambahkan');
+            },
+            icon: const Icon(Iconsax.add),
+            label: Text('Type Motor',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium
+                    ?.apply(color: AppColors.white)),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      }),
     );
   }
 }
