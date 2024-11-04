@@ -9,6 +9,7 @@ import '../../models/laporan honda/samarinda_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/laporan honda/samarinda_source.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
 
 class LaporanSamarinda extends StatefulWidget {
@@ -127,116 +128,99 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
       ),
       body: RefreshIndicator(
         onRefresh: () async => await _fetchDataAndRefreshSource(),
-        child: ListView(
+        child: Padding(
           padding: const EdgeInsets.fromLTRB(
-              CustomSize.sm, CustomSize.sm, CustomSize.sm, 0),
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: DropDownWidget(
-                    value: selectedYear,
-                    items: years,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedYear = newValue!;
-                        print('INI TAHUN YANG DI PILIH $selectedYear');
-                        _fetchDataAndRefreshSource();
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(width: CustomSize.sm),
-                Expanded(
-                  flex: 1,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      _fetchDataAndRefreshSource();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: CustomSize.md)),
-                    child: const Icon(Iconsax.calendar_search),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: CustomSize.spaceBtwInputFields),
-            SizedBox(
-              height: gridHeight,
-              child: samarindaSource != null
-                  ? SfDataGrid(
-                      source: samarindaSource!,
-                      frozenColumnsCount: 1,
-                      columnWidthMode: ColumnWidthMode.fitByColumnName,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      verticalScrollPhysics:
-                          const NeverScrollableScrollPhysics(),
-                      allowColumnsResizing: true,
-                      onColumnResizeUpdate:
-                          (ColumnResizeUpdateDetails details) {
-                        columnWidths[details.column.columnName] = details.width;
-                        return true;
+              CustomSize.sm, CustomSize.sm, CustomSize.sm, CustomSize.md),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: DropDownWidget(
+                      value: selectedYear,
+                      items: years,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedYear = newValue!;
+                          print('INI TAHUN YANG DI PILIH $selectedYear');
+                          _fetchDataAndRefreshSource();
+                        });
                       },
-                      stackedHeaderRows: [
-                        StackedHeaderRow(cells: [
-                          StackedHeaderCell(
-                            columnNames: [
-                              'Bulan 1',
-                              'Bulan 2',
-                              'Bulan 3',
-                              'Bulan 4',
-                              'Bulan 5',
-                              'Bulan 6',
-                              'Bulan 7',
-                              'Bulan 8',
-                              'Bulan 9',
-                              'Bulan 10',
-                              'Bulan 11',
-                              'Bulan 12'
-                            ], // Kolom bulan yang sesuai
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 50,
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                color: Colors.lightBlue.shade100,
+                    ),
+                  ),
+                  const SizedBox(width: CustomSize.sm),
+                  Expanded(
+                    flex: 1,
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _fetchDataAndRefreshSource();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: CustomSize.md)),
+                      child: const Icon(Iconsax.calendar_search),
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: CustomSize.spaceBtwInputFields),
+              SizedBox(
+                height: gridHeight,
+                child: samarindaSource != null
+                    ? SfDataGrid(
+                        source: samarindaSource!,
+                        frozenColumnsCount: 1,
+                        columnWidthMode: ColumnWidthMode.fitByColumnName,
+                        gridLinesVisibility: GridLinesVisibility.both,
+                        headerGridLinesVisibility: GridLinesVisibility.both,
+                        verticalScrollPhysics:
+                            const NeverScrollableScrollPhysics(),
+                        allowColumnsResizing: true,
+                        onColumnResizeUpdate:
+                            (ColumnResizeUpdateDetails details) {
+                          columnWidths[details.column.columnName] =
+                              details.width;
+                          return true;
+                        },
+                        stackedHeaderRows: [
+                          StackedHeaderRow(cells: [
+                            StackedHeaderCell(
+                              columnNames: [
+                                'Bulan 1',
+                                'Bulan 2',
+                                'Bulan 3',
+                                'Bulan 4',
+                                'Bulan 5',
+                                'Bulan 6',
+                                'Bulan 7',
+                                'Bulan 8',
+                                'Bulan 9',
+                                'Bulan 10',
+                                'Bulan 11',
+                                'Bulan 12'
+                              ], // Kolom bulan yang sesuai
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 50,
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: const Text(
+                                  'Bulan',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
                               ),
-                              child: const Text(
-                                'Bulan',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
                             ),
-                          ),
-                        ]),
-                      ],
-                      columns: [
-                        GridColumn(
-                          width: columnWidths['Daerah']!,
-                          columnName: 'Daerah',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
-                            ),
-                            child: Text(
-                              '${selectedMonth.substring(0, 3)} / $selectedYear',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                        for (int i = 0; i < 12; i++)
+                          ]),
+                        ],
+                        columns: [
                           GridColumn(
-                            width: columnWidths['Bulan']!,
-                            columnName: 'Bulan ${i + 1}',
+                            width: columnWidths['Daerah']!,
+                            columnName: 'Daerah',
                             label: Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -244,46 +228,87 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
                                 color: Colors.lightBlue.shade100,
                               ),
                               child: Text(
-                                months[
-                                    i], // Menampilkan nama bulan (Jan, Feb, dst.)
+                                '${selectedMonth.substring(0, 3)} / $selectedYear',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color:
-                                          (i == months.indexOf(selectedMonth))
-                                              ? Colors.red
-                                              : Colors.black,
-                                    ),
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ),
                           ),
-                        GridColumn(
-                          width: columnWidths['TOTAL']!,
-                          columnName: 'TOTAL',
-                          label: Container(
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.lightBlue.shade100,
+                          for (int i = 0; i < 12; i++)
+                            GridColumn(
+                              width: columnWidths['Bulan']!,
+                              columnName: 'Bulan ${i + 1}',
+                              label: Container(
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  color: Colors.lightBlue.shade100,
+                                ),
+                                child: Text(
+                                  months[
+                                      i], // Menampilkan nama bulan (Jan, Feb, dst.)
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            (i == months.indexOf(selectedMonth))
+                                                ? Colors.red
+                                                : Colors.black,
+                                      ),
+                                ),
+                              ),
                             ),
-                            child: Text(
-                              'TOTAL',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
+                          GridColumn(
+                            width: columnWidths['TOTAL']!,
+                            columnName: 'TOTAL',
+                            label: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                color: Colors.lightBlue.shade100,
+                              ),
+                              child: Text(
+                                'TOTAL',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : const Center(
-                      child:
-                          CircularProgressIndicator()), // Tampilkan loading jika null
-            )
-          ],
+                        ],
+                      )
+                    : const Center(
+                        child:
+                            CircularProgressIndicator()), // Tampilkan loading jika null
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: ElevatedButton(
+                        onPressed: () => Get.back(),
+                        child: const Text('Kembali')),
+                  ),
+                  const SizedBox(width: CustomSize.md),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                        onPressed: () => controller
+                            .downloadExcelForDooring(int.parse(selectedYear)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.success),
+                        child: const Icon(Iconsax.document_download)),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
