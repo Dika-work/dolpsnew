@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -11,6 +12,7 @@ import '../../utils/popups/snackbar.dart';
 import '../../utils/source/laporan honda/samarinda_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
+import 'pdf_preview/pdf_preview.dart';
 
 class LaporanSamarinda extends StatefulWidget {
   const LaporanSamarinda({super.key});
@@ -294,6 +296,30 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
                     child: ElevatedButton(
                         onPressed: () => Get.back(),
                         child: const Text('Kembali')),
+                  ),
+                  const SizedBox(width: CustomSize.md),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final pdfBytes = await controller
+                            .generatePDF(int.parse(selectedYear));
+                        // Navigate to PDF preview screen
+                        if (pdfBytes.isNotEmpty) {
+                          Get.to(
+                            () => PdfPreviewScreen(
+                              pdfBytes: pdfBytes,
+                              fileName:
+                                  'Laporan-Samarinda-${int.parse(selectedYear)}.pdf',
+                            ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.success,
+                      ),
+                      child: const Icon(FontAwesomeIcons.solidFilePdf),
+                    ),
                   ),
                   const SizedBox(width: CustomSize.md),
                   Expanded(
