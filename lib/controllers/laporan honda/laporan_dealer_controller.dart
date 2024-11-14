@@ -21,4 +21,6 @@ class LaporanDealerController extends GetxController {
       dealerLoading.value = false;
     }
   }
+
+  // Future<void> downloadExcelForDealer(int)
 }

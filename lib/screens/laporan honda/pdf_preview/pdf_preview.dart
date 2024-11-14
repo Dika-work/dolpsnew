@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:doplsnew/utils/popups/snackbar.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PdfPreviewScreen extends StatefulWidget {
@@ -22,6 +21,7 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('PDF Preview'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.download),
@@ -34,13 +34,33 @@ class _PdfPreviewScreenState extends State<PdfPreviewScreen> {
   }
 
   Future<void> _downloadPDF() async {
-    Directory directory = await getExternalStorageDirectory() ??
-        await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/${widget.fileName}');
-    await file.writeAsBytes(widget.pdfBytes);
+    try {
+      // Tentukan lokasi folder
+      Directory downloadDir =
+          Directory('/storage/emulated/0/Download/LaporanPDF');
+      if (!await downloadDir.exists()) {
+        await downloadDir.create(recursive: true); // Buat folder jika belum ada
+      }
 
-    SnackbarLoader.successSnackBar(
+      // Simpan PDF ke dalam folder
+      final file = File('${downloadDir.path}/${widget.fileName}');
+      await file.writeAsBytes(widget.pdfBytes);
+
+      // Tampilkan notifikasi keberhasilan
+      SnackbarLoader.successSnackBar(
         title: 'Berhasil menyimpan',
-        message: 'Pdf tersimpan pada folder download');
+        message: 'PDF tersimpan di folder ./Download/LaporanPDF',
+      );
+
+      // Log file path untuk debugging
+      print('PDF saved at: ${file.path}');
+    } catch (e) {
+      // Tampilkan notifikasi jika terjadi error
+      SnackbarLoader.errorSnackBar(
+        title: 'Gagal menyimpan',
+        message: 'Terjadi kesalahan saat menyimpan file: $e',
+      );
+      print('Error saving PDF: $e');
+    }
   }
 }
