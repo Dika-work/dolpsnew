@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,9 @@ import '../../models/laporan honda/laporan_dealer_model.dart';
 import '../../utils/constant/custom_size.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/laporan honda/laporan_dealer_source.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
+// import 'pdf_preview/pdf_preview.dart';
 
 class LaporanDealer extends StatefulWidget {
   const LaporanDealer({super.key});
@@ -69,7 +72,8 @@ class _LaporanDealerState extends State<LaporanDealer> {
     String formattedMonth =
         (months.indexOf(selectedMonth) + 1).toString().padLeft(2, '0');
     print('ini format bulan nya : $formattedMonth');
-    await controller.fetchLaporanEstimasi(formattedMonth, selectedYear);
+    await controller.fetchLaporanEstimasi(
+        int.parse(formattedMonth), int.parse(selectedYear));
     _updateLaporanSource();
     _updateLaporanHarianSource();
     _updateLaporanRealisasiSource();
@@ -635,6 +639,62 @@ class _LaporanDealerState extends State<LaporanDealer> {
                     ),
                   )
                 : const CustomCircularLoader(),
+            const SizedBox(height: CustomSize.spaceBtwSections),
+            Padding(
+              padding: const EdgeInsets.only(bottom: CustomSize.md),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: ElevatedButton(
+                        onPressed: () => Get.back(),
+                        child: const Text('Kembali')),
+                  ),
+                  const SizedBox(width: CustomSize.md),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // final pdfBytes = await controller
+                        //     .generatePDF(int.parse(selectedYear));
+                        // // Navigate to PDF preview screen
+                        // if (pdfBytes.isNotEmpty) {
+                        //   Get.to(
+                        //     () => PdfPreviewScreen(
+                        //       pdfBytes: pdfBytes,
+                        //       fileName:
+                        //           'Laporan-Samarinda-${int.parse(selectedYear)}.pdf',
+                        //     ),
+                        //   );
+                        // }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.success,
+                      ),
+                      child: const Icon(FontAwesomeIcons.solidFilePdf),
+                    ),
+                  ),
+                  const SizedBox(width: CustomSize.md),
+                  Expanded(
+                    flex: 1,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          String formattedMonth =
+                              (months.indexOf(selectedMonth) + 1)
+                                  .toString()
+                                  .padLeft(2, '0');
+
+                          controller.downloadExcelForDealer(
+                              int.parse(formattedMonth),
+                              int.parse(selectedYear));
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.success),
+                        child: const Icon(Iconsax.document_download)),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

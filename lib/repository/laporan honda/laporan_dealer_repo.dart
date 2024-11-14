@@ -9,7 +9,7 @@ class LaporanDealerRepository {
   final storageUtil = StorageUtil();
 
   Future<List<LaporanDealerModel>> fetchLaporanEstimasi(
-      String bulan, String tahun) async {
+      int bulan, int tahun) async {
     final response = await http.get(Uri.parse(
         '${storageUtil.baseURL}/DO/api/api_laporan_dealer.php?action=search&bulan=$bulan&tahun=$tahun'));
     if (response.statusCode == 200) {
