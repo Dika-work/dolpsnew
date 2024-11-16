@@ -82,7 +82,7 @@ class DoMutasiController extends GetxController {
 
       // Fetch all Mutasi data from the repository
       final getRegulerDo = await doMutasiRepo.fetchAllMutasiData();
-      print("Raw data fetched: ${getRegulerDo.length} items");
+      print("Raw  ${getRegulerDo.length} items");
 
       if (getRegulerDo.isNotEmpty) {
         // Step 1: Filter by date if the date range is provided

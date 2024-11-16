@@ -13,6 +13,7 @@ import '../../utils/loader/circular_loader.dart';
 import '../../utils/source/laporan honda/laporan_dealer_source.dart';
 import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
+import 'pdf_preview/pdf_preview.dart';
 // import 'pdf_preview/pdf_preview.dart';
 
 class LaporanDealer extends StatefulWidget {
@@ -655,18 +656,27 @@ class _LaporanDealerState extends State<LaporanDealer> {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: () async {
-                        // final pdfBytes = await controller
-                        //     .generatePDF(int.parse(selectedYear));
-                        // // Navigate to PDF preview screen
-                        // if (pdfBytes.isNotEmpty) {
-                        //   Get.to(
-                        //     () => PdfPreviewScreen(
-                        //       pdfBytes: pdfBytes,
-                        //       fileName:
-                        //           'Laporan-Samarinda-${int.parse(selectedYear)}.pdf',
-                        //     ),
-                        //   );
-                        // }
+                        // Konversi nama bulan ke angka
+                        String formattedMonth =
+                            (months.indexOf(selectedMonth) + 1)
+                                .toString()
+                                .padLeft(2, '0');
+
+                        print('Ini bulan pdf dealer $formattedMonth');
+
+                        final pdfBytes = await controller.generatePDF(
+                            int.parse(formattedMonth), int.parse(selectedYear));
+
+                        // Navigasi ke layar preview PDF
+                        if (pdfBytes.isNotEmpty) {
+                          Get.to(
+                            () => PdfPreviewScreen(
+                              pdfBytes: pdfBytes,
+                              fileName:
+                                  'Laporan-Dealer-$formattedMonth-$selectedYear.pdf',
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.success,

@@ -19,8 +19,7 @@ class EditTypeMotorController extends GetxController {
       isLoadingType.value = true;
       final getSRD = await editMotorRepo.fetchAllTypeMotor(id);
       doRealisasiModel.assignAll(getSRD);
-      print(
-          "Data fetched: ${doRealisasiModel.length} items"); // Add this to check
+      print(" ${doRealisasiModel.length} items"); // Add this to check
     } catch (e) {
       print('Error while fetching jumlah type SRD : $e');
       doRealisasiModel.assignAll([]);

@@ -44,7 +44,7 @@ class DataDOHarianHomeController extends GetxController {
       print("Fetching data for User Role: $roleUser, Plant: $rolePlant");
 
       final dataHarian = await dataHarianHomeRepo.fetchGlobalHarianContent();
-      print("Data fetched: ${dataHarian.length} items");
+      print(" ${dataHarian.length} items");
 
       if (dataHarian.isNotEmpty) {
         if (isAdmin) {
