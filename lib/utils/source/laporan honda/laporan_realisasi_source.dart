@@ -191,7 +191,7 @@ class LaporanRealisasiUnfieldSource extends DataGridSource {
         },
       ),
       // const DataGridCell<String>(columnName: 'Avg', value: ''),
-      DataGridCell<int>(columnName: 'Total', value: totalGlobal - totalHarian),
+      DataGridCell<int>(columnName: 'Total', value: totalHarian - totalGlobal),
     ]));
   }
 

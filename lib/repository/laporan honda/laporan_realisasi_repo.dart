@@ -9,7 +9,7 @@ class LaporanRealisasiRepository {
   final storagUtil = StorageUtil();
 
   Future<List<LaporanRealisasiModel>> fetchLaporanRealisasi(
-      String bulan, String tahun) async {
+      int bulan, int tahun) async {
     final response = await http.get(Uri.parse(
         '${storagUtil.baseURL}/DO/api/api_laporan_realisasi.php?action=laporan_realisasi&bulan=$bulan&tahun=$tahun'));
     if (response.statusCode == 200) {

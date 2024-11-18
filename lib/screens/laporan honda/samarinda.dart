@@ -302,13 +302,22 @@ class _LaporanSamarindaState extends State<LaporanSamarinda> {
                     flex: 1,
                     child: ElevatedButton(
                       onPressed: () async {
-                        final pdfBytes = await controller
-                            .generatePDF(int.parse(selectedYear));
-                        // Navigate to PDF preview screen
-                        if (pdfBytes.isNotEmpty) {
+                        // Generate dua jenis PDF
+                        final pdfBytesWithHeader = await controller.generatePDF(
+                            int.parse(selectedYear),
+                            withHeader: true);
+
+                        final pdfBytesWithoutHeader = await controller
+                            .generatePDF(int.parse(selectedYear),
+                                withHeader: false);
+
+                        // Navigasi ke layar preview PDF
+                        if (pdfBytesWithHeader.isNotEmpty &&
+                            pdfBytesWithoutHeader.isNotEmpty) {
                           Get.to(
                             () => PdfPreviewScreen(
-                              pdfBytes: pdfBytes,
+                              pdfBytesWithHeader: pdfBytesWithHeader,
+                              pdfBytesWithoutHeader: pdfBytesWithoutHeader,
                               fileName:
                                   'Laporan-Samarinda-${int.parse(selectedYear)}.pdf',
                             ),

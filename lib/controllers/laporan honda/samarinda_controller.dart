@@ -161,7 +161,7 @@ class SamarindaController extends GetxController {
     }
   }
 
-  Future<Uint8List> generatePDF(int tahun) async {
+  Future<Uint8List> generatePDF(int tahun, {bool withHeader = true}) async {
     print('Starting PDF generation...');
     CustomDialogs.loadingIndicator();
 
@@ -239,29 +239,215 @@ class SamarindaController extends GetxController {
         List.generate(12, (i) => doGlobalValues[i] - doHarianValues[i]);
     int selisihTotal = totalGlobal - totalHarian;
 
-    pdf.addPage(pw.Page(
-      build: (pw.Context context) {
-        return pw.Center(
-          child: pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-                pw.Image(image, width: 60, height: 60),
-                pw.SizedBox(width: 10),
-                pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.center,
+    if (withHeader) {
+      pdf.addPage(pw.Page(
+        build: (pw.Context context) {
+          return pw.Center(
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
-                      pw.Text('Langgeng Pranamas Sentosa',
-                          style: pw.TextStyle(fontSize: 24, font: ttfBold)),
-                      pw.SizedBox(width: 16),
-                      pw.Text(
-                          'Jl. Komp. Babek TN Jl. Rorotan No.3 Blok C, RT.1/RW.10, Rorotan,\nKec. Cakung, Jkt Utara, Daerah Khusus Ibukota Jakarta 14140',
+                      pw.Image(image, width: 60, height: 60),
+                      pw.SizedBox(width: 10),
+                      pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.center,
+                          children: [
+                            pw.Text('Langgeng Pranamas Sentosa',
+                                style:
+                                    pw.TextStyle(fontSize: 24, font: ttfBold)),
+                            pw.SizedBox(width: 16),
+                            pw.Text(
+                                'Jl. Komp. Babek TN Jl. Rorotan No.3 Blok C, RT.1/RW.10, Rorotan,\nKec. Cakung, Jkt Utara, Daerah Khusus Ibukota Jakarta 14140',
+                                textAlign: pw.TextAlign.center,
+                                style: pw.TextStyle(
+                                    fontSize: 14, font: ttfRegular))
+                          ])
+                    ]),
+                pw.Divider(),
+                pw.SizedBox(height: 15),
+                pw.Row(
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                    children: [
+                      pw.Text('Laporan Samarinda',
+                          style: pw.TextStyle(fontSize: 14, font: ttfBold)),
+                      pw.Text('$tahun',
                           textAlign: pw.TextAlign.center,
                           style: pw.TextStyle(fontSize: 14, font: ttfRegular))
-                    ])
-              ]),
-              pw.Divider(),
-              pw.SizedBox(height: 15),
+                    ]),
+                pw.SizedBox(height: 15),
+                pw.Text(
+                    '   Hasil di bawah ini disusun berdasarkan kalkulasi dan analisis data yang diperoleh sepanjang tahun ini, mencerminkan pencapaian khusus untuk wilayah Samarinda.',
+                    textAlign: pw.TextAlign.justify,
+                    style: pw.TextStyle(fontSize: 14, font: ttfRegular)),
+                pw.SizedBox(height: 20),
+                // Table with headers and data
+                pw.Table(
+                  border: pw.TableBorder.all(color: PdfColors.black, width: 1),
+                  columnWidths: {
+                    0: const pw.FlexColumnWidth(2), // Sumber Data column
+                    for (var i = 1; i < 13; i++)
+                      i: const pw.FlexColumnWidth(1), // Months
+                    13: const pw.FixedColumnWidth(45), // TOTAL column
+                  },
+                  children: [
+                    // Header row with padding and center alignment
+                    pw.TableRow(
+                      decoration:
+                          const pw.BoxDecoration(color: PdfColors.grey300),
+                      children: headers.map((header) {
+                        return pw.Center(
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.all(4),
+                            child: pw.Text(
+                              header,
+                              style: pw.TextStyle(font: ttfBold, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    // DO GLOBAL row with padding and center alignment
+                    pw.TableRow(
+                      children: [
+                        pw.Center(
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.all(4),
+                            child: pw.Text(
+                              'Global',
+                              style:
+                                  pw.TextStyle(font: ttfRegular, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        ...doGlobalValues.map((value) => pw.Center(
+                              child: pw.Padding(
+                                padding: const pw.EdgeInsets.all(4),
+                                child: pw.Text(
+                                  value.toString(),
+                                  style: pw.TextStyle(
+                                      font: ttfRegular, fontSize: 10),
+                                  textAlign: pw.TextAlign.center,
+                                ),
+                              ),
+                            )),
+                        pw.Center(
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.all(4),
+                            child: pw.Text(
+                              totalGlobal.toString(),
+                              style:
+                                  pw.TextStyle(font: ttfRegular, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // DO HARIAN row with padding and center alignment
+                    pw.TableRow(
+                      children: [
+                        pw.Center(
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.all(4),
+                            child: pw.Text(
+                              'Harian',
+                              style:
+                                  pw.TextStyle(font: ttfRegular, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        ...doHarianValues.map((value) => pw.Center(
+                              child: pw.Padding(
+                                padding: const pw.EdgeInsets.all(4),
+                                child: pw.Text(
+                                  value.toString(),
+                                  style: pw.TextStyle(
+                                      font: ttfRegular, fontSize: 10),
+                                  textAlign: pw.TextAlign.center,
+                                ),
+                              ),
+                            )),
+                        pw.Center(
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.all(4),
+                            child: pw.Text(
+                              totalHarian.toString(),
+                              style:
+                                  pw.TextStyle(font: ttfRegular, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    // SELISIH row with padding and center alignment
+                    pw.TableRow(
+                      children: [
+                        pw.Center(
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.all(4),
+                            child: pw.Text(
+                              'SELISIH',
+                              style:
+                                  pw.TextStyle(font: ttfRegular, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                        ),
+                        ...selisihValues.map((value) => pw.Center(
+                              child: pw.Padding(
+                                padding: const pw.EdgeInsets.all(4),
+                                child: pw.Text(
+                                  value.toString(),
+                                  style: pw.TextStyle(
+                                      font: ttfRegular, fontSize: 10),
+                                  textAlign: pw.TextAlign.center,
+                                ),
+                              ),
+                            )),
+                        pw.Center(
+                          child: pw.Padding(
+                            padding: const pw.EdgeInsets.all(4),
+                            child: pw.Text(
+                              selisihTotal.toString(),
+                              style:
+                                  pw.TextStyle(font: ttfRegular, fontSize: 10),
+                              textAlign: pw.TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                pw.SizedBox(height: 25),
+                pw.Text(
+                    '   Laporan ini diharapkan menjadi dasar untuk keputusan strategis ke depan. Terima kasih kepada tim Samarinda atas dedikasi dan kontribusinya dalam pencapaian ini.',
+                    textAlign: pw.TextAlign.justify,
+                    style: pw.TextStyle(fontSize: 14, font: ttfRegular)),
+                pw.Spacer(),
+                pw.Text('Sekian,',
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(fontSize: 14, font: ttfRegular)),
+                pw.Text('Terimakasih',
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(fontSize: 14, font: ttfRegular))
+              ],
+            ),
+          );
+        },
+      ));
+    } else {
+      pdf.addPage(pw.Page(
+        build: (pw.Context context) {
+          return pw.Column(
+            mainAxisAlignment: pw.MainAxisAlignment.center,
+            children: [
               pw.Row(
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
@@ -420,17 +606,22 @@ class SamarindaController extends GetxController {
                   textAlign: pw.TextAlign.justify,
                   style: pw.TextStyle(fontSize: 14, font: ttfRegular)),
               pw.Spacer(),
-              pw.Text('Sekian,',
-                  textAlign: pw.TextAlign.center,
-                  style: pw.TextStyle(fontSize: 14, font: ttfRegular)),
-              pw.Text('Terimakasih',
-                  textAlign: pw.TextAlign.center,
-                  style: pw.TextStyle(fontSize: 14, font: ttfRegular))
+              pw.Align(
+                alignment: pw.Alignment.centerLeft,
+                child: pw.Text('Sekian,',
+                    textAlign: pw.TextAlign.center,
+                    style: pw.TextStyle(fontSize: 14, font: ttfRegular)),
+              ),
+              pw.Align(
+                  alignment: pw.Alignment.centerLeft,
+                  child: pw.Text('Terimakasih',
+                      textAlign: pw.TextAlign.center,
+                      style: pw.TextStyle(fontSize: 14, font: ttfRegular)))
             ],
-          ),
-        );
-      },
-    ));
+          );
+        },
+      ));
+    }
 
     CustomFullScreenLoader.stopLoading();
 

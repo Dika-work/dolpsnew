@@ -1,5 +1,6 @@
 import 'package:doplsnew/helpers/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
@@ -11,7 +12,9 @@ import '../../utils/loader/animation_loader.dart';
 import '../../utils/loader/circular_loader.dart';
 import '../../utils/popups/snackbar.dart';
 import '../../utils/source/laporan honda/laporan_realisasi_source.dart';
+import '../../utils/theme/app_colors.dart';
 import '../../widgets/dropdown.dart';
+import 'pdf_preview/pdf_preview.dart';
 
 class LaporanRealisasi extends StatefulWidget {
   const LaporanRealisasi({super.key});
@@ -67,7 +70,8 @@ class _LaporanRealisasiState extends State<LaporanRealisasi> {
 
     String formattedMonth =
         (months.indexOf(selectedMonth) + 1).toString().padLeft(2, '0');
-    await controller.fetchLaporanRealisasi(formattedMonth, selectedYear);
+    await controller.fetchLaporanRealisasi(
+        int.parse(formattedMonth), int.parse(selectedYear));
     _updateLaporanSource();
     _updateLaporanUnfilledSource();
   }
@@ -166,7 +170,7 @@ class _LaporanRealisasiState extends State<LaporanRealisasi> {
 
             return RefreshIndicator(
               onRefresh: () async => _fetchDataAndRefreshSource(),
-              child: ListView(
+              child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(CustomSize.sm),
@@ -421,6 +425,84 @@ class _LaporanRealisasiState extends State<LaporanRealisasi> {
                           )
                         : const Center(child: CustomCircularLoader()),
                   ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(
+                        CustomSize.md, 0, CustomSize.md, CustomSize.sm),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: ElevatedButton(
+                              onPressed: () => Get.back(),
+                              child: const Text('Kembali')),
+                        ),
+                        const SizedBox(width: CustomSize.md),
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              String formattedMonth =
+                                  (months.indexOf(selectedMonth) + 1)
+                                      .toString()
+                                      .padLeft(2, '0');
+
+                              print('Ini bulan pdf dealer $formattedMonth');
+
+                              // Generate dua jenis PDF
+                              final pdfBytesWithHeader =
+                                  await controller.createPDF(
+                                      int.parse(formattedMonth),
+                                      int.parse(selectedYear),
+                                      withHeader: true);
+
+                              final pdfBytesWithoutHeader =
+                                  await controller.createPDF(
+                                      int.parse(formattedMonth),
+                                      int.parse(selectedYear),
+                                      withHeader: false);
+
+                              // Navigasi ke layar preview PDF
+                              if (pdfBytesWithHeader.isNotEmpty &&
+                                  pdfBytesWithoutHeader.isNotEmpty) {
+                                Get.to(
+                                  () => PdfPreviewScreen(
+                                    pdfBytesWithHeader: pdfBytesWithHeader,
+                                    pdfBytesWithoutHeader:
+                                        pdfBytesWithoutHeader,
+                                    fileName:
+                                        'Laporan-Dealer-$formattedMonth-$selectedYear.pdf',
+                                  ),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.success,
+                            ),
+                            child: const Icon(FontAwesomeIcons.solidFilePdf),
+                          ),
+                        ),
+                        const SizedBox(width: CustomSize.md),
+                        Expanded(
+                          flex: 1,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                String formattedMonth =
+                                    (months.indexOf(selectedMonth) + 1)
+                                        .toString()
+                                        .padLeft(2, '0');
+
+                                controller.downloadExcelForRealisasi(
+                                    int.parse(formattedMonth),
+                                    int.parse(selectedYear));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.success),
+                              child: const Icon(Iconsax.document_download)),
+                        ),
+                      ],
+                    ),
+                  )
                 ],
               ),
             );

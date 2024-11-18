@@ -664,14 +664,24 @@ class _LaporanDealerState extends State<LaporanDealer> {
 
                         print('Ini bulan pdf dealer $formattedMonth');
 
-                        final pdfBytes = await controller.generatePDF(
-                            int.parse(formattedMonth), int.parse(selectedYear));
+                        // Generate dua jenis PDF
+                        final pdfBytesWithHeader = await controller.generatePDF(
+                            int.parse(formattedMonth), int.parse(selectedYear),
+                            withHeader: true);
+
+                        final pdfBytesWithoutHeader =
+                            await controller.generatePDF(
+                                int.parse(formattedMonth),
+                                int.parse(selectedYear),
+                                withHeader: false);
 
                         // Navigasi ke layar preview PDF
-                        if (pdfBytes.isNotEmpty) {
+                        if (pdfBytesWithHeader.isNotEmpty &&
+                            pdfBytesWithoutHeader.isNotEmpty) {
                           Get.to(
                             () => PdfPreviewScreen(
-                              pdfBytes: pdfBytes,
+                              pdfBytesWithHeader: pdfBytesWithHeader,
+                              pdfBytesWithoutHeader: pdfBytesWithoutHeader,
                               fileName:
                                   'Laporan-Dealer-$formattedMonth-$selectedYear.pdf',
                             ),

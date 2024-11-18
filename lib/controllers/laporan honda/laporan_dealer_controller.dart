@@ -172,10 +172,11 @@ class LaporanDealerController extends GetxController {
   }
 
   // generate pdf
-  Future<Uint8List> generatePDF(int bulan, int tahun) async {
-    CustomDialogs.loadingIndicator();
-
+  Future<Uint8List> generatePDF(int bulan, int tahun,
+      {bool withHeader = true}) async {
     try {
+      CustomDialogs.loadingIndicator();
+
       final isConnected = await networkManager.isConnected();
       if (!isConnected) {
         CustomFullScreenLoader.stopLoading();
@@ -356,66 +357,70 @@ class LaporanDealerController extends GetxController {
         );
       }
 
-      // Buat halaman PDF dengan tiga tabel
-      pdf.addPage(
-        pw.Page(
-          pageFormat: PdfPageFormat.a4.landscape,
-          margin: const pw.EdgeInsets.all(10),
-          build: (pw.Context context) {
-            return pw.Column(
-              crossAxisAlignment: pw.CrossAxisAlignment.center,
-              children: [
-                // Header Dokumen
-                pw.Row(
+      // Halaman dengan kop surat
+      if (withHeader) {
+        pdf.addPage(
+          pw.Page(
+            pageFormat: PdfPageFormat.a4.landscape,
+            margin: const pw.EdgeInsets.all(10),
+            build: (pw.Context context) {
+              return pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.center,
+                children: [
+                  pw.Row(
                     mainAxisAlignment: pw.MainAxisAlignment.center,
                     children: [
                       pw.Image(image, width: 60, height: 60),
                       pw.SizedBox(width: 10),
                       pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.center,
-                          children: [
-                            pw.Text('Langgeng Pranamas Sentosa',
-                                style:
-                                    pw.TextStyle(fontSize: 24, font: ttfBold)),
-                            pw.SizedBox(width: 16),
-                            pw.Text(
-                                'Jl. Komp. Babek TN Jl. Rorotan No.3 Blok C, RT.1/RW.10, Rorotan,\nKec. Cakung, Jkt Utara, Daerah Khusus Ibukota Jakarta 14140',
-                                textAlign: pw.TextAlign.center,
-                                style: pw.TextStyle(
-                                    fontSize: 14, font: ttfRegular))
-                          ])
-                    ]),
-                pw.SizedBox(height: 10),
-                pw.Divider(),
-                pw.SizedBox(height: 10),
-                // Tambahkan tabel satu per satu
-                createTable('DO Global Berdasarkan Dealer', globalData),
-                pw.SizedBox(height: 10),
-                createTable('DO Harian Berdasarkan Dealer', harianData),
-                pw.SizedBox(height: 10),
-                createTable('DO Realisasi Berdasarkan Dealer', realisasiData),
-                pw.Row(children: [
-                  pw.Text('Note :'),
-                  pw.SizedBox(width: 10),
-                  pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text('SRD : SAMARINDA'),
-                        pw.Text('MKS : MAKASAR'),
-                      ]),
-                  pw.SizedBox(width: 10),
-                  pw.Column(
-                      crossAxisAlignment: pw.CrossAxisAlignment.start,
-                      children: [
-                        pw.Text('PTK : PONTIANAK'),
-                        pw.Text('BJM : BANJARMASIN'),
-                      ])
-                ])
-              ],
-            );
-          },
-        ),
-      );
+                        crossAxisAlignment: pw.CrossAxisAlignment.center,
+                        children: [
+                          pw.Text('Langgeng Pranamas Sentosa',
+                              style: pw.TextStyle(fontSize: 24, font: ttfBold)),
+                          pw.SizedBox(width: 16),
+                          pw.Text(
+                              'Jl. Komp. Babek TN Jl. Rorotan No.3 Blok C, RT.1/RW.10, Rorotan,\nKec. Cakung, Jkt Utara, Daerah Khusus Ibukota Jakarta 14140',
+                              textAlign: pw.TextAlign.center,
+                              style:
+                                  pw.TextStyle(fontSize: 14, font: ttfRegular))
+                        ],
+                      )
+                    ],
+                  ),
+                  pw.SizedBox(height: 10),
+                  pw.Divider(),
+                  pw.SizedBox(height: 10),
+                  createTable('DO Global Berdasarkan Dealer', globalData),
+                  pw.SizedBox(height: 10),
+                  createTable('DO Harian Berdasarkan Dealer', harianData),
+                  pw.SizedBox(height: 10),
+                  createTable('DO Realisasi Berdasarkan Dealer', realisasiData),
+                ],
+              );
+            },
+          ),
+        );
+      } else {
+        // Halaman tanpa kop surat
+        pdf.addPage(
+          pw.Page(
+            pageFormat: PdfPageFormat.a4.landscape,
+            margin: const pw.EdgeInsets.all(10),
+            build: (pw.Context context) {
+              return pw.Column(
+                mainAxisAlignment: pw.MainAxisAlignment.center,
+                children: [
+                  createTable('DO Global Berdasarkan Dealer', globalData),
+                  pw.SizedBox(height: 10),
+                  createTable('DO Harian Berdasarkan Dealer', harianData),
+                  pw.SizedBox(height: 10),
+                  createTable('DO Realisasi Berdasarkan Dealer', realisasiData),
+                ],
+              );
+            },
+          ),
+        );
+      }
 
       CustomFullScreenLoader.stopLoading();
       return pdf.save();
